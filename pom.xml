@@ -1,16 +1,87 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.grp6</groupId>
-    <artifactId>sudo-help</artifactId>
-    <version>1.0-SNAPSHOT</version>
+  <groupId>com.example</groupId>
+  <artifactId>javafx-fxml-example</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+  <name>javafx-fxml-example</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+      <maven.compiler.source>15</maven.compiler.source>
+      <maven.compiler.target>15</maven.compiler.target>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <javafx.version>19</javafx.version>
+      <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
+  </properties>
+
+  <dependencies>
+
+    <!-- JUnit 5 (dernière version stable) -->
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>5.9.0</version>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- JavaFX Dependencies -->
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>${javafx.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-fxml</artifactId>
+        <version>${javafx.version}</version>
+    </dependency>
+
+    <!-- Jakarta Persistence (JPA) uniquement -->
+    <dependency>
+        <groupId>jakarta.persistence</groupId>
+        <artifactId>jakarta.persistence-api</artifactId>
+        <version>3.1.0</version>
+        <scope>provided</scope>
+    </dependency>
+
+    <!-- Hibernate (JPA implementation) -->
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>6.2.0.Final</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+      <plugins>
+          <!-- JavaFX Maven Plugin -->
+          <plugin>
+              <groupId>org.openjfx</groupId>
+              <artifactId>javafx-maven-plugin</artifactId>
+              <version>${javafx.maven.plugin.version}</version>
+              <configuration>
+                  <mainClass>com.example.Main</mainClass>
+              </configuration>
+          </plugin>
+
+          <!-- Compiler Plugin -->
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>3.8.1</version>
+              <configuration>
+                  <source>${maven.compiler.source}</source>
+                  <target>${maven.compiler.target}</target>
+              </configuration>
+          </plugin>
+      </plugins>
+  </build>
 
 </project>
