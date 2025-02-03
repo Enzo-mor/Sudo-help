@@ -1,0 +1,61 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+-classpath
+'C:/Users/kilia/.m2/repository/org/openjfx/javafx-controls/19/javafx-controls-19.jar;C:/Users/kilia/.m2/repository/org/openjfx/javafx-controls/19/javafx-controls-19-win.jar;C:/Users/kilia/.m2/repository/org/openjfx/javafx-graphics/19/javafx-graphics-19.jar;C:/Users/kilia/.m2/repository/org/openjfx/javafx-graphics/19/javafx-graphics-19-win.jar;C:/Users/kilia/.m2/repository/org/openjfx/javafx-base/19/javafx-base-19.jar;C:/Users/kilia/.m2/repository/org/openjfx/javafx-base/19/javafx-base-19-win.jar;C:/Users/kilia/.m2/repository/org/openjfx/javafx-fxml/19/javafx-fxml-19.jar;C:/Users/kilia/.m2/repository/org/openjfx/javafx-fxml/19/javafx-fxml-19-win.jar;C:/Users/kilia/.m2/repository/org/hibernate/orm/hibernate-core/6.2.0.Final/hibernate-core-6.2.0.Final.jar;C:/Users/kilia/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.1.0/jakarta.persistence-api-3.1.0.jar;C:/Users/kilia/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar;C:/Users/kilia/.m2/repository/org/xerial/sqlite-jdbc/3.36.0.3/sqlite-jdbc-3.36.0.3.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'15'
+-sourcepath
+'C:/Users/kilia/Desktop/Grid+bdd/Grid+bdd/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2025. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/kilia/Desktop/Grid+bdd/Grid+bdd/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'javafx-fxml-example 1.0-SNAPSHOT API'
+-linkoffline
+'https://docs.oracle.com/en/java/javase/15/docs/api' 'C:/Users/kilia/Desktop/Grid+bdd/Grid+bdd/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'javafx-fxml-example 1.0-SNAPSHOT API'
+com.example
+C:\Users\kilia\.m2\repository\org\openjfx\javafx-controls\19\javafx-controls-19.jar = 1737991242704
+C:\Users\kilia\.m2\repository\org\openjfx\javafx-controls\19\javafx-controls-19-win.jar = 1737991244185
+C:\Users\kilia\.m2\repository\org\openjfx\javafx-graphics\19\javafx-graphics-19.jar = 1737991242808
+C:\Users\kilia\.m2\repository\org\openjfx\javafx-graphics\19\javafx-graphics-19-win.jar = 1737991244286
+C:\Users\kilia\.m2\repository\org\openjfx\javafx-base\19\javafx-base-19.jar = 1737991242890
+C:\Users\kilia\.m2\repository\org\openjfx\javafx-base\19\javafx-base-19-win.jar = 1737991243670
+C:\Users\kilia\.m2\repository\org\openjfx\javafx-fxml\19\javafx-fxml-19.jar = 1738154413985
+C:\Users\kilia\.m2\repository\org\openjfx\javafx-fxml\19\javafx-fxml-19-win.jar = 1738154414029
+C:\Users\kilia\.m2\repository\org\hibernate\orm\hibernate-core\6.2.0.Final\hibernate-core-6.2.0.Final.jar = 1738154415353
+C:\Users\kilia\.m2\repository\jakarta\persistence\jakarta.persistence-api\3.1.0\jakarta.persistence-api-3.1.0.jar = 1738154261495
+C:\Users\kilia\.m2\repository\jakarta\transaction\jakarta.transaction-api\2.0.1\jakarta.transaction-api-2.0.1.jar = 1738154261457
+C:\Users\kilia\.m2\repository\org\xerial\sqlite-jdbc\3.36.0.3\sqlite-jdbc-3.36.0.3.jar = 1738171201924
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\src\main\java = 1738603824191
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\allclasses-index.html = 1738605881819
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\allpackages-index.html = 1738605881821
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\constant-values.html = 1738605881768
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\element-list = 1738605881742
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\help-doc.html = 1738605881846
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\index-all.html = 1738605881840
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\index.html = 1738605881842
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\jquery-ui.overrides.css = 1738605881882
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\member-search-index.js = 1738605881826
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\module-search-index.js = 1738605881823
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\overview-tree.html = 1738605881804
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\package-search-index.js = 1738605881824
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\script.js = 1738605881851
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\search.js = 1738605881854
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\stylesheet.css = 1738605881849
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\tag-search-index.js = 1738605881827
+C:\Users\kilia\Desktop\Grid+bdd\Grid+bdd\target\reports\apidocs\type-search-index.js = 1738605881825
