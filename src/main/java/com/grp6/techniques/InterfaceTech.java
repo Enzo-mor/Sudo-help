@@ -6,5 +6,5 @@ public interface InterfaceTech {
     int num;
     string[] mess;
     
-    public detect(Grid grille);
+    public boolean detect(Grid grille);
 }
