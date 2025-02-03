@@ -1,6 +1,6 @@
 package com.grp6;
 
-public class line extends SousGrille  {
+public class Line extends SousGrille  {
 
     private Cell[] ligne;
 
@@ -27,7 +27,7 @@ public class line extends SousGrille  {
      * @return true si la ligne est complète, false sinon [boolean]
      * @param une ligne de cellule [Cell[]] 
      */
-    public complete(){
+    public boolean complete(){
         for(int i = 0; i < 9; i++){
             if(this.cell[i].getValue().isEmpty()){
                 return false;
