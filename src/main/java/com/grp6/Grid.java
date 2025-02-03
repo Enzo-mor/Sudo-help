@@ -87,7 +87,7 @@ public class Grid implements Iterable<Cell> {
     /**
      * Recupere la ieme ligne de la grille
      * @param i Indice de la ligne [int]
-     * @return La iemme ligne [Cell[]]
+     * @return La ieme ligne [Cell[]]
      */
     public Cell[] getLine(int i) {
         if(!isValidIndex(i)) {
@@ -104,7 +104,7 @@ public class Grid implements Iterable<Cell> {
     /**
      * Recupere la jeme colunne de la grille
      * @param j Indice de la colunne [int]
-     * @return La jemme colunne [Cell[]]
+     * @return La jeme colunne [Cell[]]
      */
     public Cell[] getColumn(int j) {
         if(!isValidIndex(j)) {
