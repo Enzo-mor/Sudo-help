@@ -1,4 +1,4 @@
-public class X_wing extends interfaceTech {
+public class X_wing implements interfaceTech {
    
     
 }

@@ -1,10 +1,10 @@
 package com.grp6.techniques;
 
-public class interfaceTech {
+public interface InterfaceTech {
     string name;
     int weight;
     int num;
     string[] mess;
     
-    public detect();
+    public detect(Grid grille);
 }
