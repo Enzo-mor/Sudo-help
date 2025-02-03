@@ -1,1 +1,7 @@
-com\grp6\Main.class
+com/example/SudokuGrid.class
+com/example/Profile.class
+com/example/ToolsPanel.class
+com/example/ProfileSelection.class
+com/example/ControlButtons.class
+com/example/NumberSelection.class
+com/example/Main.class
