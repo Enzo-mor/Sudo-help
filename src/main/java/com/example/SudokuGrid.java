@@ -14,12 +14,14 @@ import java.util.List;
 
 public class SudokuGrid {
     private GridPane grid;
-    private String selectedNumber = null; // Chiffre sélectionné
     private boolean eraseMode = false;    // Mode gomme
     private boolean annotationMode = false; // Mode annotation
+    private NumberSelection numberSelection; // Panneau de sélection des chiffres
+    private Button selectedCell = null; // Bouton de la cellule sélectionnée
 
-    public SudokuGrid() {
+    public SudokuGrid(NumberSelection numberSelection) {
         this.grid = new GridPane();
+        this.numberSelection = numberSelection;
         grid.setHgap(2);
         grid.setVgap(2);
         grid.setPadding(new Insets(10));
@@ -58,22 +60,22 @@ public class SudokuGrid {
                 final int r = row;
                 final int c = col;
                 cell.setOnAction(e -> {
+                    selectedCell = cell; // Sélectionner la cellule actuelle
+                    String selectedStr = numberSelection.getSelectedNumber();
+
                     if (eraseMode) {
                         // Si le mode gomme est activé
                         mainNumber.setText(""); // Effacer le chiffre principal
                         annotations.clear(); // Effacer les annotations
                         annotationText.setText(""); // Effacer les annotations affichées
-                    } else if (annotationMode && selectedNumber != null) {
-                        // Si le mode annotation est activé
-                        if (!mainNumber.getText().isEmpty()) {
-                            return; // Ne rien faire si un chiffre est déjà présent
-                        }
+                    }
 
-                        // Ajouter ou retirer le chiffre sélectionné des annotations
-                        if (annotations.contains(selectedNumber)) {
-                            annotations.remove(selectedNumber);
+                    else if (annotationMode && selectedStr != null) {
+                        // Ajouter ou retirer l'annotation
+                        if (!annotations.contains(selectedStr)) {
+                            annotations.add(selectedStr); // Ajouter le chiffre sélectionné aux annotations
                         } else {
-                            annotations.add(selectedNumber);
+                            annotations.remove(selectedStr); // Retirer le chiffre des annotations si déjà présent
                         }
 
                         // Réorganiser et afficher les annotations sous forme de 3x3
@@ -93,10 +95,11 @@ public class SudokuGrid {
                             }
                         }
                         annotationText.setText(formattedAnnotations.toString().trim());
+                    }
 
-                    } else if (selectedNumber != null) {
+                    else if (selectedStr != null) {
                         // Mode normal : insérer le chiffre sélectionné dans la cellule
-                        mainNumber.setText(selectedNumber);
+                        mainNumber.setText(selectedStr);
                         annotations.clear(); // Effacer les annotations
                         annotationText.setText(""); // Effacer les annotations
                     }
@@ -113,21 +116,12 @@ public class SudokuGrid {
         return grid;
     }
 
-    public String getSelectedNumber() {
-        return selectedNumber;
-    }
-
     public boolean getEraseMode() {
         return eraseMode;
     }
 
     public boolean getAnnotationMode() {
         return annotationMode;
-    }
-
-    // Setters
-    public void setSelectedNumber(String number) {
-        this.selectedNumber = number;
     }
 
     public void setEraseMode(boolean erase) {
@@ -151,8 +145,6 @@ public class SudokuGrid {
         }
     }
 
-    // MODIFIABLE, il s'agit d'une proposition
-    
     // Méthode pour définir les valeurs de la grille
     public void setGrid(String[][] values) {
         for (int row = 0; row < 9; row++) {

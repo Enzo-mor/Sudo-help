@@ -12,21 +12,22 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Créer la grille de Sudoku
-        SudokuGrid grid = new SudokuGrid();
         
+        // Créer le panneau de sélection des chiffres
+        NumberSelection numberSelection = new NumberSelection(); // Création avant pour la référence
+        
+        // Créer la grille de Sudoku
+        SudokuGrid grid = new SudokuGrid(numberSelection); // Passer NumberSelection à SudokuGrid
+
         // Créer le panneau des outils
         ToolsPanel toolsPanel = new ToolsPanel(grid);
-
-        // Créer le panneau de sélection des chiffres
-        NumberSelection numberSelection = new NumberSelection(grid);
 
         // Créer le panneau des contrôles
         ControlButtons controlsButtons = new ControlButtons();
 
         // Disposition de la scène de droite
         VBox rightPanel = new VBox(20);
-        rightPanel.getChildren().addAll( numberSelection.getNumberSelection(), toolsPanel.getTools(), controlsButtons.getControlButtons());
+        rightPanel.getChildren().addAll(numberSelection.getNumberSelection(), toolsPanel.getTools(), controlsButtons.getControlButtons());
         // Disposition de la scène principale
         HBox layout = new HBox(20);
         layout.getChildren().addAll(grid.getGridPane(), rightPanel);

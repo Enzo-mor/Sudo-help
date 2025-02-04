@@ -7,10 +7,9 @@ import javafx.scene.layout.VBox;
 
 public class NumberSelection {
     private VBox numberSelection;
-    private SudokuGrid sudokuGrid;
+    private String selectedNumber = null;
 
-    public NumberSelection(SudokuGrid grid) {
-        this.sudokuGrid = grid;
+    public NumberSelection() {
         numberSelection = new VBox(5);
         numberSelection.setAlignment(Pos.CENTER);
     
@@ -23,7 +22,7 @@ public class NumberSelection {
             numButtonsTop[index] = new Button(String.valueOf(i));
             numButtonsTop[index].setMinSize(50, 50);
             numButtonsTop[index].setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-            numButtonsTop[index].setOnAction(e -> sudokuGrid.setSelectedNumber(numButtonsTop[index].getText()));
+            numButtonsTop[index].setOnAction(e -> selectNumber(numButtonsTop[index]));
             topNumbers.getChildren().add(numButtonsTop[index]);
         }
     
@@ -36,20 +35,31 @@ public class NumberSelection {
             numButtonsBottom[index] = new Button(String.valueOf(i));
             numButtonsBottom[index].setMinSize(50, 50);
             numButtonsBottom[index].setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-            numButtonsBottom[index].setOnAction(e -> sudokuGrid.setSelectedNumber(numButtonsBottom[index].getText()));
+            numButtonsBottom[index].setOnAction(e -> selectNumber(numButtonsBottom[index]));
+
             bottomNumbers.getChildren().add(numButtonsBottom[index]);
         }
     
         numberSelection.getChildren().addAll(topNumbers, bottomNumbers);
-    }    
+    }
+
+    private void selectNumber(Button button) {
+
+        // Vérifier si les boutons sont bien trouvés
+        var buttons = numberSelection.lookupAll(".button");
+
+        buttons.forEach(node -> ((Button) node).setStyle("")); 
+        button.setStyle("-fx-background-color: lightgreen;");
+        
+        this.selectedNumber = button.getText();
+    }
 
     // Getters
     public VBox getNumberSelection() {
         return numberSelection;
     }
 
-    // Setters
-    public void setNumberSelection(VBox numberSelection) {
-        this.numberSelection = numberSelection;
+    public String getSelectedNumber() {
+        return selectedNumber;
     }
 }

@@ -23,21 +23,36 @@ public class ToolsPanel {
         pencilIcon.setFitWidth(40);
         pencilIcon.setPreserveRatio(true);
 
+        /* Déclaration des boutons pour l'effaceur et l'annotation */
         Button eraseButton = new Button();
+        Button pencilButton = new Button();
+
         eraseButton.setGraphic(binIcon);
         eraseButton.setOnAction(e -> {
-            sudokuGrid.setEraseMode(true);
+            boolean newMode =!sudokuGrid.getEraseMode();
+            sudokuGrid.setEraseMode(newMode);
             sudokuGrid.setAnnotationMode(false);
+
+            if (newMode) {
+                eraseButton.setStyle("-fx-background-color: lightgreen;");
+                pencilButton.setStyle("");
+            } else {
+                eraseButton.setStyle("");
+            }
         });
 
-        Button pencilButton = new Button();
         pencilButton.setGraphic(pencilIcon);
         pencilButton.setOnAction(e -> {
-            if(this.sudokuGrid.getAnnotationMode())
-                sudokuGrid.setAnnotationMode(false);
-            else
-                sudokuGrid.setAnnotationMode(true);    
+            boolean newMode = !sudokuGrid.getAnnotationMode();
+            sudokuGrid.setAnnotationMode(newMode);
             sudokuGrid.setEraseMode(false);
+
+            if (newMode) {
+                pencilButton.setStyle("-fx-background-color: lightgreen;");
+                eraseButton.setStyle("");
+            } else {
+                pencilButton.setStyle("");
+            }
         });
 
         tools.getChildren().addAll(eraseButton, pencilButton);
