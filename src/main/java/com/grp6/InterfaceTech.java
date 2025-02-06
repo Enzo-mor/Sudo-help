@@ -1,9 +1,6 @@
-package com.grp6.techniques;
+package com.grp6;
 
 public interface InterfaceTech {
-    string name;
-    int weight;
-    string[] mess;
     
     public boolean detect(Grid grille);
 }

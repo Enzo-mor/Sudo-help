@@ -1,4 +1,4 @@
-package com.example;
+package com.grp6;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

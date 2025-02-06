@@ -1,4 +1,4 @@
-package com.example;
+package com.grp6;
 
 /**
  * Cette interface permet de modéliser une cellule d'une grille

@@ -1,4 +1,4 @@
-package com.example;
+package com.grp6;
 
 import java.util.ArrayList;
 import java.util.List;

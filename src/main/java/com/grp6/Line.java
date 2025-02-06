@@ -10,7 +10,7 @@ public class Line extends SousGrille  {
      * @param i
      * @param grille
      */
-    public line(int i , Grid grille){
+    public Line(int i , Grid grille){
         if(!isValidIndex(i)) {
             throw new IllegalArgumentException("Indice de ligne invalide: " + i);
         }

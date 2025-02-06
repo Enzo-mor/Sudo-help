@@ -1,6 +1,4 @@
-import com.grp6.Cell;
-import com.grp6.Grid;
-import com.grp6.com;
+package com.grp6;
 
 public class LastNumber implements interfaceTech  {
     string name="LastNumber";

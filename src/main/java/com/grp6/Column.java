@@ -10,7 +10,7 @@ public class Column  extends SousGrille{
      * @param i
      * @param grille
      */
-    public column(int j , Grid grille){
+    public Column(int j , Grid grille){
         if(!isValidIndex(j)) {
             throw new IllegalArgumentException("Indice de colonne invalide: " + j);
         }

@@ -1,4 +1,4 @@
-package com.example;
+package com.grp6;
 
 /**
  * Classe modelisant une cellule flex, c'est-a-dire qu'elle peut être
