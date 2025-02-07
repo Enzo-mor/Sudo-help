@@ -20,9 +20,7 @@ public interface Cell {
 
     /**
      * Ajouter un annotation à la cellule
-     * @param number Chiffre de l'annotation à ajouter [int]
-     */
-    public void addAnnotation(int number);
+     * @param number ChiffregetValuen(int number);
 
     /** 
      * Récupérer les annotations de la cellule
