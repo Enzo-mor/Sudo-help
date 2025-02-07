@@ -3,13 +3,23 @@ package com.example;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.scene.image.Image;
+
 public class ProfileSelection {
     private final List<Profile> profiles = new ArrayList<>();
     private Profile selectedProfile = new Profile("Invité", 1); //String à changer par Profile
     private int currentPage = 0;
     private static int idNum = 2;
 
-    /*private void showProfileSelection(Stage stage) {
+    public void showProfileSelection(Stage stage) {
         StackPane root = new StackPane();
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
@@ -41,15 +51,43 @@ public class ProfileSelection {
         navigation.setAlignment(Pos.CENTER);
 
         Button guestButton = new Button("Continuer en tant qu'invité");
-        guestButton.setOnAction(e -> showMainMenu(stage, "Invité"));
+        //guestButton.setOnAction(e -> showMainMenu(stage, "Invité"));
 
         Button addProfileButton = new Button("Ajouter un profil");
         addProfileButton.setOnAction(e -> {
-            String newProfile = "Profil" + (profiles.size() + 1);
-            profiles.add(new Profile("newProfile", idNum++));
-            System.out.println("Nouveau profil ajouté : " + newProfile);
-            updateProfiles(profileContainer, leftArrow, rightArrow, stage);
+            // Créer une nouvelle petite fenêtre pop-up (fenêtre modale)
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL); // Bloquer les interactions avec la fenêtre principale
+            popupStage.setTitle("Créer un profil"); // Définir le titre de la fenêtre
+
+            // Composants de l'interface utilisateur
+            Label label = new Label("Entrez le nom du profil :"); // Libellé au-dessus du champ de texte
+            TextField nameField = new TextField(); // Champ de texte pour la saisie du nom du profil
+            Button confirmButton = new Button("Créer"); // Bouton pour confirmer la création du profil
+
+            // Gérer l'événement lors du clic sur le bouton "Créer"
+            confirmButton.setOnAction(event -> {
+                String name = nameField.getText().trim(); // Récupérer le texte saisi et supprimer les espaces inutiles
+                if (!name.isEmpty()) {
+                    profiles.add(new Profile(name, idNum++)); // Ajouter un nouveau profil avec un identifiant unique
+                    System.out.println("Nouveau profil ajouté : " + name); // Afficher un message dans la console
+                    updateProfiles(profileContainer, leftArrow, rightArrow, stage); // Mettre à jour l'affichage des profils
+                    popupStage.close(); // Fermer la fenêtre pop-up après l'ajout du profil
+                }
+            });
+
+            // Créer une mise en page verticale avec un espacement entre les éléments
+            VBox popupLayout = new VBox(10, label, nameField, confirmButton);
+            popupLayout.setPadding(new Insets(10)); // Ajouter une marge pour une meilleure apparence
+
+            // Créer et appliquer la scène à la fenêtre pop-up
+            Scene scene = new Scene(popupLayout, 300, 150);
+            popupStage.setScene(scene);
+
+            // Afficher la fenêtre pop-up et attendre l'interaction de l'utilisateur
+            popupStage.showAndWait();
         });
+
 
         layout.getChildren().addAll(titleLabel, navigation, addProfileButton, guestButton);
         root.getChildren().add(layout);
@@ -71,7 +109,7 @@ public class ProfileSelection {
             VBox profileBox = new VBox(10);
             profileBox.setAlignment(Pos.CENTER);
 
-            ImageView profileImage = new ImageView(new Image(getClass().getResource("/profil.jpg").toExternalForm()));
+            ImageView profileImage = new ImageView(new Image(getClass().getResource("/profil.png").toExternalForm()));
             profileImage.setFitWidth(100);
             profileImage.setFitHeight(100);
 
@@ -84,11 +122,11 @@ public class ProfileSelection {
             final Profile profile = profiles.get(i); // Local variable for the profile
             profileBox.setOnMouseClicked(e -> {
                 selectedProfile = profile; // Assign to the global variable
-                showMainMenu(stage, selectedProfile);
+                //showMainMenu(stage, selectedProfile);
             });
         }
 
         leftArrow.setDisable(currentPage == 0);
         rightArrow.setDisable(endIndex == profiles.size());
-    }*/
+    }
 }

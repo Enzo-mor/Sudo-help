@@ -1,5 +1,5 @@
 package com.example;
-
+import com.bdd.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -19,10 +19,12 @@ public class SudokuGrid {
     private NumberSelection numberSelection; // Panneau de sélection des chiffres
     private Button selectedCell = null; // Bouton de la cellule sélectionnée
     private Button[][] cells = new Button[9][9]; // Stocke les boutons des cellules
+    private Grid gridSudoku; // Grille de sudoku
 
-    public SudokuGrid(NumberSelection numberSelection) {
+    public SudokuGrid(NumberSelection numberSelection, Grid gridData) {
         this.grid = new GridPane();
         this.numberSelection = numberSelection;
+        this.gridSudoku = gridData;
         grid.setHgap(2);
         grid.setVgap(2);
         grid.setPadding(new Insets(10));
@@ -55,6 +57,14 @@ public class SudokuGrid {
                 cell.setOnAction(e -> {
                     selectedCell = cell;
                     String selectedStr = numberSelection.getSelectedNumber();
+                    Cell currentCell = gridData.getCell(r, c);  // gridData étant l'instance de la grille de données
+
+                    // Ne pas permettre de modifier les cellules fixes
+                    if (!currentCell.isEditable()) {
+                        // Afficher un message ou ne rien faire
+                        System.out.println("Cette cellule est fixe et ne peut pas être modifiée.");
+                        return;  // Sortie de la méthode, empêchant toute modification de la cellule fixe
+                    }
 
                     if (eraseMode) {
                         mainNumber.setText(""); // Effacer le nombre
@@ -106,6 +116,8 @@ public class SudokuGrid {
 
                 cells[row][col] = cell;
                 grid.add(cell, col, row);
+
+                /* Modifier historique */
             }
         }
     }    
@@ -145,14 +157,49 @@ public class SudokuGrid {
     }
 
     // Méthode pour définir les valeurs de la grille
-    public void setGrid(String[][] values) {
+    public void setGrid() {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
-                VBox cellContainer = (VBox) ((Button) grid.getChildren().get(row * 9 + col)).getGraphic();
-                Label mainNumber = (Label) cellContainer.getChildren().get(0);
-                Text annotationText = (Text) cellContainer.getChildren().get(1);
-                mainNumber.setText(values[row][col]);
-                annotationText.setText("");
+                Cell cell = gridSudoku.getCell(row, col);
+                Button cellButton = cells[row][col];
+                Label mainNumber = new Label();
+                Text annotationText = new Text();
+
+                if (cell instanceof FixCell) {
+                    // Pour les cellules fixes, on affiche le nombre principal
+                    FixCell fixCell = (FixCell) cell;
+                    if (fixCell.getNumber() == 0) {
+                        mainNumber.setText("");
+                    } else {
+                        mainNumber.setText(String.valueOf(fixCell.getNumber()));
+                    }                    
+                    annotationText.setText(""); // Pas d'annotations pour les cellules fixes
+                    cellButton.setGraphic(mainNumber);
+                } else if (cell instanceof FlexCell) {
+                    // Pour les cellules flexibles, on affiche les annotations
+                    FlexCell flexCell = (FlexCell) cell;
+                    List<Integer> annotations = flexCell.getAnnotations();
+                    StringBuilder formattedAnnotations = new StringBuilder();
+
+                    // Formater les annotations en 3x3
+                    String[] positions = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+                    for (int i = 0; i < 9; i++) {
+                        if (annotations.contains(i + 1)) {
+                            formattedAnnotations.append(positions[i]);
+                        } else {
+                            formattedAnnotations.append(" ");
+                        }
+
+                        if ((i + 1) % 3 == 0) {
+                            formattedAnnotations.append("\n");
+                        } else {
+                            formattedAnnotations.append(" ");
+                        }
+                    }
+
+                    annotationText.setText(formattedAnnotations.toString().trim());
+                    cellButton.setGraphic(annotationText);
+                }
             }
         }
     }
