@@ -73,10 +73,14 @@ public class Column  implements SousGrille{
      * @param une colonne de cellule [Cell[]] 
      */
     public int[][] emptyCellPos(){
+        int j = 0;
         int[][] pos = new int[9][9];
         for(int i = 0; i < 9; i++){
             if(colonne[i].isEmpty()){
-                pos[i] = colonne[i].getPosition();
+
+                pos[i][j] = colonne[i].getPosition()[0];
+                pos[i][j] = colonne[i].getPosition()[1];
+                j++;
             }
         }
         return pos;
@@ -88,12 +92,15 @@ public class Column  implements SousGrille{
      * @param une colonne de cellule [Cell[]] 
      */
     public int[][] fullCellPos(){
+        int j =0;
         int[][] pos = new int[9][9];
         for(int i = 0; i < 9; i++){
             if(!colonne[i].isEmpty()){
-                //pos[i] = colonne[i].getPosition();
+                pos[i][j] = colonne[i].getPosition()[0];
+                pos[i][j] = colonne[i].getPosition()[1];
+                j++;
             }
+            }
+            return pos;
         }
-        return pos;
     }
-}
