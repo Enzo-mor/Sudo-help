@@ -1,4 +1,4 @@
-
+package com.grp6;
 
 public class Square implements SousGrille  {
     
