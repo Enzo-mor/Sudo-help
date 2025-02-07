@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"com.example","l":"Cell"},{"p":"com.example","l":"DBManager"},{"p":"com.example","l":"FixCell"},{"p":"com.example","l":"FlexCell"},{"p":"com.example","l":"Grid"},{"p":"com.example","l":"Main"}];updateSearchResults();

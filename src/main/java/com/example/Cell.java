@@ -51,6 +51,12 @@ public interface Cell {
      */
     public boolean isEmpty();
 
+    /**
+     * Savoir si une cellule est modifiable
+     * @return Vrai si la cellule peut etre modifiée
+     */
+    public boolean isEditable();
+
     /** 
      * Transforme la cellule en chaîne de caractères
      * @return La chaîne de caractères correspondante [String]

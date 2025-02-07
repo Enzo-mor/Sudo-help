@@ -107,4 +107,13 @@ public class FlexCell extends FixCell {
         }
         return String.valueOf(nb);
     }
+
+    /**
+     * Savoir si une cellule est modifiable
+     * @return Vrai si la cellule peut etre modifiée
+     */
+    @Override
+    public boolean isEditable() {
+        return true;
+    }
 }

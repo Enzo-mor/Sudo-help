@@ -9,7 +9,7 @@ public class Main {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Grid g = DBManager.getGrid(4);
+        Grid g = DBManager.getGrid(8);
         System.out.println(g);
     }
 }

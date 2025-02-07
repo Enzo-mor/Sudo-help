@@ -110,5 +110,13 @@ public class FixCell implements Cell {
         return String.valueOf(this.getNumber());
     }
     
+    /**
+     * Savoir si une cellule est modifiable
+     * @return Vrai si la cellule peut etre modifiée
+     */
+    @Override
+    public boolean isEditable() {
+        return false;
+    }
 
 }

@@ -49,7 +49,7 @@ public class DBManager {
 
         System.out.println("Base de données SQLite : " + DATABASE_PATH);
 
-        if (databaseFile.exists()) {
+        if(databaseFile.exists()) {
             System.out.println("La base de données existe déjà, le script ne sera pas exécuté.");
         } else {
             try (Connection connection = DriverManager.getConnection(DATABASE_URL)) {
@@ -76,7 +76,7 @@ public class DBManager {
      */
     public static void close() {
         try {
-            if (conn != null && !conn.isClosed()) {
+            if(conn != null && !conn.isClosed()) {
                 conn.close();
                 System.out.println("Connexion SQLite fermée.");
             }
@@ -90,15 +90,15 @@ public class DBManager {
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
              Statement statement = connection.createStatement()) {
 
-            if (inputStream == null) {
+            if(inputStream == null) {
                 throw new RuntimeException("Fichier SQL non trouvé : " + scriptPath);
             }
 
             StringBuilder sql = new StringBuilder();
             String line;
-            while ((line = reader.readLine()) != null) {
+            while((line = reader.readLine()) != null) {
                 sql.append(line).append("\n");
-                if (line.trim().endsWith(";")) { // Exécute une commande complète
+                if(line.trim().endsWith(";")) { // Exécute une commande complète
                     statement.execute(sql.toString());
                     sql.setLength(0); // Réinitialise le buffer
                 }
@@ -125,12 +125,12 @@ public class DBManager {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
 
-            if (rs.next()) {
+            if(rs.next()) {
                 String difficulty = rs.getString("difficulty");
                 String data = rs.getString("cells");
 
                 // Vérification des données
-                if (data.length() != Grid.NB_NUM * Grid.NB_NUM) {
+                if(data.length() != Grid.NB_NUM * Grid.NB_NUM) {
                     throw new IllegalArgumentException("Taille des données incorrecte pour la grille ID: " + id);
                 }
 
