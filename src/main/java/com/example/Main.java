@@ -18,7 +18,7 @@ public class Main extends Application {
         
         // Créer la grille de Sudoku
         SudokuGrid grid = new SudokuGrid(numberSelection); // Passer NumberSelection à SudokuGrid
-
+        
         // Créer le panneau des outils
         ToolsPanel toolsPanel = new ToolsPanel(grid);
 
