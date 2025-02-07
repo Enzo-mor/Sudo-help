@@ -62,10 +62,10 @@ public class Grid implements Iterable<Cell> {
         // Initialisation de la tableau avec les donnees
         for(int i=0; i<NB_NUM*NB_NUM; i++) {
             if(data[i] == 0)
-                this.cells.add(new FlexCell());
+                this.cells.add(new FlexCell(i));
             // Si la callule est remplit alors elle est fixe
             else
-                this.cells.add(new FixCell(data[i]));
+                this.cells.add(new FixCell(data[i],i));
         }
     }
 

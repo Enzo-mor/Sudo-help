@@ -10,14 +10,16 @@ public class FixCell implements Cell {
 
     /* ======= Variables d'instance ======= */
     protected int number;   // Chiffre stocké dans la cellule
+    private int[] position;             // Tableau de deux int [x,y] reprsesentant la position en x y
 
     /* ======= Méthodes d'instance ======= */
 
     /**
      * Constructeur de la classe 'FixCell'.
      * @param number Chiffre qui sera stoqué dans la cellule [int]
+     * @param indice indice de la cellule
      */
-    public FixCell(int number) {
+    public FixCell(int number,int indice) {
         // Le chiffre doit etre valide: number in [0, 9] // 0 == vide
         if(Grid.isValidNumber(number) || number == 0){
             this.number = number;
@@ -26,6 +28,19 @@ public class FixCell implements Cell {
             System.err.println("Impossible d'initialiser cette cellule: " + number + " doit etre inclue dans [0, " + Grid.NB_NUM + "]");
             this.number = 0;
         }
+
+        this.position = new int[2];  // Tableau de 2 éléments pour x et y
+        this.position[0] = indice/9;
+        this.position[1] = indice%9;
+
+    }
+
+    /**
+     * Permet de recuperer la position d'une cellule
+     */
+    @Override
+    public int[] getPosition(){
+        return position;
     }
 
     /**

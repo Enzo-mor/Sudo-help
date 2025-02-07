@@ -10,14 +10,16 @@ public class FlexCell extends FixCell {
 
     /* ======= Variables d'instance ======= */
     protected boolean[] annotations;    // Tableau des annotations (si annotations[i]==true, i+1 est annotée dans la cellule)
+    private int[] position;             // Tableau de deux int [x,y] reprsesentant la position en x y
 
     /* ======= Méthodes d'instance ======= */
 
     /**
      * Constructeur de la classe 'FlexCell'
+     * @param indice indice de la cellule
      */
-    public FlexCell() {
-        super(0);
+    public FlexCell(int indice) {
+        super(0,indice);
         // Initialise le tableau des annotations à false
         this.annotations = new boolean[Grid.NB_NUM];
     }

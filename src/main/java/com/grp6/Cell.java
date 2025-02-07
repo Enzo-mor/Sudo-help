@@ -13,6 +13,12 @@ public interface Cell {
     public int getNumber();
 
     /**
+     * Recupérer la position de la cellule
+     * @return Tableau d'entier représentant la position [x,y]
+     */
+    public int[] getPosition();
+
+    /**
      * Mettre un chiffre dans une cellule
      * @param number Chiffre à mettre dans la cellule [int]
      */
