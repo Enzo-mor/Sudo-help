@@ -33,6 +33,7 @@ public class Line implements SousGrille  {
                 return false;
             }
         }
+        return true;
     }
 
     /**
