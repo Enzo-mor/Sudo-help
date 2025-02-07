@@ -1,6 +1,6 @@
 package com.grp6;
 
-public class Column  extends SousGrille{
+public class Column  implements SousGrille{
     
     private Cell[] colonne;
 
@@ -11,13 +11,13 @@ public class Column  extends SousGrille{
      * @param grille
      */
     public Column(int j , Grid grille){
-        if(!isValidIndex(j)) {
+        if(!Grid.isValidIndex(j)) {
             throw new IllegalArgumentException("Indice de colonne invalide: " + j);
         }
 
-        Cell[] column = new Cell[NB_NUM];
-        for(int i=0; i<NB_NUM; i++) {
-            column[i] = this.getCell(i, j);
+        Cell[] column = new Cell[Grid.NB_NUM];
+        for(int i=0; i<Grid.NB_NUM; i++) {
+            column[i] = grille.getCell(i, j);
         }
         this.colonne = column;
     }
@@ -29,10 +29,11 @@ public class Column  extends SousGrille{
      */
     public boolean complete(){
         for(int i = 0; i < 9; i++){
-            if(this.cell[i].getValue().isEmpty()){
+            if(this.colonne[i].isEmpty()){
                 return false;
             }
         }
+        return true;
     }
 
     /**
@@ -40,10 +41,10 @@ public class Column  extends SousGrille{
      * @return Le nombre de cellules vides restantes [cell[]]
      * @param une colonne de cellule [Cell[]] 
      */
-    public cell[] emptyCell(){
-        cell[] cellVide = new cell[9];
+    public Cell[] emptyCell(){
+        Cell[] cellVide = new Cell[9];
         for(int i = 0; i < 9; i++){
-            if(colonne[i].getValue().isEmpty()){
+            if(colonne[i].isEmpty()){
                 cellVide[i] = colonne[i];
             }
         }
@@ -55,10 +56,10 @@ public class Column  extends SousGrille{
      * @return Le nombre de cellules pleines restantes [cell[]]
      * @param une colonne de cellule [Cell[]] 
      */
-    public cell[] fullCell(){
-        cell[] cellPlein = new cell[9];
+    public Cell[] fullCell(){
+        Cell[] cellPlein = new Cell[9];
         for(int i = 0; i < 9; i++){
-            if(!colonne[i].getValue().isEmpty()){
+            if(!colonne[i].isEmpty()){
                 cellPlein[i] = colonne[i];
             }
         }
@@ -74,7 +75,7 @@ public class Column  extends SousGrille{
     public int[][] emptyCellPos(){
         int[][] pos = new int[9][9];
         for(int i = 0; i < 9; i++){
-            if(colonne[i].getValue().isEmpty()){
+            if(colonne[i].isEmpty()){
                 pos[i] = colonne[i].getPosition();
             }
         }
@@ -89,8 +90,8 @@ public class Column  extends SousGrille{
     public int[][] fullCellPos(){
         int[][] pos = new int[9][9];
         for(int i = 0; i < 9; i++){
-            if(!colonne[i].getValue().isEmpty()){
-                pos[i] = colonne[i].getPosition();
+            if(!colonne[i].isEmpty()){
+                //pos[i] = colonne[i].getPosition();
             }
         }
         return pos;
