@@ -67,7 +67,6 @@ public class FixCell implements Cell {
      * /!\ Impossible pour une cellule fixe /!\
      * @param number Chiffre de l'annotation à ajouter [int]
      */
-    @Override
     public void addAnnotation(int number) {
         System.out.println("Il est impossible d'ajouter une annotation à cette cellule");
     }
