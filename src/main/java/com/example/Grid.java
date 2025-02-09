@@ -24,6 +24,8 @@ public class Grid implements Iterable<Cell> {
     /* ======= Variables d'instance ======= */
     /** Tableau des cellules de la grille */
     private List<Cell> cells;
+    /** Tableau des cellules de la grille résolue */
+    private List<Cell> solvedCells;
     /** Identifiant de la grille */
     private Integer id;        
     /** Difficulté de la grille */     
@@ -38,7 +40,7 @@ public class Grid implements Iterable<Cell> {
      * @return Vrai si la valeur est valide FAUX sinon
      */
     public static boolean isValidNumber(int number) {
-        return 0 < number && number <= Grid.NB_NUM;
+        return 0 <= number && number <= Grid.NB_NUM;
     }
 
     /**
@@ -56,12 +58,12 @@ public class Grid implements Iterable<Cell> {
 
     /**
      * Constructeur de la classe 'Grid'.
-     * /!\/!\LE CONSTRUCTEUR EST TEMPORAIRE /!\/!\
      */
     public Grid(int id, String difficulty, String data) {
         this.id = id;
         this.cells = parseCells(data);
         this.difficulty = difficulty;
+        this.solvedCells = SudokuSolver.solveCells(this.cells);
     }
 
     /**
@@ -105,7 +107,6 @@ public class Grid implements Iterable<Cell> {
         if(!isValidIndex(i)) {
             throw new IllegalArgumentException("Indice de ligne invalide: " + i);
         }
-
         Cell[] line = new Cell[NB_NUM];
         for(int j=0; j<NB_NUM; j++) {
             line[j] = this.getCell(i, j);
@@ -218,16 +219,16 @@ public class Grid implements Iterable<Cell> {
         return count;
     }
 
-    /** 
-     * Transforme la cellule en chaîne de caractères
-     * @return La chaîne de caractères correspondante [String]
+    /**
+     * Transforme les cellules en chaîne de caractères
+     * @param grid Liste de cellules representant une grille
+     * @return La chaîne de caractères correspondante
      */
-    @Override
-    public String toString() {
+    public static String toString(List <Cell> grid) {
         String result = "";
         int i = 0, j = 0;
 
-        for(Cell cell: this) {
+        for(Cell cell: grid) {
             i++;
             result += cell.toString() + " ";
 
@@ -249,12 +250,59 @@ public class Grid implements Iterable<Cell> {
         }
         return result;
     }
+    
+    /** 
+     * Transforme la grille en chaîne de caractères
+     * @return La chaîne de caractères correspondante [String]
+     */
+    @Override
+    public String toString() {
+        return Grid.toString(cells);
+    }
 
+    /**
+     * Getter: Identifiant de la grille
+     * @return Identifiant de la grille
+     */
     public Integer getId() {
         return id;
     }
 
+    /**
+     * Getter: Difficulté de la grille
+     * @return Difficulté de la grille
+     */
     public String getDifficulty() {
         return difficulty;
+    }
+
+    /**
+     * Getter: Liste de cellules correspondante à la
+     * grille de solution
+     * @return Liste de cellules (résolue)
+     */
+    public List<Cell> getSolvedCells() {
+        return solvedCells;
+    }
+
+    /**
+     * Evaluer une grille (verifier si elle bonne)
+     * @return Nombre d'erreur
+     */
+    public List<int[]> evaluate() {
+        List<int[]> res = new ArrayList<>();
+
+        for(int i=0; i<Grid.NB_NUM; i++) {
+            for(int j=0; j<Grid.NB_NUM; j++) {
+                int idx = NB_NUM*i+j;
+                if(cells.get(idx).getNumber() != solvedCells.get(idx).getNumber()) {
+                    int[] error = new int[2];
+                    error[0] = i;
+                    error[1] = j;
+                    res.add(error);
+                }
+            }
+        }
+        return res;
     }
 }

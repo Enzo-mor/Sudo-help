@@ -116,4 +116,18 @@ public class FlexCell extends FixCell {
     public boolean isEditable() {
         return true;
     }
+
+     /**
+     * Clone une cellule flexible
+     * @return Une nouvelle instance de Cell (clone de la cellule)
+     */
+    @Override
+    public Cell clone() {
+        // Clone profond : création d'une nouvelle instance de FlexCell,
+        // et copie des annotations.
+        FlexCell clonedCell = new FlexCell();
+        clonedCell.number = this.number;
+        clonedCell.annotations = this.annotations.clone(); // Clonage profond du tableau d'annotations.
+        return clonedCell;
+    }
 }

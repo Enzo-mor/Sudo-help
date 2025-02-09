@@ -37,7 +37,6 @@ public class DBManager {
 
     private static final String DATABASE_PATH = System.getProperty("user.home") + "/db_sudohelp.db"; // Stocké dans le dossier Home
     private static final String DATABASE_URL = "jdbc:sqlite:" + DATABASE_PATH;
-    private static final String SQL_SCRIPT_PATH = "/init.sql"; // Fichier dans resources
     private static Connection conn = null; // Connection persistante
 
     /**
@@ -54,7 +53,8 @@ public class DBManager {
         } else {
             try (Connection connection = DriverManager.getConnection(DATABASE_URL)) {
                 System.out.println("Connexion à la base de données SQLite réussie.");
-                executeSqlScript(connection, SQL_SCRIPT_PATH);
+                executeSqlScript(connection, "grid");
+                executeSqlScript(connection, "profile");
             }
         }
     }
@@ -85,7 +85,8 @@ public class DBManager {
         }
     }
 
-    private static void executeSqlScript(Connection connection, String scriptPath) {
+    private static void executeSqlScript(Connection connection, String scriptName) {
+        String scriptPath = "/bdd/" + scriptName + ".sql";
         try (InputStream inputStream = DBManager.class.getResourceAsStream(scriptPath);
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
              Statement statement = connection.createStatement()) {
@@ -109,6 +110,22 @@ public class DBManager {
         }
     }
 
+    private static boolean tableExists(String tableName) {
+        String query = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
+    
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+    
+            pstmt.setString(1, tableName);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la vérification de l'existence de la table : " + e.getMessage());
+            return false;
+        }
+    }
+    
+
 
     /**
      * Récupère une grille depuis la base de données en fonction de son ID.
@@ -117,35 +134,38 @@ public class DBManager {
      * @throws RuntimeException en cas d'erreur SQL ou si la grille est introuvable
      */
     public static Grid getGrid(int id) {
-        String query = "SELECT * FROM grid WHERE id_grid = ?";
-
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-
-            if(rs.next()) {
-                String difficulty = rs.getString("difficulty");
-                String data = rs.getString("cells");
-
-                // Vérification des données
-                if(data.length() != Grid.NB_NUM * Grid.NB_NUM) {
-                    throw new IllegalArgumentException("Taille des données incorrecte pour la grille ID: " + id);
-                }
-
-                // Création de la grille
-                Grid grid = new Grid(id, difficulty, data);
-                return grid;
-            } else {
-                throw new IllegalArgumentException("Aucune grille trouvée avec l'ID: " + id);
+        try {
+            if (!tableExists("grid")) {
+                System.out.println("La table 'grid' n'existe pas. Initialisation en cours...");
+                executeSqlScript(getConnection(), "grid");
             }
-
+    
+            String query = "SELECT * FROM grid WHERE id_grid = ?";
+            try (Connection conn = getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+    
+                pstmt.setInt(1, id);
+                ResultSet rs = pstmt.executeQuery();
+    
+                if (rs.next()) {
+                    String difficulty = rs.getString("difficulty");
+                    String data = rs.getString("cells");
+    
+                    if (data.length() != Grid.NB_NUM * Grid.NB_NUM) {
+                        throw new IllegalArgumentException("Taille des données incorrecte pour la grille ID: " + id);
+                    }
+    
+                    return new Grid(id, difficulty, data);
+                } else {
+                    throw new IllegalArgumentException("Aucune grille trouvée avec l'ID: " + id);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Erreur lors du chargement de la grille avec l'ID: " + id, e);
         }
     }
+    
 
     
 }

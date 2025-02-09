@@ -62,4 +62,10 @@ public interface Cell {
      * @return La chaîne de caractères correspondante [String]
      */
     public String toString();
+
+     /**
+     * Clone une cellule flexible
+     * @return Une nouvelle instance de Cell (clone de la cellule)
+     */
+    public Cell clone();
 }

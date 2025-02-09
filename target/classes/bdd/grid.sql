@@ -1,4 +1,4 @@
--- Créer la table avec des contraintes appropriées
+-- Table representant les grilles de Soduku
 CREATE TABLE grid (
     id_grid INTEGER PRIMARY KEY AUTOINCREMENT,
     difficulty VARCHAR(10) CHECK (difficulty IN ('facile', 'moyen', 'difficile')),

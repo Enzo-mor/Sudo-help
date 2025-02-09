@@ -5,23 +5,6 @@ CREATE TABLE grid (
     cells VARCHAR(81)
 );
 
--- Table representant les profiles
-CREATE TABLE profile (
-    id_profile INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(16) NOT NULL
-);
-
--- Table representant les partie
-CREATE TABLE partie (
-    id_partie INTEGER PRIMARY KEY AUTOINCREMENT,
-    id_grid INTEGER REFERCENCES grid(id_grid),
-    id_profile INTEGER REFERCENCES profile(id_profile),
-    date_creation DATE,
-    date_modif DATE,
-    score INTEGER,
-    historique TEXT NOT NULL
-);
-
 -- Insérer des données dans la table grid
 INSERT INTO grid (difficulty, cells) VALUES
 ('facile',    '370680000100074803008100060720040630030802010015060049080006400403720001000018026'),
@@ -60,7 +43,4 @@ INSERT INTO grid (difficulty, cells) VALUES
 ('difficile', '002098005003402000900100820090080004346000958700040030015004007000801500400750300'),
 ('difficile', '840100500700903000003000617390010000001806400000070021689000100000604005004001068'),
 ('difficile', '000138090200005006000706048300810200080000030002093004570201000600500007020379000');
-
-INSERT INTO profile (name) VALUES
-('Invité');
 

@@ -89,7 +89,7 @@ public class FixCell implements Cell {
      */
     @Override
     public void clear() {
-        System.out.println("Il est impossible de netoyer cette cellule");
+        System.out.println("Il est impossible de nettoyer cette cellule");
     }
 
     /**
@@ -117,6 +117,16 @@ public class FixCell implements Cell {
     @Override
     public boolean isEditable() {
         return false;
+    }
+
+    /**
+     * Clone une cellule fixe
+     * @return Une nouvelle instance de Cell (clone de la cellule)
+     */
+    @Override
+    public Cell clone() {
+        // Clonage superficiel, pas de besoin de cloner des objets internes.
+        return new FixCell(this.number);
     }
 
 }
