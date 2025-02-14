@@ -1,8 +1,10 @@
 com/example/ToolsPanel.class
+com/example/ProfileButton.class
 com/bdd/Main.class
 com/bdd/FlexCell.class
 com/example/ControlButtons.class
 com/bdd/Grid$GridIterator.class
+com/example/MainMenu.class
 com/bdd/Cell.class
 com/example/SudokuGrid.class
 com/example/Profile.class
