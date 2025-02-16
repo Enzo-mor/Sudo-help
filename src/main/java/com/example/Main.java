@@ -51,9 +51,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        ProfileSelection ps = new ProfileSelection();
-        ps.showProfileSelection(primaryStage);
-
+        MenusController.launcher(primaryStage);
     }
 
     public static void main(String[] args) {

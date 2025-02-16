@@ -17,7 +17,7 @@ public class MainMenu {
         welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         Button startGameButton = new ProfileButton("Jouer");
-        //startGameButton.setOnAction(e -> showSudokuLibrary(stage));
+        startGameButton.setOnAction(e -> SudokuMenu.showSudokuLibrary(stage));
 
         Button settingsButton = new ProfileButton("Paramètres");
         settingsButton.setOnAction(e -> System.out.println("Paramètres ouverts"));

@@ -1,5 +1,8 @@
 package com.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,9 +12,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+
+
 public class SudokuMenu {
-    /*
-    private void showSudokuLibrary(Stage stage) {
+    public static void showSudokuLibrary(Stage stage) {
+
+        final List<Sudoku> sudokus = new ArrayList<>();
+
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(20));
         gridPane.setHgap(20);
@@ -36,11 +43,11 @@ public class SudokuMenu {
             gridPane.add(sudokuBox, i % columns, i / columns);
 
             final int selectedSudokuId = i + 1; // Crée une copie finale
-            sudokuBox.setOnMouseClicked(e -> showSudokuGame(stage, selectedSudokuId));
+            //sudokuBox.setOnMouseClicked(e -> showSudokuGame(stage, selectedSudokuId));  --> VOIR AVEC NATHAN
         }
 
         Button backButton = new Button("Retour");
-        backButton.setOnAction(e -> showMainMenu(stage, selectedProfile));
+        //backButton.setOnAction(e -> MainMenu.showMainMenu(stage, selectedProfile));   --> MODIFIER DANS MENUCONTROLLER
 
         VBox layout = new VBox(20, gridPane, backButton);
         layout.setAlignment(Pos.CENTER);
@@ -49,5 +56,35 @@ public class SudokuMenu {
         stage.setTitle("Bibliothèque de Sudoku");
         stage.setScene(scene);
         stage.show();
-    }*/
+    }
+
+    private static class Sudoku {
+        private final String name;
+        private final String bestTime;
+        private final String score;
+        private final String status;
+
+        public Sudoku(String name, String bestTime, String score, String status) {
+            this.name = name;
+            this.bestTime = bestTime;
+            this.score = score;
+            this.status = status;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getBestTime() {
+            return bestTime;
+        }
+
+        public String getScore() {
+            return score;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+    }
 }
