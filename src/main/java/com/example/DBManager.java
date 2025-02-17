@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe: Permet l'initialisation et/ou la création de la Base de données
@@ -23,7 +25,7 @@ import java.sql.Statement;
  *      try {
  *         // Initialiser la base de données
  *         DBManager.init();
- *      } catch (SQLException e) {
+ *      } catch(SQLException e) {
  *          // Gestion des execptions lié à l'initilisation
  *          System.err.println("Erreur : " + e.getMessage());
  *      }
@@ -51,7 +53,7 @@ public class DBManager {
         if(databaseFile.exists()) {
             System.out.println("La base de données existe déjà, le script ne sera pas exécuté.");
         } else {
-            try (Connection connection = DriverManager.getConnection(DATABASE_URL)) {
+            try(Connection connection = DriverManager.getConnection(DATABASE_URL)) {
                 System.out.println("Connexion à la base de données SQLite réussie.");
                 executeSqlScript(connection, "grid");
                 executeSqlScript(connection, "profile");
@@ -65,7 +67,7 @@ public class DBManager {
      * @throws SQLException en cas d'erreur de connexion
      */
     private static Connection getConnection() throws SQLException {
-        if (conn == null || conn.isClosed()) {
+        if(conn == null || conn.isClosed()) {
             conn = DriverManager.getConnection(DATABASE_URL);
         }
         return conn;
@@ -80,14 +82,20 @@ public class DBManager {
                 conn.close();
                 System.out.println("Connexion SQLite fermée.");
             }
-        } catch (SQLException e) {
+        } catch(SQLException e) {
             System.err.println("Erreur lors de la fermeture de la connexion : " + e.getMessage());
         }
     }
 
+    /**
+     * Execute un scripte SQL pour initialiser une table
+     * dans la BdD
+     * @param connection
+     * @param scriptName
+     */
     private static void executeSqlScript(Connection connection, String scriptName) {
         String scriptPath = "/bdd/" + scriptName + ".sql";
-        try (InputStream inputStream = DBManager.class.getResourceAsStream(scriptPath);
+        try(InputStream inputStream = DBManager.class.getResourceAsStream(scriptPath);
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
              Statement statement = connection.createStatement()) {
 
@@ -105,21 +113,27 @@ public class DBManager {
                 }
             }
             System.out.println("Script SQL exécuté avec succès.");
-        } catch (Exception e) {
+        } catch(Exception e) {
             System.err.println("Erreur lors de l'exécution du script SQL : " + e.getMessage());
         }
     }
 
+    /**
+     * Verifie si une table existe dans la Base de Données
+     * @param tableName Nom de la table dans la BdD
+     * @return Vrai si la table existe, Faux sinon
+     */
     private static boolean tableExists(String tableName) {
         String query = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
     
-        try (Connection conn = getConnection();
+        try(Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
     
             pstmt.setString(1, tableName);
             ResultSet rs = pstmt.executeQuery();
             return rs.next();
-        } catch (SQLException e) {
+        }
+        catch(SQLException e) {
             System.err.println("Erreur lors de la vérification de l'existence de la table : " + e.getMessage());
             return false;
         }
@@ -135,23 +149,23 @@ public class DBManager {
      */
     public static Grid getGrid(int id) {
         try {
-            if (!tableExists("grid")) {
+            if(!tableExists("grid")) {
                 System.out.println("La table 'grid' n'existe pas. Initialisation en cours...");
                 executeSqlScript(getConnection(), "grid");
             }
     
             String query = "SELECT * FROM grid WHERE id_grid = ?";
-            try (Connection conn = getConnection();
+            try(Connection conn = getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(query)) {
     
                 pstmt.setInt(1, id);
                 ResultSet rs = pstmt.executeQuery();
     
-                if (rs.next()) {
+                if(rs.next()) {
                     String difficulty = rs.getString("difficulty");
                     String data = rs.getString("cells");
     
-                    if (data.length() != Grid.NB_NUM * Grid.NB_NUM) {
+                    if(data.length() != Grid.NB_NUM * Grid.NB_NUM) {
                         throw new IllegalArgumentException("Taille des données incorrecte pour la grille ID: " + id);
                     }
     
@@ -160,12 +174,88 @@ public class DBManager {
                     throw new IllegalArgumentException("Aucune grille trouvée avec l'ID: " + id);
                 }
             }
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Erreur lors du chargement de la grille avec l'ID: " + id, e);
         }
     }
     
+    /**
+     * Récupérer toutes les grilles sous forme de liste
+     * @return Liste comportant les grilles présentes dans la BdD
+     */
+    public static List<Grid> getGrids() {
+        List<Grid> res = new ArrayList<>();
 
+        try {
+            if(!tableExists("grid")) {
+                System.out.println("La table 'grid' n'existe pas. Initialisation en cours...");
+                executeSqlScript(getConnection(), "grid");
+            }
+    
+            String query = "SELECT * FROM grid";
+            try(Connection conn = getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+    
+                ResultSet rs = pstmt.executeQuery();
+    
+                while(rs.next()) {
+                    Integer id = rs.getInt("id_grid");
+                    String difficulty = rs.getString("difficulty");
+                    String data = rs.getString("cells");
+    
+                    if(data.length() != Grid.NB_NUM * Grid.NB_NUM) {
+                        System.err.println("Taille des données incorrecte pour la grille ID: " + id);
+                        continue;
+                    }
+    
+                    res.add(new Grid(id, difficulty, data));
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors du chargement des grilles: " + e);
+        }
+
+
+        return res;
+    }
+    
+    /**
+     * Récupérer tous les profiles sous forme de liste
+     * @return Liste comportant les profiles présentes dans la BdD
+     */
+    public static List<Profile> getProfiles() {
+        List<Profile> res = new ArrayList<>();
+
+        try {
+            if(!tableExists("profile")) {
+                System.out.println("La table 'profile' n'existe pas. Initialisation en cours...");
+                executeSqlScript(getConnection(), "profile");
+            }
+    
+            String query = "SELECT * FROM profile";
+            try(Connection conn = getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+    
+                ResultSet rs = pstmt.executeQuery();
+    
+                while(rs.next()) {
+                    Integer id = rs.getInt("id_profile");
+                    String pseudo = rs.getString("pseudo");
+    
+                    res.add(new Profile(id, pseudo));
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors du chargement des profiles: " + e);
+        }
+
+
+        return res;
+    }
     
 }

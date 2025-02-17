@@ -12,10 +12,14 @@ public class Main {
         }
         Grid g = DBManager.getGrid(8);
         System.out.println(g);
+
+        // Exemple de visualisation des erreurs
         List<int[]> errors = g.evaluate();
         for(int[] err: errors) {
             System.out.print("(" + err[0] + ", " + err[1] + ") ");
         }
         System.out.println();
+
+        System.out.println(DBManager.getProfiles());
     }
 }
