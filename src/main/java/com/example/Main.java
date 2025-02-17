@@ -31,7 +31,7 @@ public class Main extends Application {
         ToolsPanel toolsPanel = new ToolsPanel(grid);
 
         // Créer le panneau des contrôles
-        ControlButtons controlsButtons = new ControlButtons();
+        ControlButtons controlsButtons = new ControlButtons(grid);
 
         // Disposition de la scène de droite
         VBox rightPanel = new VBox(20);

@@ -6,8 +6,9 @@ import javafx.scene.layout.HBox;
 
 public class ControlButtons {
     private HBox controlButtons;
+    private SudokuGrid sudokuGrid;
 
-    public ControlButtons() {
+    public ControlButtons(SudokuGrid sudokuGrid) {
         controlButtons = new HBox(10);
         controlButtons.setAlignment(Pos.CENTER);
 
@@ -16,6 +17,11 @@ public class ControlButtons {
         Button helpButton = new Button("Aide");
         Button checkButton = new Button("Vérifier");
         Button restartButton = new Button("Recommencer");
+
+        // Ajoute l'action sur le bouton "Recommencer"
+        restartButton.setOnAction(e -> {
+            sudokuGrid.resetGrid();
+        });
 
         controlButtons.getChildren().addAll(undoButton, redoButton, helpButton, checkButton, restartButton);
     }
