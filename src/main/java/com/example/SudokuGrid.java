@@ -98,6 +98,7 @@ public class SudokuGrid {
                                 }
                             }
                             annotationText.setText(formattedAnnotations.toString().trim());
+                            annotationText.setStyle("-fx-fill: darkblue;");
 
                             // Afficher les annotations à la place du nombre
                             cell.setGraphic(annotationText);
@@ -106,6 +107,7 @@ public class SudokuGrid {
 
                     else if (selectedStr != null) {
                         mainNumber.setText(selectedStr);
+                        mainNumber.setStyle("-fx-text-fill: blue;");
                         annotations.clear(); // Effacer les annotations
                         annotationText.setText("");
 
@@ -171,6 +173,7 @@ public class SudokuGrid {
                     if (fixCell.getNumber() == 0) {
                         mainNumber.setText("");
                     } else {
+                        mainNumber.setFont(new Font(18));
                         mainNumber.setText(String.valueOf(fixCell.getNumber()));
                     }                    
                     annotationText.setText(""); // Pas d'annotations pour les cellules fixes
