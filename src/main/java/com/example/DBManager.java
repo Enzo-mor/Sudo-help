@@ -231,7 +231,7 @@ public class DBManager {
 
         try {
             if(!tableExists("profile")) {
-                System.out.println("La table 'profile' n'existe pas. Initialisation en cours...");
+                System.err.println("La table 'profile' n'existe pas. Initialisation en cours...");
                 executeSqlScript(getConnection(), "profile");
             }
     
@@ -257,5 +257,40 @@ public class DBManager {
 
         return res;
     }
+
+    /**
+     *  methode permettant de sauvegarder ou ajouter  un profil dans la Base de Données
+     * @param profile reprsente le profile à sauvegarder
+     * @throws Exception leve une execption de type SqlExecption ou autre.
+     *  donc if faut l'executer dans un bloc try/catch
+     */
+    public static void saveProfile(Profile profile) throws Exception{
+
+        if(!tableExists("profile")) {
+            System.err.println("La table 'profile' n'existe pas. Initialisation en cours...");
+            executeSqlScript(getConnection(), "profile");
+         
+    }
+
+     if(DBManager.getProfiles().size()>0&&!(DBManager.getProfiles()).stream()
+         .anyMatch(p->p.getPseudo().equalsIgnoreCase(profile.getPseudo()))){
+
+      String query = "INSERT INTO profile(pseudo) VALUES(?)";
+       Connection conn=getConnection();
+       PreparedStatement stmt =conn.prepareStatement(query);
+        stmt.setString(1, profile.getPseudo());
+        stmt.executeUpdate();
+
+     }
     
+}
+public static void main(String[] args) {
+    try {
+        DBManager.saveProfile(new Profile(0,"jean"));
+        System.out.println(DBManager.getProfiles().stream().findFirst().get().getId());
+    } catch (Exception e) {
+        // TODO: handle exception
+    }
+    
+}
 }
