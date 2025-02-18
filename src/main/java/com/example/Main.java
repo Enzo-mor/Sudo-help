@@ -22,13 +22,13 @@ public class Main extends Application {
         // Exemple: Récupération de la grille à l'identifiant n°3
         Grid gridSudoku = DBManager.getGrid(3);
 
+        // Créer le panneau des outils
+        ToolsPanel toolsPanel = new ToolsPanel();
+
         // Créer la grille de Sudoku
-        SudokuGrid grid = new SudokuGrid(numberSelection, gridSudoku); // Passer NumberSelection à SudokuGrid
+        SudokuGrid grid = new SudokuGrid(numberSelection, gridSudoku, toolsPanel);
 
         grid.setGrid();
-        
-        // Créer le panneau des outils
-        ToolsPanel toolsPanel = new ToolsPanel(grid);
 
         // Créer le panneau des contrôles
         ControlButtons controlsButtons = new ControlButtons(grid);

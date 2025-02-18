@@ -14,15 +14,14 @@ import java.util.List;
 
 public class SudokuGrid {
     private GridPane grid;
-    private boolean eraseMode = false;    // Mode gomme
-    private boolean annotationMode = false; // Mode annotation
+    private ToolsPanel toolsPanel; // Panneau des outils
     private NumberSelection numberSelection; // Panneau de sélection des chiffres
-    private Button selectedCell = null; // Bouton de la cellule sélectionnée
     private Button[][] cells = new Button[9][9]; // Stocke les boutons des cellules
     private Grid gridSudoku; // Grille de sudoku
 
-    public SudokuGrid(NumberSelection numberSelection, Grid gridData) {
+    public SudokuGrid(NumberSelection numberSelection, Grid gridData, ToolsPanel toolsP) {
         this.grid = new GridPane();
+        this.toolsPanel = toolsP;
         this.numberSelection = numberSelection;
         this.gridSudoku = gridData;
         grid.setHgap(2);
@@ -93,7 +92,6 @@ public class SudokuGrid {
     
     private void setupCellInteraction(Button cellButton, final int r, final int c, List<String> annotations, Label mainNumber, Text annotationText) {
         cellButton.setOnAction(e -> {
-            selectedCell = cellButton;
             String selectedStr = numberSelection.getSelectedNumber();
             Cell currentCell = gridSudoku.getCell(r, c);
     
@@ -102,9 +100,9 @@ public class SudokuGrid {
                 return;
             }
     
-            if (eraseMode) {
+            if (toolsPanel.getEraseMode()) {
                 resetCellDisplay(cellButton, mainNumber, annotationText);
-            } else if (annotationMode && selectedStr != null) {
+            } else if (toolsPanel.getAnnotationMode() && selectedStr != null) {
                 if (mainNumber.getText().isEmpty()) {
                     if (!annotations.contains(selectedStr)) {
                         annotations.add(selectedStr);
@@ -124,22 +122,6 @@ public class SudokuGrid {
     // Getters
     public GridPane getGridPane() {
         return grid;
-    }
-
-    public boolean getEraseMode() {
-        return eraseMode;
-    }
-
-    public boolean getAnnotationMode() {
-        return annotationMode;
-    }
-
-    public void setEraseMode(boolean erase) {
-        this.eraseMode = erase;
-    }
-
-    public void setAnnotationMode(boolean annotation) {
-        this.annotationMode = annotation;
     }
 
     // Méthodes pour effacer la grille
@@ -227,5 +209,11 @@ public class SudokuGrid {
                 }
             }
         }
+
+        numberSelection.resetSelectedNumber();
+        numberSelection.clearSelection();
+        
+        toolsPanel.setEraseButtonOff();
+        toolsPanel.setPencilButtonOff();
     }
 }

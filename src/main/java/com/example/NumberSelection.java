@@ -51,7 +51,7 @@ public class NumberSelection {
         buttons.forEach(node -> ((Button) node).setStyle("")); 
         button.setStyle("-fx-background-color: lightgreen;");
         
-        this.selectedNumber = button.getText();
+        setSelectedNumber(button.getText());
     }
 
     // Getters
@@ -61,5 +61,19 @@ public class NumberSelection {
 
     public String getSelectedNumber() {
         return selectedNumber;
+    }
+
+    // Setters
+    public void setSelectedNumber(String selectedNumber) {
+        this.selectedNumber = selectedNumber;
+    }
+
+    public void resetSelectedNumber() {
+        this.selectedNumber = null;
+    }
+
+    public void clearSelection() {
+        var buttons = numberSelection.lookupAll(".button");
+        buttons.forEach(node -> ((Button) node).setStyle("")); 
     }
 }

@@ -8,10 +8,12 @@ import javafx.scene.control.Button;
 
 public class ToolsPanel {
     private VBox tools;
-    private SudokuGrid sudokuGrid;
+    private boolean eraseMode = false;    // Mode gomme
+    private boolean annotationMode = false; // Mode annotation
+    private Button eraseButton;
+    private Button pencilButton;
 
-    public ToolsPanel(SudokuGrid grid) {
-        this.sudokuGrid = grid;
+    public ToolsPanel() {
         this.tools = new VBox(15);
         tools.setAlignment(Pos.CENTER);
 
@@ -24,34 +26,30 @@ public class ToolsPanel {
         pencilIcon.setPreserveRatio(true);
 
         /* Déclaration des boutons pour l'effaceur et l'annotation */
-        Button eraseButton = new Button();
-        Button pencilButton = new Button();
+        eraseButton = new Button();
+        pencilButton = new Button();
 
         eraseButton.setGraphic(binIcon);
         eraseButton.setOnAction(e -> {
-            boolean newMode =!sudokuGrid.getEraseMode();
-            sudokuGrid.setEraseMode(newMode);
-            sudokuGrid.setAnnotationMode(false);
+            boolean newMode = !getEraseMode();
 
             if (newMode) {
-                eraseButton.setStyle("-fx-background-color: lightgreen;");
-                pencilButton.setStyle("");
+                setEraseButtonOn();
+                setPencilButtonOff();
             } else {
-                eraseButton.setStyle("");
+                setEraseButtonOff();
             }
         });
 
         pencilButton.setGraphic(pencilIcon);
         pencilButton.setOnAction(e -> {
-            boolean newMode = !sudokuGrid.getAnnotationMode();
-            sudokuGrid.setAnnotationMode(newMode);
-            sudokuGrid.setEraseMode(false);
+            boolean newMode = !getAnnotationMode();
 
             if (newMode) {
-                pencilButton.setStyle("-fx-background-color: lightgreen;");
-                eraseButton.setStyle("");
+                setPencilButtonOn();
+                setEraseButtonOff();
             } else {
-                pencilButton.setStyle("");
+                setPencilButtonOff();
             }
         });
 
@@ -70,17 +68,33 @@ public class ToolsPanel {
     public Button getPencilButton() {
         return (Button) tools.getChildren().get(1);
     }
+    public boolean getEraseMode() {
+        return eraseMode;
+    }
 
+    public boolean getAnnotationMode() {
+        return annotationMode;
+    }
+    
+    
     // Setters
-    public void setEraseButton(Button eraseButton) {
-        tools.getChildren().set(0, eraseButton);
+    public void setEraseButtonOn() {
+        eraseMode = true;
+        eraseButton.setStyle("-fx-background-color: lightgreen;");
     }
 
-    public void setPencilButton(Button pencilButton) {
-        tools.getChildren().set(1, pencilButton);
+    public void setPencilButtonOn() {
+        annotationMode = true;
+        pencilButton.setStyle("-fx-background-color: lightgreen;");
     }
 
-    public void setTools(VBox tools) {
-        this.tools = tools;
+    public void setEraseButtonOff() {
+        eraseMode = false;
+        eraseButton.setStyle("");
+    }
+
+    public void setPencilButtonOff() {
+        annotationMode = false;
+        pencilButton.setStyle("");
     }
 }
