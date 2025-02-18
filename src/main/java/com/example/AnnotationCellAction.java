@@ -22,5 +22,9 @@ public class AnnotationCellAction implements Action  {
     public void undoAction() {
         grid.getCell(x, y).removeAnnotation(number);
     }
+    @Override
+    public String actionType(){
+        return "actionAnontation";
+    }
     
 }

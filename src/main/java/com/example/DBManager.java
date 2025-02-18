@@ -242,10 +242,9 @@ public class DBManager {
                 ResultSet rs = pstmt.executeQuery();
     
                 while(rs.next()) {
-                    Integer id = rs.getInt("id_profile");
                     String pseudo = rs.getString("pseudo");
     
-                    res.add(new Profile(id, pseudo));
+                    res.add(new Profile(pseudo));
                 }
             }
         }
@@ -260,7 +259,8 @@ public class DBManager {
 
     /**
      *  methode permettant de sauvegarder ou ajouter  un profil dans la Base de Données
-     * @param profile reprsente le profile à sauvegarder
+     *  le nom du profile reste insemsible à la casse
+     * @param profile represente le profile à sauvegarder
      * @throws Exception leve une execption de type SqlExecption ou autre.
      *  donc if faut l'executer dans un bloc try/catch
      */
@@ -286,8 +286,8 @@ public class DBManager {
 }
 public static void main(String[] args) {
     try {
-        DBManager.saveProfile(new Profile(0,"jean"));
-        System.out.println(DBManager.getProfiles().stream().findFirst().get().getId());
+        DBManager.saveProfile(new Profile("jean"));
+        System.out.println(DBManager.getProfiles().stream().findFirst().get().getPseudo());
     } catch (Exception e) {
         // TODO: handle exception
     }

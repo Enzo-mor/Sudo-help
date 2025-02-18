@@ -24,5 +24,8 @@ public class NumberCellAction implements Action  {
     public void undoAction() {
         grid.getCell(x, y).setNumber(old_number);
     }
-    
+    @Override
+    public String actionType(){
+        return "actionNombre";
+    }
 }
