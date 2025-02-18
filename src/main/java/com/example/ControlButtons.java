@@ -20,7 +20,7 @@ public class ControlButtons {
 
         // Ajoute l'action sur le bouton "Recommencer"
         restartButton.setOnAction(e -> {
-            sudokuGrid.resetGrid();
+            sudokuGrid.resetGame();
         });
 
         controlButtons.getChildren().addAll(undoButton, redoButton, helpButton, checkButton, restartButton);

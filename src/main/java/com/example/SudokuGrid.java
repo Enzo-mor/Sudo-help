@@ -171,7 +171,7 @@ public class SudokuGrid {
         }
     }
 
-    public void resetGrid() {
+    public void resetGame() {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 Cell cellData = gridSudoku.getCell(row, col);
