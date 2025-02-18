@@ -175,10 +175,6 @@ public class SudokuGrid {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 Cell cellData = gridSudoku.getCell(row, col);
-                if (cellData instanceof FlexCell) {
-                    ((FlexCell) cellData).setNumber(0);
-                    ((FlexCell) cellData).getAnnotations().clear();
-                }
     
                 // Remettre l'état graphique de la cellule à zéro
                 Button cellButton = cells[row][col];
