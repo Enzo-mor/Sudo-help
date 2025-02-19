@@ -8,12 +8,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainMenu {
+    private static String profile = null;
 
     public static void showMainMenu(Stage stage, String profileName) {
+        profile = profileName;
+
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
 
-        Label welcomeLabel = new Label("Bienvenue, " + profileName);
+        Label welcomeLabel = new Label("Bienvenue, " + profile);
         welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         Button startGameButton = new ProfileButton("Jouer");
@@ -31,5 +34,9 @@ public class MainMenu {
         stage.setTitle("Menu Principal");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public static String getProfileName() {
+        return profile;
     }
 }

@@ -8,52 +8,86 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-
 
 public class SudokuMenu {
     public static void showSudokuLibrary(Stage stage) {
 
         final List<Sudoku> sudokus = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            if (i == 1) {
+                sudokus.add(new Sudoku("Sudoku F-" + i, "00.01.58", "100", "completed"));
+            } else if (i == 2) {
+                sudokus.add(new Sudoku("Sudoku F-" + i, "00.03.02", "", "in_progress"));
+            } else {
+                sudokus.add(new Sudoku("Sudoku F-" + i, "00.00.00", "", "not_started"));
+            }
+        }
 
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(20));
-        gridPane.setHgap(20);
-        gridPane.setVgap(20);
+        gridPane.setHgap(15);
+        gridPane.setVgap(15);
         gridPane.setAlignment(Pos.CENTER);
 
         int columns = 4;
         for (int i = 0; i < sudokus.size(); i++) {
             Sudoku sudoku = sudokus.get(i);
 
-            VBox sudokuBox = new VBox(10);
+            VBox sudokuBox = new VBox(5);
             sudokuBox.setAlignment(Pos.CENTER);
-            sudokuBox.setStyle("-fx-border-color: black; -fx-padding: 10px; -fx-background-color: #F0F0F0;");
+            sudokuBox.setStyle("-fx-background-color: #939cb5; -fx-padding: 10; -fx-border-color: black; -fx-border-width: 1; -fx-border-radius: 5;");
 
             Label nameLabel = new Label(sudoku.getName());
-            Label bestTimeLabel = new Label(sudoku.getBestTime());
-            Label scoreLabel = new Label(sudoku.getScore());
-            Label statusLabel = new Label(sudoku.getStatus());
+            Label scoreLabel = new Label("Score : " + (sudoku.getScore().isEmpty() ? "-" : sudoku.getScore()));
+            Label bestTimeLabel = new Label("Temps : " + sudoku.getBestTime());
 
-            sudokuBox.getChildren().addAll(nameLabel, bestTimeLabel, scoreLabel, statusLabel);
+            ImageView statusIcon = new ImageView();
+            statusIcon.setFitWidth(24);
+            statusIcon.setFitHeight(24);
+
+            switch (sudoku.getStatus()) {
+                case "completed":
+                    statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/star.png")));
+                    break;
+                case "in_progress":
+                    statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/pause.png")));
+                    break;
+                default:
+                    statusIcon = null;
+                    break;
+            }
+
+            VBox contentBox = new VBox(3);
+            contentBox.setAlignment(Pos.CENTER);
+
+            if (statusIcon != null) {
+                contentBox.getChildren().add(statusIcon);
+            }
+            contentBox.getChildren().addAll(scoreLabel, bestTimeLabel);
+
+            sudokuBox.getChildren().addAll(nameLabel, contentBox);
 
             gridPane.add(sudokuBox, i % columns, i / columns);
 
-            final int selectedSudokuId = i + 1; // Crée une copie finale
-            //sudokuBox.setOnMouseClicked(e -> showSudokuGame(stage, selectedSudokuId));  --> VOIR AVEC NATHAN
+            final int selectedSudokuId = i + 1;
+            sudokuBox.setOnMouseClicked(e -> SudokuGame.showSudokuGame(stage, selectedSudokuId));
         }
 
-        Button backButton = new Button("Retour");
-        //backButton.setOnAction(e -> MainMenu.showMainMenu(stage, selectedProfile));   --> MODIFIER DANS MENUCONTROLLER
+        Button backButton = new ProfileButton("Retour");
+        backButton.setOnAction(e -> MainMenu.showMainMenu(stage, MainMenu.getProfileName()));
 
-        VBox layout = new VBox(20, gridPane, backButton);
+        VBox layout = new VBox(15, gridPane, backButton);
         layout.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(layout, 800, 600);
+        layout.setPadding(new Insets(10));
 
-        stage.setTitle("Bibliothèque de Sudoku");
+        Scene scene = new Scene(layout, 900, 600);
+
+        stage.setTitle("Mode Facile");
         stage.setScene(scene);
         stage.show();
     }
@@ -71,19 +105,19 @@ public class SudokuMenu {
             this.status = status;
         }
 
-        public String getName() {
+        public String getName() { 
             return name;
         }
 
-        public String getBestTime() {
+        public String getBestTime() { 
             return bestTime;
         }
 
-        public String getScore() {
+        public String getScore() { 
             return score;
         }
 
-        public String getStatus() {
+        public String getStatus() { 
             return status;
         }
     }
