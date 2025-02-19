@@ -1,7 +1,13 @@
-com\example\FlexCell.class
+com\example\Game.class
+com\example\AnnotationCellAction.class
 com\example\Main.class
-com\example\Grid.class
+com\example\Action.class
 com\example\Cell.class
 com\example\DBManager.class
 com\example\Grid$GridIterator.class
+com\example\Profile.class
+com\example\SudokuSolver.class
+com\example\FlexCell.class
+com\example\Grid.class
+com\example\NumberCellAction.class
 com\example\FixCell.class

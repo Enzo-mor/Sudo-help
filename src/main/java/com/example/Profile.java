@@ -3,13 +3,11 @@ package com.example;
 /**
  * Classe représentant les profiles.
  * @author Kilian POUSSE
+ * @author Taise de Thèse
  */
 public class Profile {
     
     /* ====== Variables d'instance ====== */
-
-    /** Identifiant du profile */
-    private Integer id;
 
     /** Pseudonyme du profile */
     private String pseudo;
@@ -40,6 +38,15 @@ public class Profile {
     @Override
     public String toString() {
         return "<Profile: " + getPseudo() + ">";
+    }
+  /***
+   *  cette methode permet de sauvegarder un profile dans la base de données
+   *  avant d'utliser cette methode la base de donnée devra d'abord etre initialiser
+   * @throws Exception leve une exeception en cas d'erreur
+   * @see DBManager
+   */
+    public void save() throws Exception{
+        DBManager.saveProfile(this);
     }
 
 }

@@ -65,6 +65,28 @@ public class Grid implements Iterable<Cell> {
         this.difficulty = difficulty;
         this.solvedCells = SudokuSolver.solveCells(this.cells);
     }
+    /**
+     * cette methode permet de creer une grille à partir d'un id et de la difficulter
+     * cette methode est utileé pour cloner une grille
+     * @param id
+     * @param difficulty
+     */
+    private Grid(int id,String difficulty ){
+        this.id = id;
+        this.difficulty = difficulty;
+        this.cells=new ArrayList<Cell>();
+
+    };
+   /***
+    * methode permettant de cloner une grille
+    * cette methode permettant de creer une nouvelle instance copie  de grille, afin d'eviter d'affecter la grille de depart
+    * @return Grid une copie de la grille de depart
+    */
+    public Grid clone(){
+         Grid gridclone=new Grid(this.id,this.difficulty);
+        this.cells.forEach((cell)->gridclone.cells.add(cell.clone()));
+        return gridclone;
+    }
 
     /**
      * Convertit une chaîne de caractères en liste de cellules.

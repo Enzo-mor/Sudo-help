@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Classe: Permet l'initialisation et/ou la création de la Base de données
@@ -272,7 +273,7 @@ public class DBManager {
          
     }
 
-     if(DBManager.getProfiles().size()>0&&!(DBManager.getProfiles()).stream()
+     if(!(DBManager.getProfiles()).stream()
          .anyMatch(p->p.getPseudo().equalsIgnoreCase(profile.getPseudo()))){
 
       String query = "INSERT INTO profile(pseudo) VALUES(?)";
@@ -282,15 +283,32 @@ public class DBManager {
         stmt.executeUpdate();
 
      }
+    }
+    /**
+     * cette methode permet de retourner le profile present dans la base de données à travers son pseudo
+     * @param pseudo
+     * @return  profile
+     * @throws Exception leve une exception de type NoSuchElementException
+     * si aucun profile contenant ce pseudo n'a été trouvé dans la base de donnée
+     */
+     public static Profile getProfile(String pseudo) throws Exception {
+         return DBManager.getProfiles().stream()
+         .filter(p->p.getPseudo().equalsIgnoreCase(pseudo))
+         .findFirst()
+         .orElseThrow(() -> new NoSuchElementException("Aucun profil n'a été trouvé avec le pseudo : " + pseudo));
+     }
     
-}
+
 public static void main(String[] args) {
     try {
         DBManager.saveProfile(new Profile("jean"));
         System.out.println(DBManager.getProfiles().stream().findFirst().get().getPseudo());
+        System.out.println(DBManager.getProfile("jea"));
     } catch (Exception e) {
+        System.err.println(e.getMessage());
         // TODO: handle exception
     }
+
     
 }
 }
