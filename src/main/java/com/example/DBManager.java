@@ -58,6 +58,7 @@ public class DBManager {
                 System.out.println("Connexion à la base de données SQLite réussie.");
                 executeSqlScript(connection, "grid");
                 executeSqlScript(connection, "profile");
+                executeSqlScript(connection, "game");
             }
         }
     }
@@ -68,8 +69,9 @@ public class DBManager {
      * @throws SQLException en cas d'erreur de connexion
      */
     private static Connection getConnection() throws SQLException {
+        conn = DriverManager.getConnection(DATABASE_URL);
         if(conn == null || conn.isClosed()) {
-            conn = DriverManager.getConnection(DATABASE_URL);
+            throw new SQLException("Tentative d'accès à une base de données fermée.");
         }
         return conn;
     }
@@ -93,8 +95,11 @@ public class DBManager {
      * dans la BdD
      * @param connection
      * @param scriptName
+     * 
+     * @throws SQLException leve une exeception de type sql en cas de probleme de connection 
+     * @throws RuntimeException leve cette execption si le ficher est sql scriptName est introuvable 
      */
-    private static void executeSqlScript(Connection connection, String scriptName) {
+    private static void executeSqlScript(Connection connection, String scriptName) throws SQLException, RuntimeException {
         String scriptPath = "/bdd/" + scriptName + ".sql";
         try(InputStream inputStream = DBManager.class.getResourceAsStream(scriptPath);
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
@@ -123,8 +128,10 @@ public class DBManager {
      * Verifie si une table existe dans la Base de Données
      * @param tableName Nom de la table dans la BdD
      * @return Vrai si la table existe, Faux sinon
+     * 
+     * @throws SQLException leve l'exeption en cas d'erreur de connection
      */
-    private static boolean tableExists(String tableName) {
+    private static boolean tableExists(String tableName) throws SQLException {
         String query = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
     
         try(Connection conn = getConnection();
@@ -180,12 +187,45 @@ public class DBManager {
             throw new RuntimeException("Erreur lors du chargement de la grille avec l'ID: " + id, e);
         }
     }
+
+   /**
+    * cette methode retourne l'id du dernier jeu
+    * @return
+    * @throws SQLException leve une exception de type SQLException
+    */
+    protected static int getLastIdGame() throws SQLException {
+        
+        try {
+            if(!tableExists("game")) {
+                System.err.println("La table 'game' n'existe pas. Initialisation en cours...");
+                executeSqlScript(getConnection(), "game");
+            }
+
+        String query = "SELECT COALESCE(MAX(id_game), 0) FROM game";
+        try(Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query)) {
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next())
+            return rs.getInt(1);
+        } catch(SQLException e) {
+            System.err.println("Erreur lors de la récupération du dernier ID de partie : " + e.getMessage());
+        }
+          return 0;
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors du l'execution du script: " + e);
+    }
+    }
+
     
     /**
      * Récupérer toutes les grilles sous forme de liste
      * @return Liste comportant les grilles présentes dans la BdD
+     * @throws RuntimeException leve une execeptions si les grilles n'ont pas été chargé du par 
+     *  par une erreur de connexion
      */
-    public static List<Grid> getGrids() {
+    public static List<Grid> getGrids() throws RuntimeException {
         List<Grid> res = new ArrayList<>();
 
         try {
@@ -226,8 +266,11 @@ public class DBManager {
     /**
      * Récupérer tous les profiles sous forme de liste
      * @return Liste comportant les profiles présentes dans la BdD
+     * @throws RuntimeException leve une execeptions si les profiles n'ont pas été chargé du par 
+     *  par une erreur de connexion
+     * 
      */
-    public static List<Profile> getProfiles() {
+    public static List<Profile> getProfiles() throws RuntimeException {
         List<Profile> res = new ArrayList<>();
 
         try {
@@ -257,21 +300,20 @@ public class DBManager {
 
         return res;
     }
-
+    
     /**
      *  methode permettant de sauvegarder ou ajouter  un profil dans la Base de Données
      *  le nom du profile reste insemsible à la casse
      * @param profile represente le profile à sauvegarder
-     * @throws Exception leve une execption de type SqlExecption ou autre.
-     *  donc if faut l'executer dans un bloc try/catch
+     * @throws SQLException leve une execption de type SqlExecption en cas d'erreur de connection.
+     *  donc if faut l'executer dans un bloc try/cacht
      */
-    public static void saveProfile(Profile profile) throws Exception{
+    public static void saveProfile(Profile profile) throws SQLException{
 
         if(!tableExists("profile")) {
             System.err.println("La table 'profile' n'existe pas. Initialisation en cours...");
             executeSqlScript(getConnection(), "profile");
-         
-    }
+         }
 
      if(!(DBManager.getProfiles()).stream()
          .anyMatch(p->p.getPseudo().equalsIgnoreCase(profile.getPseudo()))){
@@ -284,14 +326,154 @@ public class DBManager {
 
      }
     }
+
+    /**
+     * Vérifie si un profil existe dans la base de données.
+     * @param profileName Le nom du profil à vérifier.
+     * @return true si le profil existe, sinon false.
+     * @throws SQLException leve une execption de type SqlExecption en cas d'erreur de connection.
+     */
+    public static boolean profileExists(String profileName) throws SQLException {
+
+        if(!tableExists("profile")) {
+            System.err.println("La table 'profile' n'existe pas. Initialisation en cours...");
+            executeSqlScript(getConnection(), "profile");
+         }
+
+        String query = "SELECT COUNT(*) FROM profile WHERE LOWER(pseudo) = LOWER(?)";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, profileName);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Retourne true si au moins un profil est trouvé
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; 
+    }
+     
+
+     /**
+     * Récupérer tous les jeux present sous forme de liste
+     * @return Liste comportant les jeux présentes dans la BdD
+     * 
+     * @throws Runtimexception leve une execption en cas d'erreur de connection.
+     */
+    public static List<Game> getGames() throws RuntimeException {
+        List<Game> res = new ArrayList<>();
+
+        try {
+            if(!tableExists("game")) {
+                System.err.println("La table 'profile' n'existe pas. Initialisation en cours...");
+                executeSqlScript(getConnection(), "game");
+            }
+    
+            String query = "SELECT * FROM game";
+            try(Connection conn = getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+    
+                ResultSet rs = pstmt.executeQuery();
+    
+                while(rs.next()) {
+                    Game game=new Game(
+                        rs.getLong("id_game")
+                      , DBManager.getGrid(rs.getInt("grid"))
+                      , DBManager.getProfile(rs.getString("player"))
+                      , rs.getString("created_date")
+                      , rs.getString("last_modifed_date")
+                      , rs.getDouble("progress_rate")
+                      , rs.getLong("elapsed_time")
+                      );
+                     game.applyActions(ActionManagerApply.deserializeList(rs.getString("actions"), game));
+                    res.add(game );
+                }
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors de l'execution du script: " + e);
+        }
+
+
+        return res;
+    }
+   
+    /***
+     * cette retourne toutes les parties present dans la DB appartant à un profil
+     * @param pseudo : represnte le profil
+     * @return
+     * @throws SQlException leve une erreur en cas de probleme de connection 
+     */
+    public static List<Game> getGamesForProfile(String pseudo) throws SQLException {
+        List<Game> games = new ArrayList<>();
+    
+        if (DBManager.profileExists(pseudo)) {
+            games = DBManager.getGames().stream()
+                    .filter(game -> game.getProfile() != null && game.getProfile().getPseudo().equalsIgnoreCase(pseudo))
+                    .toList();
+        }
+        return games;
+    }
+
+    /**
+      * cette methode permet de sauvegarder un jeu
+      * @param game
+      * @throws SQLException leve une execption en cas d'erreur de connection
+      */
+      protected static void saveGame(Game game) throws SQLException{
+       
+            if(!tableExists("game")) {
+                System.err.println("La table 'profile' n'existe pas. Initialisation en cours...");
+                executeSqlScript(getConnection(), "game");
+                 }
+                  if(!DBManager.profileExists(game.getProfile().getPseudo()))
+                    game.getProfile().save();
+
+               String sql = "INSERT INTO game (id_game, grid,player,created_date, last_modifed_date,progress_rate,score,actions,elapsed_time) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+                 "ON CONFLICT(id_game) DO UPDATE SET " +
+                 "player = excluded.player, " +
+                 "last_modifed_date = excluded.last_modifed_date, " +
+                 "progress_rate = excluded.progress_rate, " +
+                 "score = excluded.score;"+ 
+                 "actions=excluded.actions"+
+                 "elapsed_time=excluded.elapsed_time";
+                 try (Connection conn = getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                    pstmt.setLong(1, game.getId());
+                    pstmt.setInt(2, game.getGrid().getId());
+                    pstmt.setString(3, game.getProfile().getPseudo());
+                    pstmt.setString(4, game.getCreatedDate());
+                    pstmt.setString(5, game.getLastModifDate());
+                    pstmt.setDouble(6, game.getProgressRate());
+                    pstmt.setInt(7, game.getScore());
+                    pstmt.setString(8, game.JsonEncodeActionsGame());
+                    pstmt.setLong(9,game.getElapsedTime());
+
+                    pstmt.executeUpdate();
+                    System.out.println("Jeu enregistré avec succès !");
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    }
+
+            }
+
+       
     /**
      * cette methode permet de retourner le profile present dans la base de données à travers son pseudo
      * @param pseudo
      * @return  profile
-     * @throws Exception leve une exception de type NoSuchElementException
-     * si aucun profile contenant ce pseudo n'a été trouvé dans la base de donnée
+     * @throws SQLException leve une exception en cas d'erreur de connection
+     * @throws NoSuchElementException leve une exception si aucun profile contenant ce pseudo n'a été trouvé dans la base de donnée
      */
-     public static Profile getProfile(String pseudo) throws Exception {
+     public static Profile getProfile(String pseudo) throws SQLException ,NoSuchElementException{
          return DBManager.getProfiles().stream()
          .filter(p->p.getPseudo().equalsIgnoreCase(pseudo))
          .findFirst()
@@ -301,14 +483,15 @@ public class DBManager {
 
 public static void main(String[] args) {
     try {
-        DBManager.saveProfile(new Profile("jean"));
-        System.out.println(DBManager.getProfiles().stream().findFirst().get().getPseudo());
-        System.out.println(DBManager.getProfile("jea"));
+        DBManager.init();
+       // DBManager.getGames();
+        DBManager.getGamesForProfile("jaques").forEach(t->System.out.println(t.getHistoActions()));;
+       // System.out.println(DBManager.getProfile("jea"));
+        //DBManager.saveGame(new Game(DBManager.getGrid(2),new Profile("pierre")));
     } catch (Exception e) {
         System.err.println(e.getMessage());
         // TODO: handle exception
-    }
 
-    
+}
 }
 }

@@ -8,13 +8,9 @@ import java.util.List;
  * @author Kilian POUSSE
  * @version 1.1
  */
-public interface Cell {
+public interface Cell extends ReadOnlyCell {
 
-    /**
-     * Recupérer le chiffre de la cellule
-     * @return Entier représentant le chiffre (0 si vide) [int]
-     */
-    public int getNumber();
+   
 
     /**
      * Mettre un chiffre dans une cellule
@@ -28,11 +24,6 @@ public interface Cell {
      */
     public void addAnnotation(int number);
 
-    /** 
-     * Récupérer les annotations de la cellule
-     * @return Liste des annotations 
-     */
-    public List<Integer> getAnnotations();
 
     /**
      * Enlever une annotation d'une cellule
@@ -46,26 +37,16 @@ public interface Cell {
     public void clear();
 
     /**
-     * Savoir si une celluce est vide ou non
-     * @return 'true' si la cellule est vide, sinon 'false' [booleen]
-     */
-    public boolean isEmpty();
-
-    /**
-     * Savoir si une cellule est modifiable
-     * @return Vrai si la cellule peut etre modifiée
-     */
-    public boolean isEditable();
-
-    /** 
-     * Transforme la cellule en chaîne de caractères
-     * @return La chaîne de caractères correspondante [String]
-     */
-    public String toString();
-
-     /**
      * Clone une cellule flexible
      * @return Une nouvelle instance de Cell (clone de la cellule)
      */
     public Cell clone();
+
+
+   
+    
+
+   
+
+     
 }

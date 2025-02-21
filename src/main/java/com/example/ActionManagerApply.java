@@ -12,29 +12,38 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
-
+/**
+ * Cette classe permet de gerer la serialisation et la deserialisation d'une liste actions
+ * 
+ * @author Taise de Thèse
+ * @version 1.0 
+ */
 public class ActionManagerApply {
     
 
     /**
      *  cette methode permet de serialiser une liste d'action
      * @param actions
-     * @return une chaine sous forme de json obtenu en serialisant la liste
+     * @return une chaine sous forme de json obtenu contenant un ensemble d'actions en serialiser
      */
     public static String serializeList(List<Action> actions) {
         return new GsonBuilder()
                .registerTypeHierarchyAdapter(Action.class, new ActionManagerserialiser())
-               .setPrettyPrinting()
                .create()
                .toJson(actions);
     }
-
-
-    public static List<Action> deserializeList(String json,Grid grid) {
+   
+    /**
+     * cette methode permet de deserialiser une liste d'action
+     * @param json represente la chaine json contenant les actions serialiser
+     * @param game represente le jeu  sur lequel les actions seront appliquées
+     * @return une liste d'action deserialiser
+     */
+    public static List<Action> deserializeList(String json,Game game) {
         Type listType = new TypeToken<List<Action>>() {}.getType();
 
         return new GsonBuilder()
-               .registerTypeAdapter(Action.class, new ActionManagerDeserialiser(grid))
+               .registerTypeAdapter(Action.class, new ActionManagerDeserialiser(game))
                .create()
                .fromJson(json, listType);
     }
@@ -43,20 +52,20 @@ public class ActionManagerApply {
     * Gestion  désérialisation des objets Action
     */
     private static class ActionManagerDeserialiser implements JsonDeserializer<Action> {
-        private Grid grid;
-        public ActionManagerDeserialiser(Grid grid){
-        this.grid=grid;
+        private Game game;
+        public ActionManagerDeserialiser(Game game){
+        this.game=game;
         }
          @Override
         public Action deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
              try {
                  Class <? extends Action> subAction=ActionFactory.getClassFromType(json.getAsJsonObject().get("type").getAsString());
-                 java.lang.reflect.Method method=subAction.getMethod("jsonDecode", String.class,Grid.class);
-                 return (Action) method.invoke(subAction, json.toString(), grid);
+                 java.lang.reflect.Method method=subAction.getMethod("jsonDecode", String.class,Game.class);
+                 return (Action) method.invoke(subAction, json.toString(), game);
                  } catch (Exception e) {
                     e.printStackTrace();
-                    throw new JsonParseException("Failed to deserialize Action", e);
+                    throw new JsonParseException("echec lors de le deserialisation : ", e);
                 }   
          }
     }
@@ -71,7 +80,9 @@ public class ActionManagerApply {
 
     public static void main(String[] args) {
 
-        // Création de quelques actions pour tester
+        try {
+            
+            // Création de quelques actions pour tester
         Action action1 = new AnnotationCellAction(null, 1, 1, 5);
         Action action2 = new NumberCellAction(null, 2, 2, 8, 3);
 
@@ -86,7 +97,7 @@ public class ActionManagerApply {
         System.out.println("Liste d'actions sérialisée : " + json);
 
         // Désérialisation de la liste d'actions
-        List<Action> deserializedActions = ActionManagerApply.deserializeList(json, null);
+        List<Action> deserializedActions = ActionManagerApply.deserializeList(json, new Game(DBManager.getGrid(2), new Profile("jean")));
         System.out.println("Liste d'actions désérialisée : " + deserializedActions);
 
         /* / Exécution des actions désérialisées
@@ -94,5 +105,10 @@ public class ActionManagerApply {
             action.doAction();
             System.out.println("Action exécutée : " + action);
         }*/
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        
     }
 }

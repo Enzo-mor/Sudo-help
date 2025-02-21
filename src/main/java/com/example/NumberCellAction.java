@@ -11,11 +11,10 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class NumberCellAction implements Action  {
+public class NumberCellAction extends Action  {
     private int x, y;
     private int number;
     private int old_number;
-    private Grid grid;
    /**
     * methode permettant de creer une action qui permet de modifier une valeur à une cellule specifique de la grille
     * @param grid represente  la grille à modifier
@@ -24,21 +23,30 @@ public class NumberCellAction implements Action  {
     * @param number represente la nouvelle valeur à modifier
     * @param old_number represente l'anciene valeur presente à  cette position
     */
-    public NumberCellAction(Grid grid, int x, int y, int number, int old_number) {
+    public NumberCellAction(Game game, int x, int y, int number, int old_number) {
+        super(game);
         this.x = x;
         this.y = y;
         this.number = number;
         this.old_number = old_number;
-        this.grid = grid;
+    }
+    
+    /**
+     * methode permettant de retourner la chaine representant l'action
+     * @return
+     */
+    @Override
+    public String toString(){
+        return "modification de la valeur de la cellule à la position : x = "+x+" et y = "+y+" de "+old_number+" à "+number;
     }
     @Override
-    public void doAction() {
-        grid.getCell(x, y).setNumber(number);
+     protected void doAction() {
+        game.getGrid().getMutableCell(x, y).setNumber(number);
     }
 
     @Override
-    public void undoAction() {
-        grid.getCell(x, y).setNumber(old_number);
+    protected void undoAction() {
+        game.getGrid().getMutableCell(x, y).setNumber(old_number);
     }
     @Override
     public String actionType(){
@@ -70,10 +78,10 @@ public class NumberCellAction implements Action  {
      * @
      * @throws Exception leve une exception si le json est incompatible à l'action ou incorrect
      */
-    public  static NumberCellAction jsonDecode(String json,Grid grid) throws Exception{
+    public  static NumberCellAction jsonDecode(String json,Game game) throws Exception{
         try{
             Gson gson=new GsonBuilder()
-            .registerTypeAdapter(NumberCellAction.class, new NumberCellActionDeserialiser(grid) )
+            .registerTypeAdapter(NumberCellAction.class, new NumberCellActionDeserialiser(game) )
             .create();
              return gson.fromJson(json, NumberCellAction.class);
         }catch ( JsonParseException e) {
@@ -98,15 +106,15 @@ public class NumberCellAction implements Action  {
          */
     private static class NumberCellActionDeserialiser implements JsonDeserializer<NumberCellAction> {
         /**
-         * represente la grille qui sera contenu dans l'annotation
+         * represente le jeu dans lequel qui sera contenu dans l'annotation
          */
-        private Grid grid;
+        private Game game;
         /**
          *  constructeur de la classe 
          * @param grid represente la grille qui sera contenu dans l'annotation
          */
-     public   NumberCellActionDeserialiser(Grid grid){
-        this.grid=grid;
+     public   NumberCellActionDeserialiser(Game game){
+        this.game=game;
      }
     public NumberCellAction  deserialize(JsonElement jsonElement, Type vartype, JsonDeserializationContext context) throws JsonParseException{
         JsonObject jsonObject = jsonElement.getAsJsonObject();
@@ -114,7 +122,7 @@ public class NumberCellAction implements Action  {
             throw new JsonParseException("Le JSON ne contient pas tous les champs requis : 'x', 'y', 'number','old_number','type");
         }
          return new NumberCellAction(
-           grid, 
+           game, 
            jsonObject.get("x").getAsInt(),
            jsonObject.get("y").getAsInt(),
            jsonObject.get("number").getAsInt(), 

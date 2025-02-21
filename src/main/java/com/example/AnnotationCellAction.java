@@ -11,27 +11,30 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class AnnotationCellAction implements Action  {
+/**
+ * cette classe permet de gerer les actions d'annotation d'un jeu de sudoku
+ * elle permet d'ajouter une annotation à une cellule
+ */
+public class AnnotationCellAction extends Action  {
 
     private int x, y;
     private int number;
-    private Grid grid;
 
-    public AnnotationCellAction(Grid grid, int x, int y, int number) {
+    public AnnotationCellAction(Game game, int x, int y, int number) {
+        super(game);
         this.x = x;
         this.y = y;
         this.number = number;
-        this.grid = grid;
     }
 
     @Override
-    public void doAction() {
-        grid.getCell(x, y).addAnnotation(number);
+    protected void doAction() {
+        this.game.getGrid().getMutableCell(x, y).addAnnotation(number);
     }
 
     @Override
-    public void undoAction() {
-        grid.getCell(x, y).removeAnnotation(number);
+    protected void undoAction() {
+        this.game.getGrid().getMutableCell(x, number).removeAnnotation(number);
     }
     @Override
     public String actionType(){
@@ -46,6 +49,14 @@ public class AnnotationCellAction implements Action  {
         jsonObject.addProperty("number", number);
         return jsonObject; 
 
+    }
+    /**
+     * methode permettant de retourner la chaine representant l'action
+     * @return
+     */
+    @Override
+    public String toString(){
+        return " ajout de l'annotation  au jeu de valeur : "+number+ " à la position : x = "+x+" et y = "+y;
     }
     @Override
     public String jsonEncode(){
@@ -62,10 +73,10 @@ public class AnnotationCellAction implements Action  {
      * @
      * @throws Exception leve une exception si le json est incompatible à l'action ou incorrect
      */
-    public  static AnnotationCellAction jsonDecode(String json,Grid grid) throws Exception{
+    public  static AnnotationCellAction jsonDecode(String json,Game game) throws Exception{
         try{
         Gson gson=new GsonBuilder()
-        .registerTypeAdapter(AnnotationCellAction.class, new AnnotationCellActionDeserialiser(grid) )
+        .registerTypeAdapter(AnnotationCellAction.class, new AnnotationCellActionDeserialiser(game) )
         .create();
         return gson.fromJson(json, AnnotationCellAction.class);
         }catch ( JsonParseException e) {
@@ -84,9 +95,9 @@ public class AnnotationCellAction implements Action  {
     }
 
      private static class AnnotationCellActionDeserialiser implements JsonDeserializer<AnnotationCellAction> {
-        private final Grid grid;
-     public   AnnotationCellActionDeserialiser(Grid grid){
-        this.grid=grid;
+        private final Game game;
+     public   AnnotationCellActionDeserialiser(Game game){
+        this.game=game;
      }
     public AnnotationCellAction  deserialize(JsonElement jsonElement, Type vartype, JsonDeserializationContext context) throws JsonParseException{
         JsonObject jsonObject = jsonElement.getAsJsonObject();
@@ -94,7 +105,7 @@ public class AnnotationCellAction implements Action  {
             throw new JsonParseException("Le JSON ne contient pas tous les champs requis : 'x', 'y', 'number','type'");
         }
          return new AnnotationCellAction(
-           grid, 
+           game, 
            jsonObject.get("x").getAsInt(),
            jsonObject.get("y").getAsInt(),
            jsonObject.get("number").getAsInt());

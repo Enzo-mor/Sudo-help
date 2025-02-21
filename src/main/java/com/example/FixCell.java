@@ -49,8 +49,8 @@ public class FixCell implements Cell {
      * @param number Chiffre à mettre dans la cellule [int]
      */
     @Override
-    public void setNumber(int number) {
-        System.out.println("Il est impossible de mettre un nombre dans cette cellule");
+    public void setNumber(int number)  {
+        throw new NoPutNumberOnCellExeception ("Il est impossible de mettre un nombre dans cette cellule car elle est fixe  ");
     }
 
     /**

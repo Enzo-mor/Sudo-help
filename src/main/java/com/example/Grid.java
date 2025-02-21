@@ -9,10 +9,22 @@ import java.util.NoSuchElementException;
 /**
  * Cette classe represente une grille de Sudoku.
  * 'Grid' est iterable, cele veut dire qu'elle peut être utilisé dans un for each.
+ * les cellules parcourru ne peuvent être modifié pour des besoins de securité,
+ * toutes les methodes de cette classe reverra des cellules en lecture seule
+ * ces cellules implementeront  implementerons l'interface ReadOnyCell
+ * 
+ * les cellules ne pourront etre modifier que par le biais d'une action dans un Jeu
  * @author Kilian POUSSE
+ *@author Taise de Thèse
  * @version 1.2
+ * 
+ * @see ReadOnlyCell  interface des ceullules  contenant toutes les methodes en lecture seule
+ * @see Cell   interface des ceullules  contenant toutes les methodes en ecriture
+ * @see Action interface permettant de modifier les cellules d'un jeu
+ * @see Game  classe representant un jeu de sudoku
+ * 
  */
-public class Grid implements Iterable<Cell> {
+public class Grid implements Iterable<ReadOnlyCell> {
 
     /* ======= Constantes de Classes ======= */
     /** Nombre de valeurs que peut prendre un chiffre [1, 9] */
@@ -23,13 +35,13 @@ public class Grid implements Iterable<Cell> {
 
     /* ======= Variables d'instance ======= */
     /** Tableau des cellules de la grille */
-    private List<Cell> cells;
+    private final List<Cell> cells;
     /** Tableau des cellules de la grille résolue */
-    private List<Cell> solvedCells;
+    private final List<Cell> solvedCells;
     /** Identifiant de la grille */
-    private Integer id;        
+    private final Integer id;        
     /** Difficulté de la grille */     
-    private String difficulty;       
+    private final String difficulty;       
 
 
     /* ======= Méthodes de Classe ======= */
@@ -75,6 +87,7 @@ public class Grid implements Iterable<Cell> {
         this.id = id;
         this.difficulty = difficulty;
         this.cells=new ArrayList<Cell>();
+        this.solvedCells=new ArrayList<Cell>();
 
     };
    /***
@@ -104,6 +117,24 @@ public class Grid implements Iterable<Cell> {
         }
         return cells;
     }
+ 
+     /**
+     * Permet de récupérer la cellule à la position (i, j) qui peux etre modifiable
+     * @param i Indice de la ligne [int]
+     * @param j Indice de la colonne [int]
+     * @return La cellule à la ieme ligne et jeme colonne [Cell]
+     * 
+     * @throws IndexOutOfBoundsException si les indices sont invalides
+     */
+    protected Cell getMutableCell(int i, int j) throws IndexOutOfBoundsException{
+        try {
+             return this.cells.get(NB_NUM*i+j);
+        }
+        catch(Exception e) {
+            throw new IndexOutOfBoundsException("Indice incorrect : " + e);
+        }
+        }
+
 
     /**
      * Permet de récupérer la cellule à la position (i, j)
@@ -111,7 +142,7 @@ public class Grid implements Iterable<Cell> {
      * @param j Indice de la colonne [int]
      * @return La cellule à la ieme ligne et jeme colonne [Cell]
      */
-    public Cell getCell(int i, int j) {
+    public ReadOnlyCell getCell(int i, int j) {
         try {
             return this.cells.get(NB_NUM*i+j);
         }
@@ -120,16 +151,28 @@ public class Grid implements Iterable<Cell> {
         }
     }
 
+    /***
+     *  cette permet de renitialiser la grille
+     */
+     protected void resetGrid(){
+        this.cells.forEach((e)->{
+            if(e.isEditable())
+                e.clear();
+        });
+     }
+
     /**
      * Recupere la ieme ligne de la grille
      * @param i Indice de la ligne [int]
      * @return La iemme ligne [Cell[]]
+     * 
+     * @throws IndexOutOfBoundsException si l'indice est invalide
      */
-    public Cell[] getLine(int i) {
+    public  ReadOnlyCell[] getLine(int i) {
         if(!isValidIndex(i)) {
-            throw new IllegalArgumentException("Indice de ligne invalide: " + i);
+            throw new IndexOutOfBoundsException("Indice de ligne invalide: " + i);
         }
-        Cell[] line = new Cell[NB_NUM];
+        ReadOnlyCell[] line = new ReadOnlyCell[NB_NUM];
         for(int j=0; j<NB_NUM; j++) {
             line[j] = this.getCell(i, j);
         }
@@ -137,16 +180,35 @@ public class Grid implements Iterable<Cell> {
     }
 
     /**
+     * cette methode permet de determiner le nombre total de
+     * cellule flexible present dans la grille
+     * 
+     * @return la somme total des cellules flexibles
+     */
+     public Integer getNumberFlexCell(){
+      Integer somme=0;
+
+      for(ReadOnlyCell c: this)
+        if(c.isEditable())
+            somme+=1;
+        return somme;
+    
+     }
+
+    /**
      * Recupere la jeme colunne de la grille
+     * cette permet l'accès des cellules en lecture seule
      * @param j Indice de la colunne [int]
      * @return La jemme colunne [Cell[]]
+     * 
+     * @throws IndexOutOfBoundsException si l'indice est invalide
      */
-    public Cell[] getColumn(int j) {
+    public ReadOnlyCell[] getColumn(int j) throws IndexOutOfBoundsException {
         if(!isValidIndex(j)) {
-            throw new IllegalArgumentException("Indice de colonne invalide: " + j);
+            throw new IndexOutOfBoundsException("Indice de colonne invalide: " + j);
         }
 
-        Cell[] column = new Cell[NB_NUM];
+        ReadOnlyCell[] column = new ReadOnlyCell[NB_NUM];
         for(int i=0; i<NB_NUM; i++) {
             column[i] = this.getCell(i, j);
         }
@@ -156,16 +218,19 @@ public class Grid implements Iterable<Cell> {
     /**
      * Recupere la sous-grille de la cellule à la position (i, j)
      * Une sous-grille est les carrés de 3*3 d'une grille de Sudoku
+     * toutes les retourner par cette methode sont e lectures seules
      * @param i Indice de la ligne de la cellule cible
      * @param j Indice de la colonne de la cellule cible
      * @return La sous-grille ou se trouve la cellule en (i, j) [Cell[][]]
+     * 
+     * @throws IndexOutOfBoundsException si les indices sont invalides
      */
-    public Cell[][] getSubGrid(int i, int j) {
+    public  ReadOnlyCell[][] getSubGrid(int i, int j) throws IndexOutOfBoundsException {
         if(!isValidIndex(i) || !isValidIndex(j)) {
-            throw new IllegalArgumentException("Indices de sous-grille invalides : (" + i + ", " + j + ")");
+            throw new IndexOutOfBoundsException("Indices de sous-grille invalides : (" + i + ", " + j + ")");
         }
 
-        Cell[][] subGrid = new Cell[NB_SUBGRID][NB_SUBGRID];
+        ReadOnlyCell[][] subGrid = new ReadOnlyCell[NB_SUBGRID][NB_SUBGRID];
         // Calcule les coordonnées de la sous-grille
         int n_line = (i/NB_SUBGRID)*NB_SUBGRID;
         int n_column = (j/NB_SUBGRID)*NB_SUBGRID;
@@ -179,19 +244,22 @@ public class Grid implements Iterable<Cell> {
         return subGrid;
     }
 
+    
+
     /**
      * Methode permettant de gener l'iteration de la classe
+     * seul les cellules en lecture seule peuvent être parcourru
      * @return Retourne une instance de la sous-classe iterable
      */
     @Override
-    public Iterator<Cell> iterator() {
+    public Iterator<ReadOnlyCell> iterator() {
         return new GridIterator();
     }
 
     /**
      * Sous-classe de 'Grid' permettant l'iteration de la classe mere.
      */
-    private class GridIterator implements Iterator<Cell> {
+    private class GridIterator implements Iterator<ReadOnlyCell> {
         /* ==== Variables d'instance ==== */
         private int i=0;    // indice des lignes
         private int j=0;    // indice des colonnes
@@ -208,14 +276,14 @@ public class Grid implements Iterable<Cell> {
          * Generer la prochaine cellule
          */
         @Override
-        public Cell next() {
+        public ReadOnlyCell next() {
             // Check si il y a encore des elements dans la collection
             if(!hasNext()) {
                 throw new NoSuchElementException();
             }
 
             // Recupere la cellule à la position (i, j)
-            Cell cell = getCell(i, j);
+            ReadOnlyCell cell = getCell(i, j);
             j++;
             if(j >= NB_NUM) {
                 j=0;
@@ -226,6 +294,7 @@ public class Grid implements Iterable<Cell> {
         }
     }
 
+   
     /**
      * Permet de savoir combien de cellule vide reste-t-il
      * @return Le nombre de cellules vides restantes [int]
@@ -233,7 +302,7 @@ public class Grid implements Iterable<Cell> {
     public int emptyCellNumber() {
         int count = 0;
         // for each de la class 'Grid'
-        for(Cell cell: this) {
+        for(ReadOnlyCell cell: this) {
             if(cell.isEmpty()) {
                 count++;
             }
@@ -327,4 +396,6 @@ public class Grid implements Iterable<Cell> {
         }
         return res;
     }
+
+
 }

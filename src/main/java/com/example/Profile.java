@@ -1,5 +1,7 @@
 package com.example;
 
+import java.sql.SQLException;
+
 /**
  * Classe représentant les profiles.
  * @author Kilian POUSSE
@@ -42,10 +44,10 @@ public class Profile {
   /***
    *  cette methode permet de sauvegarder un profile dans la base de données
    *  avant d'utliser cette methode la base de donnée devra d'abord etre initialiser
-   * @throws Exception leve une exeception en cas d'erreur
+   * @throws SQLException leve une exeception en cas d'erreur de connection
    * @see DBManager
    */
-    public void save() throws Exception{
+    public void save() throws SQLException{
         DBManager.saveProfile(this);
     }
 
