@@ -9,9 +9,6 @@ import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import org.sqlite.core.DB;
-
 import com.example.SudoTypes.GameState;
 
 import javafx.application.Platform;
