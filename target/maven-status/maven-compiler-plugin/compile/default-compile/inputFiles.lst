@@ -2,6 +2,7 @@ E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\DBManager.java
 E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\Grid.java
 E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\Profile.java
 E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\NumberCellAction.java
+E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\SudoTypes.java
 E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\ActionCell.java
 E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\Main.java
 E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\NoCompatibleActionGameException.java
@@ -13,6 +14,7 @@ E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\SudokuSolver.java
 E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\FixCell.java
 E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\GameTimeListener.java
 E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\GameTimerTestApp.java
+E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\NoEditableCellExeception.java
 E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\Game.java
 E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\Action.java
 E:\lemans\gl2\v1\Sudo-help\src\main\java\com\example\ActionFactory.java

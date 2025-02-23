@@ -21,8 +21,8 @@ public class ActionFactory {
     private static final Map<String, Class<? extends Action>> actionMap = new HashMap<>();
 
     static {
-        actionMap.put("actionAnontation", AnnotationCellAction.class);
-        actionMap.put("actionNombre", NumberCellAction.class);
+        actionMap.put(SudoTypes.ActionType.ANNOTATION_CELL_ACTION.getDescription(), AnnotationCellAction.class);
+        actionMap.put(SudoTypes.ActionType.NUMBER_CELL_ACTION.getDescription(), NumberCellAction.class);
     }
 
     /**Récupère dynamiquement la classe associée à un type donné

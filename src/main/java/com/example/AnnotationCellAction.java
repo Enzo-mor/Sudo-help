@@ -43,13 +43,13 @@ public class AnnotationCellAction extends ActionCell  {
         this.game.getGrid().getMutableCell(x, y).removeAnnotation(annotation);
     }
     @Override
-    public String actionType(){
-        return "actionAnontation";
+    public SudoTypes.ActionType actionType(){
+        return SudoTypes.ActionType.ANNOTATION_CELL_ACTION;
     }
     @Override
     public JsonObject serialise(){
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("type",actionType());
+        jsonObject.addProperty("type",actionType().getDescription());
         jsonObject.addProperty("x", x);
         jsonObject.addProperty("y", y);
         jsonObject.addProperty("number", annotation);

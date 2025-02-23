@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.example.SudoTypes.Difficulty;
+
 /**
  * Classe: Permet l'initialisation et/ou la création de la Base de données
  * @author Kilian POUSSE 
@@ -170,7 +172,7 @@ public class DBManager {
                 ResultSet rs = pstmt.executeQuery();
     
                 if(rs.next()) {
-                    String difficulty = rs.getString("difficulty");
+                    Difficulty difficulty = Difficulty.fromDescription(rs.getString("difficulty"));
                     String data = rs.getString("cells");
     
                     if(data.length() != Grid.NB_NUM * Grid.NB_NUM) {
@@ -242,7 +244,7 @@ public class DBManager {
     
                 while(rs.next()) {
                     Integer id = rs.getInt("id_grid");
-                    String difficulty = rs.getString("difficulty");
+                    Difficulty difficulty = Difficulty.fromDescription(rs.getString("difficulty"));
                     String data = rs.getString("cells");
     
                     if(data.length() != Grid.NB_NUM * Grid.NB_NUM) {

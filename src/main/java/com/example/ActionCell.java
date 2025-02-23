@@ -28,9 +28,15 @@ protected final int y;
  * @param game represente le jeu sur lequel les actions seront appliquées
  * @param x represente les coordonnées X  de la cellule
  * @param y represente les coordonnées Y de la cellule
+ * 
+ * @throws NoEditableCellExeception si la cellule n'est pas editable
  */
-public ActionCell(Game game, int x, int y) {
-super(game);  
+public ActionCell(Game game, int x, int y) throws NoEditableCellExeception {
+super(game);
+
+if(game.getGrid().getCell(x, y).isEditable() == false){
+    throw new NoCompatibleActionGameException("la cellule doit etre editable ou flexible");
+}
 this.x = x;
 this.y = y;
     

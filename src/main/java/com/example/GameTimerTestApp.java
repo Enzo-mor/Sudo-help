@@ -18,7 +18,7 @@ public class GameTimerTestApp extends Application {
     public void start(Stage primaryStage)  {
         timerLabel = new Label("Temps : 00:00:00");
          try {
-            game = new Game(DBManager.getGrid(2), new Profile("Player1"));
+            game = new Game(DBManager.getGrid(2), new Profile("mathieu"));
          } catch (Exception e) {
             // TODO: handle exception
          }

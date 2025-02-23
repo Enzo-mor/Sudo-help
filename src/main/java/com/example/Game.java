@@ -10,6 +10,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.sqlite.core.DB;
+
+import com.example.SudoTypes.GameState;
+
 import javafx.application.Platform;
 
 /***
@@ -82,7 +86,7 @@ public class Game {
       /**
        * represente le temps ecoulé  secondes
        */
-      private long elapsedTime; 
+      private volatile long elapsedTime; 
 
       /**
        *  represente le timer du jeu(processus qui permettra le comptage)
@@ -94,10 +98,6 @@ public class Game {
        */
       private GameTimeListener timeListener;
 
-      /**
-       * represente l'etat du jeu   en pause ou non
-       */
-      private boolean isPaused;
 
       /***
        * represente l'index courant de la liste des actions
@@ -109,6 +109,12 @@ public class Game {
        */
       private String histoActions=new String();
 
+        /**
+         * represente l'etat du jeu
+         */
+      private GameState gameState;
+
+    //=================constructeur================
 
     /**
      * constructeur de la classe Game
@@ -127,7 +133,8 @@ public class Game {
         calculateProgressRate();
         this.elapsedTime = 0; 
         currentIndex=-1;
-        isPaused=false;
+        gameState=GameState.NOT_STARTED;
+        score=0;
         this.timer = Executors.newScheduledThreadPool(1);
     }
     /**
@@ -143,7 +150,6 @@ public class Game {
         currentIndex=-1;
         score=0;
         this.grid.resetGrid();
-        isPaused=false;
         startGame();
     }
     /**
@@ -174,7 +180,7 @@ public class Game {
         this.lastModifDate=lastModifDate;
         this.progressRate=progressRate;
         this.elapsedTime=elapsedTime;
-        isPaused=false;
+        gameState=GameState.NOT_STARTED;
         this.timer = Executors.newScheduledThreadPool(1);
        
     }
@@ -209,10 +215,25 @@ public class Game {
      * @throws Exception leve une exception en cas d'erreur
      */
     public void startGame(){
-        if (timer == null || timer.isShutdown()) {
-            this.timer = Executors.newScheduledThreadPool(1); 
+        try {
+
+            if(gameState==GameState.IN_PROGRESS){
+                throw new IllegalStateException("le jeu est déjà en cours");
+            }
+
+            if (timer == null || timer.isShutdown()) {
+                this.timer = Executors.newScheduledThreadPool(1); 
+            }
+            gameState=GameState.IN_PROGRESS;
+            startTimer();
+            
+        } catch (IllegalStateException e) {
+              System.err.println(e.getMessage());
         }
-        startTimer();
+         catch (IllegalArgumentException e) {
+             System.err.println("impossible de lancer le timer : "+e.getMessage());
+         }
+        
         
         
        }
@@ -231,11 +252,10 @@ public class Game {
     }
 
     /**
-     *  cette methode retourne le temps 
-     *  ecoulé 
+     *  cette methode retourne le temps ecoulé 
      * @return
      */
-    public long getElapsedTime() {
+    public synchronized long getElapsedTime() {
         return elapsedTime;
     }
   
@@ -249,13 +269,11 @@ public class Game {
         }
     
         timer.scheduleAtFixedRate(() -> {
-            if (!isPaused) {
                 elapsedTime++; // Augmente le temps écoulé
                 if (timeListener != null) {
                     String formattedTime = getSringtElapsedTime();
                     Platform.runLater(() -> timeListener.onTimeUpdated(formattedTime));
                 }
-            }
         }, 0, 1, TimeUnit.SECONDS); 
     }
     
@@ -265,11 +283,30 @@ public class Game {
      * @throws IllegalStateException leve une exception si le jeu n'est pas encore demarré ou le jeu a déja été terminé
      */
      public void pauseGame() throws IllegalStateException{
-
-        if(timer==null|| timer.isShutdown()) {
-            throw new IllegalStateException("impossible de mettre en pause le jeu car le jeu n'est pas encore demarré ou le jeu a déja été terminé");
-        }
-        isPaused = true;        
+      try {
+         if(gameState==GameState.NOT_STARTED){
+                throw new IllegalStateException("le jeu n'est pas encore demarré");
+          }
+          if(gameState==GameState.FINISHED){
+                throw new IllegalStateException("le jeu a déja été terminé");
+          } 
+          
+         if(gameState==GameState.PAUSED){
+                throw new IllegalStateException("le jeu est déjà en pause");
+          }
+             if (timer != null && !timer.isShutdown()) {
+               timer.shutdown(); 
+            if (!timer.awaitTermination(3, TimeUnit.SECONDS)) {
+                timer.shutdownNow(); // Force l'arrêt après 4 secondes attente
+            }
+          gameState=GameState.PAUSED;
+          timer.shutdown();
+        } 
+        }catch (Exception e) {
+        // TODO: handle exception
+        System.err.println(e.getMessage());
+      }
+          
         
     }
 
@@ -278,11 +315,21 @@ public class Game {
      * @throws IllegalStateException leve une exception si le jeu n'est pas encore demarré ou le jeu a déja été terminé
      */
     public void ResumeGame() throws IllegalStateException{
-       if(timer==null|| timer.isShutdown()) {
-            throw new IllegalStateException("impossible de reprendre le jeu car le jeu n'est pas encore demarré ou le jeu a déja été terminé");
+        try {
+            if(gameState==GameState.NOT_STARTED){
+                throw new IllegalStateException("le jeu n'est pas encore demarré");
+            }
+            if(gameState==GameState.FINISHED){
+                throw new IllegalStateException("le jeu a déja été terminé");
+            } 
+            if(gameState==GameState.IN_PROGRESS){
+                throw new IllegalStateException("le jeu est déjà en cours");
+            }
+            startTimer();
+            gameState=GameState.IN_PROGRESS;
+        } catch (Exception e) {
+           System.err.println(e.getMessage());
         }
-
-        isPaused = false;
     }
 
     /**
@@ -371,13 +418,15 @@ public class Game {
     * @throws IllegalStateException leve une exception si le jeu est en pause
     * @throws IllegalArgumentException leve une exception si l'action n'est pas compatible avec le jeu, ou ne concerne pas ce jeu
     */
-    public Game executeAction(Action e) throws IllegalStateException,IllegalArgumentException,Exception{
+    public Game executeAction(Action action) throws IllegalStateException,IllegalArgumentException{
 
-        if(this!=e.game){
+        try {
+            
+        if(this!=action.game){
             throw new IllegalArgumentException("l'action n'est pas compatible avec le jeu, ou ne concerne pas ce jeu");
         }
-        if(isPaused){
-            throw new IllegalStateException("auncune action ne peut etre effectuée car le jeu est en pause");
+        if (gameState == GameState.NOT_STARTED || gameState == GameState.FINISHED||gameState==GameState.PAUSED) {
+            throw new IllegalStateException("Aucune action ne peut être effectuée car le jeu est en pause ou n'a pas encore été démarré ou est est déjà terminé.");
         }
         //on supprime les actions qui sont après l'index courant
         while (actions.size() > currentIndex + 1) {
@@ -386,45 +435,133 @@ public class Game {
            
 
         }
-         e.doAction();
-         actions.add(e);
-         histoActions+="Action "+(currentIndex+2)+" : "+e.toString()+"\n";
+         action.doAction();
+         actions.add(action);
+         histoActions+="Action "+(currentIndex+2)+" : "+action.toString()+"\n";
          currentIndex++;
          updateGame();
          return this;
-    }
-
-    /**
-     * cette methode permet d'annuler la derniere action effectuée
-     * 
-     * @throws IllegalStateException leve une exception si aucune action n'a été effectuée ou si le jeu est en pause
-     */
-    public void undoAction() throws IllegalStateException{
-        if (currentIndex < 0) 
-           throw new IllegalStateException("impossible d'annuler l'action car aucune action n'a été effectuée");
-        if(isPaused)
-            throw new IllegalStateException("auncune action ne peut etre effectuée car le jeu est en pause ou n'a pas encore été demarré");
-
-            actions.get(currentIndex).undoAction();
-            histoActions+="Annulation de l'action "+(currentIndex+1)+" : "+actions.get(currentIndex)+"\n";
-            currentIndex--;
-    }
-
-    /**
-     * cette methode permet de refaire la derniere action annulée
-     * 
-     * @throws IllegalStateException leve une exception si aucune action n'a été annulée ou si le jeu est en pause
-     */  
-    public void redoAction() throws IllegalStateException{
-        if (currentIndex >= actions.size() - 1) 
-            throw new IllegalStateException("impossible de refaire l'action car aucune action n'a été annulée");
-        if(isPaused)
-            throw new IllegalStateException("auncune action ne peut etre effectuée car le jeu est en pause ou n'a pas encore été demarré");
-            currentIndex++;
-            histoActions+="Refaire de l'action "+(currentIndex+1)+" : "+actions.get(currentIndex)+"\n";
-            actions.get(currentIndex).doAction();
             
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.err.println("aucune action n'a été effectué :"+e.getMessage());
+            return this;
+        }
+
     }
+
+    /**
+     * Vérifie si une action peut être annulée (undo).
+    * @return true si undo est possible, sinon false.
+    */
+    public boolean canUndo() {
+        return currentIndex >= 0;  
+    }
+
+    /**
+    * Vérifie si une action annulée peut être refaite (redo).
+    * @return true si redo est possible, sinon false.
+    */
+    public boolean canRedo() {
+        return currentIndex < actions.size() - 1; 
+    }
+
+
+    /**
+    * Cette méthode permet d'annuler la dernière action effectuée.
+    *
+    * @throws IllegalStateException si aucune action n'a été effectuée ou si le jeu est en pause ou si aucune action n'a été effectué precedement.
+    */
+    public void undoAction() throws IllegalStateException {
+
+        try {
+
+            if (!canUndo()) {
+                throw new IllegalStateException("Impossible d'annuler l'action car aucune action n'a été effectuée.");
+             }
+            if (gameState == GameState.NOT_STARTED || gameState == GameState.FINISHED||gameState==GameState.PAUSED) {
+                throw new IllegalStateException("Aucune action ne peut être effectuée car le jeu est en pause ou n'a pas encore été démarré ou est est déjà terminé.");
+            }
+    
+    
+            // Vérifie si la dernière action est une ActionCell
+             if (actions.get(currentIndex) instanceof ActionCell) {
+             // Si oui, on l'annule et on s'arrête immédiatement
+                 actions.get(currentIndex).undoAction();
+                histoActions += "Annulation de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
+                currentIndex--;
+                return;
+             }
+    
+            // Sinon, on annule toutes les actions précédentes jusqu'à la première ActionCell trouvée
+            while (canUndo()) {
+                 Action action = actions.get(currentIndex);
+                 action.undoAction();
+                 histoActions += "Annulation de l'action " + (currentIndex + 1) + " : " + action + "\n";
+                currentIndex--;
+    
+                // Si on trouve une ActionCell, on s'arrête immédiatement
+                if (action instanceof ActionCell) {
+                    break;
+                }
+             }
+    
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.err.println(e.getMessage());
+        }  
+        
+    }
+
+    /**
+    * Cette méthode permet de rétablir les actions annulées.
+    * Si l'action suivante est une `ActionCell`, elle seule est refaite.
+    * Sinon, toutes les actions suivantes sont refaites jusqu'à la première `ActionCell` trouvée.
+    *
+    * @throws IllegalStateException si aucune action n'a été annulée ou si le jeu est en pause.
+    */
+    public void redoAction() throws IllegalStateException {
+
+        try {
+            if (!canRedo()) {
+                throw new IllegalStateException("Impossible de refaire l'action car aucune action n'a été annulée.");
+            }
+            if (gameState == GameState.NOT_STARTED || gameState == GameState.FINISHED||gameState==GameState.PAUSED) {
+                throw new IllegalStateException("Aucune action ne peut être effectuée car le jeu est en pause ou n'a pas encore été démarré ou est est déjà terminé.");
+            }
+    
+            // Vérifier si l'action suivante est une ActionCell
+            if (actions.get(currentIndex + 1) instanceof ActionCell) {
+             // Si oui, on l'exécute et on s'arrête immédiatement
+                currentIndex++;
+                actions.get(currentIndex).doAction();
+                histoActions += "Refaire de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
+                return;
+            }
+    
+            // Sinon, on refait toutes les actions suivantes jusqu'à la première ActionCell trouvée
+            while (canRedo()) {
+                currentIndex++;
+                Action action = actions.get(currentIndex);
+                action.doAction();
+                histoActions += "Refaire de l'action " + (currentIndex + 1) + " : " + action + "\n";
+    
+                // Si on trouve une ActionCell, on s'arrête immédiatement
+                if (action instanceof ActionCell) {
+                    break;
+                }
+            }
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.err.println(e.getMessage());
+        }
+        
+
+    
+    }
+
 
 
      /**
@@ -460,25 +597,33 @@ public class Game {
      * @param y represente la position Y de la case dans la grille
      * @param value represente la valeur à ajouter
      * @return la même instance du jeux  après appliquation de  la modification
-     * @throws IllegalStateException leve une exception si le jeu est en pause
+     * @throws IllegalStateException leve une exception si le jeu se trouve dans un eta incompatible à cette methode
+     * @throws NoEditableCellExeception leve une exception si la cellule n'est pas editable
+     *
      * @return la même instance du jeu  après appliquation de  la modification
      * 
      */
-    public Game addNumber(int x,int y,int value) throws IllegalStateException,Exception{
+    public Game addNumber(int x,int y,int value) throws IllegalStateException,NoEditableCellExeception{
 
-
-        if(isPaused){
-            throw new IllegalStateException("auncune action ne peut etre effectuée car le jeu est en pause");
-        }
-
-            Action a=new NumberCellAction(this, x, y, value, grid.getCell(x,y).getNumber());
-            a.doAction();
-            actions.add(a);
-            ++currentIndex;
-            histoActions+="Action "+(currentIndex+1)+" : "+a.toString()+"\n";
-            updateGame();
+        try {
+            if (gameState == GameState.NOT_STARTED || gameState == GameState.FINISHED||gameState==GameState.PAUSED) {
+                throw new IllegalStateException("Aucune action ne peut être effectuée car le jeu est en pause ou n'a pas encore été démarré ou est est déjà terminé.");
+            }
+    
+                Action a=new NumberCellAction(this, x, y, value, grid.getCell(x,y).getNumber());
+                a.doAction();
+                actions.add(a);
+                ++currentIndex;
+                histoActions+="Action "+(currentIndex+1)+" : "+a.toString()+"\n";
+                updateGame();
+                return this;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.err.println("aucune action n'a été effectué :"+e.getMessage());
             return this;
+        }
     }
+       
 
      /**
      *  cette methode permet d'ajouter une annotation  à une case du jeu 
@@ -489,20 +634,60 @@ public class Game {
      * 
      * @return la même instance du jeu  après appliquation de  la modification
      * 
-     * @throws IllegalStateException leve une exception si le jeu est en pause
+     * @throws IllegalStateException leve une exception si le jeu se trouve dans un eta incompatible à cette methode
+     *  @throws NoEditableCellExeception leve une exception si la cellule n'est pas editable
      */
-    public  Game addAnnotation(int x,int y, int value) throws IllegalStateException,Exception{
+    public  Game addAnnotation(int x,int y, int value) throws IllegalStateException,NoEditableCellExeception{
 
-        if(isPaused){
-            throw new IllegalStateException("auncune action ne peut etre effectuée car le jeu est en pause");
-        } 
-        Action a=new AnnotationCellAction(this, x, y, value);
-        a.doAction();
-        actions.add(a);
-        ++currentIndex;
-        histoActions+="Action "+(currentIndex+1)+" : "+a.toString()+"\n";
-        updateGame();
-        return this;
+        try {
+            if (gameState == GameState.NOT_STARTED || gameState == GameState.FINISHED||gameState==GameState.PAUSED) {
+                throw new IllegalStateException("Aucune action ne peut être effectuée car le jeu est en pause ou n'a pas encore été démarré ou est est déjà terminé.");
+            } 
+            Action a=new AnnotationCellAction(this, x, y, value);
+            a.doAction();
+            actions.add(a);
+            ++currentIndex;
+            histoActions+="Action "+(currentIndex+1)+" : "+a.toString()+"\n";
+            updateGame();
+            return this;
+            
+        } catch (Exception e) {
+            System.err.println("aucune action n'a été effectué :"+e.getMessage());
+            return this;
+        }
+
+       
+    }
+
+  /**
+   * methode permettant de supprimer un nombre dans une cellule
+   * @param x represente la position x de la case dans la grille
+    * @param y represente la position Y de la case dans la grille
+    * @param value represente l'annoatation à ajouter
+     * 
+     * @return la même instance du jeu  après appliquation de  la modification
+     * 
+     * @throws IllegalStateException leve une exception si le jeu se trouve dans un eta incompatible à cette methode
+     * @throws NoEditableCellExeception leve une exception si la cellule n'est pas editable
+   */
+    public Game removeNumber(int x, int y) throws IllegalStateException,NoEditableCellExeception{
+
+          try {
+             return addNumber(x, y, 0);
+          } catch (Exception e) {
+            // TODO: handle exception
+            System.err.println("aucune action n'a été effectué :"+e.getMessage());
+            return this;
+          }
+    }
+
+    public Game removeAnnotation(int x, int y, int value) throws IllegalStateException,NoEditableCellExeception{
+        try {
+            return addAnnotation(x, y, 0);
+        } catch (Exception e) { 
+            System.err.println("aucune action n'a été effectué :"+e.getMessage());
+            return this;
+        }
     }
 
     /**
@@ -535,7 +720,6 @@ public class Game {
     /**
      *  cette methode permet de mettre à jour le jeu 
      *  et de le sauvegarder
-     * @throws Exeception
      */
     private void updateGame(){
         updateDate();
@@ -571,7 +755,13 @@ public class Game {
         return progressRate;
     }
 
-
+    /**
+     * cette methode permet de retourner l'etat du jeu
+     * @return
+     */
+    public GameState getGameState() {
+        return gameState;
+    }
 
     public static void main(String[] args) {
 
@@ -581,10 +771,10 @@ public class Game {
             
             // Attendre et voir le timer avancer
             for (int i = 0; i < 5; i++) {
-                Thread.sleep(1000);
+               // Thread.sleep(1000);
                 System.out.println("Temps écoulé : " + g.getSringtElapsedTime());
             }
-            
+             DBManager.deleteAllGamesForProfile("jaques");
             g.stopGame();
             
         }catch (Exception e) {

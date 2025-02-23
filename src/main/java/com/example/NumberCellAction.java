@@ -52,12 +52,12 @@ public class NumberCellAction extends ActionCell  {
         game.getGrid().getMutableCell(x, y).setNumber(old_number);
     }
     @Override
-    public String actionType(){
-        return "actionNombre";
+    public SudoTypes.ActionType actionType(){
+        return SudoTypes.ActionType.NUMBER_CELL_ACTION;
     }
     public JsonObject serialise(){
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("type",actionType());
+        jsonObject.addProperty("type",actionType().getDescription());
         jsonObject.addProperty("x", x);
         jsonObject.addProperty("y", y);
         jsonObject.addProperty("number", number);

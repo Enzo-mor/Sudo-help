@@ -41,7 +41,7 @@ public class Grid implements Iterable<ReadOnlyCell> {
     /** Identifiant de la grille */
     private final Integer id;        
     /** Difficulté de la grille */     
-    private final String difficulty;       
+    private final SudoTypes.Difficulty difficulty;       
 
 
     /* ======= Méthodes de Classe ======= */
@@ -71,7 +71,7 @@ public class Grid implements Iterable<ReadOnlyCell> {
     /**
      * Constructeur de la classe 'Grid'.
      */
-    public Grid(int id, String difficulty, String data) {
+    public Grid(int id, SudoTypes.Difficulty difficulty, String data) {
         this.id = id;
         this.cells = parseCells(data);
         this.difficulty = difficulty;
@@ -83,7 +83,7 @@ public class Grid implements Iterable<ReadOnlyCell> {
      * @param id
      * @param difficulty
      */
-    private Grid(int id,String difficulty ){
+    private Grid(int id,SudoTypes.Difficulty difficulty ){
         this.id = id;
         this.difficulty = difficulty;
         this.cells=new ArrayList<Cell>();
@@ -363,7 +363,7 @@ public class Grid implements Iterable<ReadOnlyCell> {
      * Getter: Difficulté de la grille
      * @return Difficulté de la grille
      */
-    public String getDifficulty() {
+    public SudoTypes.Difficulty getDifficulty() {
         return difficulty;
     }
 

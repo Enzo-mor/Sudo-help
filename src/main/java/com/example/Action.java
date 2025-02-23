@@ -34,9 +34,9 @@ public  abstract class Action {
 
     /**
      *  methode permettant de retourner le type action
-     * @return String retourne la chaine representant le type  d'action 
+     * @return String retourne le type  enumeré  de l'action 
      */
-    public abstract String actionType(); 
+    public abstract SudoTypes.ActionType actionType(); 
     /**
      * cette methode permet de serialiser une action sous forme de Json
      * 
