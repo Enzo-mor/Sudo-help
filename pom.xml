@@ -147,7 +147,7 @@
                 </execution>
             </executions>
               <configuration>
-                  <mainClass>com.example.GameTimerApp</mainClass>
+                  <mainClass>com.example.GameTimerTestApp</mainClass>
               </configuration>
           </plugin>
 

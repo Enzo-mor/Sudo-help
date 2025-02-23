@@ -8,7 +8,6 @@ com\example\ActionManagerApply$ActionManagerserialiser.class
 com\example\SudokuSolver.class
 com\example\NumberCellAction.class
 com\example\NumberCellAction$NumberCellActionSerialiser.class
-com\example\GameTimerApp.class
 com\example\NumberCellAction$NumberCellActionDeserialiser.class
 com\example\FixCell.class
 com\example\AnnotationCellAction$AnnotationCellActionDeserialiser.class

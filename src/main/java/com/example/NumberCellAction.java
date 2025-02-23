@@ -12,7 +12,13 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 public class NumberCellAction extends ActionCell  {
+    /**
+     * represente le nombre à ajouter en annotation
+     */
     private int number;
+    /**
+     * represente l'ancienne valeur de la cellule
+     */
     private int old_number;
    /**
     * methode permettant de creer une action qui permet de modifier une valeur à une cellule specifique de la grille

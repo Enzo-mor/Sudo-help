@@ -6,8 +6,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-public class GameTimerApp extends Application {
+/**
+ * classe de teste pour le timer du jeu
+ */
+public class GameTimerTestApp extends Application {
 
     private Game game;
     private Label timerLabel;

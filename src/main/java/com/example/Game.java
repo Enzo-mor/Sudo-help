@@ -277,7 +277,7 @@ public class Game {
      *  methode permettant de reprendre le jeu
      * @throws IllegalStateException leve une exception si le jeu n'est pas encore demarré ou le jeu a déja été terminé
      */
-    public void ResumeGame() {
+    public void ResumeGame() throws IllegalStateException{
        if(timer==null|| timer.isShutdown()) {
             throw new IllegalStateException("impossible de reprendre le jeu car le jeu n'est pas encore demarré ou le jeu a déja été terminé");
         }
@@ -289,18 +289,31 @@ public class Game {
      * methode permettant d'arrêter le timer du jeu
      * cette methode devra etre  obligatoirement appelé à la fin du jeu
      * 
-     * @throws Exception
+     * @throws SQLException leve une exception en cas d'erreur de connection à la base de donnée
+     * @throws InterruptedException leve une exception en cas d'erreur d'interruption du timer
      */
-    public void stopGame() throws Exception {
-        if (timer != null && !timer.isShutdown()) {
-            timer.shutdown(); // Arrête proprement
-            if (!timer.awaitTermination(3, TimeUnit.SECONDS)) {
-                timer.shutdownNow(); // Forcer l'arrêt après attente
+    public void stopGame() throws SQLException,InterruptedException {
+
+        try {
+
+            if (timer != null && !timer.isShutdown()) {
+                timer.shutdown(); // Arrête proprement
+                if (!timer.awaitTermination(4, TimeUnit.SECONDS)) {
+                    timer.shutdownNow(); // Force l'arrêt après 4 secondes attente
+                }
             }
+            saveGame();
+            
+        } catch (InterruptedException e) {
+            // TODO: handle exception
+             System.err.println("le timer est déjà arrêté "+e.getMessage());
+             saveGame();
         }
-        updateDate();
-        calculateProgressRate();
-        saveGame();
+        catch(SQLException e){
+            System.err.println("Erreur de sauvegarde du jeu  "+e.getMessage());
+        }
+       
+        
     }
     
 
@@ -416,9 +429,9 @@ public class Game {
 
      /**
       * methode permettant de sauvegarder le jeu
-      * @throws Exception
+      * @throws SQLException leve une exception en cas d'erreur de connection à la base de donnée
       */
-     private void saveGame() throws Exception{
+     private void saveGame() throws SQLException{
 
         DBManager.saveGame(this);
      }
@@ -520,7 +533,7 @@ public class Game {
     }
 
     /**
-     *  cette methode permet de mettre à jour le jeu
+     *  cette methode permet de mettre à jour le jeu 
      *  et de le sauvegarder
      * @throws Exeception
      */
