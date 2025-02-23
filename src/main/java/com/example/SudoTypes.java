@@ -1,9 +1,5 @@
 package com.example;
 
-import com.example.SudoTypes.ActionType;
-import com.example.SudoTypes.CellType;
-import com.example.SudoTypes.Difficulty;
-
 /**
  * cette classe permet de definir les types de données utilisées dans le jeu de sudoku
  * elle permet de definir les types d'actions, les types de cellules, les niveaux de difficulté et les etats du jeu
