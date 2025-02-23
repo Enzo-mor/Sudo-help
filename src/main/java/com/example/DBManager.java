@@ -419,7 +419,87 @@ public class DBManager {
         }
         return games;
     }
+    /**
+     *  methode permettant de supprimer un jeu dans la base de donnée
+     * @param id represente id du jeu
+     * @return vrai si le jeu a été supprimé
+     * @throws SQLException leve une exception en cas d'erreur de connection
+     */
+    public static Boolean deleteGame(long id) throws SQLException {
+        String query = "DELETE FROM game WHERE id_game = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setLong(1, id);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    /**
+     * methode permettant de supprimer tous les jeux appartenant à un profile
+     * @param pseudo represente le pseudo du profile
+     * @return vrai si les jeux ont été supprimé
+     * @throws SQLException leve une exception en cas d'erreur de connection
+     */
+    public static Boolean deleteAllGamesForProfile(String pseudo) throws SQLException{
+        String query = "DELETE FROM game WHERE player = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, pseudo);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
+    /**
+     * methode permettant de supprimer tous les jeux
+     * @throws SQLException leve une exception en cas d'erreur de connection
+     */
+    public static void deleteAllGames() throws SQLException {
+        String query = "DELETE FROM game";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+   /**
+    * methode permettant de supprimer tous les profiles
+    * @throws SQLException leve une exception en cas d'erreur de connection
+    */
+    public static void deleteAllProfiles() throws SQLException {
+        String query = "DELETE FROM profile";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * methode permettant de supprimer un profile et tous les jeux qui lui sont associés
+     * @param pseudo represente le pseudo du profile
+     * @return vrai si le profile a été supprimé
+     * @throws SQLException leve une exception en cas d'erreur de connection
+     */
+    public static boolean deleteProfile(String pseudo) throws SQLException {
+
+        deleteAllGamesForProfile(pseudo);
+        String query = "DELETE FROM profile WHERE pseudo = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, pseudo);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     /**
       * cette methode permet de sauvegarder un jeu
       * @param game

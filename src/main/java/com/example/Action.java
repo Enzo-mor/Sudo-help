@@ -2,7 +2,7 @@ package com.example;
 
 import com.google.gson.JsonObject;
 /**
- * cette classe permet d'effectuer les diffrente actions du jeu de sudoku
+ * cette classe permet d'effectuer les diffrentes actions ou interactions  avec le jeu de sudoku
  * elle permet de faire l'action et de l'annuler
  * elle permet aussi de serialiser et deserialiser les actions
  * 
@@ -11,9 +11,14 @@ import com.google.gson.JsonObject;
  * @see ActionManagerApply
  */
 public  abstract class Action {
-
+    /**
+     * represente le jeu sur lequel les actions seront appliquées
+     */
     final protected Game game;
-
+    /**
+     * constructeur des actions
+     * @param game represente le jeu sur lequel les actions seront appliquées
+     */
     public Action(Game game){
         this.game = game;
     }

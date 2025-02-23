@@ -11,8 +11,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class NumberCellAction extends Action  {
-    private int x, y;
+public class NumberCellAction extends ActionCell  {
     private int number;
     private int old_number;
    /**
@@ -24,9 +23,7 @@ public class NumberCellAction extends Action  {
     * @param old_number represente l'anciene valeur presente à  cette position
     */
     public NumberCellAction(Game game, int x, int y, int number, int old_number) {
-        super(game);
-        this.x = x;
-        this.y = y;
+        super(game,x,y);
         this.number = number;
         this.old_number = old_number;
     }

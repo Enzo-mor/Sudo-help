@@ -15,26 +15,32 @@ import com.google.gson.JsonSerializer;
  * cette classe permet de gerer les actions d'annotation d'un jeu de sudoku
  * elle permet d'ajouter une annotation à une cellule
  */
-public class AnnotationCellAction extends Action  {
+public class AnnotationCellAction extends ActionCell  {
+    /**
+     * represente le nombre à ajouter en annotation
+     */
+    private int annotation;
 
-    private int x, y;
-    private int number;
-
-    public AnnotationCellAction(Game game, int x, int y, int number) {
-        super(game);
-        this.x = x;
-        this.y = y;
-        this.number = number;
+    /**
+     * constructeur permettant de creer une action qui permet d'ajouter une annotation à une cellule specifique de la grille
+     * @param grid represente  la grille à modifier
+     * @param x represente les coordonnées X de la cellule
+     * @param y represente les coordonnées Y de la cellule
+     * @param annotation represente la nouvelle annotation à ajouter
+     */ 
+    public AnnotationCellAction(Game game, int x, int y, int annotation) {
+        super(game, x, y);
+        this.annotation = annotation;
     }
 
     @Override
     protected void doAction() {
-        this.game.getGrid().getMutableCell(x, y).addAnnotation(number);
+        this.game.getGrid().getMutableCell(x, y).addAnnotation(annotation);
     }
 
     @Override
     protected void undoAction() {
-        this.game.getGrid().getMutableCell(x, number).removeAnnotation(number);
+        this.game.getGrid().getMutableCell(x, y).removeAnnotation(annotation);
     }
     @Override
     public String actionType(){
@@ -46,7 +52,7 @@ public class AnnotationCellAction extends Action  {
         jsonObject.addProperty("type",actionType());
         jsonObject.addProperty("x", x);
         jsonObject.addProperty("y", y);
-        jsonObject.addProperty("number", number);
+        jsonObject.addProperty("number", annotation);
         return jsonObject; 
 
     }
@@ -56,7 +62,7 @@ public class AnnotationCellAction extends Action  {
      */
     @Override
     public String toString(){
-        return " ajout de l'annotation  au jeu de valeur : "+number+ " à la position : x = "+x+" et y = "+y;
+        return " ajout de l'annotation  au jeu de valeur : "+annotation+ " à la position : x = "+x+" et y = "+y;
     }
     @Override
     public String jsonEncode(){
