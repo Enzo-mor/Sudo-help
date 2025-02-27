@@ -9,7 +9,7 @@ import java.util.List;
  * @author K. POUSSE
  * @version 1.0
  */
-public class SudokuSolver {
+public final class SudokuSolver {
 
     /**
      * Resu la liste des cellules donnée en parametre et renvoie 

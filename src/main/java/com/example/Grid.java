@@ -18,13 +18,13 @@ import java.util.NoSuchElementException;
  *@author Taise de Thèse
  * @version 1.2
  * 
- * @see ReadOnlyCell  interface des ceullules  contenant toutes les methodes en lecture seule
+ * @see ReadOnlyCell  interface des cellules  contenant toutes les methodes en lecture seule
  * @see Cell   interface des ceullules  contenant toutes les methodes en ecriture
  * @see Action interface permettant de modifier les cellules d'un jeu
  * @see Game  classe representant un jeu de sudoku
  * 
  */
-public class Grid implements Iterable<ReadOnlyCell> {
+public final class Grid implements Iterable<ReadOnlyCell> {
 
     /* ======= Constantes de Classes ======= */
     /** Nombre de valeurs que peut prendre un chiffre [1, 9] */

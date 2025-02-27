@@ -2,15 +2,26 @@ package com.example;
 
 /**
  * cette classe permet de definir les types de données utilisées dans le jeu de sudoku
- * elle permet de definir les types d'actions, les types de cellules, les niveaux de difficulté et les etats du jeu
+ * elle permet de definir les types d'actions, les types de cellules, les niveaux de difficulté et les etats du jeu etc..
  */
-public class SudoTypes {
+public final class SudoTypes {
 
     /**
      * Enum pour les types d'actions
      */
     public enum ActionType {
-        NUMBER_CELL_ACTION("Action pour nombre"), ANNOTATION_CELL_ACTION("Action pour les annotations"), BONUS_ACTION("bonusCell");
+        /**
+         * Enum pour les actions sur les cellules de type nombre
+         */
+        NUMBER_CELL_ACTION("Action pour nombre"), 
+        /**
+         * Enum pour les actions sur les cellules de type annotation
+         */
+        ANNOTATION_CELL_ACTION("Action pour les annotations"), 
+        /**
+         * Enum pour les actions sur le jeu de type bonus
+         */
+        BONUS_ACTION("bonusCell");
 
         private final String description;
         ActionType(String value) {
@@ -35,7 +46,14 @@ public class SudoTypes {
      * Enum pour les types de cellules
      */
     public enum CellType {
-        FIXED_CELL, FLEXIBLE_CELL;
+        /**
+         * Enum pour les cellules de type fixe
+         */
+        FIXED_CELL, 
+        /**
+         * Enum pour les cellules de type flexible
+         */
+        FLEXIBLE_CELL;
     }
 
     /**
@@ -43,7 +61,18 @@ public class SudoTypes {
      * les niveaux de difficulté sont : facile, moyen et difficile et sont representés par les valeurs 1, 2 et 3
      */
     public enum Difficulty {
-        EASY(1,"facile"), MEDIUM(2,"moyen"), HARD(3,"difficile");
+        /**
+         * Enum pour le niveau de difficulté facile
+         */
+        EASY(1,"facile"), 
+        /**
+         * Enum pour le niveau de difficulté moyen
+         */
+        MEDIUM(2,"moyen"),
+        /**
+         * Enum pour le niveau de difficulté difficile
+         */
+         HARD(3,"difficile");
 
         public String getDescription() {
             return description;
@@ -92,7 +121,24 @@ public class SudoTypes {
      * Enum pour les états du jeu
      */
     public enum GameState {
-        NOT_STARTED("jeu est en arrêt"), IN_PROGRESS("jeu encours"), PAUSED("jeu en pause"), FINISHED("jeu terminer");
+        /**
+         * Enum pour l'etat du jeu non commencé ou en arrêt
+         */
+        NOT_STARTED("jeu est en arrêt"),
+        /**
+         * Enum pour l'etat du jeu en cours
+         */
+         IN_PROGRESS("jeu encours"),
+        /**
+         * Enum pour l'etat du jeu en pause
+         */
+          PAUSED("jeu en pause"), 
+        /**
+         * Enum pour l'etat du jeu terminé
+         * le jeu est terminé lorsque le joueur a rempli toutes les cellules du jeu
+         */
+          FINISHED("jeu terminer");
+
         private final String description;
         GameState(String description) {
             this.description = description;

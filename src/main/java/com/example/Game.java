@@ -34,7 +34,7 @@ import javafx.application.Platform;
  * @see Profile
  * @see Action
  */
-public class Game {
+public final class Game {
 
 
   //================ variable d'instance===========

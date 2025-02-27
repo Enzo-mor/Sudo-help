@@ -38,7 +38,7 @@ import com.example.SudoTypes.Difficulty;
  *      Grid grid = DBManager.getGrid(3);
  * }</pre>
  */
-public class DBManager {
+public final class DBManager {
 
     private static final String DATABASE_PATH = System.getProperty("user.home") + "/db_sudohelp.db"; // Stocké dans le dossier Home
     private static final String DATABASE_URL = "jdbc:sqlite:" + DATABASE_PATH;

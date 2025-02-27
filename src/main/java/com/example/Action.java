@@ -3,6 +3,7 @@ package com.example;
 import com.google.gson.JsonObject;
 /**
  * cette classe permet d'effectuer les diffrentes actions ou interactions  avec le jeu de sudoku
+ * toutes les actions du jeu heritent de cette classe et les actions appliquées sur les cellules du jeu ne concerneront que les cellules flexibles ou editable.
  * elle permet de faire l'action et de l'annuler
  * elle permet aussi de serialiser et deserialiser les actions
  * 

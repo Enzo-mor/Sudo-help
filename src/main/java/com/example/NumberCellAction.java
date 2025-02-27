@@ -1,6 +1,8 @@
 package com.example;
 
 import java.lang.reflect.Type;
+
+import com.example.SudoTypes.ActionType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -11,7 +13,18 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class NumberCellAction extends ActionCell  {
+/**
+ * cette classe permet de gerer les actions de modification d'une cellule d'un jeu de sudoku
+ * elle permet de modifier la valeur d'une cellule
+ * 
+ * @version 1.0
+ * @see Game 
+ * @see ActionManagerApply
+ * @see Action
+ * @see ActionCell
+ * @see SudoTypes
+ */
+public final class NumberCellAction extends ActionCell  {
     /**
      * represente le nombre à ajouter en annotation
      */
@@ -53,7 +66,7 @@ public class NumberCellAction extends ActionCell  {
     }
     @Override
     public SudoTypes.ActionType actionType(){
-        return SudoTypes.ActionType.NUMBER_CELL_ACTION;
+        return  ActionType.NUMBER_CELL_ACTION;
     }
     public JsonObject serialise(){
         JsonObject jsonObject = new JsonObject();

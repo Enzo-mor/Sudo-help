@@ -10,7 +10,7 @@ import java.util.List;
  * @author Kilian POUSSE
  * @version 1.2
  */
-public class FlexCell extends FixCell {
+public final class FlexCell extends FixCell {
 
     /* ======= Variables d'instance ======= */
     /** Tableau des annotations (si annotations[i]==true, i+1 est annotée dans la cellule) */

@@ -1,7 +1,5 @@
 package com.example;
 
-import java.util.List;
-
 /**
  * Cette interface permet de modéliser une cellule d'une grille
  * de Sudoku.
