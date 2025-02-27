@@ -23,6 +23,7 @@ public class ActionFactory {
     static {
         actionMap.put(SudoTypes.ActionType.ANNOTATION_CELL_ACTION.getDescription(), AnnotationCellAction.class);
         actionMap.put(SudoTypes.ActionType.NUMBER_CELL_ACTION.getDescription(), NumberCellAction.class);
+        actionMap.put(SudoTypes.ActionType.ANNOTATION_REMOVE_CELL_ACTION.getDescription(), AnnotationRemoveCellAction.class);
     }
 
     /**Récupère dynamiquement la classe associée à un type donné

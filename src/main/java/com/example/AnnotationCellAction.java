@@ -23,11 +23,11 @@ import com.google.gson.JsonSerializer;
  * @see ActionCell
  * @see SudoTypes
  */
-public final class AnnotationCellAction extends ActionCell  {
+public  class AnnotationCellAction extends ActionCell  {
     /**
      * represente le nombre à ajouter en annotation
      */
-    private int annotation;
+    protected int annotation;
 
     /**
      * constructeur permettant de creer une action qui permet d'ajouter une annotation à une cellule specifique de la grille

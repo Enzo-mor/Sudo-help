@@ -677,10 +677,18 @@ public final class Game {
             return this;
           }
     }
-
+    /**
+     * cette methode permet de supprimer une annotation  à une case du jeu
+     * @param x represente la position x de la case dans la grille
+     * @param y represente la position Y de la case dans la grille
+     * @param value represente l'annoatation à supprimer
+     * @return la même instance du jeu  après appliquation de  la modification
+     * @throws IllegalStateException
+     * @throws NoEditableCellExeception
+     */
     public Game removeAnnotation(int x, int y, int value) throws IllegalStateException,NoEditableCellExeception{
         try {
-            return addAnnotation(x, y, 0);
+            return executeAction(new AnnotationRemoveCellAction(this, x, y, value));
         } catch (Exception e) { 
             System.err.println("aucune action n'a été effectué :"+e.getMessage());
             return this;

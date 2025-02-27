@@ -15,13 +15,17 @@ public final class SudoTypes {
          */
         NUMBER_CELL_ACTION("Action pour nombre"), 
         /**
-         * Enum pour les actions sur les cellules de type annotation
+         * Enum pour les actions d'ajout d'annotation sur les cellules
          */
         ANNOTATION_CELL_ACTION("Action pour les annotations"), 
         /**
          * Enum pour les actions sur le jeu de type bonus
          */
-        BONUS_ACTION("bonusCell");
+        BONUS_ACTION("bonusCell"),
+        /**
+         * Enum pour les actions de suppression d'annotation sur les cellules
+         */
+        ANNOTATION_REMOVE_CELL_ACTION("action de suppression de l'annotation");
 
         private final String description;
         ActionType(String value) {
