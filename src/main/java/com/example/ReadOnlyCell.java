@@ -3,7 +3,8 @@ package com.example;
 import java.util.List;
 
 /**
- * cette Interface qui permet l'accès aux cellules en lecture seule
+ * Cette interface permet de representer une cellule non modifiable d'une grille
+ * de Sudoku
  * @author Taise de Thèse
  * @version 1.0
  */

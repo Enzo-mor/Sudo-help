@@ -1,7 +1,7 @@
 package com.example;
 
 /**
- * Cette interface permet de modéliser une cellule d'une grille
+ * Cette interface permet de representer une cellule modifiable d'une grille
  * de Sudoku.
  * @author Kilian POUSSE
  * @version 1.1

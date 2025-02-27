@@ -35,7 +35,7 @@ public final class NumberCellAction extends ActionCell  {
     private int old_number;
    /**
     * methode permettant de creer une action qui permet de modifier une valeur à une cellule specifique de la grille
-    * @param grid represente  la grille à modifier
+    * @param game represente le jeu contenant la grille à modifier
     * @param x represente les coordonnées X 
     * @param y represente les coordonnées Y
     * @param number represente la nouvelle valeur à modifier

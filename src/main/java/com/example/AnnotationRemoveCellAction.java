@@ -17,7 +17,7 @@ import com.example.SudoTypes.ActionType;
 public class AnnotationRemoveCellAction extends AnnotationCellAction {
     /**
      * constructeur permettant de creer une action qui permet de supprimer une annotation à une cellule specifique de la grille
-     * @param grid represente  la grille à modifier
+     * @param game represente le jeu contenant la grille à modifier
      * @param x represente les coordonnées X de la cellule
      * @param y represente les coordonnées Y de la cellule
      * @param annotation represente la nouvelle annotation à supprimer
