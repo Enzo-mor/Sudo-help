@@ -157,7 +157,8 @@ public final class Grid implements Iterable<ReadOnlyCell> {
      protected void resetGrid(){
         this.cells.forEach((e)->{
             if(e.isEditable())
-                e.clear();
+                 e.clear();
+                ((FlexCell)e).trashAnnotation();
         });
      }
 

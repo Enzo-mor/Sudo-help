@@ -43,6 +43,16 @@ public final class FlexCell extends FixCell {
     }
 
     /**
+     * methode permettant de vider les annotations d'une cellule
+     * 
+     */
+    protected void trashAnnotation() {
+        for(int i = 0; i < Grid.NB_NUM; i++) {
+            this.annotations[i] = false;
+        }
+    }
+
+    /**
      * Ajouter un annotation à la cellule
      * @param number Chiffre de l'annotation à ajouter [int]
      */
