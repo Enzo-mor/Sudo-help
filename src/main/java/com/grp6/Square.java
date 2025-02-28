@@ -96,6 +96,7 @@ public class Square implements SousGrille  {
      * @param une ligne de cellule [Cell[]] 
      */
     public int[][] fullCellPos(){
+        //a faire
         return null;
     }
 
