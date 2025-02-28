@@ -1,7 +1,7 @@
 package com.grp6;
 
 public class LastCell implements InterfaceTech  {
- 
+    @Override
     public boolean detect(Grid grille) {
 
         for(int i = 0; i < Grid.NB_NUM;i++){
@@ -16,7 +16,10 @@ public class LastCell implements InterfaceTech  {
         }
         return false;   
     }
-
+    @Override
+    public void applique(Grid grille){
+        
+    }
     public static void main(String[] args){
          //grille  (pour les collones )
         int[] data={
