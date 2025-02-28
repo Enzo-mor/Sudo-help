@@ -69,14 +69,18 @@ public class Column  implements SousGrille{
 
     /**
      * Permet de savoir la position des cellules vides
-     * @return La position des cellules vides [int[][]]
-     * @param une colonne de cellule [Cell[]] 
+     * @return La position des cellules vides [int[][]] le premier tableau corespond aux coordonnées x/y et le deuxieme tableau corespond aux nombre de cellules
+     * @param void 
      */
     public int[][] emptyCellPos(){
+        int j = 0;
         int[][] pos = new int[9][9];
         for(int i = 0; i < 9; i++){
             if(colonne[i].isEmpty()){
-                pos[i] = colonne[i].getPosition();
+
+                pos[i][j] = colonne[i].getPosition()[0];
+                pos[i][j] = colonne[i].getPosition()[1];
+                j++;
             }
         }
         return pos;
@@ -88,12 +92,35 @@ public class Column  implements SousGrille{
      * @param une colonne de cellule [Cell[]] 
      */
     public int[][] fullCellPos(){
+        int j =0;
         int[][] pos = new int[9][9];
         for(int i = 0; i < 9; i++){
             if(!colonne[i].isEmpty()){
-                //pos[i] = colonne[i].getPosition();
+                pos[i][j] = colonne[i].getPosition()[0];
+                pos[i][j] = colonne[i].getPosition()[1];
+                j++;
             }
+            }
+            return pos;
         }
-        return pos;
-    }
+        
+    public String toString(){
+          String s ="";
+          for(int i=0;i<9;i++){
+              s+= colonne[i].getNumber();
+              s+= "\n"; 
+          }
+          return s;
+      }
+    
+     public static void main(String[] args) {
+         int[] data={2,5,9,4,7,3,6,1,8,6,4,1,8,2,9,3,5,7,3,7,8,1,5,6,9,2,4,5,2,4,7,9,8,1,3,6,9,3,7,5,6,1,4,8,2,8,1,6,3,4,2,5,7,9,4,6,3,2,1,7,8,9,5,7,8,5,9,3,4,2,6,1,1,9,2,6,8,5,7,4,3};
+         Grid g =new Grid(data);
+         System.out.println(g.toString());
+         Column colonne1= new Column(1,g);
+         Column colonne2= new Column(2,g);
+
+         System.out.println(colonne1.toString());
+         System.out.println(colonne2.toString());
+     }
 }
