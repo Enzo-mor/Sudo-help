@@ -81,11 +81,15 @@ public class Square implements SousGrille  {
         for(int i = 0; i <3; i++){
             for(int j =0; j<3 ;j++)
                 if(carre[i][j].isEmpty()){
-
-                pos[i][k] = carre[i][j].getPosition()[0];
-                pos[i][k] = carre[i][j].getPosition()[1];
-                k=0;
+                    pos[i][k] = carre[i][j].getPosition()[0];
+                    pos[i][k] = carre[i][j].getPosition()[1];
+                    k++;
                 }
+        }
+        for(int i =0 ; i<9;i++){
+            
+              System.out.println(pos[i][0]);
+                System.out.println(pos[i][1]);
         }
         return pos;
     }
@@ -104,7 +108,13 @@ public class Square implements SousGrille  {
         String s ="";
         for(int i=0;i<3;i++)
             for(int j=0;j<3;j++){
+                if (carre[i][j].isEmpty()){
+                    s += " ";
+                    
+                }else{
                 s += carre[i][j].getNumber();
+                    
+                }
                 if(j == 2)
                     s+="\n";
             }
@@ -112,7 +122,7 @@ public class Square implements SousGrille  {
     }
 
     public static void main(String[] args) {
-        int[] data={2,5,9,4,0,3,6,1,8,6,4,1,8,2,9,3,5,7,3,7,8,1,5,6,9,2,4,5,2,4,7,9,8,1,3,6,9,3,7,5,6,1,4,8,2,8,1,6,3,4,2,5,7,9,4,6,3,2,1,7,8,9,5,7,8,5,9,3,4,2,6,1,1,9,2,6,8,5,7,4,3};
+        int[] data={2,0,9,4,0,3,6,1,8,6,4,1,8,2,9,3,5,7,3,7,8,1,5,6,9,2,4,5,2,4,7,9,8,1,3,6,9,3,7,5,6,1,4,8,2,8,1,6,3,4,2,5,7,9,4,6,3,2,1,7,8,9,5,7,8,5,9,3,4,2,6,1,1,9,2,6,8,5,7,4,3};
         Grid g =new Grid(data);
         System.out.println(g.toString());
         Square hooo= new Square(0, 0,g);
@@ -124,6 +134,10 @@ public class Square implements SousGrille  {
 
         System.out.println(hooo.toString());
         System.out.println(hooo1.toString());
+
+        System.out.println(hooo.emptyCellPos());
+
+
     }
 
 }
