@@ -4,7 +4,7 @@
   
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.example</groupId>
+  <groupId>grp6.sudocore</groupId>
   <artifactId>javafx-fxml-example</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -106,7 +106,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.example.Main</mainClass>
+                            <mainClass>grp6.sudocore.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -147,7 +147,7 @@
                 </execution>
             </executions>
               <configuration>
-                  <mainClass>com.example.GameTimerTestApp</mainClass>
+                  <mainClass>grp6.sudocore.GameTimerTestApp</mainClass>
               </configuration>
           </plugin>
 
