@@ -1,6 +1,6 @@
 package grp6.intergraph;
 
-import grp6.bdd.*;
+import grp6.sudocore.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

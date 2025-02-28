@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
-import grp6.bdd.*;
+import grp6.sudocore.*;
 
 public class SudokuGrid {
     private GridPane grid;
