@@ -1,4 +1,6 @@
 package com.grp6;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LastNumber implements InterfaceTech  {
 
@@ -8,8 +10,8 @@ public class LastNumber implements InterfaceTech  {
             Column colonne = new Column(j, grille);
             Line ligne = new Line(i, grille);
             
-            Cell[] cell_col = colonne.fullCell();
-            Cell[] cell_lig = ligne.fullCell();
+            List<Cell> cell_col = colonne.fullCell();
+            List<Cell> cell_lig = ligne.fullCell();
             for(int z=1;z<=Grid.NB_NUM;z++){
                 if(cell_col[i].getNumber() == z || cell_lig[j].getNumber() == z ){
                     listInt[z]=z;
@@ -22,6 +24,7 @@ public class LastNumber implements InterfaceTech  {
         return false;
     }
 
+    
     public static void main(String[] args) {
         int[] data={2,4,6,0,0,0,0,0,0,0,0,0,3,0,6,0,7,4,3,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0};
         Grid g =new Grid(data);
