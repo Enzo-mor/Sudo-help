@@ -48,16 +48,17 @@ public class AnnotationRemoveCellAction extends AnnotationCellAction {
 
     public static void main(String[] args) {
 
-        try {
 
             System.out.println("AnnotationRemoveCellAction");
-            AnnotationRemoveCellAction annotation = new AnnotationRemoveCellAction(new Game(DBManager.getGrid(2),new Profile("philippe")), 0, 0, 3);
-            System.out.println(annotation.serialise());
+            try {
+                AnnotationRemoveCellAction annotation = new AnnotationRemoveCellAction(new Game(DBManager.getGrid(2),new Profile("philippe")), 0, 0, 3);
+                 System.out.println(annotation.serialise());
+            } catch (Exception e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }
             
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
+        
        
     }
     
