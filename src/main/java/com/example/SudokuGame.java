@@ -68,7 +68,7 @@ public class SudokuGame {
         mainLayout.getChildren().addAll(topBar, layout);
 
         Scene scene = new Scene(mainLayout, 800, 600);
-        primaryStage.setTitle("Sudoku - Niveau facile n°" + selectedSudokuId);
+        primaryStage.setTitle("Niveau facile n°" + selectedSudokuId + " - " + MainMenu.getProfileName());
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(MIN_WIDTH);
         primaryStage.setMinHeight(MIN_HEIGHT);

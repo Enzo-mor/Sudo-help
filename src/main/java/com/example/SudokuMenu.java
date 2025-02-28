@@ -17,6 +17,16 @@ import javafx.stage.Stage;
 public class SudokuMenu {
     public static void showSudokuLibrary(Stage stage) {
 
+        int currentPage = 0;
+
+        Button leftArrow = new Button("<");
+        leftArrow.setDisable(true);
+
+        Button rightArrow = new Button(">");
+
+        Label difficultyLabel = new Label("Facile");
+        difficultyLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+
         final List<Sudoku> sudokus = new ArrayList<>();
         for (int i = 1; i <= 12; i++) {
             if (i == 1) {
@@ -79,15 +89,15 @@ public class SudokuMenu {
         }
 
         Button backButton = new ProfileButton("Retour");
-        backButton.setOnAction(e -> MainMenu.showMainMenu(stage, MainMenu.getProfileName()));
+        backButton.setOnAction(e -> GameplayChoice.showGameplayChoice(stage));
 
-        VBox layout = new VBox(15, gridPane, backButton);
+        VBox layout = new VBox(15, difficultyLabel, gridPane, backButton);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(10));
 
         Scene scene = new Scene(layout, 900, 600);
 
-        stage.setTitle("Mode Facile");
+        stage.setTitle("Mode Libre - " + MainMenu.getProfileName());
         stage.setScene(scene);
         stage.show();
     }

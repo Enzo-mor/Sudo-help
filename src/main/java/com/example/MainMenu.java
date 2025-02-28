@@ -20,7 +20,7 @@ public class MainMenu {
         welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         Button startGameButton = new ProfileButton("Jouer");
-        startGameButton.setOnAction(e -> SudokuMenu.showSudokuLibrary(stage));
+        startGameButton.setOnAction(e -> GameplayChoice.showGameplayChoice(stage));
 
         Button settingsButton = new ProfileButton("Paramètres");
         settingsButton.setOnAction(e -> System.out.println("Paramètres ouverts"));
@@ -31,7 +31,7 @@ public class MainMenu {
         layout.getChildren().addAll(welcomeLabel, startGameButton, settingsButton, exitButton);
 
         Scene scene = new Scene(layout, 640, 480);
-        stage.setTitle("Menu Principal");
+        stage.setTitle("Menu Principal - " + MainMenu.getProfileName());
         stage.setScene(scene);
         stage.show();
     }
