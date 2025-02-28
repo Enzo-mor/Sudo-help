@@ -4,24 +4,49 @@ import java.util.List;
 
 public class LastNumber implements InterfaceTech  {
 
-    public boolean detect(Grid grille,int i,int j){
-        int listInt[];
+    @Override
+    public boolean detect(Grid grille){
+        ArrayList<Integer> liste = new ArrayList<>();
+        int i=1;
+        int j=1;
+        int cpt=0;
+        
         if(grille.getCell(i, j).isEmpty()){
             Column colonne = new Column(j, grille);
             Line ligne = new Line(i, grille);
+            Square carre = new Square(i/3, j%3, grille);
             
-            List<Cell> cell_col = colonne.fullCell();
-            List<Cell> cell_lig = ligne.fullCell();
-            for(int z=1;z<=Grid.NB_NUM;z++){
-                if(cell_col[i].getNumber() == z || cell_lig[j].getNumber() == z ){
-                    listInt[z]=z;
+            List<Cell> col_cells=colonne.fullCell();
+            List<Cell> lin_cells=ligne.fullCell();
+            List<Cell> car_cells=carre.fullCell();
+            for(Cell c:col_cells){
+                if(!liste.contains(c.getNumber()) ){
+                    liste.add(c.getNumber());
                 }
             }
-            if (listInt.length == Grid.NB_NUM -1) {
+            for(Cell c:lin_cells){
+                if(!liste.contains(c.getNumber()) ){
+                    liste.add(c.getNumber());
+                }
+            }
+            for(Cell c:car_cells){
+                if(!liste.contains(c.getNumber()) ){
+                    liste.add(c.getNumber());
+                }
+            }
+
+            if(liste.size() == Grid.NB_NUM-1){
                 return true;
             }
+
+            
         }
         return false;
+    }
+
+    @Override
+    public void applique(Grid grilleJoueur){
+        
     }
 
     
@@ -30,7 +55,7 @@ public class LastNumber implements InterfaceTech  {
         Grid g =new Grid(data);
         LastNumber test =new LastNumber();
         System.out.println(g.toString());
-        System.out.println(test.detect(g,0,1));
+        System.out.println(test.detect(g));
 
 
     }
