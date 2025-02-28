@@ -1,4 +1,7 @@
 package com.grp6;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Column  implements SousGrille{
     
@@ -41,11 +44,11 @@ public class Column  implements SousGrille{
      * @return Le nombre de cellules vides restantes [cell[]]
      * @param une colonne de cellule [Cell[]] 
      */
-    public Cell[] emptyCell(){
-        Cell[] cellVide = new Cell[9];
+    public List<Cell> emptyCell(){
+        List<Cell> cellVide = new ArrayList<>();
         for(int i = 0; i < 9; i++){
             if(colonne[i].isEmpty()){
-                cellVide[i] = colonne[i];
+                cellVide.add(colonne[i]);
             }
         }
         return cellVide;
@@ -56,11 +59,11 @@ public class Column  implements SousGrille{
      * @return Le nombre de cellules pleines restantes [cell[]]
      * @param une colonne de cellule [Cell[]] 
      */
-    public Cell[] fullCell(){
-        Cell[] cellPlein = new Cell[9];
+    public List<Cell> fullCell(){
+        List<Cell> cellPlein = new ArrayList<>();
         for(int i = 0; i < 9; i++){
             if(!colonne[i].isEmpty()){
-                cellPlein[i] = colonne[i];
+                cellPlein.add(colonne[i]);
             }
         }
         return cellPlein;

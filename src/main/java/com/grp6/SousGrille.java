@@ -3,6 +3,7 @@ package com.grp6;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public interface SousGrille  {
@@ -17,13 +18,13 @@ public interface SousGrille  {
      * Permet d'obtenir un tableau des cellules vides
      * @return Le nombre de cellules vides restantes [cell[]]
      */
-    public Cell[] emptyCell();
+    public List<Cell> emptyCell();
 
     /**
      * Permet d'obtenir un tableau des cellules pleines  
      * @return Le nombre de cellules pleines restantes [cell[]]
      */
-    public Cell[] fullCell();
+    public List<Cell> fullCell();
 
 
      /**
