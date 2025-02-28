@@ -409,17 +409,23 @@ public final class DBManager {
      * cette retourne toutes les parties present dans la DB appartant à un profil
      * @param pseudo : represnte le profil
      * @return
-     * @throws SQlException leve une erreur en cas de probleme de connection 
      */
-    public static List<Game> getGamesForProfile(String pseudo) throws SQLException {
-        List<Game> games = new ArrayList<>();
-    
-        if (DBManager.profileExists(pseudo)) {
-            games = DBManager.getGames().stream()
-                    .filter(game -> game.getProfile() != null && game.getProfile().getPseudo().equalsIgnoreCase(pseudo))
-                    .toList();
+    public static List<Game> getGamesForProfile(String pseudo) {
+        try {
+             List<Game> games = new ArrayList<>();
+            if (DBManager.profileExists(pseudo)) {
+                games = DBManager.getGames().stream()
+                        .filter(game -> game.getProfile() != null && game.getProfile().getPseudo().equalsIgnoreCase(pseudo))
+                        .toList();
+            }
+            return games;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<Game>();
+            // TODO: handle exception
         }
-        return games;
+       
     }
     /**
      *  methode permettant de supprimer un jeu dans la base de donnée

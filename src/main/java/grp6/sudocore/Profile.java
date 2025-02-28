@@ -35,6 +35,10 @@ public class Profile {
         return pseudo;
     }
 
+    public void setPseudo(String pseudo) {
+        this.pseudo=pseudo;
+    }
+
     /* ====== Méthodes d'instance ====== */
 
     @Override

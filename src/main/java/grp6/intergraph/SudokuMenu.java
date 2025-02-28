@@ -1,4 +1,5 @@
 package grp6.intergraph;
+import grp6.sudocore.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ import javafx.stage.Stage;
 public class SudokuMenu {
     public static void showSudokuLibrary(Stage stage) {
 
+        List<Game> games = DBManager.getGamesForProfile(MainMenu.getProfileName());
+
         int currentPage = 0;
 
         Button leftArrow = new Button("<");
@@ -28,6 +31,11 @@ public class SudokuMenu {
         difficultyLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         final List<Sudoku> sudokus = new ArrayList<>();
+        games.stream().forEach(game-> {
+            
+        });
+        
+
         for (int i = 1; i <= 12; i++) {
             if (i == 1) {
                 sudokus.add(new Sudoku("Sudoku F-" + i, "00.01.58", "100", "completed"));

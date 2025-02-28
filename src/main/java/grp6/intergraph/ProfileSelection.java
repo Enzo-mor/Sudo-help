@@ -1,5 +1,8 @@
 package grp6.intergraph;
 
+import grp6.sudocore.*;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +18,9 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
 public class ProfileSelection {
-    private final List<Profile> profiles = new ArrayList<>();
-    private Profile selectedProfile = new Profile("Invité", 1);
+    private final List<Profile> profiles = DBManager.getProfiles();
+    private Profile selectedProfile = new Profile("Invité");
     private int currentPage = 0;
-    private static int idNum = 2;
 
     public void showProfileSelection(Stage stage) {
         StackPane root = new StackPane();
@@ -80,9 +82,27 @@ public class ProfileSelection {
             confirmButton.setOnAction(event -> {
                 String name = nameField.getText().trim(); // Récupérer le texte saisi et supprimer les espaces inutiles
                 if (!name.isEmpty()) {
-                    profiles.add(new Profile(name, idNum++)); // Ajouter un nouveau profil avec un identifiant unique
-                    System.out.println("Nouveau profil ajouté : " + name); // Afficher un message dans la console
-                    updateProfiles(profileContainer, leftArrow, rightArrow, stage); // Mettre à jour l'affichage des profils
+                    try{
+
+                        if (DBManager.profileExists(name)){
+                            System.out.println("Le profil " + name + " existe déjà");
+                        }
+                        else{
+                            Profile newProf= new Profile(name);
+                            profiles.add(newProf); // Ajouter un nouveau profil avec un identifiant unique
+                            try {
+                                DBManager.saveProfile(newProf);
+                            }
+                            catch (SQLException err){
+                                System.out.println("Impossible d'accéder à la BDD");
+                            }
+                            System.out.println("Nouveau profil ajouté : " + name); // Afficher un message dans la console
+                            updateProfiles(profileContainer, leftArrow, rightArrow, stage); // Mettre à jour l'affichage des profils
+                        }
+                    }
+                    catch(SQLException er){
+                        System.out.println("Impossible d'accéder à la BDD");
+                    }
                     popupStage.close(); // Fermer la fenêtre pop-up après l'ajout du profil
                 }
             });
@@ -124,7 +144,7 @@ public class ProfileSelection {
             profileImage.setFitWidth(100);
             profileImage.setFitHeight(100);
 
-            Label profileName = new Label(profiles.get(i).getName());
+            Label profileName = new Label(profiles.get(i).getPseudo());
             profileName.setStyle("-fx-font-size: 16px;");
 
             profileBox.getChildren().addAll(profileImage, profileName);
@@ -133,7 +153,7 @@ public class ProfileSelection {
             final Profile profile = profiles.get(i);
             profileBox.setOnMouseClicked(e -> {
                 selectedProfile = profile;
-                MainMenu.showMainMenu(stage, selectedProfile.getName());
+                MainMenu.showMainMenu(stage, selectedProfile.getPseudo());
             });
         }
 

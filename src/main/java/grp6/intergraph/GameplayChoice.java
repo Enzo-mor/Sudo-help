@@ -9,9 +9,9 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class GameplayChoice {
-
+    
     public static void showGameplayChoice(Stage stage) {
-        
+
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
 

@@ -4,6 +4,3 @@ CREATE TABLE profile (
     pseudo VARCHAR NOT NULL UNIQUE
 );
 
-INSERT INTO profile (pseudo) VALUES
-('Invité');
-
