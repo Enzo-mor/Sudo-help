@@ -508,66 +508,104 @@ public final class DBManager {
             return false;
         }
     }
-    /**
-      * cette methode permet de sauvegarder un jeu
-      * @param game
-      * @throws SQLException leve une execption en cas d'erreur de connection
-      */
-      protected static void saveGame(Game game) throws SQLException{
-       
-            if(!tableExists("game")) {
-                System.err.println("La table 'profile' n'existe pas. Initialisation en cours...");
-                executeSqlScript(getConnection(), "game");
-                 }
-                  if(!DBManager.profileExists(game.getProfile().getPseudo()))
-                    game.getProfile().save();
+/**
+ * cette methode permet de sauvegarder un jeu
+ * @param game
+ * @throws SQLException leve une execption en cas d'erreur de connection
+ */
+protected static void saveGame(Game game) throws SQLException{
 
-               String sql = "INSERT INTO game (id_game, grid,player,created_date, last_modifed_date,progress_rate,score,actions,elapsed_time) " +
-                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-                 "ON CONFLICT(id_game) DO UPDATE SET " +
-                 "player = excluded.player, " +
-                 "last_modifed_date = excluded.last_modifed_date, " +
-                 "progress_rate = excluded.progress_rate, " +
-                 "score = excluded.score;"+ 
-                 "actions=excluded.actions"+
-                 "elapsed_time=excluded.elapsed_time";
-                 try (Connection conn = getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    if(!tableExists("game")) {
+        System.err.println("La table 'profile' n'existe pas. Initialisation en cours...");
+        executeSqlScript(getConnection(), "game");
+            }
+            if(!DBManager.profileExists(game.getProfile().getPseudo()))
+            game.getProfile().save();
 
-                    pstmt.setLong(1, game.getId());
-                    pstmt.setInt(2, game.getGrid().getId());
-                    pstmt.setString(3, game.getProfile().getPseudo());
-                    pstmt.setString(4, game.getCreatedDate());
-                    pstmt.setString(5, game.getLastModifDate());
-                    pstmt.setDouble(6, game.getProgressRate());
-                    pstmt.setInt(7, game.getScore());
-                    pstmt.setString(8, game.JsonEncodeActionsGame());
-                    pstmt.setLong(9,game.getElapsedTime());
+        String sql = "INSERT INTO game (id_game, grid,player,created_date, last_modifed_date,progress_rate,score,actions,elapsed_time) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+            "ON CONFLICT(id_game) DO UPDATE SET " +
+            "player = excluded.player, " +
+            "last_modifed_date = excluded.last_modifed_date, " +
+            "progress_rate = excluded.progress_rate, " +
+            "score = excluded.score;"+ 
+            "actions=excluded.actions"+
+            "elapsed_time=excluded.elapsed_time";
+            try (Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-                    pstmt.executeUpdate();
-                    System.out.println("Jeu enregistré avec succès !");
+            pstmt.setLong(1, game.getId());
+            pstmt.setInt(2, game.getGrid().getId());
+            pstmt.setString(3, game.getProfile().getPseudo());
+            pstmt.setString(4, game.getCreatedDate());
+            pstmt.setString(5, game.getLastModifDate());
+            pstmt.setDouble(6, game.getProgressRate());
+            pstmt.setInt(7, game.getScore());
+            pstmt.setString(8, game.JsonEncodeActionsGame());
+            pstmt.setLong(9,game.getElapsedTime());
 
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    }
+            pstmt.executeUpdate();
+            System.out.println("Jeu enregistré avec succès !");
 
+        } catch (SQLException e) {
+            e.printStackTrace();
             }
 
+}
+
        
-    /**
-     * cette methode permet de retourner le profile present dans la base de données à travers son pseudo
-     * @param pseudo
-     * @return  profile
-     * @throws SQLException leve une exception en cas d'erreur de connection
-     * @throws NoSuchElementException leve une exception si aucun profile contenant ce pseudo n'a été trouvé dans la base de donnée
-     */
-     public static Profile getProfile(String pseudo) throws SQLException ,NoSuchElementException{
-         return DBManager.getProfiles().stream()
-         .filter(p->p.getPseudo().equalsIgnoreCase(pseudo))
-         .findFirst()
-         .orElseThrow(() -> new NoSuchElementException("Aucun profil n'a été trouvé avec le pseudo : " + pseudo));
-     }
+/**
+ * cette methode permet de retourner le profile present dans la base de données à travers son pseudo
+ * @param pseudo
+ * @return  profile
+ * @throws SQLException leve une exception en cas d'erreur de connection
+ * @throws NoSuchElementException leve une exception si aucun profile contenant ce pseudo n'a été trouvé dans la base de donnée
+ */
+public static Profile getProfile(String pseudo) throws SQLException ,NoSuchElementException{
+    return DBManager.getProfiles().stream()
+    .filter(p->p.getPseudo().equalsIgnoreCase(pseudo))
+    .findFirst()
+    .orElseThrow(() -> new NoSuchElementException("Aucun profil n'a été trouvé avec le pseudo : " + pseudo));
+}
+
+
+/**
+ * Récupérer le nombre de grilles correspondant à une difficulté donnée.
+ * @param difficulty Difficulté donnée
+ * @return Le nombre de grilles
+ */
+public static int getGridSizeWithDifficulty(String difficulty) {
+
+    SudoTypes.Difficulty diff;
+
+    if ("facile".equals(difficulty)) {
+    diff = SudoTypes.Difficulty.EASY;
+    }
+    else if("difficile".equals(difficulty)) {
+        diff = SudoTypes.Difficulty.HARD;
+    }
+    else {
+        diff = SudoTypes.Difficulty.MEDIUM;
+    }
     
+    return DBManager.getGridSizeWithDifficulty(diff);
+} 
+
+/**
+ * Récupérer le nombre de grilles correspondant à une difficulté donnée.
+ * @param difficulty Difficulté donnée
+ * @return Le nombre de grilles
+ */
+public static int getGridSizeWithDifficulty(SudoTypes.Difficulty difficulty) {
+    return (int) DBManager.getGrids().stream()
+            .filter(g -> g.getDifficulty().equals(difficulty))
+            .count();
+}
+
+public static int getGridsSize() {
+    return (int) DBManager.getGrids().stream()
+            .count();
+}
 
 public static void main(String[] args) {
     try {

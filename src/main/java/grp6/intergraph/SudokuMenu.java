@@ -1,5 +1,6 @@
 package grp6.intergraph;
 import grp6.sudocore.*;
+import grp6.sudocore.SudoTypes.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,21 +31,32 @@ public class SudokuMenu {
         Label difficultyLabel = new Label("Facile");
         difficultyLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
+        /* Initialisation */
         final List<Sudoku> sudokus = new ArrayList<>();
-        games.stream().forEach(game-> {
-            
-        });
         
+        int sizeEasy = DBManager.getGridSizeWithDifficulty(Difficulty.EASY);
+        int sizeMedium = DBManager.getGridSizeWithDifficulty(Difficulty.MEDIUM);
+        int sizeHard = DBManager.getGridSizeWithDifficulty(Difficulty.HARD);
 
-        for (int i = 1; i <= 12; i++) {
-            if (i == 1) {
-                sudokus.add(new Sudoku("Sudoku F-" + i, "00.01.58", "100", "completed"));
-            } else if (i == 2) {
-                sudokus.add(new Sudoku("Sudoku F-" + i, "00.03.02", "", "in_progress"));
-            } else {
-                sudokus.add(new Sudoku("Sudoku F-" + i, "00.00.00", "", "not_started"));
+        for (int i = 0; i < DBManager.getGridsSize(); i++) {
+            String nameS = "Sudoku ";
+
+            if(i < sizeEasy){
+                nameS = nameS + "F-" + (i % sizeEasy + 1);
             }
+            else if (i >= sizeEasy && i < (sizeEasy + sizeMedium)){
+                nameS = nameS + "M-" + (i % sizeMedium + 1);
+            }
+            else {
+                nameS = nameS + "D-" + (i % sizeHard + 1);
+            }
+            
+            sudokus.add(new Sudoku(i, nameS, 0, 0, GameState.NOT_STARTED));
         }
+
+        games.stream().forEach(game-> {
+            sudokus.get(game.getGrid().getId()).modifyInfo(game.getElapsedTime(), game.getScore(), game.getGameState(), game);
+        });
 
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(20));
@@ -61,7 +73,7 @@ public class SudokuMenu {
             sudokuBox.setStyle("-fx-background-color: #939cb5; -fx-padding: 10; -fx-border-color: black; -fx-border-width: 1; -fx-border-radius: 5;");
 
             Label nameLabel = new Label(sudoku.getName());
-            Label scoreLabel = new Label("Score : " + (sudoku.getScore().isEmpty() ? "-" : sudoku.getScore()));
+            Label scoreLabel = new Label("Score : " + (sudoku.getScore()==0 ? "-" : sudoku.getScore()));
             Label bestTimeLabel = new Label("Temps : " + sudoku.getBestTime());
 
             ImageView statusIcon = new ImageView();
@@ -69,10 +81,10 @@ public class SudokuMenu {
             statusIcon.setFitHeight(24);
 
             switch (sudoku.getStatus()) {
-                case "completed":
+                case FINISHED:
                     statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/star.png")));
                     break;
-                case "in_progress":
+                case IN_PROGRESS:
                     statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/pause.png")));
                     break;
                 default:
@@ -93,7 +105,7 @@ public class SudokuMenu {
             gridPane.add(sudokuBox, i % columns, i / columns);
 
             final int selectedSudokuId = i + 1;
-            sudokuBox.setOnMouseClicked(e -> SudokuGame.showSudokuGame(stage, selectedSudokuId));
+            sudokuBox.setOnMouseClicked(e -> SudokuGame.showSudokuGame(stage, sudokus.get(selectedSudokuId)));
         }
 
         Button backButton = new ProfileButton("Retour");
@@ -108,35 +120,5 @@ public class SudokuMenu {
         stage.setTitle("Mode Libre - " + MainMenu.getProfileName());
         stage.setScene(scene);
         stage.show();
-    }
-
-    private static class Sudoku {
-        private final String name;
-        private final String bestTime;
-        private final String score;
-        private final String status;
-
-        public Sudoku(String name, String bestTime, String score, String status) {
-            this.name = name;
-            this.bestTime = bestTime;
-            this.score = score;
-            this.status = status;
-        }
-
-        public String getName() { 
-            return name;
-        }
-
-        public String getBestTime() { 
-            return bestTime;
-        }
-
-        public String getScore() { 
-            return score;
-        }
-
-        public String getStatus() { 
-            return status;
-        }
     }
 }

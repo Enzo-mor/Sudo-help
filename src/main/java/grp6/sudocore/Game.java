@@ -182,7 +182,6 @@ public final class Game {
         this.elapsedTime=elapsedTime;
         gameState=GameState.NOT_STARTED;
         this.timer = Executors.newScheduledThreadPool(1);
-       
     }
 
     /**
@@ -757,7 +756,7 @@ public final class Game {
      *  cette methode retourne le taux de progression de la partie en pourcentage
      *  le taux de progression represente le pourcentage de case resolue dans la grille
      * 
-     * @return le  pourcentage des cases réuissits
+     * @return le  pourcentage des cases réussits
      */
     public double getProgressRate() {
         return progressRate;

@@ -6,17 +6,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import grp6.sudocore.*;
 
 public class MainMenu {
-    private static String profile = null;
+    private static String pseudo = null;
+    private static Profile profile = null;
 
-    public static void showMainMenu(Stage stage, String profileName) {
-        profile = profileName;
+    public static void showMainMenu(Stage stage, Profile selectedProfile) {
+        pseudo = selectedProfile.getPseudo();
+        profile = selectedProfile;
 
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
 
-        Label welcomeLabel = new Label("Bienvenue, " + profile);
+        Label welcomeLabel = new Label("Bienvenue, " + pseudo);
         welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         Button startGameButton = new ProfileButton("Jouer");
@@ -37,6 +40,10 @@ public class MainMenu {
     }
 
     public static String getProfileName() {
+        return pseudo;
+    }
+
+    public static Profile getProfile(){
         return profile;
     }
 }

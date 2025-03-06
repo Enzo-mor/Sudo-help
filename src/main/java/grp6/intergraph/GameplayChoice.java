@@ -32,7 +32,7 @@ public class GameplayChoice {
         /*************/
 
         Button exitButton = new ProfileButton("Retour");
-        exitButton.setOnAction(e -> MainMenu.showMainMenu(stage, MainMenu.getProfileName()));
+        exitButton.setOnAction(e -> MainMenu.showMainMenu(stage, MainMenu.getProfile()));
 
         layout.getChildren().addAll(choiceLabel, gameMode, exitButton);
 

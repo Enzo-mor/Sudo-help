@@ -59,7 +59,7 @@ public class ProfileSelection {
 
         Button guestButton = new ProfileButton("Continuer en tant qu'invité");
         
-        guestButton.setOnAction(e -> MainMenu.showMainMenu(stage, "Invité"));
+        guestButton.setOnAction(e -> MainMenu.showMainMenu(stage, selectedProfile));
         
         Button quitButton = new ProfileButton("Quitter");
         quitButton.setOnAction(e -> {
@@ -153,7 +153,7 @@ public class ProfileSelection {
             final Profile profile = profiles.get(i);
             profileBox.setOnMouseClicked(e -> {
                 selectedProfile = profile;
-                MainMenu.showMainMenu(stage, selectedProfile.getPseudo());
+                MainMenu.showMainMenu(stage, selectedProfile);
             });
         }
 

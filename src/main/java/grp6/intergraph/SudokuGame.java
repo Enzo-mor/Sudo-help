@@ -1,13 +1,17 @@
 package grp6.intergraph;
 
-import grp6.sudocore.*;
 
+import java.sql.SQLException;
+
+import grp6.sudocore.*;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -20,12 +24,27 @@ public class SudokuGame {
     private static final double MIN_WIDTH = 600;
     private static final double MIN_HEIGHT = 500;
     private static SudokuTimer sudokuTimer; // Chronomètre
+    private static Game actualGame;
 
-    public static void showSudokuGame(Stage primaryStage, int selectedSudokuId) {
+    public static void showSudokuGame(Stage primaryStage, Sudoku selectedSudoku) {
 
-        // Initialiser le chronomètre avec une valeur arbitraire (ex: 120 secondes)
-        sudokuTimer = new SudokuTimer(120);
-        sudokuTimer.startTimer(); // Démarrer le chronomètre
+        actualGame = selectedSudoku.getGame();
+        Grid gridSudoku = DBManager.getGrid(selectedSudoku.getId());
+        
+        //Gestion du chronometre
+        if(selectedSudoku.gameExists()){
+            // Reprise de la partie et du chronometre
+            actualGame.ResumeGame();
+        }
+        else {
+            try {
+                actualGame = new Game(gridSudoku, MainMenu.getProfile());
+            } catch (SQLException e) {
+                System.out.println("Error when starting new game");
+            }
+            // Initialisation de la partie et du chronomètre 
+            actualGame.startGame();
+        }
         
         // Bouton retour (Maison)
         Button homeButton = new Button();
@@ -49,11 +68,13 @@ public class SudokuGame {
         topBar.getChildren().add(spacer);
 
         // Ajouter le timer à droite
-        topBar.getChildren().add(sudokuTimer.getTimerDisplay());
+        Label timerLabel =  new Label("00:00:00");
+        actualGame.setGameTimeListener(timer -> Platform.runLater(() -> timerLabel.setText(timer)));
+
+        topBar.getChildren().add(timerLabel);
 
         // Créer le panneau de sélection des chiffres
         NumberSelection numberSelection = new NumberSelection();
-        Grid gridSudoku = DBManager.getGrid(selectedSudokuId);
         ToolsPanel toolsPanel = new ToolsPanel();
         SudokuGrid grid = new SudokuGrid(numberSelection, gridSudoku, toolsPanel);
         grid.setGrid();
@@ -68,7 +89,7 @@ public class SudokuGame {
         mainLayout.getChildren().addAll(topBar, layout);
 
         Scene scene = new Scene(mainLayout, 800, 600);
-        primaryStage.setTitle("Niveau facile n°" + selectedSudokuId + " - " + MainMenu.getProfileName());
+        primaryStage.setTitle(selectedSudoku.getName() + " - " + MainMenu.getProfileName());
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(MIN_WIDTH);
         primaryStage.setMinHeight(MIN_HEIGHT);
@@ -76,6 +97,8 @@ public class SudokuGame {
     }
 
     private static void showExitDialog(Stage primaryStage) {
+        //TODO REFAIRE LA GESTION DU TIMER ET DE LA MISE EN PAUSE DU JEU
+
         sudokuTimer.pauseTimer(); // Arrêter le chrono avant de quitter
 
         Alert alert = new Alert(Alert.AlertType.NONE);
@@ -95,11 +118,11 @@ public class SudokuGame {
         menuButton.setOnAction(e -> {
             alert.setResult(ButtonType.OK);
             alert.close();
-            MainMenu.showMainMenu(primaryStage, MainMenu.getProfileName());
+            MainMenu.showMainMenu(primaryStage, MainMenu.getProfile());
         });
     
         cancelButton.setOnAction(e -> {
-            sudokuTimer.resumeTimer(); // Reprendre le chrono
+            actualGame.startGame(); // Reprendre le chrono
             alert.setResult(ButtonType.CANCEL);
             alert.close();
         });
