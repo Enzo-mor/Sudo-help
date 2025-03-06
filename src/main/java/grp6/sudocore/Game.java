@@ -141,7 +141,7 @@ public final class Game {
      * cette methode permet de recommencer une partie en renitialisant la grille
      * et en supprimant les actions effectuées
      */
-    void restartGame(){
+    public void restartGame(){
         this.actions.clear();
         this.histoActions="";
         this.lastModifDate=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.FRANCE).format(new Date());
@@ -313,7 +313,7 @@ public final class Game {
      *  methode permettant de reprendre le jeu
      * @throws IllegalStateException leve une exception si le jeu n'est pas encore demarré ou le jeu a déja été terminé
      */
-    public void ResumeGame() throws IllegalStateException{
+    public void resumeGame() throws IllegalStateException{
         try {
             if(gameState==GameState.NOT_STARTED){
                 throw new IllegalStateException("le jeu n'est pas encore demarré");
@@ -484,13 +484,14 @@ public final class Game {
     
     
             // Vérifie si la dernière action est une ActionCell
-             if (actions.get(currentIndex) instanceof ActionCell) {
-             // Si oui, on l'annule et on s'arrête immédiatement
-                 actions.get(currentIndex).undoAction();
+            if (actions.get(currentIndex) instanceof ActionCell) {
+                // Si oui, on l'annule et on s'arrête immédiatement
+                actions.get(currentIndex).undoAction();
                 histoActions += "Annulation de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
                 currentIndex--;
+                System.out.println(histoActions);
                 return;
-             }
+            }
     
             // Sinon, on annule toutes les actions précédentes jusqu'à la première ActionCell trouvée
             while (canUndo()) {
@@ -509,8 +510,7 @@ public final class Game {
         } catch (Exception e) {
             // TODO: handle exception
             System.err.println(e.getMessage());
-        }  
-        
+        }
     }
 
     /**
@@ -533,9 +533,9 @@ public final class Game {
             // Vérifier si l'action suivante est une ActionCell
             if (actions.get(currentIndex + 1) instanceof ActionCell) {
              // Si oui, on l'exécute et on s'arrête immédiatement
-                currentIndex++;
                 actions.get(currentIndex).doAction();
                 histoActions += "Refaire de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
+                currentIndex++;
                 return;
             }
     
@@ -610,6 +610,7 @@ public final class Game {
             }
     
                 Action a=new NumberCellAction(this, x, y, value, grid.getCell(x,y).getNumber());
+                grid.getCell(x,y).setNumber(value);
                 a.doAction();
                 actions.add(a);
                 ++currentIndex;
@@ -768,6 +769,12 @@ public final class Game {
      */
     public GameState getGameState() {
         return gameState;
+    }
+
+    public Action getLastAction() {
+        if(currentIndex >= 0)
+            return actions.get(currentIndex);
+        return null;
     }
 
     public static void main(String[] args) {

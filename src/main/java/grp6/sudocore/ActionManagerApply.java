@@ -82,7 +82,7 @@ public class ActionManagerApply {
 
         try {
             
-            // Création de quelques actions pour tester
+        // Création de quelques actions pour tester
         Action action1 = new AnnotationCellAction(null, 1, 1, 5);
         Action action2 = new NumberCellAction(null, 2, 2, 8, 3);
 

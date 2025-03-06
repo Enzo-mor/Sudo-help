@@ -34,7 +34,7 @@ public class SudokuGame {
         //Gestion du chronometre
         if(selectedSudoku.gameExists()){
             // Reprise de la partie et du chronometre
-            actualGame.ResumeGame();
+            actualGame.resumeGame();
         }
         else {
             try {
@@ -76,9 +76,9 @@ public class SudokuGame {
         // Créer le panneau de sélection des chiffres
         NumberSelection numberSelection = new NumberSelection();
         ToolsPanel toolsPanel = new ToolsPanel();
-        SudokuGrid grid = new SudokuGrid(numberSelection, gridSudoku, toolsPanel);
+        SudokuGrid grid = new SudokuGrid(numberSelection, gridSudoku, toolsPanel,actualGame);
         grid.setGrid();
-        ControlButtons controlsButtons = new ControlButtons(grid);
+        ControlButtons controlsButtons = new ControlButtons(grid, actualGame);
 
         VBox rightPanel = new VBox(20);
         rightPanel.getChildren().addAll(numberSelection.getNumberSelection(), toolsPanel.getTools(), controlsButtons.getControlButtons());
@@ -97,9 +97,8 @@ public class SudokuGame {
     }
 
     private static void showExitDialog(Stage primaryStage) {
-        //TODO REFAIRE LA GESTION DU TIMER ET DE LA MISE EN PAUSE DU JEU
 
-        sudokuTimer.pauseTimer(); // Arrêter le chrono avant de quitter
+        actualGame.pauseGame();
 
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("Retour au menu");
@@ -122,7 +121,7 @@ public class SudokuGame {
         });
     
         cancelButton.setOnAction(e -> {
-            actualGame.startGame(); // Reprendre le chrono
+            actualGame.resumeGame(); // Reprendre le chrono
             alert.setResult(ButtonType.CANCEL);
             alert.close();
         });

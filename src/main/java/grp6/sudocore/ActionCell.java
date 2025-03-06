@@ -32,21 +32,29 @@ protected final int y;
  * 
  * @throws NoEditableCellExeception  si la cellule n'est pas editable
  */
-public ActionCell(Game game, int x, int y) throws NoEditableCellExeception {
-    super(game);
-    this.x = x;
-    this.y = y;
-  try {
-  
-        if(game.getGrid().getCell(x, y).isEditable() == false){
-            throw new NoCompatibleActionGameException("l'action ne peut etre crée car la cellule doit etre editable ou flexible");
-}
-
-  } catch (Exception e) {
-    // TODO: handle exception
-    e.printStackTrace();
-  }  
-
+  public ActionCell(Game game, int x, int y) throws NoEditableCellExeception {
+      super(game);
+      this.x = x;
+      this.y = y;
+    try {
     
-}
+      if(game.getGrid().getCell(x, y).isEditable() == false){
+          throw new NoCompatibleActionGameException("l'action ne peut etre crée car la cellule doit etre editable ou flexible");
+      }
+
+    } catch (Exception e) {
+      // TODO: handle exception
+      e.printStackTrace();
+    }  
+  }
+
+  @Override
+  public int getRow(){
+      return x;
+  }
+
+  @Override
+  public int getColumn(){
+    return y;
+  }
 }

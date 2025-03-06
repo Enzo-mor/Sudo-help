@@ -135,9 +135,10 @@ public final class Grid implements Iterable<Cell> {
      */
      protected void resetGrid(){
         this.cells.forEach((e)->{
-            if(e.isEditable())
+            if(e.isEditable() && e instanceof FlexCell) {
                  e.clear();
                 ((FlexCell)e).trashAnnotation();
+            }
         });
      }
 

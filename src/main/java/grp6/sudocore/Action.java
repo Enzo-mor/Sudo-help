@@ -26,7 +26,7 @@ public  abstract class Action {
     /**
      *  methode permettant faire l' action
      */
-     protected abstract void doAction();
+    protected abstract void doAction();
 
     /**
      *  methode permettant d'annuler l' action
@@ -56,6 +56,18 @@ public  abstract class Action {
      * @return
      */
     public abstract String toString();
+
+    public int getRow(){
+        return -1;
+    }
+  
+    public int getColumn(){
+      return -1;
+    }
+
+    public int getOldNumber(){
+        return -1;
+    }
      
     
 }

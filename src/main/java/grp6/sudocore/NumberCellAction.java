@@ -150,4 +150,8 @@ public final class NumberCellAction extends ActionCell  {
     
         
     }
+
+    public int getOldNumber(){
+        return old_number;
+    }
 }
