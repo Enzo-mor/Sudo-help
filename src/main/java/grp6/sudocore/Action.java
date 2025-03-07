@@ -68,6 +68,17 @@ public  abstract class Action {
     public int getOldNumber(){
         return -1;
     }
+
+    public int getRedoNumber(){
+        return -1;
+    }
+
+    public void setCorrect(boolean b){
+    }
+
+    public boolean getCorrect(){
+        return true;
+    }
      
     
 }

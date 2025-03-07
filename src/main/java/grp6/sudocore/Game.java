@@ -52,7 +52,7 @@ public final class Game {
     /**
      *  represente la grille de depart
      */
-    private final Grid grid;
+    protected final Grid grid;
 
     /**
      * represente la liste des actions effectuées 
@@ -122,7 +122,8 @@ public final class Game {
      */
     public Game(Grid grid,Profile profile)throws SQLException{
         this.id=DBManager.getLastIdGame()+1;
-        this.grid=grid;
+        this.grid=grid.clone();
+
         this.profile=profile;
         this.actions=new LinkedList<Action>();
         this.createdDate=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.FRANCE).format(new Date());
@@ -438,9 +439,25 @@ public final class Game {
          actions.add(action);
          histoActions+="Action "+(currentIndex+2)+" : "+action.toString()+"\n";
          currentIndex++;
-         updateGame();
+        
+        if (currentIndex > 0) {
+            int indexTemp = currentIndex - 1;
+            if(!actions.get(indexTemp).getCorrect()){
+                action.setCorrect(false);
+            }
+            else{
+                action.setCorrect(grid.isCorrectCell(action.getRow(),action.getColumn()));
+            }
+        }
+        else{
+            System.out.println(grid.isCorrectCell(action.getRow(),action.getColumn()));
+            action.setCorrect(grid.isCorrectCell(action.getRow(),action.getColumn()));
+        }
+
+        updateGame();
+
          return this;
-            
+
         } catch (Exception e) {
             // TODO: handle exception
             System.err.println("aucune action n'a été effectué :"+e.getMessage());
@@ -489,7 +506,8 @@ public final class Game {
                 actions.get(currentIndex).undoAction();
                 histoActions += "Annulation de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
                 currentIndex--;
-                System.out.println(histoActions);
+
+                System.out.println("Je suis undo : \n" + histoActions);
                 return;
             }
     
@@ -499,7 +517,7 @@ public final class Game {
                  action.undoAction();
                  histoActions += "Annulation de l'action " + (currentIndex + 1) + " : " + action + "\n";
                 currentIndex--;
-    
+            
                 // Si on trouve une ActionCell, on s'arrête immédiatement
                 if (action instanceof ActionCell) {
                     break;
@@ -533,9 +551,12 @@ public final class Game {
             // Vérifier si l'action suivante est une ActionCell
             if (actions.get(currentIndex + 1) instanceof ActionCell) {
              // Si oui, on l'exécute et on s'arrête immédiatement
+                currentIndex++;
                 actions.get(currentIndex).doAction();
                 histoActions += "Refaire de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
-                currentIndex++;
+                
+                System.out.println("Je suis redo : \n" + histoActions);
+                
                 return;
             }
     
@@ -545,7 +566,7 @@ public final class Game {
                 Action action = actions.get(currentIndex);
                 action.doAction();
                 histoActions += "Refaire de l'action " + (currentIndex + 1) + " : " + action + "\n";
-    
+                
                 // Si on trouve une ActionCell, on s'arrête immédiatement
                 if (action instanceof ActionCell) {
                     break;
@@ -610,13 +631,8 @@ public final class Game {
             }
     
                 Action a=new NumberCellAction(this, x, y, value, grid.getCell(x,y).getNumber());
-                grid.getCell(x,y).setNumber(value);
-                a.doAction();
-                actions.add(a);
-                ++currentIndex;
-                histoActions+="Action "+(currentIndex+1)+" : "+a.toString()+"\n";
-                updateGame();
-                return this;
+                
+                return executeAction(a);
         } catch (Exception e) {
             // TODO: handle exception
             System.err.println("aucune action n'a été effectué :"+e.getMessage());
@@ -644,12 +660,8 @@ public final class Game {
                 throw new IllegalStateException("Aucune action ne peut être effectuée car le jeu est en pause ou n'a pas encore été démarré ou est est déjà terminé.");
             } 
             Action a=new AnnotationCellAction(this, x, y, value);
-            a.doAction();
-            actions.add(a);
-            ++currentIndex;
-            histoActions+="Action "+(currentIndex+1)+" : "+a.toString()+"\n";
-            updateGame();
-            return this;
+           
+            return executeAction(a);
             
         } catch (Exception e) {
             System.err.println("aucune action n'a été effectué :"+e.getMessage());
@@ -772,6 +784,7 @@ public final class Game {
     }
 
     public Action getLastAction() {
+        System.out.println("Current : " + currentIndex);
         if(currentIndex >= 0)
             return actions.get(currentIndex);
         return null;
@@ -783,11 +796,7 @@ public final class Game {
             Game g = new Game(DBManager.getGrid(2), new Profile("jaques"));
             g.startGame();
             
-            // Attendre et voir le timer avancer
-            for (int i = 0; i < 5; i++) {
-               // Thread.sleep(1000);
-                System.out.println("Temps écoulé : " + g.getSringtElapsedTime());
-            }
+           
              DBManager.deleteAllGamesForProfile("jaques");
             g.stopGame();
             

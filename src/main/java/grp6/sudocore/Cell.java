@@ -44,14 +44,15 @@ public interface Cell {
    * cette methode verifie si une cellule est vide 
    * @return
    */
-    public boolean isEmpty();
-   
+    public boolean isEmpty();   
 
     /**
      * Mettre un chiffre dans une cellule
      * @param number Chiffre à mettre dans la cellule [int]
      */
     public void setNumber(int number);
+
+    public void setRedo (int number);
 
     /**
      * Ajouter un annotation à la cellule

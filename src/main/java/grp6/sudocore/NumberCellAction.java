@@ -35,6 +35,16 @@ public final class NumberCellAction extends ActionCell  {
      */
     private int old_number;
    /**
+    * 
+    /**
+     * represente la valeur de la cellule pour redo
+     */
+    private int redo_number;
+    /**
+     * represente l'ancienne valeur de la cellule
+     */
+    private boolean correct;
+    /**
     * methode permettant de creer une action qui permet de modifier une valeur à une cellule specifique de la grille
     * @param game represente le jeu contenant la grille à modifier
     * @param x represente les coordonnées X 
@@ -46,6 +56,7 @@ public final class NumberCellAction extends ActionCell  {
         super(game,x,y);
         this.number = number;
         this.old_number = old_number;
+        this.redo_number = number;
     }
     
     /**
@@ -58,12 +69,13 @@ public final class NumberCellAction extends ActionCell  {
     }
     @Override
      protected void doAction() {
-        game.getGrid().getCell(x, y).setNumber(number);
+        game.grid.getCell(x, y).setNumber(redo_number);
     }
 
     @Override
     protected void undoAction() {
-        game.getGrid().getCell(x, y).setNumber(old_number);
+        game.grid.getCell(x, y).setRedo(number);
+        game.grid.getCell(x, y).setNumber(old_number);
     }
     @Override
     public SudoTypes.ActionType actionType(){
@@ -153,5 +165,21 @@ public final class NumberCellAction extends ActionCell  {
 
     public int getOldNumber(){
         return old_number;
+    }
+
+    public int getRedoNumber(){
+        return redo_number;
+    }
+
+    public void setRedo (int number){
+        this.redo_number=number;
+    }
+
+    public void setCorrect(boolean b){
+        this.correct=b;
+    }
+
+    public boolean getCorrect(){
+        return correct;
     }
 }

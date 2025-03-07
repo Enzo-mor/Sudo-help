@@ -41,10 +41,10 @@ public class SudokuMenu {
         for (int i = 0; i < DBManager.getGridsSize(); i++) {
             String nameS = "Sudoku ";
 
-            if(i < sizeEasy){
+            if(i < sizeEasy) {
                 nameS = nameS + "F-" + (i % sizeEasy + 1);
             }
-            else if (i >= sizeEasy && i < (sizeEasy + sizeMedium)){
+            else if (i >= sizeEasy && i < (sizeEasy + sizeMedium)) {
                 nameS = nameS + "M-" + (i % sizeMedium + 1);
             }
             else {

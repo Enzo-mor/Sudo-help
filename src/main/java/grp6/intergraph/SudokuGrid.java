@@ -1,7 +1,8 @@
 package grp6.intergraph;
+import grp6.sudocore.*;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -12,7 +13,6 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
-import grp6.sudocore.*;
 
 public class SudokuGrid {
     private GridPane grid;
@@ -27,7 +27,7 @@ public class SudokuGrid {
         this.toolsPanel = toolsP;
         this.numberSelection = numberSelection;
         this.gridSudoku = gridData;
-        this.actualGame=actualGame;
+        this.actualGame = actualGame;
 
         grid.setHgap(2);
         grid.setVgap(2);
@@ -77,8 +77,10 @@ public class SudokuGrid {
             if (oldNumber == 0){
                 resetCellDisplay(cell, labelTemp, textTemp);
             }
-            else{
+            else {
                 labelTemp.setText(String.format("%d", oldNumber));
+                // TODO si le undo est une annotation
+                // TODO affichage de l'annotation pas formater (affichage comme un nombre et non en 3*3)
                 textTemp.setText("");
                 cell.setGraphic(labelTemp);
             }
@@ -87,7 +89,39 @@ public class SudokuGrid {
         }
     }
 
-    private void setAnnotationDisplay(Button cellButton, List<String> annotations, Text annotationText, Label mainNumber) {
+    public void setCellsColorError(List<int[]> cellsToColor) {
+        for (int[] cell : cellsToColor) {
+            int row = cell[0];
+            int col = cell[1];
+
+            System.out.println("Recherche du bouton à la position (" + row + ", " + col + ")");
+
+            // Recherche du bouton correspondant à la position (row, col)
+            Node node = grid.getChildren().stream()
+                    .filter(n -> GridPane.getRowIndex(n) != null && GridPane.getColumnIndex(n) != null)
+                    .filter(n -> GridPane.getRowIndex(n) == row && GridPane.getColumnIndex(n) == col)
+                    .findFirst().orElse(null);
+
+            if (node == null) {
+                System.out.println("Aucun nœud trouvé à (" + row + ", " + col + ")");
+            } else if (!(node instanceof Button)) {
+                System.out.println("Le nœud trouvé à (" + row + ", " + col + ") n'est pas un bouton");
+            } else {
+                System.out.println("Modification du bouton à (" + row + ", " + col + ")");
+                ((Button) node).setStyle("-fx-background-color: red !important;");
+            }
+        }
+    }
+
+    public void setCellsColorDefault() {
+        for(int i = 0; i < 9; i++) {
+            for(int j = 0; j < 9; j++) {
+                cells[i][j].setStyle((i / 3 + j / 3) % 2 == 0 ? "-fx-background-color: lightblue;" : "-fx-background-color: white;");
+            }
+        }
+    }
+
+    private void setAnnotationDisplay(Button cellButton, List<String> annotations, Text annotationText) {
         StringBuilder formattedAnnotations = new StringBuilder();
         String[] positions = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
         
@@ -138,10 +172,11 @@ public class SudokuGrid {
                         annotations.remove(selectedStr);
                         actualGame.removeAnnotation(r,c,Integer.valueOf(selectedStr));
                     }
-                    setAnnotationDisplay(cellButton, annotations, annotationText, mainNumber);
+                    setAnnotationDisplay(cellButton, annotations, annotationText);
                 }
             } else if (selectedStr != null) {
                 setNumberDisplay(cellButton, selectedStr, mainNumber, annotationText);
+                //TODO: verifier si le nombre que l'on veut mettre n;est pas deja dans la cell
                 actualGame.addNumber(r,c,Integer.valueOf(selectedStr));
             }
         });
@@ -195,7 +230,7 @@ public class SudokuGrid {
                     for (Integer annotation : annotations) {
                         annotationStr.add(String.valueOf(annotation));
                     }
-                    setAnnotationDisplay(cellButton, annotationStr, annotationText, mainNumber);
+                    setAnnotationDisplay(cellButton, annotationStr, annotationText);
                 }
             }
         }
@@ -248,5 +283,9 @@ public class SudokuGrid {
     public void resetInterface() {
         resetGrid();
         resetButton();
+    }
+
+    public Game getGame() {
+        return actualGame;
     }
 }

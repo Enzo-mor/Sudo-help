@@ -42,6 +42,8 @@ public final class FlexCell extends FixCell {
         }
     }
 
+    public void setRedo (int number){}
+
     /**
      * methode permettant de vider les annotations d'une cellule
      * 

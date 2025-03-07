@@ -1,9 +1,7 @@
 package grp6.intergraph;
-
+import grp6.sudocore.*;
 
 import java.sql.SQLException;
-
-import grp6.sudocore.*;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,16 +18,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
+
 public class SudokuGame {
     private static final double MIN_WIDTH = 600;
     private static final double MIN_HEIGHT = 500;
-    private static SudokuTimer sudokuTimer; // Chronomètre
     private static Game actualGame;
 
     public static void showSudokuGame(Stage primaryStage, Sudoku selectedSudoku) {
 
         actualGame = selectedSudoku.getGame();
-        Grid gridSudoku = DBManager.getGrid(selectedSudoku.getId());
+        Grid gridSudokuBase = DBManager.getGrid(selectedSudoku.getId());
         
         //Gestion du chronometre
         if(selectedSudoku.gameExists()){
@@ -38,7 +36,7 @@ public class SudokuGame {
         }
         else {
             try {
-                actualGame = new Game(gridSudoku, MainMenu.getProfile());
+                actualGame = new Game(gridSudokuBase, MainMenu.getProfile());
             } catch (SQLException e) {
                 System.out.println("Error when starting new game");
             }
@@ -76,7 +74,7 @@ public class SudokuGame {
         // Créer le panneau de sélection des chiffres
         NumberSelection numberSelection = new NumberSelection();
         ToolsPanel toolsPanel = new ToolsPanel();
-        SudokuGrid grid = new SudokuGrid(numberSelection, gridSudoku, toolsPanel,actualGame);
+        SudokuGrid grid = new SudokuGrid(numberSelection, actualGame.getGrid(), toolsPanel, actualGame);
         grid.setGrid();
         ControlButtons controlsButtons = new ControlButtons(grid, actualGame);
 

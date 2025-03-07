@@ -33,7 +33,7 @@ public final class Grid implements Iterable<Cell> {
     /** Tableau des cellules de la grille */
     private final List<Cell> cells;
     /** Tableau des cellules de la grille résolue */
-    private final List<Cell> solvedCells;
+    private List<Cell> solvedCells;
     /** Identifiant de la grille */
     private final Integer id;        
     /** Difficulté de la grille */     
@@ -94,6 +94,7 @@ public final class Grid implements Iterable<Cell> {
     public Grid clone(){
          Grid gridclone=new Grid(this.id,this.difficulty);
         this.cells.forEach((cell)->gridclone.cells.add(cell.clone()));
+        gridclone.solvedCells = SudokuSolver.solveCells(gridclone.cells); ;
         return gridclone;
     }
 
@@ -363,11 +364,9 @@ public final class Grid implements Iterable<Cell> {
      */
     public List<int[]> evaluate() {
         List<int[]> res = new ArrayList<>();
-
         for(int i=0; i<Grid.NB_NUM; i++) {
             for(int j=0; j<Grid.NB_NUM; j++) {
-                int idx = NB_NUM*i+j;
-                if(cells.get(idx).getNumber() != solvedCells.get(idx).getNumber()) {
+                if(!isCorrectCell(i,j)) {
                     int[] error = new int[2];
                     error[0] = i;
                     error[1] = j;
@@ -375,7 +374,31 @@ public final class Grid implements Iterable<Cell> {
                 }
             }
         }
+        System.out.println(solvedCells);
         return res;
+    }
+
+    public boolean isCorrectCell(int r, int c){
+        int idx = NB_NUM*r+c;
+        return (cells.get(idx).getNumber() == solvedCells.get(idx).getNumber());
+    }
+
+    public int getSizeCells () {
+        return cells.size();
+    }
+
+    public static void main(String[] args) {
+
+        try{
+            Grid g = DBManager.getGrid(1);
+            System.out.println(g);
+            System.out.println("\n\n\n\n\n");
+            System.out.println(g.clone());
+            
+        }catch (Exception e) {
+            // TODO: handle exception
+            System.err.println(e.getMessage());
+         }
     }
 
 
