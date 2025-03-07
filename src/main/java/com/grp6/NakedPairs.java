@@ -15,16 +15,16 @@ public class NakedPairs implements InterfaceTech {
         return tab;
     }
 
-    private boolean detectPairs(int num,Grid grille) {
+    private boolean detectPairsCarre(int num,Grid grille) {
 
         //tableau de pairs
         int[][] tabPair = new int[9][2];
         int cpt = 0;
-
         
         // On récupère les cellules de la région
-        int[] tab2 = grille.numToPosForSubGrid(num);
-        Cell mat[][] = grille.getSubGrid(tab2[0], tab2[1]);
+        int[] indiceCell = grille.numToPosForSubGrid(num);
+        Cell mat[][] = grille.getSubGrid(indiceCell[0], indiceCell[1]);
+
 
         //tableau de booléen pour les annotations
         boolean[] tabBool = new boolean[9];
@@ -52,10 +52,54 @@ public class NakedPairs implements InterfaceTech {
         return false;
     }
 
+    private boolean detectPairs(int num,Grid grille){
+
+        //tableau de pairs
+        int [][] tabPair = new int[9][2];
+        int cpt = 0;
+
+        // On récupère les cellules dans les lignes et colonnes
+        Cell line[] = grille.getLine(num);
+        Cell col[] = grille.getColumn(num);
+
+        //tableau de booléen pour les annotations
+        boolean[] tabBool = new boolean[9];
+
+        // On récupère les pairs dans les lignes
+        for (int i = 0; i<9;i++){
+            if (line[i].getAnnotations().length == 2){
+                tabBool = line[i].getAnnotations();
+                tabPair[cpt] = donnerPair(tabBool);
+                cpt++;
+            }
+        }
+
+        // On récupère les pairs dans les colonnes
+        for (int i = 0; i<9;i++){
+            if (col[i].getAnnotations().length == 2){
+                tabBool = col[i].getAnnotations();
+                tabPair[cpt] = donnerPair(tabBool);
+                cpt++;
+            }
+        }
+
+        // On vérifie si on a trouvé une paire
+        for(int i = 0; i<9;i++){
+            int[] temp = tabPair[i];
+            for(int j = 0; j<9;j++){
+                if(temp == tabPair[j] && i!=j){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     @Override
     public boolean detect(Grid grille) {
         for(int i = 0; i<9;i++){
-            if(detectPairs(i,grille)){
+            if(detectPairsCarre(i,grille) || detectPairs(i,grille)){
                 return true;
             }
         }
