@@ -9,8 +9,8 @@ public class LastNumber implements InterfaceTech  {
         ArrayList<Integer> liste = new ArrayList<>();
         
 
-        for(int i=0; i<9; i++){
-            for(int j=0;j<9;j++){
+        for(int i=0; i<Grid.NB_NUM; i++){
+            for(int j=0;j<Grid.NB_NUM;j++){
                 if(grille.getCell(i, j).isEmpty()){
                     
                     List<Cell> col_cells=grille.fullCell(Grid.Shape.COLUMN,j);
