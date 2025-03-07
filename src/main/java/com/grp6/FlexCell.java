@@ -98,4 +98,23 @@ public class FlexCell extends FixCell {
         }
         return String.valueOf(nb);
     }
+
+    /**
+     * Permet de decter si un tableau d'annotation ne contient qu'une entrée
+     * @param grille represente la grille à detecter
+     * @return une liste de technique application sur cette grille
+     */
+    public boolean OnlyOneAnnotation() {
+        int count =0;
+        for(int i = 0;i<annotations.length;i++){
+            if(annotations[i]){
+                count++;
+            }
+        }
+        if (count == 1){
+            return true;
+        
+        }  
+        return false;
+    }
 }

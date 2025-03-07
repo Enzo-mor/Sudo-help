@@ -4,6 +4,7 @@ import java.util.ArrayList;
 /* ====== Importation des libreries java ====== */
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.List;
 
 /**
  * Cette classe represente une grille de Sudoku.
@@ -14,6 +15,11 @@ public class Grid implements Iterable<Cell> {
     /* ======= Constantes de Classes ======= */
     public static final int NB_NUM     = 9;   // Nombre de valeurs que peut prendre un chiffre [1, 9]
     public static final int NB_SUBGRID = 3;   // Nombre de cellules sur une ligne/colonne d'une sous-grille
+
+    /* ======= Type abstrait ======= */
+    public enum Shape {
+        LINE, COLUMN, SQUARE;
+    }
 
 
     /* ======= Variables d'instance ======= */
@@ -144,6 +150,119 @@ public class Grid implements Iterable<Cell> {
         return subGrid;
     }
 
+    public Cell[] getFlatSubGrid(int a, int b){
+        Cell[][] subGrid = this.getSubGrid(a,b);
+        Cell[] res = new Cell[NB_NUM];
+        int j = 0;
+        for(int i = 0;i < 3;i++){
+            for(int y = 0;y < 3;y++){
+                res[j++] = subGrid[i][y];
+            }
+        }
+        return res;
+    }
+
+    private boolean forComplete(Cell [] tab){
+        for(int i = 0; i < 9; i++){
+            if(tab[i].isEmpty()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean complete(Shape shape,int num){
+        switch(shape){
+            case LINE -> {
+                return forComplete(this.getLine(num));
+            }
+            case COLUMN -> {
+                return forComplete(this.getColumn(num));
+            }
+            case SQUARE -> {
+                int [] tabNum = numToPosForSubGrid(num);
+                return forComplete(this.getFlatSubGrid(tabNum[0],tabNum[1]));
+            }
+        }
+        return false;
+    }
+
+    public int numberOfFullCell(Shape shape,int num){
+        int res = 0;
+        switch(shape){
+            case LINE -> {
+                Cell [] line = this.getLine(num);
+                for(int i = 0; i < 9; i++){
+                    if(!line[i].isEmpty()){
+                        res++;
+                    }
+                }
+            }
+            case COLUMN -> {
+                Cell [] column = this.getColumn(num);
+                for(int i = 0; i < 9; i++){
+                    if(!column[i].isEmpty()){
+                        res++;
+                    }
+                }
+            }
+            case SQUARE -> {
+                int [] tabNum = numToPosForSubGrid(num);
+                Cell [][] square = this.getSubGrid(tabNum[0],tabNum[1]);
+                for(int i = 0; i < NB_SUBGRID; i++){
+                    for(int j = 0; j < NB_SUBGRID;j++){
+                        if(!square[i][j].isEmpty()){
+                            res++;
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    public int[] numToPosForSubGrid(int num) {
+        if (num < 0 || num >= NB_NUM) {
+            throw new IllegalArgumentException("Numéro de sous-grille invalide: " + num);
+        }
+        
+        int row = (num / NB_SUBGRID) * NB_SUBGRID;
+        int col = (num % NB_SUBGRID) * NB_SUBGRID; 
+
+        return new int[]{row, col};
+    }
+
+    private List<Cell> forFullCell(Cell [] tab){
+        List<Cell> cellPlein = new ArrayList<>();
+        for(int i = 0; i < 9; i++){
+            if(!tab[i].isEmpty()){
+                cellPlein.add(tab[i]);
+            }
+        }
+        return cellPlein;
+    }
+
+    /**
+     * Permet de savoir combien de cellule pleine reste-t-il
+     * @return Le nombre de cellules pleines restantes [cell[]]
+     * @param une colonne de cellule [Cell[]] 
+     */
+    public List<Cell> fullCell(Shape shape,int num){
+        return switch(shape){
+            case LINE -> {
+                yield forFullCell(this.getLine(num));
+            }
+            case COLUMN -> {
+                yield forFullCell(this.getColumn(num));
+            }
+            case SQUARE -> {
+                int [] tabNum = numToPosForSubGrid(num);
+                yield forFullCell(this.getFlatSubGrid(tabNum[0],tabNum[1]));
+            }
+        };
+    }
+
+
     /**
      * Methode permettant de gener l'iteration de la classe
      * @return Retourne une instance de la sous-classe iterable
@@ -237,6 +356,8 @@ public class Grid implements Iterable<Cell> {
         }
         return result;
     }
+
+
 
 
     
