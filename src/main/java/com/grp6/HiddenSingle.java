@@ -1,5 +1,7 @@
 package com.grp6;
 
+import java.util.List;
+
 /**
  * Technique : Singleton caché (Hidden Single)
  * Objectif : Trouver une case où un chiffre ne peut apparaître qu’à un seul endroit dans un bloc (ligne, colonne ou carré).
@@ -10,9 +12,37 @@ package com.grp6;
 public class HiddenSingle implements InterfaceTech {
 
     @Override
-    public boolean detect(Grid grille) {
-        // TODO: Implémenter la détection du singleton caché
+    public boolean detect(Grid grille) {    
+        int[] tab;
+        int[] tab_line, tab_column, tab_square;
+        for(int i=0; i<Grid.NB_NUM; i++){
+            tab = grille.numToPosForSubGrid(i);
+  
+            tab_line=nb_Num_Annotations(grille.getLine(i));
+            tab_column=nb_Num_Annotations(grille.getColumn(i));
+            tab_square=nb_Num_Annotations(grille.getFlatSubGrid(tab[0], tab[1]));   
+            
+            for(int j=0; j<Grid.NB_NUM; j++){
+                if(tab_line[j]==1 || tab_column[j]==1 || tab_square[j]==1){
+                    return true;
+                }
+            }
+            
+        }
         return false;
+    }
+
+    private int[] nb_Num_Annotations(Cell[] tab){
+        int[] compteur;
+        compteur=new int[Grid.NB_NUM];
+        
+        for(int i=0;i<Grid.NB_NUM;i++){
+            if(tab[i].getAnnotations()!=null){
+                compteur[i]++;
+            }
+        }
+
+        return compteur;
     }
 
     @Override
