@@ -93,6 +93,13 @@ public class HiddenSingle implements InterfaceTech {
         addAnnotations(grille.getCell(5, 3), new int[]{3, 4, 7, 8});
         addAnnotations(grille.getCell(5, 4), new int[]{3, 4, 7, 8});
 
+      
+        for(int i=0; i<9; i++){
+            System.out.print(grille.getCell(6,0).getAnnotations()[i] + " ");
+        }
+        System.out.println();
+        
+
         HiddenSingle hiddenSingle = new HiddenSingle();
         System.out.println(hiddenSingle.detect(grille));
 
