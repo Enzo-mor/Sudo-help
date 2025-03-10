@@ -12,8 +12,31 @@ public class NakedTriples implements InterfaceTech {
 
     @Override
     public boolean detect(Grid grille) {
-        // TODO: Implémenter la détection des triplets nus
+
+        int[] tab, tab_line, tab_column, tab_square;
+        for(int i=0; i<Grid.NB_NUM; i++){
+            tab = grille.numToPosForSubGrid(i);
+  
+            tab_line=nb_Num_Annotations(grille.getLine(i));
+            tab_column=nb_Num_Annotations(grille.getColumn(i));
+            tab_square=nb_Num_Annotations(grille.getFlatSubGrid(tab[0], tab[1]));   
+
+            
+        }
         return false;
+    }
+
+    private int[] nb_Num_Annotations(Cell[] tab){
+        int[] compteur;
+        compteur=new int[Grid.NB_NUM];
+        
+        for(int i=0;i<Grid.NB_NUM;i++){
+            if(tab[i].getAnnotations()[i]!=false){
+                compteur[i]++;
+            }
+        }
+
+        return compteur;
     }
 
     @Override
