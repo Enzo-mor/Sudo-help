@@ -380,6 +380,8 @@ public final class Grid implements Iterable<Cell> {
 
     public boolean isCorrectCell(int r, int c){
         int idx = NB_NUM*r+c;
+        if(cells.get(idx).getNumber() == 0)
+            return true;
         return (cells.get(idx).getNumber() == solvedCells.get(idx).getNumber());
     }
 

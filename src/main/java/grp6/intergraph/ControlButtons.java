@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import java.lang.Thread;
 
+import java.util.*;
+
 public class ControlButtons {
     private HBox controlButtons;
     private SudokuGrid sudokuGrid;
@@ -57,9 +59,10 @@ public class ControlButtons {
         // Ajoute l'action sur le bouton "Vérifier"
         checkButton.setOnAction(e -> {
             //TODO: Affichage en rouge des erreurs + undo jusqua la premiere erreur
+            List<int[]> eval = sudokuGame.evaluate();
             System.out.println(sudokuGame.getGrid());
-            System.out.println("avnt : " + sudokuGame.getGrid().evaluate().size());
-            sudokuGrid.setCellsColorError(sudokuGame.getGrid().evaluate());
+            System.out.println("avnt : " + eval.size());
+            sudokuGrid.setCellsColorError(eval);
 
             try {
                 Thread.sleep(1000);

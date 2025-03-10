@@ -507,6 +507,9 @@ public final class DBManager {
             e.printStackTrace();
             return false;
         }
+
+        // Supprimmer les techniques sauvegardées liées au profile
+        // TODOTODOTODOTODOTODOTODOTODO
     }
 /**
  * cette methode permet de sauvegarder un jeu
@@ -602,10 +605,63 @@ public static int getGridSizeWithDifficulty(SudoTypes.Difficulty difficulty) {
             .count();
 }
 
+/**
+ * Nombre de grille dans la bdd
+ * @return nombre de grille
+ */
 public static int getGridsSize() {
     return (int) DBManager.getGrids().stream()
             .count();
 }
+
+/**
+ * Supprime un profile de la bdd
+ * @param profile profile à supprimmer
+ */
+public static boolean removeProfile(Profile profile) {
+
+    return false;
+}
+
+/**
+ * Renomme un profile 
+ * @param profile Profile à renommer
+ * @param name Nouveau nom du profile
+ */
+public static boolean renameProfile(Profile profile, String name) {
+    try {
+        if(DBManager.profileExists(name)) {
+            return false;
+        }
+    } catch(Exception e) {
+        System.err.println("renameProfile: " + e);
+        return false;
+    }
+
+    System.out.println(profile.getPseudo() + " --> " + name);
+    
+    String query = "UPDATE profiles SET pseudo = ? WHERE pseudo = ?";
+    
+    try(Connection conn = DBManager.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(query)) {
+         
+        pstmt.setString(1, name);
+        pstmt.setString(2, profile.getPseudo());
+
+        int n = pstmt.executeUpdate();
+        if(n > 0) {
+            // Met à jour l'objet après succès
+            profile.setPseudo(name); 
+            return true;
+        }
+        return false;
+        
+    } catch(SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
 
 public static void main(String[] args) {
     try {

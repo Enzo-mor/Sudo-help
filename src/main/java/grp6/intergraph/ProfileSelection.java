@@ -29,7 +29,6 @@ public class ProfileSelection {
         
         Label titleLabel = new Label("Choisissez votre profil");
         titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
-
         HBox profileContainer = new HBox(20);
         profileContainer.setAlignment(Pos.CENTER);
 

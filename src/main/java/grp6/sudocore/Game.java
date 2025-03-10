@@ -790,6 +790,14 @@ public final class Game {
         return null;
     }
 
+    /**
+     * Permet d'évaluer la grille
+     * @return Liste des erreurs ([ligne, colonne])
+     */
+    public List<int[]> evaluate() {
+        return grid.evaluate();
+    }
+
     public static void main(String[] args) {
 
         try{
