@@ -15,7 +15,6 @@ import javafx.util.Duration;
 public class MainMenu {
     private static String pseudo = null;
     private static Profile profile = null;
-    private static boolean settingsMode = false;
     private static Settings settingsWindow = null;
     private static RotateTransition rotateAnimation;
 
@@ -54,7 +53,8 @@ public class MainMenu {
         rotateAnimation.setByAngle(180);
         rotateAnimation.setCycleCount(1);
 
-        settingsButton.setOnAction(e -> toggleSettingsWindow());
+        settingsWindow = new Settings(gearIcon);
+        settingsButton.setOnAction(e -> settingsWindow.toggleSettingsWindow());
 
         // Conteneur pour aligner le bouton en bas à droite
         HBox bottomRightContainer = new HBox(settingsButton);
@@ -70,34 +70,6 @@ public class MainMenu {
         stage.setTitle("Menu Principal - " + MainMenu.getProfileName());
         stage.setScene(scene);
         stage.show();
-    }
-
-    // --- Fonction pour gérer l'ouverture/fermeture des paramètres ---
-    private static void toggleSettingsWindow() {
-        if (settingsMode) {
-            // Si la fenêtre est ouverte, la fermer
-            if (settingsWindow != null) {
-                settingsWindow.close();
-            }
-            settingsMode = false;
-
-            // --- Animation ---
-            rotateAnimation.setByAngle(-45); // Rotation inverse pour fermer
-            rotateAnimation.play();
-            // -----------------
-        } 
-        else {
-            // Si la fenêtre est fermée, l'ouvrir
-            settingsWindow = new Settings();
-            settingsWindow.show();
-            settingsWindow.setOnCloseRequest(e -> settingsMode = false); // Met à jour settingsMode si l'utilisateur ferme la fenêtre
-            settingsMode = true;
-
-            // --- Animation ---
-            rotateAnimation.setByAngle(45); // Rotation normale pour ouvrir
-            rotateAnimation.play();
-            // -----------------
-        }
     }
 
     public static String getProfileName() {
