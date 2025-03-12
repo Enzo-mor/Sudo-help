@@ -1,11 +1,14 @@
 package com.grp6;
 
+import java.util.List;
+
 /**
- * Cette interface permet de modéliser une cellule d'une grille
+ * Cette interface permet de representer une cellule modifiable d'une grille
  * de Sudoku.
+ * @author Kilian POUSSE
+ * @version 1.1
  */
 public interface Cell {
-
     /**
      * Recupérer le chiffre de la cellule
      * @return Entier représentant le chiffre (0 si vide) [int]
@@ -32,13 +35,25 @@ public interface Cell {
      * Récupérer les annotations de la cellule
      * @return tableau des présences des annotations [booleen[]]
      */
-    public boolean[] getAnnotations();
+    public boolean[] getAnnotationsBool();
+
+        /** 
+     * Récupérer les annotations de la cellule
+     * @return Liste des annotations sous forme de Integer
+     */
+    public List<Integer> getAnnotations();
 
     /**
      * Enlever une annotation d'une cellule
      * @param number Chiffre de l'annotation à retirer [int]
      */
     public void removeAnnotation(int number);
+
+    /**
+     * Ajouter un annotation à la cellule
+     * @param number Chiffre de l'annotation à ajouter [int]
+     */
+    public void addAnnotation(int number);
 
     /** 
      * Néttoyer la cellule (la vider)
@@ -56,4 +71,18 @@ public interface Cell {
      * @return La chaîne de caractères correspondante [String]
      */
     public String toString();
+
+    /**
+     * Savoir si une cellule est modifiable
+     * @return Vrai si la cellule peut etre modifiée
+     */
+    public boolean isEditable();
+
+    public void setRedo (int number);
+
+    /**
+     * Clone une cellule flexible
+     * @return Une nouvelle instance de Cell (clone de la cellule)
+     */
+    public Cell clone();
 }
