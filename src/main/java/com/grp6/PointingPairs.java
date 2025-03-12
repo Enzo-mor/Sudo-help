@@ -112,7 +112,7 @@ public class PointingPairs implements InterfaceTech {
                                         if (cell.isEditable() && cell.getAnnotations()[candidate - 1]) {
                                             cell.removeAnnotation(candidate);
                                             System.out.println("Suppression de " + candidate +
-                                                    " en (" + r + "," + globalCol + ") par paire pointante (colonne)");
+                                                    " en (" + r + "," + globalCol + ") par paire pointante (colonne) ");
                                         }
                                     }
                                 }
