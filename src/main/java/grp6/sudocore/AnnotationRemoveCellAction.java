@@ -28,12 +28,12 @@ public class AnnotationRemoveCellAction extends AnnotationCellAction {
 
     @Override
     protected void doAction() {
-        this.game.getGrid().getCell(x, y).removeAnnotation(annotation);
+        this.game.grid.getCell(x, y).removeAnnotation(annotation);
     }
 
     @Override
     protected void undoAction() {
-        this.game.getGrid().getCell(x, y).addAnnotation(annotation);
+        this.game.grid.getCell(x, y).addAnnotation(annotation);
     }
 
     @Override
