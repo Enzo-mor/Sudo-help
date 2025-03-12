@@ -52,7 +52,7 @@ public class PointingPairs implements InterfaceTech {
         // TODO: Implémenter la détection des paires pointantes
         for (int i = 0; i < Grid.NB_SUBGRID; i++) 
             for (int j = 0; j < Grid.NB_SUBGRID; j++) {
-                Cell[][] subgrid = grille.getSubGrid(i, j);
+                Cell[][] subgrid = grille.getSubGrid(i*Grid.NB_SUBGRID, Grid.NB_SUBGRID*j);
                 for (int annotation = 1; annotation <= Grid.NB_NUM; annotation++) 
                     // Si l'annotation est aussi double dans la sous-grille
                     if (hasPointingPair(subgrid,annotation)) {
@@ -157,7 +157,7 @@ public class PointingPairs implements InterfaceTech {
             grille.getCell(0, 0).addAnnotation(2);
             grille.getCell(0, 1).addAnnotation(2);
             grille.getCell(0, 4).addAnnotation(2);
-            grille.getCell(0, 5).addAnnotation(2);
+            grille.getCell(0, 7).addAnnotation(2);
             grille.printAnnotationsGrid();;
     
             // Vérifier les annotations d'une cellule flex (par exemple la cellule (0,2) qui est vide)
