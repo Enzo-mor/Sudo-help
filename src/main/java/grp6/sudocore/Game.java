@@ -450,7 +450,6 @@ public final class Game {
             }
         }
         else{
-            System.out.println(grid.isCorrectCell(action.getRow(),action.getColumn()));
             action.setCorrect(grid.isCorrectCell(action.getRow(),action.getColumn()));
         }
 
@@ -507,7 +506,6 @@ public final class Game {
                 histoActions += "Annulation de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
                 currentIndex--;
 
-                System.out.println("Je suis undo : \n" + histoActions);
                 return;
             }
     
@@ -554,8 +552,6 @@ public final class Game {
                 currentIndex++;
                 actions.get(currentIndex).doAction();
                 histoActions += "Refaire de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
-                
-                System.out.println("Je suis redo : \n" + histoActions);
                 
                 return;
             }
@@ -659,7 +655,7 @@ public final class Game {
             if (gameState == GameState.NOT_STARTED || gameState == GameState.FINISHED||gameState==GameState.PAUSED) {
                 throw new IllegalStateException("Aucune action ne peut être effectuée car le jeu est en pause ou n'a pas encore été démarré ou est est déjà terminé.");
             } 
-            Action a=new AnnotationCellAction(this, x, y, value);
+            Action a = new AnnotationCellAction(this, x, y, value, grid.getCell(x,y).getLastAnnotation());
            
             return executeAction(a);
             
@@ -703,7 +699,7 @@ public final class Game {
      */
     public Game removeAnnotation(int x, int y, int value) throws IllegalStateException,NoEditableCellExeception{
         try {
-            return executeAction(new AnnotationRemoveCellAction(this, x, y, value));
+            return executeAction(new AnnotationRemoveCellAction(this, x, y, value, value));
         } catch (Exception e) { 
             System.err.println("aucune action n'a été effectué :"+e.getMessage());
             return this;
@@ -744,8 +740,6 @@ public final class Game {
     private void updateGame(){
         updateDate();
         calculateProgressRate();
-
-
     }
 
 

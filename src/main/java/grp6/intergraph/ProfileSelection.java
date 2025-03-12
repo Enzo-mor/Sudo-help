@@ -21,6 +21,16 @@ public class ProfileSelection {
     private final List<Profile> profiles = DBManager.getProfiles();
     private Profile selectedProfile = new Profile("Invité");
     private int currentPage = 0;
+    private static ProfileSelection instance = null;
+
+    private ProfileSelection() {}
+
+    public static ProfileSelection getInstance() {
+        if (instance == null) {
+            instance = new ProfileSelection();
+        }
+        return instance;
+    }
 
     public void showProfileSelection(Stage stage) {
         StackPane root = new StackPane();
@@ -58,7 +68,10 @@ public class ProfileSelection {
 
         Button guestButton = new ProfileButton("Continuer en tant qu'invité");
         
-        guestButton.setOnAction(e -> MainMenu.showMainMenu(stage, selectedProfile));
+        guestButton.setOnAction(e -> {
+            instance=null;
+            MainMenu.showMainMenu(stage, selectedProfile);
+            });
         
         Button quitButton = new ProfileButton("Quitter");
         quitButton.setOnAction(e -> {
@@ -152,6 +165,7 @@ public class ProfileSelection {
             final Profile profile = profiles.get(i);
             profileBox.setOnMouseClicked(e -> {
                 selectedProfile = profile;
+                instance=null;
                 MainMenu.showMainMenu(stage, selectedProfile);
             });
         }

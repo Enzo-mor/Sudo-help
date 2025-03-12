@@ -1,18 +1,16 @@
 package grp6.intergraph;
 
+import java.sql.SQLException;
+
 import grp6.sudocore.DBManager;
-import javafx.animation.RotateTransition;
-import javafx.geometry.Insets;
+import javafx.animation.*;
+import javafx.application.Platform;
+import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import javafx.scene.image.*;
+import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -20,8 +18,9 @@ class Settings extends Stage {
 
     private boolean settingsMode = false;
     private final RotateTransition rotateAnimation;
+    
 
-    public Settings(ImageView gearIcon) {
+    public Settings(Stage stage, ImageView gearIcon) {
         setTitle("Paramètres");
 
         // --- HBox pour afficher/modifier le pseudo ---
@@ -30,9 +29,6 @@ class Settings extends Stage {
         
         // Ajouter un contour visible au champ de texte pour le rendre cliquable
         usernameField.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-background-color: lightgray; -fx-border-color: darkgray; -fx-border-width: 2px;");
-
-        // Désactiver l'édition par défaut
-        usernameField.setEditable(false);
 
         // Image d'icône d'édition
         ImageView editIcon = new ImageView(new Image(getClass().getResourceAsStream("/pencil.png")));
@@ -45,35 +41,12 @@ class Settings extends Stage {
 
         // --- Gestion de l'édition du pseudo ---
 
-        boolean[] isEditing = {false};
-        // Action lors du clic sur l'icône
-        editIcon.setOnMouseClicked(e -> {
-            if (isEditing[0]) {
-                usernameField.setEditable(false);  // Désactivation de la modification du texte
-                usernameField.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-background-color: lightgray; -fx-border-color: darkgray; -fx-border-width: 2px;");
-            } else {
-                // Activer l'édition du TextField
-                usernameField.setEditable(true);  // Activation de la modification du texte
-                usernameField.requestFocus(); // Place le focus dans le champ de texte
-                usernameField.selectAll(); // Sélectionne tout le texte pour le remplacer directement
-                usernameField.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-background-color: lightgray; -fx-border-color: blue; -fx-border-width: 2px;"); // Changer la bordure pour montrer qu'on peut éditer
-            }
-
-            // Alterner l'état de l'édition
-            isEditing[0] = !isEditing[0];
-        });
-
         // Vérification du texte du TextField lorsque l'utilisateur appuie sur "Entrée"
         usernameField.setOnAction(e -> {
             String newName = usernameField.getText();
             if (!newName.isEmpty() && DBManager.renameProfile(MainMenu.getProfile(), newName)) {
                 MainMenu.getProfile().setPseudo(newName); // Met à jour le nom dans le programme
             }
-
-            // Désactiver l'édition et revenir à un style normal
-            usernameField.setEditable(false);
-            usernameField.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-background-color: lightgray; -fx-border-color: darkgray; -fx-border-width: 2px;");
-            isEditing[0] = false;
         });
 
         // --- Paramètres ---
@@ -88,6 +61,63 @@ class Settings extends Stage {
 
         VBox settingsLayout = new VBox(10, usernameBox, helpNotifications, fullscreenMode, gridHighlight, numberHighlight, changeProfileButton, deleteProfileButton);
         settingsLayout.setStyle("-fx-padding: 20px;");
+
+        // --- Gestion Boutons Paramètres ---
+        changeProfileButton.setOnAction(e -> {
+            ProfileSelection.getInstance().showProfileSelection(stage);
+            this.close();
+        });
+
+        deleteProfileButton.setOnAction(e -> {
+            try {
+                String profileName = MainMenu.getProfileName();
+                DBManager.deleteProfile(profileName);
+
+                // Affichage d'une fenêtre temporaire
+                Stage popupStage = new Stage();
+                popupStage.initModality(Modality.APPLICATION_MODAL);
+                popupStage.setTitle("Suppression");
+
+                Label message = new Label("Le profil '" + profileName + "' a été supprimé !");
+                message.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+
+                VBox layout = new VBox(10, message);
+                layout.setAlignment(Pos.CENTER);
+                layout.setPadding(new Insets(10));
+
+                Scene scene = new Scene(layout, 300, 100);
+                popupStage.setScene(scene);
+
+                // Centrer par rapport à la fenêtre principale
+                popupStage.setX(deleteProfileButton.getScene().getWindow().getX() + 200);
+                popupStage.setY(deleteProfileButton.getScene().getWindow().getY() + 100);
+
+                popupStage.show();
+
+                // Fermer automatiquement après 2 secondes
+                Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), evt -> popupStage.close()));
+                timeline.setCycleCount(1);
+                timeline.play();
+
+                ProfileSelection.getInstance().showProfileSelection(stage);
+                this.close();
+                
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        });
+
+        // -- Button full screen mode --
+        fullscreenMode.setOnAction(e -> {
+            Platform.runLater(() -> {
+                if (fullscreenMode.isSelected()) {
+                    stage.setFullScreen(true);
+                } else {
+                    stage.setFullScreen(false);
+                }
+            });
+        });
+
 
         Scene scene = new Scene(settingsLayout, 250, 300);
         setScene(scene);

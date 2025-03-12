@@ -74,6 +74,11 @@ public class FixCell implements Cell {
         List<Integer> l = new ArrayList<>();
         return l;
     }
+
+    @Override
+    public Integer getLastAnnotation() {
+        return 1;
+    }
     
     /**
      * Enlever une annotation d'une cellule

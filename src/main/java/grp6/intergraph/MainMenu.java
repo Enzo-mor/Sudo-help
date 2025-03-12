@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.animation.RotateTransition;
+import javafx.application.Platform;
 import javafx.util.Duration;
 
 public class MainMenu {
@@ -36,7 +37,10 @@ public class MainMenu {
         classementButton.setOnAction(e -> System.out.println("Classement ouvert"));
 
         Button exitButton = new ProfileButton("Quitter");
-        exitButton.setOnAction(e -> stage.close());
+        exitButton.setOnAction(e -> {
+            settingsWindow.close();
+            stage.close();
+        });
 
         layout.getChildren().addAll(welcomeLabel, startGameButton, classementButton, exitButton);
 
@@ -53,7 +57,7 @@ public class MainMenu {
         rotateAnimation.setByAngle(180);
         rotateAnimation.setCycleCount(1);
 
-        settingsWindow = new Settings(gearIcon);
+        settingsWindow = new Settings(stage, gearIcon);
         settingsButton.setOnAction(e -> settingsWindow.toggleSettingsWindow());
 
         // Conteneur pour aligner le bouton en bas à droite
@@ -65,6 +69,13 @@ public class MainMenu {
         BorderPane root = new BorderPane();
         root.setCenter(layout); // Place le menu principal au centre
         root.setBottom(bottomRightContainer); // Place le bouton settings en bas
+
+        // --- Fermer toutes les fenêtres avec la croix ---
+        stage.setOnCloseRequest(e -> {
+            Platform.exit(); // Ferme toutes les fenêtres JavaFX
+            System.exit(0);  // Termine l'application proprement
+        });
+
 
         Scene scene = new Scene(root, 640, 480);
         stage.setTitle("Menu Principal - " + MainMenu.getProfileName());

@@ -615,15 +615,6 @@ public static int getGridsSize() {
 }
 
 /**
- * Supprime un profile de la bdd
- * @param profile profile à supprimmer
- */
-public static boolean removeProfile(Profile profile) {
-
-    return false;
-}
-
-/**
  * Renomme un profile 
  * @param profile Profile à renommer
  * @param name Nouveau nom du profile
@@ -640,7 +631,7 @@ public static boolean renameProfile(Profile profile, String name) {
 
     System.out.println(profile.getPseudo() + " --> " + name);
     
-    String query = "UPDATE profiles SET pseudo = ? WHERE pseudo = ?";
+    String query = "UPDATE profile SET pseudo = ? WHERE pseudo = ?";
     
     try(Connection conn = DBManager.getConnection();
          PreparedStatement pstmt = conn.prepareStatement(query)) {

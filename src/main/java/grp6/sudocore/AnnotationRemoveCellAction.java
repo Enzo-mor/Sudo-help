@@ -22,8 +22,8 @@ public class AnnotationRemoveCellAction extends AnnotationCellAction {
      * @param y represente les coordonnées Y de la cellule
      * @param annotation represente la nouvelle annotation à supprimer
      */
-    public AnnotationRemoveCellAction(Game game, int x, int y, int annotation) {
-        super(game, x, y, annotation);
+    public AnnotationRemoveCellAction(Game game, int x, int y, int annotation, int old_annotation) {
+        super(game, x, y, annotation, old_annotation);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class AnnotationRemoveCellAction extends AnnotationCellAction {
 
             System.out.println("AnnotationRemoveCellAction");
             try {
-                AnnotationRemoveCellAction annotation = new AnnotationRemoveCellAction(new Game(DBManager.getGrid(2),new Profile("philippe")), 0, 0, 3);
-                 System.out.println(annotation.serialise());
+                //AnnotationRemoveCellAction annotation = new AnnotationRemoveCellAction(new Game(DBManager.getGrid(2),new Profile("philippe")), 0, 0, 3);
+                 //System.out.println(annotation.serialise());
             } catch (Exception e) {
                 // TODO: handle exception
                 e.printStackTrace();

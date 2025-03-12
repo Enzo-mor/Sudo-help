@@ -4,7 +4,7 @@ import javafx.stage.Stage;
 
 public class MenusController {
     public static void launcher(Stage primaryStage){
-        ProfileSelection ps = new ProfileSelection();
+        ProfileSelection ps = ProfileSelection.getInstance();
         ps.showProfileSelection(primaryStage);
     }
 }

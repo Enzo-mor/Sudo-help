@@ -50,9 +50,6 @@ public class ControlButtons {
                 int row = currentAction.getRow();
                 int col = currentAction.getColumn();
                 sudokuGrid.setCellDisplay(row, col, currentAction.getRedoNumber());
-                System.out.println("Redo Number : " + currentAction.getRedoNumber() + "\nRow : " + row + " Column : " + col);
-                
-                
             }
         });
 
@@ -95,7 +92,12 @@ public class ControlButtons {
         if(currentAction != null){
             int row = currentAction.getRow();
             int col = currentAction.getColumn();
-            sudokuGrid.setCellDisplay(row, col, currentAction.getOldNumber());
+            if (currentAction instanceof NumberCellAction) {
+                sudokuGrid.setCellDisplay(row, col, currentAction.getOldNumber());
+            } else {
+                String oldNumberString = String.valueOf(currentAction.getOldNumber());
+                sudokuGrid.removeAnnotationFromCell(row, col, oldNumberString);
+            }
 
             /* Modification coté bdd */
             sudokuGame.undoAction();

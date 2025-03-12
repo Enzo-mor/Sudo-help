@@ -40,10 +40,7 @@ public final class NumberCellAction extends ActionCell  {
      * represente la valeur de la cellule pour redo
      */
     private int redo_number;
-    /**
-     * represente l'ancienne valeur de la cellule
-     */
-    private boolean correct;
+
     /**
     * methode permettant de creer une action qui permet de modifier une valeur à une cellule specifique de la grille
     * @param game represente le jeu contenant la grille à modifier
@@ -173,13 +170,5 @@ public final class NumberCellAction extends ActionCell  {
 
     public void setRedo (int number){
         this.redo_number=number;
-    }
-
-    public void setCorrect(boolean b){
-        this.correct=b;
-    }
-
-    public boolean getCorrect(){
-        return correct;
     }
 }

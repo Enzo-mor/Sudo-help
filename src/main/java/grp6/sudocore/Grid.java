@@ -374,7 +374,6 @@ public final class Grid implements Iterable<Cell> {
                 }
             }
         }
-        System.out.println(solvedCells);
         return res;
     }
 

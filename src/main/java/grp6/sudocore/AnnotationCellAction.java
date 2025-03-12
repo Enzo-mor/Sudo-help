@@ -29,6 +29,16 @@ public  class AnnotationCellAction extends ActionCell  {
      * represente le nombre à ajouter en annotation
      */
     protected int annotation;
+    /**
+     * represente l'ancienne valeur de la cellule
+     */
+    private int old_annotation;
+   /**
+    * 
+    /**
+     * represente la valeur de la cellule pour redo
+     */
+    private int redo_annotation;
 
     /**
      * constructeur permettant de creer une action qui permet d'ajouter une annotation à une cellule specifique de la grille
@@ -37,20 +47,23 @@ public  class AnnotationCellAction extends ActionCell  {
      * @param y represente les coordonnées Y de la cellule
      * @param annotation represente la nouvelle annotation à ajouter
      */ 
-    public AnnotationCellAction(Game game, int x, int y, int annotation) {
+    public AnnotationCellAction(Game game, int x, int y, int annotation, int old_annotation) {
         super(game, x, y);
         this.annotation = annotation;
+        this.old_annotation = old_annotation;
+        this.redo_annotation = annotation;
     }
 
     @Override
     protected void doAction() {
-        this.game.grid.getCell(x, y).addAnnotation(annotation);
+        this.game.grid.getCell(x, y).addAnnotation(redo_annotation);
     }
 
     @Override
     protected void undoAction() {
         this.game.grid.getCell(x, y).removeAnnotation(annotation);
     }
+    
     @Override
     public SudoTypes.ActionType actionType(){
         return ActionType.ANNOTATION_CELL_ACTION;
@@ -116,22 +129,30 @@ public  class AnnotationCellAction extends ActionCell  {
      }
     public AnnotationCellAction  deserialize(JsonElement jsonElement, Type vartype, JsonDeserializationContext context) throws JsonParseException{
         JsonObject jsonObject = jsonElement.getAsJsonObject();
-        if (!jsonObject.has("x") || !jsonObject.has("y") || !jsonObject.has("number")||!jsonObject.has("type")) {
+        if (!jsonObject.has("x") || !jsonObject.has("y") || !jsonObject.has("number")|| !jsonObject.has("old_number")|| !jsonObject.has("type")) {
             throw new JsonParseException("Le JSON ne contient pas tous les champs requis : 'x', 'y', 'number','type'");
         }
          return new AnnotationCellAction(
            game, 
            jsonObject.get("x").getAsInt(),
            jsonObject.get("y").getAsInt(),
-           jsonObject.get("number").getAsInt());
+           jsonObject.get("number").getAsInt(),
+           jsonObject.get("old_number").getAsInt());
        }
 
 
     }
 
-    public static void main(String[] args) {
-         Action a = new AnnotationCellAction(null, 0, 0, 0);
-          System.out.println(a.serialise());
+    public int getOldAnnotation(){
+        return old_annotation;
+    }
+
+    public int getRedoAnnotation(){
+        return redo_annotation;
+    }
+
+    public void setRedo (int annotation){
+        this.redo_annotation = annotation;
     }
     
 }

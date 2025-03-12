@@ -1,5 +1,6 @@
 package grp6.sudocore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +16,8 @@ public final class FlexCell extends FixCell {
     /* ======= Variables d'instance ======= */
     /** Tableau des annotations (si annotations[i]==true, i+1 est annotée dans la cellule) */
     protected boolean[] annotations;  
+    /** Tableau des annotations (si annotations[i]==true, i+1 est annotée dans la cellule) */
+    protected List<Integer> annotationsList;  
 
     /* ======= Méthodes d'instance ======= */
 
@@ -25,6 +28,7 @@ public final class FlexCell extends FixCell {
         super(0);
         // Initialise le tableau des annotations à false
         this.annotations = new boolean[Grid.NB_NUM];
+        this.annotationsList = new ArrayList<>();
     }
 
     /**
@@ -63,6 +67,7 @@ public final class FlexCell extends FixCell {
         if(Grid.isValidNumber(number)){
             // Mettre le booleen à true pour signaler que 'number' est présant dans l'annotation
             this.annotations[number-1] = true;
+            this.annotationsList.add(number);
         }
         else {
             System.err.println("Impossible d'ajouter une annotation dans cette cellule: " + number + " doit etre inclue dans ]0, " + Grid.NB_NUM + "]");
@@ -78,6 +83,7 @@ public final class FlexCell extends FixCell {
         // Le chiffre doit etre valide: number in ]0, 9]
         if(Grid.isValidNumber(number)){
             this.annotations[number-1] = false;
+            this.annotationsList.remove(Integer.valueOf(number));
         }
         else {
             System.err.println("Impossible d'enlever une annotation dans cette cellule: " + number + " doit etre inclue dans ]0, " + Grid.NB_NUM + "]");
@@ -97,6 +103,17 @@ public final class FlexCell extends FixCell {
         }
 
         return res;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public Integer getLastAnnotation() {
+        if (annotationsList.isEmpty()) {
+            return -1;
+        }
+        return annotationsList.get(annotationsList.size()-1);
     }
 
     /** 
