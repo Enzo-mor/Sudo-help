@@ -37,9 +37,12 @@ public class HiddenSingle implements InterfaceTech {
         compteur=new int[Grid.NB_NUM];
         
         for(int i=0;i<Grid.NB_NUM;i++){
-            if(tab[i].getAnnotations()[i]!=false){
-                compteur[i]++;
+            for(int j=0;j<Grid.NB_NUM;j++){
+                if(tab[i].getAnnotations()[j]==true){
+                    compteur[j]++;
+                }
             }
+            
         }
 
         return compteur;
@@ -77,10 +80,18 @@ public class HiddenSingle implements InterfaceTech {
         // Ajout d'annotations sur les cellules vides (indices connus)
         addAnnotations(grille.getCell(6, 0), new int[]{7, 8, 9});  // Seul 9 possible
         addAnnotations(grille.getCell(6, 1), new int[]{7, 8, 9});
-        addAnnotations(grille.getCell(6, 2), new int[]{7, 8});
+        addAnnotations(grille.getCell(6, 2), new int[]{1, 7, 8});
         addAnnotations(grille.getCell(7, 0), new int[]{3, 4, 7, 8});
         addAnnotations(grille.getCell(8, 0), new int[]{3, 4, 9});
-        addAnnotations(grille.getCell(8, 2), new int[]{3, 4, 9});
+        addAnnotations(grille.getCell(8, 1), new int[]{3, 4, 9});
+        addAnnotations(grille.getCell(4, 1), new int[]{3, 4, 7, 8});
+        addAnnotations(grille.getCell(4, 2), new int[]{3, 4, 7, 8});
+        addAnnotations(grille.getCell(5, 2), new int[]{3, 4, 7, 8});
+        addAnnotations(grille.getCell(5, 0), new int[]{3, 4, 7, 8});
+        addAnnotations(grille.getCell(7, 4), new int[]{3, 4, 7, 8});
+        addAnnotations(grille.getCell(7, 3), new int[]{3, 4, 7, 8});
+        addAnnotations(grille.getCell(5, 3), new int[]{3, 4, 7, 8});
+        addAnnotations(grille.getCell(5, 4), new int[]{3, 4, 7, 8});
 
       
         for(int i=0; i<9; i++){
