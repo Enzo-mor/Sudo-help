@@ -357,8 +357,8 @@ public class Grid implements Iterable<Cell> {
         return result;
     }
     public void printAnnotationsGrid() {
-        // On fixe une largeur pour chaque cellule (ici 15 caractères)
-        final int cellWidth = 15;
+        // On fixe une largeur pour chaque cellule 
+        final int cellWidth = 9;
         
         for (int row = 0; row < NB_NUM; row++) {
             for (int col = 0; col < NB_NUM; col++) {
