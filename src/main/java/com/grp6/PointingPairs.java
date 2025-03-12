@@ -10,6 +10,13 @@ import java.util.List;
  * - Si un chiffre donné **n’apparaît que dans une seule ligne ou une seule colonne d’un carré (bloc 3x3)**,
  *   alors ce chiffre **doit forcément être placé dans ce carré**.
  * - On peut donc **supprimer ce chiffre des annotations des autres cases de cette ligne/colonne en dehors du carré**.
+ * 
+ * Exemple :
+ * - Si le chiffre 2 n'apparaît que exactement 2 fois dans une seule ligne d'un bloc 3x3, alors on peut supprimer les annotations 2 des autres cellules de cette ligne.
+ * 
+ * @author Taise De Thèse
+ * @version 1.0
+ * @since 2025-03-12
  */
 public class PointingPairs implements InterfaceTech {
 
