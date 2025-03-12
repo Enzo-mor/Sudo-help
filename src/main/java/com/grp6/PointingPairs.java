@@ -137,8 +137,7 @@ public class PointingPairs implements InterfaceTech {
 
         public static void main(String[] args) {
             // Exemple de données pour la grille 9x9 :
-            // Une valeur non nulle représente une cellule fixe (départ de la grille),
-            // 0 représente une cellule vide (flexCell) qui sera remplie par le joueur et contiendra des annotations.
+            
             int[] data = {
                 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -160,14 +159,7 @@ public class PointingPairs implements InterfaceTech {
             grille.getCell(0, 7).addAnnotation(2);
             grille.printAnnotationsGrid();;
     
-            // Vérifier les annotations d'une cellule flex (par exemple la cellule (0,2) qui est vide)
-            Cell cellFlex = grille.getCell(0, 2);
-            System.out.print("Annotations de la cellule (0,2) : ");
-            for (int i = 0; i < 9; i++) {
-                if (cellFlex.getAnnotations()[i]) {
-                    System.out.print((i + 1) + " ");
-                }
-            }
+           
             System.out.println("\n");
     
             // Création d'une instance de la technique des paires pointantes
