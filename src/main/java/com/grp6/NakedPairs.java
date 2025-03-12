@@ -1,13 +1,10 @@
 package com.grp6;
 
-import java.util.List;
-
-
 public class NakedPairs implements InterfaceTech {
 
 
+
     private int[] donnerPair(boolean[] tabBool){
-        System.err.println("donnerPair");
         int[] tab = new int[2];
         int j = 0;
         for(int i = 0; i<9;i++){
@@ -21,12 +18,11 @@ public class NakedPairs implements InterfaceTech {
 
     private boolean detectPairsCarre(int num,Grid grille) {
 
-        System.out.println("detectPairsCarre");
         //tableau de pairs
         int[][] tabPair = new int[9][2];
         int cptPair = 0;
 
-        int cptAnnotation = 0;
+        int cptAnnotation;
         
         // On récupère les cellules de la région
         int[] indiceCell = grille.numToPosForSubGrid(num);
@@ -39,33 +35,35 @@ public class NakedPairs implements InterfaceTech {
         // On récupère les pairs de la région
         for (int i =0; i<3 ;i++){
             for (int j = 0; j<3 ;j++){
+                cptAnnotation = 0;
              //   if (mat[i][j].getAnnotations().length == 2){
 
                     for (int k = 0; k<9;k++){
-                        System.out.println("Annotation de la case  "+ i +" "+j+ " et de annotation : "+ k+" :"+ mat[i][j].getAnnotations()[k]);
+                       // System.out.println("Annotation de la case  "+ i +" "+j+ " et de annotation : "+ k+" :"+ mat[i][j].getAnnotations()[k]);
                         if(mat[i][j].getAnnotations()[k]){
                             cptAnnotation++;
                         }
                     }
-                //    System.out.println("cptAnnotation : "+ cptAnnotation);
-                    //System.out.println("Annotation : "+ mat[i][j].getAnnotations());
                     if (cptAnnotation == 2) {
-                        System.out.println("annotation de  taille 2 (Carre)");
                         tabBool = mat[i][j].getAnnotations();
                         tabPair[cptPair] = donnerPair(tabBool);
                         cptPair++;                      
                         
                         }
                     }
-               // }
             }
         
-        // On vérifie si on a trouvé une paire   
-      //  System.out.println("verif tabPair");
+        //  System.out.println("verif tabPair");
         for(int i = 0; i<9;i++){
             int[] temp = tabPair[i];
+            //affichage du tableau temporaire
+            //System.out.println("tabTemp["+i+"] : "+temp[0]+" "+temp[1]);
+            //System.out.println("tabPair["+i+"] : "+tabPair[i][0]+" "+tabPair[i][1]);
             for(int j = 0; j<9;j++){
-                if(temp == tabPair[j] && i!=j){
+                //if de la violence (désolée)
+                if(temp[0] == tabPair[j][0]  && temp[1] == tabPair[j][1] && temp[0] !=0 && i!=j){
+                    System.out.println("true de région");
+
                     return true;
                 }
             }
@@ -75,10 +73,12 @@ public class NakedPairs implements InterfaceTech {
 
     private boolean detectPairs(int num,Grid grille){
 
-        //System.out.println("detectPairs");
         //tableau de pairs
         int [][] tabPair = new int[9][2];
-        int cpt = 0;
+        int cptPair = 0;
+
+        int cptAnnotation;
+
 
         // On récupère les cellules dans les lignes et colonnes
         Cell line[] = grille.getLine(num);
@@ -89,35 +89,58 @@ public class NakedPairs implements InterfaceTech {
 
         // On récupère les pairs dans les lignes
         for (int i = 0; i<9;i++){
-            if (line[i].getAnnotations().length == 2){
-                System.out.println("annotation de  taille 2 (ligne)");
+
+            cptAnnotation = 0;
+          
+            //vétification des annotations dans les lignes
+            for (int k = 0; k<9;k++){
+                if(line[i].getAnnotations()[k]){
+                    cptAnnotation++;
+                }
+            }
+            if (cptAnnotation == 2) {
                 tabBool = line[i].getAnnotations();
-                tabPair[cpt] = donnerPair(tabBool);
-                cpt++;
+                tabPair[cptPair] = donnerPair(tabBool);
+                cptPair++;                      
+                
             }
-        }
 
-        // On récupère les pairs dans les colonnes
-        for (int i = 0; i<9;i++){
-            if (col[i].getAnnotations().length == 2){
-                System.out.println("annotation de  taille 2 (colonne)");
+
+            cptAnnotation = 0;
+            //vérfication des annotations dans les colonnes
+            for (int k = 0; k<9;k++){
+                if(col[i].getAnnotations()[k]){
+                    cptAnnotation++;
+                }
+            }
+            if (cptAnnotation == 2) {
                 tabBool = col[i].getAnnotations();
-                tabPair[cpt] = donnerPair(tabBool);
-                cpt++;
+                tabPair[cptPair] = donnerPair(tabBool);
+                cptPair++;                      
+                
             }
+                    
+            
         }
-
         // On vérifie si on a trouvé une paire
         for(int i = 0; i<9;i++){
             int[] temp = tabPair[i];
+            System.out.println("tabTemp["+i+"] : "+temp[0]+" "+temp[1]);
+            System.out.println("tabPair["+i+"] : "+tabPair[i][0]+" "+tabPair[i][1]);
             for(int j = 0; j<9;j++){
-                if(temp == tabPair[j] && i!=j){
+                //if de la violence (désolée)
+                if(temp[0] == tabPair[j][0]  && temp[1] == tabPair[j][1] && temp[0] !=0 && i!=j){
+                    System.out.println("true de ligne et colonne");
                     return true;
                 }
             }
         }
         return false;
     }
+        
+
+
+        
 
 
     @Override
@@ -149,38 +172,103 @@ public class NakedPairs implements InterfaceTech {
     public static void main(String[] args) {
         // Exemple de grille où une paire pointante peut être trouvée
         int[] data = {
-            2,5,0,4,7,3,6,1,8,
-            6,1,3,8,2,9,4,7,5,
-            7,8,4,5,6,1,9,2,3,
-            9,3,1,2,5,7,8,6,4,
-            5,4,7,6,8,3,1,9,2,
-            8,6,2,1,9,4,7,5,3,
-            1,7,8,3,4,2,5,9,6,
-            3,9,5,7,1,6,2,4,0,
-            4,2,6,9,0,5,3,8,7
+            0,0,0,0,8,5,0,0,0,
+            0,0,0,0,3,0,0,0,0,
+            0,0,0,2,1,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0
         };
         Grid grille = new Grid(data);
         System.out.println(grille.toString());
+        /* Cell cellule = grille.getCell(0, 3);
+
+        if (cellule instanceof FlexCell) {
+            grille.getCell(0, 3).addAnnotation(6);
+            System.out.println("FlexCell");
+        }
+        else {
+            System.out.println("Cell");
+            
+        }*/
 
 
+        // annotations pour les régions
+        
+        /*grille.getCell(0, 3).addAnnotation(6);
+        grille.getCell(0, 3).addAnnotation(7);
+        grille.getCell(0, 3).addAnnotation(9);
 
-        // Ajout d'annotations sur les cellules vides (indices connus)
-        //grille.getCell(0, 3).addAnnotation(6);
-        addAnnotations(grille.getCell(0, 3), new int[]{6,7,9});  // Seul 9 possible
-        addAnnotations(grille.getCell(1, 3), new int[]{7,9});
-        addAnnotations(grille.getCell(1, 5), new int[]{4,7,8});
-        addAnnotations(grille.getCell(2, 5), new int[]{7,9});
-        //addAnnotations(grille.getCell(8, 5), new int[]{3, 4, 9});
-        //addAnnotations(grille.getCell(8, 2), new int[]{3, 4, 9});
+        grille.getCell(1, 3).addAnnotation(7);
+        grille.getCell(1, 3).addAnnotation(9);
 
-        for(int i=0; i<9; i++){
+        grille.getCell(1, 5).addAnnotation(4);
+        grille.getCell(1, 5).addAnnotation(7);
+        grille.getCell(1, 5).addAnnotation(9);
+
+        grille.getCell(2, 5).addAnnotation(7);
+        grille.getCell(2, 5).addAnnotation(9);*/
+        
+        
+        //annotations pour les colonnes
+        /*grille.getCell(0, 2).addAnnotation(3);
+        grille.getCell(0, 2).addAnnotation(6);
+
+        grille.getCell(1, 2).addAnnotation(7);
+        grille.getCell(1, 2).addAnnotation(5);
+
+        grille.getCell(5, 2).addAnnotation(3);
+        grille.getCell(5, 2).addAnnotation(6);
+        grille.getCell(5, 2).addAnnotation(4);
+        grille.getCell(5, 2).addAnnotation(5);
+
+        grille.getCell(7, 2).addAnnotation(3);
+        grille.getCell(7, 2).addAnnotation(6);
+        grille.getCell(7, 2).addAnnotation(4);
+        grille.getCell(7, 2).addAnnotation(7);
+
+        grille.getCell(8, 2).addAnnotation(3);
+        grille.getCell(8, 2).addAnnotation(6);*/
+
+        //annotations pour les lignes
+        grille.getCell(1, 0).addAnnotation(3);        
+        grille.getCell(1, 0).addAnnotation(2);
+
+        grille.getCell(1, 1).addAnnotation(3);
+        grille.getCell(1, 1).addAnnotation(2);
+        grille.getCell(1, 1).addAnnotation(5);
+        grille.getCell(0, 1).addAnnotation(7);
+
+        grille.getCell(1, 2).addAnnotation(3);
+        grille.getCell(1, 2).addAnnotation(5);
+        grille.getCell(1, 2).addAnnotation(7);
+
+        grille.getCell(1, 7).addAnnotation(2);
+        grille.getCell(1, 7).addAnnotation(3);
+        
+        /*for(int i=0; i<9; i++){
             System.out.print(grille.getCell(0,3).getAnnotations()[i] + " ");
         }
-        System.out.println();
+        System.out.println("\n");
+        for(int i=0; i<9; i++){
+            System.out.print(grille.getCell(1,3).getAnnotations()[i] + " ");
+        }
+        System.out.println("\n");
+        for(int i=0; i<9; i++){
+            System.out.print(grille.getCell(1,5).getAnnotations()[i] + " ");
+        }
+        System.out.println("\n");
+        for(int i=0; i<9; i++){
+            System.out.print(grille.getCell(2,5).getAnnotations()[i] + " ");
+        }*/
+    
 
 
         NakedPairs nakedPairs = new NakedPairs();
-        //System.out.println(nakedPairs.detect(grille));
+        System.out.println(nakedPairs.detect(grille));
 
         // Commande pour exécuter
         // mvn compile exec:java -Dexec.mainClass="com.grp6.PointingPairs"

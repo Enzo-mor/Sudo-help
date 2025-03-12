@@ -56,4 +56,11 @@ public interface Cell {
      * @return La chaîne de caractères correspondante [String]
      */
     public String toString();
+    
+    /**
+     * Ajouter une annotation à la cellule
+     * @param number
+     */
+    public void addAnnotation(int number);
+    
 }

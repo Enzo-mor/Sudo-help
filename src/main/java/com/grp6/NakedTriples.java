@@ -10,10 +10,76 @@ package com.grp6;
  */
 public class NakedTriples implements InterfaceTech {
 
+    private int[] donnerTriple(boolean[] tabBool){
+        int[] tab = new int[3];
+        int j = 0;
+        for(int i = 0; i<9;i++){
+            if(tabBool[i]){
+                tab[j] = i;
+                j++;
+            }
+        }
+        return tab;
+    }
+
+    private boolean detectTripletsCarre(int num,Grid grille) {
+
+        //tableau de triplets
+        int[][] tabTriple = new int[9][3];
+        int cptTriple = 0;
+
+        int cptAnnotation = 0;
+        
+        // On récupère les cellules de la région
+        int[] indiceCell = grille.numToPosForSubGrid(num);
+        Cell mat[][] = grille.getSubGrid(indiceCell[0], indiceCell[1]);
+
+        //tableau de booléen pour les annotations
+        boolean[] tabBool = new boolean[9];
+
+        // On récupère les triplets de la région
+        for (int i =0; i<3 ;i++){
+            for (int j = 0; j<3 ;j++){
+                if (mat[i][j].getAnnotations().length == 3){
+
+                    for (int k = 0; k<9;k++){
+                        if(mat[i][j].getAnnotations()[k]){
+                            cptAnnotation++;
+                        }
+                    }
+                    if (cptAnnotation == 3) {
+                        tabBool = mat[i][j].getAnnotations();
+                        tabTriple[cptTriple] = donnerTriple(tabBool);
+                        cptTriple++;                      
+
+                
+                        
+                        }
+                    }
+                }
+            }
+
+    
+
+    
+
+
+        return false;
+    }
+
+    private boolean detectTriplets(int num,Grid grille){
+        return false;
+    }
+
     @Override
     public boolean detect(Grid grille) {
-        // TODO: Implémenter la détection des triplets nus
-        return false;
+        System.out.println("detect");
+        for(int i = 0; i<9;i++){
+            if(detectTripletsCarre(i,grille) || detectTriplets(i,grille)){
+                return true;
+            }
+        }
+        return false;        
     }
 
     @Override
