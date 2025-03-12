@@ -117,4 +117,9 @@ public class FlexCell extends FixCell {
         }  
         return false;
     }
+
+    public boolean isEditable(){
+        return true;
+    }
+
 }

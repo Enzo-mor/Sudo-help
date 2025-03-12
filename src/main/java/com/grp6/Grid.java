@@ -356,6 +356,58 @@ public class Grid implements Iterable<Cell> {
         }
         return result;
     }
+    public void printAnnotationsGrid() {
+        // On fixe une largeur pour chaque cellule (ici 15 caractères)
+        final int cellWidth = 15;
+        
+        for (int row = 0; row < NB_NUM; row++) {
+            for (int col = 0; col < NB_NUM; col++) {
+                Cell cell = getCell(row, col);
+                String annStr = "";
+                // Pour les cellules flexibles, on affiche les annotations
+                if (cell.isEditable()) {
+                    StringBuilder sb = new StringBuilder();
+                    for (int candidate = 1; candidate <= NB_NUM; candidate++) {
+                        if (cell.getAnnotations()[candidate - 1]) {
+                            if (sb.length() > 0) {
+                                sb.append(" | ");
+                            }
+                            sb.append(candidate);
+                        }
+                    }
+                    annStr = sb.toString();
+                    // S'il n'y a aucune annotation, on affiche un espace vide
+                    if (annStr.isEmpty()) {
+                        annStr = " ";
+                    }
+                } else {
+                    // Pour une cellule fixe, on affiche rien (ou éventuellement "FIX")
+                    annStr = " ";
+                }
+                
+                // Affichage formaté sur une largeur fixe
+                System.out.print(String.format("%-" + cellWidth + "s", annStr));
+                // Séparateur vertical entre les blocs (3 colonnes par bloc)
+                if ((col + 1) % NB_SUBGRID == 0 && col < NB_NUM - 1) {
+                    System.out.print("| ");
+                }
+            }
+            System.out.println();
+            // Séparateur horizontal entre les blocs (3 lignes par bloc)
+            if ((row + 1) % NB_SUBGRID == 0 && row < NB_NUM - 1) {
+                // Construction d'une ligne de séparation adaptée à la largeur totale
+                String separator = "";
+                for (int i = 0; i < NB_NUM; i++) {
+                    separator += String.format("%" + cellWidth + "s", "").replace(" ", "-");
+                    if ((i + 1) % NB_SUBGRID == 0 && i < NB_NUM - 1) {
+                        separator += "+";
+                    }
+                }
+                System.out.println(separator);
+            }
+        }
+    }
+    
 
 
 

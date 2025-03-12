@@ -56,4 +56,15 @@ public interface Cell {
      * @return La chaîne de caractères correspondante [String]
      */
     public String toString();
+
+
+     /**
+     * Savoir si une cellule est modifiable
+     * @return Vrai si la cellule peut etre modifiée
+     */
+    public boolean isEditable();
+
+    public void addAnnotation(int number); 
+
+
 }

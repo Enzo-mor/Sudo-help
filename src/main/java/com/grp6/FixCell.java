@@ -119,5 +119,7 @@ public class FixCell implements Cell {
         return String.valueOf(this.getNumber());
     }
     
-
+    public boolean isEditable() {
+        return false;
+    }
 }
