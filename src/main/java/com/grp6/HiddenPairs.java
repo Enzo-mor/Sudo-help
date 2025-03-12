@@ -10,9 +10,31 @@ package com.grp6;
  */
 public class HiddenPairs implements InterfaceTech {
 
+    private int[] donnerPair(boolean[] tabBool){
+        int[] tab = new int[2];
+        int j = 0;
+        for(int i = 0; i<9;i++){
+            if(tabBool[i]){
+                tab[j] = i;
+                j++;
+            }
+        }
+        return tab;
+    }
+
+    private boolean detectPairsCarre(int num,Grid grille) {
+        
+
+        return false;
+    }
+
+    private boolean detectPairs(int num,Grid grille){
+        return false;
+    }
+
     @Override
     public boolean detect(Grid grille) {
-        // TODO: Implémenter la détection des paires cachées
+        
         return false;
     }
 
