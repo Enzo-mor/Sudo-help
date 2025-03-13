@@ -55,8 +55,6 @@ public interface Cell {
      */
     public void setNumber(int number);
 
-    public void setRedo (int number);
-
     /**
      * Ajouter un annotation à la cellule
      * @param number Chiffre de l'annotation à ajouter [int]

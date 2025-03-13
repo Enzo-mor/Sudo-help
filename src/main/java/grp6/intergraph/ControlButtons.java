@@ -1,16 +1,17 @@
 package grp6.intergraph;
-
 import grp6.sudocore.*;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
-import java.lang.Thread;
 
 import java.util.*;
 
 public class ControlButtons {
-    private HBox controlButtons;
+    private final HBox controlButtons;
     private SudokuGrid sudokuGrid;
     private Game sudokuGame;
 
@@ -55,30 +56,32 @@ public class ControlButtons {
 
         // Ajoute l'action sur le bouton "Vérifier"
         checkButton.setOnAction(e -> {
-            //TODO: Affichage en rouge des erreurs + undo jusqua la premiere erreur
             List<int[]> eval = sudokuGame.evaluate();
-            System.out.println(sudokuGame.getGrid());
-            System.out.println("avnt : " + eval.size());
-            sudokuGrid.setCellsColorError(eval);
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
+        
+            if (!eval.isEmpty()) {
+                // Colorier les cellules avec des erreurs en rouge
+                sudokuGrid.setCellsColorError(eval);
+        
+                // Faire une copie des erreurs pour réinitialiser les couleurs plus tard
+                List<int[]> originalErrors = new ArrayList<>(eval);
+        
+                // Créer une pause de 1 seconde avant d'annuler les erreurs
+                Timeline pause = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                    // Annuler les actions jusqu'à corriger les erreurs
+                    undoUntilFirstError(eval);
+        
+                    // Remettre la couleur par défaut en utilisant la copie
+                    sudokuGrid.setCellsColorDefault(originalErrors);
+        
+                    // Nettoyer l'historique après l'annulation
+                    sudokuGame.deleteActionsAfterCurrent();
+                }));
+        
+                pause.setCycleCount(1);
+                pause.play();
             }
-
-            /* Modification coté affichage */
-            Action currentAction = sudokuGame.getLastAction();
-            while(currentAction != null && !currentAction.getCorrect()) {
-                System.out.println("CC");
-                undoAction(currentAction);
-                currentAction = sudokuGame.getLastAction();
-            }
-
-            System.out.println("apres");
-            sudokuGrid.setCellsColorDefault();
-
         });
+
 
         controlButtons.getChildren().addAll(undoButton, redoButton, helpButton, checkButton, restartButton);
     }
@@ -101,6 +104,19 @@ public class ControlButtons {
 
             /* Modification coté bdd */
             sudokuGame.undoAction();
+        }
+    }
+
+    // Annuler les actions jusqu'à corriger toutes les erreurs
+    private void undoUntilFirstError(List<int[]> errors) {
+        Action currentAction = sudokuGame.getLastAction();
+
+        while (currentAction != null && !errors.isEmpty()) {
+            undoAction(currentAction);
+            currentAction = sudokuGame.getLastAction();
+
+            // Met à jour les erreurs restantes
+            errors.retainAll(sudokuGame.evaluate());
         }
     }
 }

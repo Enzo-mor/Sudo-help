@@ -2,6 +2,7 @@ package grp6.sudocore;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -428,32 +429,16 @@ public final class Game {
         if (gameState == GameState.NOT_STARTED || gameState == GameState.FINISHED||gameState==GameState.PAUSED) {
             throw new IllegalStateException("Aucune action ne peut être effectuée car le jeu est en pause ou n'a pas encore été démarré ou est est déjà terminé.");
         }
-        //on supprime les actions qui sont après l'index courant
-        while (actions.size() > currentIndex + 1) {
-            histoActions+="supression de l'action "+(currentIndex+ (actions.size()-currentIndex)+1)+" : "+actions.getLast()+"\n";
-            actions.removeLast();
-           
+        
+        deleteActionsAfterCurrent();
 
-        }
          action.doAction();
          actions.add(action);
          histoActions+="Action "+(currentIndex+2)+" : "+action.toString()+"\n";
          currentIndex++;
-        
-        if (currentIndex > 0) {
-            int indexTemp = currentIndex - 1;
-            if(!actions.get(indexTemp).getCorrect()){
-                action.setCorrect(false);
-            }
-            else{
-                action.setCorrect(grid.isCorrectCell(action.getRow(),action.getColumn()));
-            }
-        }
-        else{
-            action.setCorrect(grid.isCorrectCell(action.getRow(),action.getColumn()));
-        }
 
         updateGame();
+
 
          return this;
 
@@ -552,7 +537,7 @@ public final class Game {
                 currentIndex++;
                 actions.get(currentIndex).doAction();
                 histoActions += "Refaire de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
-                
+
                 return;
             }
     
@@ -626,7 +611,7 @@ public final class Game {
                 throw new IllegalStateException("Aucune action ne peut être effectuée car le jeu est en pause ou n'a pas encore été démarré ou est est déjà terminé.");
             }
     
-                Action a=new NumberCellAction(this, x, y, value, grid.getCell(x,y).getNumber());
+                Action a = new NumberCellAction(this, x, y, value, grid.getCell(x,y).getNumber());
                 
                 return executeAction(a);
         } catch (Exception e) {
@@ -785,11 +770,22 @@ public final class Game {
     }
 
     /**
-     * Permet d'évaluer la grille
+     * Permet d'evaluer la grille
      * @return Liste des erreurs ([ligne, colonne])
      */
     public List<int[]> evaluate() {
         return grid.evaluate();
+    }    
+
+    /**
+     * Permet de supprimer toutes les actions après l'action courante
+     * @param args
+     */
+    public void deleteActionsAfterCurrent() {
+        while (actions.size() > currentIndex + 1) {
+            histoActions+="supression de l'action "+(currentIndex+ (actions.size()-currentIndex)+1)+" : "+actions.getLast()+"\n";
+            actions.removeLast();
+        }
     }
 
     public static void main(String[] args) {

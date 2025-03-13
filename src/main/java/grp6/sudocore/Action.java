@@ -16,14 +16,12 @@ public  abstract class Action {
      * represente le jeu sur lequel les actions seront appliquées
      */
     final protected Game game; 
-    protected Boolean correct;
     /**
      * constructeur des actions
      * @param game represente le jeu sur lequel les actions seront appliquées
      */
     public Action(Game game){
         this.game = game;
-        this.correct = true;
     }
     /**
      *  methode permettant faire l' action
@@ -75,12 +73,8 @@ public  abstract class Action {
         return -1;
     }
 
-    public void setCorrect(boolean b) {
-        correct = b;
-    }
-
-    public boolean getCorrect(){
-        return correct;
+    public int getNumber(){
+        return -1;
     }
      
     

@@ -1,28 +1,33 @@
 package grp6.intergraph;
 import grp6.sudocore.*;
-
+import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class SudokuGrid {
-    private GridPane grid;
-    private ToolsPanel toolsPanel; // Panneau des outils
-    private NumberSelection numberSelection; // Panneau de sélection des chiffres
-    private Button[][] cells = new Button[9][9]; // Stocke les boutons des cellules
-    private List<String>[][] annotations = new ArrayList[9][9];
-    private Grid gridSudoku; // Grille de sudoku
-    private Game actualGame;
+    private final GridPane grid;
+    private final ToolsPanel toolsPanel; // Panneau des outils
+    private final NumberSelection numberSelection; // Panneau de sélection des chiffres
+    private final Button[][] cells = new Button[9][9]; // Stocke les boutons des cellules
+    private final List<String>[][] annotations = new ArrayList[9][9];
+    private final Grid gridSudoku; // Grille de sudoku
+    private final Game actualGame;
 
+    /**
+     * Constructeur de la classe SudokuGrid
+     * @param numberSelection Panneau de sélection des chiffres [NumberSelection]
+     * @param gridData [GridData] 
+     * @param toolsP [ToolsPanel] 
+     * @param actualGame [Game]
+     */
     public SudokuGrid(NumberSelection numberSelection, Grid gridData, ToolsPanel toolsP, Game actualGame) {
         this.grid = new GridPane();
         this.toolsPanel = toolsP;
@@ -62,6 +67,100 @@ public class SudokuGrid {
         }
     }
 
+    // ------------ Nombre ------------ // 
+
+    private void updateCellDisplay(Button cellButton, Label mainNumber, Text annotationText, String numberStr) {
+        if (numberStr != null) {
+            mainNumber.setText(numberStr);
+            mainNumber.setStyle("-fx-text-fill: blue;");
+
+            if (annotationText != null) {
+                annotationText.setText("");  // Effacer les annotations
+            } else {
+                annotationText = new Text();  // Créer un nouveau Text si nécessaire
+            }
+
+            cellButton.setGraphic(mainNumber);  // Afficher le nombre principal
+        } else {
+            resetCellDisplay(cellButton, mainNumber, annotationText); // Si pas de nombre, réinitialiser
+        }
+    }    
+
+    private void resetCellDisplay(Button cellButton, Label mainNumber, Text annotationText) {
+        mainNumber.setText("");
+        if (annotationText == null) {
+            annotationText = new Text();  // Créer un nouveau Text si nécessaire
+        }
+        annotationText.setText("");
+        cellButton.setGraphic(mainNumber);  // Revenir au mode principal (sans annotations)
+    }
+
+    public void setCellDisplay(int row, int col, int oldNumber) {
+        if (row >= 0 && col >= 0 && oldNumber >= 0) {
+            Button cellButton = cells[row][col];
+            Label mainNumber = new Label();
+            mainNumber.setFont(new Font(18));
+            Text annotationText = new Text();
+            annotationText.setFont(new Font(10));
+
+            if (oldNumber == 0) {
+                resetCellDisplay(cellButton, mainNumber, annotationText);  // Réinitialiser si le nombre est 0
+            } else {
+                updateCellDisplay(cellButton, mainNumber, annotationText, String.valueOf(oldNumber));  // Afficher le nombre
+            }
+
+            cells[row][col] = cellButton;
+        }
+    }
+
+    public void setNumberDisplay(Button cellButton, String selectedStr, Label mainNumber, Text annotationText) {
+        updateCellDisplay(cellButton, mainNumber, annotationText, selectedStr);
+    }
+
+    // Méthode pour colorier les cellules en rouge si elles contiennent des erreurs
+    public void setCellsColorError(List<int[]> eval) {
+        for (int[] position : eval) {
+            int row = position[0];
+            int col = position[1];
+            Button cellButton = getButton(row, col);
+            
+            if (cellButton != null) {
+                // Appliquer la couleur rouge pour signaler une erreur
+                cellButton.setStyle("-fx-background-color: #FF6F91;");
+
+                // Mettre à jour l'affichage de la cellule avec les annotations si nécessaire
+                Label mainNumber = (Label) cellButton.getGraphic();
+                Text annotationText = (Text) mainNumber.getGraphic();
+                String numberStr = mainNumber.getText();
+
+                updateCellDisplay(cellButton, mainNumber, annotationText, numberStr);
+            }
+        }
+    }
+    
+    
+    // Méthode pour remettre les cellules à leur couleur d'origine
+    public void setCellsColorDefault(List<int[]> eval) {
+        for (int[] position : eval) {
+            int row = position[0];
+            int col = position[1];
+            Button cellButton = getButton(row, col);
+
+            if (cellButton != null) {
+                String defaultColor = (row / 3 + col / 3) % 2 == 0 ? "-fx-background-color: lightblue;" : "-fx-background-color: white;";
+                cellButton.setStyle(defaultColor);
+    
+                // Mettre à jour l'affichage des annotations ou des numéros
+                Label mainNumber = (Label) cellButton.getGraphic();
+                Text annotationText = (Text) mainNumber.getGraphic();
+                String numberStr = mainNumber.getText();
+
+                updateCellDisplay(cellButton, mainNumber, annotationText, numberStr);
+            }
+        }
+    }
+
+
     // ------------ Annotation ------------ // 
 
     /* Méthode pour ajouter une annotation */
@@ -92,6 +191,12 @@ public class SudokuGrid {
 
     /* Méthode pour afficher les annotations dans le bouton */
     public void setAnnotationDisplay(Button cellButton, int row, int col, Text annotationText) {
+
+        if (annotationText == null) {
+            annotationText = new Text();  // Toujours vérifier ou créer un nouveau Text
+            annotationText.setFont(new Font(10));
+        }
+
         StringBuilder formattedAnnotations = new StringBuilder();
         String[] positions = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
         
@@ -114,81 +219,13 @@ public class SudokuGrid {
         cellButton.setGraphic(annotationText);
     }
 
-    // ------------ Nombre ------------ //
-
-    private void resetCellDisplay(Button cellButton, Label mainNumber, Text annotationText) {
-        mainNumber.setText("");
-        annotationText.setText("");
-        cellButton.setGraphic(mainNumber);  // Revenir au mode principal
-    }
-
-    public void setCellDisplay(int row, int col, int oldNumber) {
-        if(row >= 0 && col >= 0 && oldNumber >= 0) {
-            
-            Button cell = cells[row][col];
-            Label labelTemp = new Label();
-            labelTemp.setFont(new Font(18));
-            Text textTemp = new Text();
-            textTemp.setFont(new Font(10));
-
-            if (oldNumber == 0){
-                resetCellDisplay(cell, labelTemp, textTemp);
-            }
-            else {
-                labelTemp.setText(String.format("%d", oldNumber));
-                // TODO si le undo est une annotation
-                // TODO affichage de l'annotation pas formater (affichage comme un nombre et non en 3*3)
-                textTemp.setText("");
-                cell.setGraphic(labelTemp);
-            }
-            
-            cells[row][col] = cell;
-        }
-    }
-
-    public void setCellsColorError(List<int[]> cellsToColor) {
-        for (int[] cell : cellsToColor) {
-            int row = cell[0];
-            int col = cell[1];
-
-            System.out.println("Recherche du bouton à la position (" + row + ", " + col + ")");
-
-            // Recherche du bouton correspondant à la position (row, col)
-            Node node = grid.getChildren().stream()
-                    .filter(n -> GridPane.getRowIndex(n) != null && GridPane.getColumnIndex(n) != null)
-                    .filter(n -> GridPane.getRowIndex(n) == row && GridPane.getColumnIndex(n) == col)
-                    .findFirst().orElse(null);
-
-            if (node == null) {
-                System.out.println("Aucun nœud trouvé à (" + row + ", " + col + ")");
-            } else if (!(node instanceof Button)) {
-                System.out.println("Le nœud trouvé à (" + row + ", " + col + ") n'est pas un bouton");
-            } else {
-                System.out.println("Modification du bouton à (" + row + ", " + col + ")");
-                ((Button) node).setStyle("-fx-background-color: red !important;");
-            }
-        }
-    }
-
-    public void setCellsColorDefault() {
-        for(int i = 0; i < 9; i++) {
-            for(int j = 0; j < 9; j++) {
-                cells[i][j].setStyle((i / 3 + j / 3) % 2 == 0 ? "-fx-background-color: lightblue;" : "-fx-background-color: white;");
-            }
-        }
-    }
-
-    public void setNumberDisplay(Button cellButton, String selectedStr, Label mainNumber, Text annotationText) {
-        mainNumber.setText(selectedStr);
-        mainNumber.setStyle("-fx-text-fill: blue;");
-        annotationText.setText("");  // Effacer les annotations
-        cellButton.setGraphic(mainNumber);  // Afficher le nombre principal
-    }
+    // ------------ Interaction avec les cellules ------------ //
     
     private void setupCellInteraction(Button cellButton, final int r, final int c, Label mainNumber, Text annotationText) {
         cellButton.setOnAction(e -> {
             String selectedStr = numberSelection.getSelectedNumber();
             Cell currentCell = gridSudoku.getCell(r, c);
+            Integer selectedInteger = Integer.valueOf(selectedStr);
     
             if (!currentCell.isEditable()) {
                 System.out.println("Cette cellule est fixe et ne peut pas être modifiée.");
@@ -201,16 +238,16 @@ public class SudokuGrid {
                 if (mainNumber.getText().isEmpty()) {
                     if (!annotations[r][c].contains(selectedStr)) {
                         addAnnotationToCell(r, c, selectedStr);
-                        actualGame.addAnnotation(r, c, Integer.valueOf(selectedStr));
+                        actualGame.addAnnotation(r, c, selectedInteger);
                     } else {
                         removeAnnotationFromCell(r, c, selectedStr);
-                        actualGame.removeAnnotation(r, c, Integer.valueOf(selectedStr));
+                        actualGame.removeAnnotation(r, c, selectedInteger);
                     }
                 }
             } else if (selectedStr != null) {
                 setNumberDisplay(cellButton, selectedStr, mainNumber, annotationText);
                 //TODO: verifier si le nombre que l'on veut mettre n;est pas deja dans la cell
-                actualGame.addNumber(r,c,Integer.valueOf(selectedStr));
+                actualGame.addNumber(r, c, selectedInteger);
             }
         });
     }

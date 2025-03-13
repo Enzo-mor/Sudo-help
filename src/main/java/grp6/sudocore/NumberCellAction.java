@@ -34,8 +34,6 @@ public final class NumberCellAction extends ActionCell  {
      * represente l'ancienne valeur de la cellule
      */
     private int old_number;
-   /**
-    * 
     /**
      * represente la valeur de la cellule pour redo
      */
@@ -64,6 +62,7 @@ public final class NumberCellAction extends ActionCell  {
     public String toString(){
         return "modification de la valeur de la cellule à la position : x = "+x+" et y = "+y+" de "+old_number+" à "+number;
     }
+
     @Override
      protected void doAction() {
         game.grid.getCell(x, y).setNumber(redo_number);
@@ -71,13 +70,14 @@ public final class NumberCellAction extends ActionCell  {
 
     @Override
     protected void undoAction() {
-        game.grid.getCell(x, y).setRedo(number);
         game.grid.getCell(x, y).setNumber(old_number);
     }
+
     @Override
     public SudoTypes.ActionType actionType(){
         return  ActionType.NUMBER_CELL_ACTION;
     }
+
     public JsonObject serialise(){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("type",actionType().getDescription());
@@ -88,6 +88,7 @@ public final class NumberCellAction extends ActionCell  {
         return jsonObject; 
 
     }
+
     @Override
     public String jsonEncode(){
         //creation de l'adaptateur Gson qui permet de matcher notre classe  NumberCellAction avec la classe NumberCellActionSerialiser 
@@ -123,7 +124,7 @@ public final class NumberCellAction extends ActionCell  {
 
        
        public  JsonElement serialize(NumberCellAction action, Type vartype, JsonSerializationContext context){
-        return action.serialise();
+            return action.serialise();
        }
     }
     /**
@@ -170,5 +171,9 @@ public final class NumberCellAction extends ActionCell  {
 
     public void setRedo (int number){
         this.redo_number=number;
+    }
+
+    public int getNumber(){
+        return number;
     }
 }

@@ -43,8 +43,6 @@ public class FixCell implements Cell {
         return number;
     }
 
-    public void setRedo (int number){}
-
     /**
      * Mettre un chiffre dans une cellule
      * /!\ Impossible pour une cellule fixe /!\
