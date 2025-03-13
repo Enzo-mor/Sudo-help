@@ -153,5 +153,7 @@ public class FixCell implements Cell {
         return new FixCell(this.number,(this.position[0]*9+this.position[1]));
     }
     
-
+    public boolean isEditable() {
+        return false;
+    }
 }

@@ -1,5 +1,8 @@
 package com.grp6;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Technique : Paires pointantes (Pointing Pairs)
  * Objectif : Réduire le nombre d’annotations dans une ligne ou une colonne.
@@ -7,40 +10,170 @@ package com.grp6;
  * - Si un chiffre donné **n’apparaît que dans une seule ligne ou une seule colonne d’un carré (bloc 3x3)**,
  *   alors ce chiffre **doit forcément être placé dans ce carré**.
  * - On peut donc **supprimer ce chiffre des annotations des autres cases de cette ligne/colonne en dehors du carré**.
+ * 
+ * Exemple :
+ * - Si le chiffre 2 n'apparaît que exactement 2 fois dans une seule ligne d'un bloc 3x3, alors on peut supprimer les annotations 2 des autres cellules de cette ligne.
+ * 
+ * @author Taise De Thèse
+ * @version 1.0
+ * @since 2025-03-12
  */
 public class PointingPairs implements InterfaceTech {
+
+     
+
+     private List<int[]> getCandidatePositions(Cell[][] subgrid, int candidate) {
+    List<int[]> positions = new ArrayList<>();
+    for (int i = 0; i < Grid.NB_SUBGRID; i++) {
+        for (int j = 0; j < Grid.NB_SUBGRID; j++) {
+            if (subgrid[i][j].isEditable()&&subgrid[i][j].getAnnotations()[candidate - 1]) {
+                positions.add(new int[]{i, j});
+            }
+        }
+    }
+         return positions;
+    }
+
+        private boolean hasPointingPair(Cell[][] subgrid, int candidate) {
+        List<int[]> positions = getCandidatePositions(subgrid, candidate);
+        if (positions.size() == 2) {
+            int row0 = positions.get(0)[0];
+            int row1 = positions.get(1)[0];
+            int col0 = positions.get(0)[1];
+            int col1 = positions.get(1)[1];
+            return (row0 == row1) || (col0 == col1);
+        }
+        return false;
+    }
+    
 
     @Override
     public boolean detect(Grid grille) {
         // TODO: Implémenter la détection des paires pointantes
+        for (int i = 0; i < Grid.NB_SUBGRID; i++) 
+            for (int j = 0; j < Grid.NB_SUBGRID; j++) {
+                Cell[][] subgrid = grille.getSubGrid(i*Grid.NB_SUBGRID, Grid.NB_SUBGRID*j);
+                for (int annotation = 1; annotation <= Grid.NB_NUM; annotation++) 
+                    // Si l'annotation est aussi double dans la sous-grille
+                    if (hasPointingPair(subgrid,annotation)) {
+                        return true;
+                    }
+                }
+         
+
+
         return false;
     }
 
     @Override
     public void applique(Grid grille) {
-        // TODO: Implémenter l'application de la technique des paires pointantes
+        // Parcourir tous les blocs 3x3
+        for (int blockRow = 0; blockRow < Grid.NB_SUBGRID; blockRow++) {
+            for (int blockCol = 0; blockCol < Grid.NB_SUBGRID; blockCol++) {
+                Cell[][] subgrid = grille.getSubGrid(blockRow*Grid.NB_SUBGRID,Grid.NB_SUBGRID*blockCol);
+                int startRow = blockRow * Grid.NB_SUBGRID;
+                int startCol = blockCol * Grid.NB_SUBGRID;
+    
+                // Pour chaque candidat de 1 à 9
+                for (int candidate = 1; candidate <= Grid.NB_NUM; candidate++) {
+                    List<int[]> positions = getCandidatePositions(subgrid, candidate);
+                    if (positions.size() == 2) {
+                        int row0 = positions.get(0)[0];
+                        int row1 = positions.get(1)[0];
+                        int col0 = positions.get(0)[1];
+                        int col1 = positions.get(1)[1];
+    
+                        // Pour faciliter la vérification, construisons les coordonnées globales des cellules de la paire
+                        int globalRow0 = startRow + row0;
+                        int globalCol0 = startCol + col0;
+                        int globalRow1 = startRow + row1;
+                        int globalCol1 = startCol + col1;
+    
+                        // Cas 1 : les deux cellules sont sur la même ligne dans le bloc
+                        if (row0 == row1) {
+                            int globalRow = startRow + row0;
+                            for (int c = 0; c < Grid.NB_NUM; c++) {
+                                // On traite uniquement les cellules hors du bloc courant
+                                if (c < startCol || c >= startCol + Grid.NB_SUBGRID) {
+                                    // Si la cellule ne fait pas partie de la paire (vérification par rapport aux coordonnées globales)
+                                    Cell cell = grille.getCell(globalRow, c);
+                                    if (!((globalRow == globalRow0 && c == globalCol0) ||
+                                          (globalRow == globalRow1 && c == globalCol1))) {
+                                        if (cell.isEditable() && cell.getAnnotations()[candidate - 1]) {
+                                            cell.removeAnnotation(candidate);
+                                            System.out.println("Suppression de " + candidate +
+                                                    " en (" + globalRow + "," + c + ") par paire pointante (ligne)");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        // Cas 2 : les deux cellules sont sur la même colonne dans le bloc
+                        if (col0 == col1) {
+                            int globalCol = startCol + col0;
+                            for (int r = 0; r < Grid.NB_NUM; r++) {
+                                if (r < startRow || r >= startRow + Grid.NB_SUBGRID) {
+                                    Cell cell = grille.getCell(r, globalCol);
+                                    if (!((r == globalRow0 && globalCol == globalCol0) ||
+                                          (r == globalRow1 && globalCol == globalCol1))) {
+                                        if (cell.isEditable() && cell.getAnnotations()[candidate - 1]) {
+                                            cell.removeAnnotation(candidate);
+                                            System.out.println("Suppression de " + candidate +
+                                                    " en (" + r + "," + globalCol + ") par paire pointante (colonne) ");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
+    
 
-    public static void main(String[] args) {
-        // Exemple de grille où une paire pointante peut être trouvée
-        int[] data = {
-            2,5,0,4,7,3,6,1,8,
-            6,1,3,8,2,9,4,7,5,
-            7,8,4,5,6,1,9,2,3,
-            9,3,1,2,5,7,8,6,4,
-            5,4,7,6,8,3,1,9,2,
-            8,6,2,1,9,4,7,5,3,
-            1,7,8,3,4,2,5,9,6,
-            3,9,5,7,1,6,2,4,0,
-            4,2,6,9,0,5,3,8,7
-        };
-        Grid grille = new Grid(data);
-        System.out.println(grille.toString());
 
-        PointingPairs pointingPairs = new PointingPairs();
-        System.out.println(pointingPairs.detect(grille));
 
-        // Commande pour exécuter
-        // mvn compile exec:java -Dexec.mainClass="com.grp6.PointingPairs"
-    }
+
+        public static void main(String[] args) {
+            // Exemple de données pour la grille 9x9 :
+            
+            int[] data = {
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0
+            };
+            
+    
+            Grid grille = new Grid(data);
+            System.out.println("Grille initiale :");
+            grille.getCell(0, 0).addAnnotation(2);
+            grille.getCell(0, 1).addAnnotation(2);
+            grille.getCell(0, 4).addAnnotation(2);
+            grille.getCell(0, 7).addAnnotation(2);
+            grille.printAnnotationsGrid();;
+    
+           
+            System.out.println("\n");
+    
+            // Création d'une instance de la technique des paires pointantes
+            PointingPairs pointingPairs = new PointingPairs();
+    
+            // Détection
+            boolean detectee = pointingPairs.detect(grille);
+            System.out.println("Paires pointantes détectées ? " + detectee);
+    
+            // Application de la technique
+            pointingPairs.applique(grille);
+    
+            System.out.println("\nGrille après application des paires pointantes :");
+            grille.printAnnotationsGrid();;;
+        }
+    
 }
