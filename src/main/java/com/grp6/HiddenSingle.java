@@ -33,12 +33,13 @@ public class HiddenSingle implements InterfaceTech {
 
     private int[] nb_Num_Annotations(Cell[] tab){
         int[] compteur;
-        compteur=new int[Grid.NB_NUM];
+        compteur=new int[Grid.NB_NUM+1];
         
         for(int i=0;i<Grid.NB_NUM;i++){
             for(int j=0;j<Grid.NB_NUM;j++){
                 if(tab[i].getAnnotationsBool()[j]==true){
                     compteur[j]++;
+                    compteur[Grid.NB_NUM]=j-1;
                 }
             }
             
@@ -71,18 +72,15 @@ public class HiddenSingle implements InterfaceTech {
             tab_square=nb_Num_Annotations(grille.getFlatSubGrid(tab[0], tab[1]));   
             
             for(int j=0; j<Grid.NB_NUM; j++){
-                System.out.println(j);
                 if(tab_line[j]==1 ){
-                    commandes.add(new CommandeApplique(grille.getLine(i)[j], j));
-                    System.out.println("ligne"+grille.getLine(i)[j]);
+                    commandes.add(new CommandeApplique(grille.getLine(i)[tab_line[Grid.NB_NUM]], j));
                 }
                 if(tab_column[j]==1 ){
-                    commandes.add(new CommandeApplique(grille.getColumn(i)[j], j));
-                    System.out.println("colonne"+grille.getColumn(i)[j]);
+                    commandes.add(new CommandeApplique(grille.getColumn(i)[tab_column[Grid.NB_NUM]], j));
                 }
                 if (tab_square[j]==1){
-                    commandes.add(new CommandeApplique(grille.getFlatSubGrid(tab[0], tab[1])[j], j));
-                    System.out.println("carre"+grille.getFlatSubGrid(tab[0], tab[1])[j]);
+                    int temp = tab_square[Grid.NB_NUM];
+                    commandes.add(new CommandeApplique(grille.getSubGrid(tab[0], tab[1])[temp/3][temp%3], j));
                 }
             }
             
@@ -112,23 +110,26 @@ public class HiddenSingle implements InterfaceTech {
         addAnnotations(grille.getCell(6, 0), new int[]{7, 8, 9});  // Seul 9 possible
         addAnnotations(grille.getCell(6, 1), new int[]{7, 8, 9});
         addAnnotations(grille.getCell(6, 2), new int[]{1, 7, 8});
+        addAnnotations(grille.getCell(6, 3), new int[]{1, 7, 8});
         addAnnotations(grille.getCell(7, 0), new int[]{3, 4, 7, 8});
+        addAnnotations(grille.getCell(7, 3), new int[]{3, 4, 7, 8, 1});
         addAnnotations(grille.getCell(8, 0), new int[]{3, 4, 9});
         addAnnotations(grille.getCell(8, 1), new int[]{3, 4, 9});
         addAnnotations(grille.getCell(4, 1), new int[]{3, 4, 7, 8});
         addAnnotations(grille.getCell(4, 2), new int[]{3, 4, 7, 8});
+        addAnnotations(grille.getCell(4, 3), new int[]{3, 4, 7, 8, 1});
         addAnnotations(grille.getCell(5, 2), new int[]{3, 4, 7, 8});
         addAnnotations(grille.getCell(5, 0), new int[]{3, 4, 7, 8});
         addAnnotations(grille.getCell(7, 4), new int[]{3, 4, 7, 8});
         addAnnotations(grille.getCell(7, 3), new int[]{3, 4, 7, 8});
-        addAnnotations(grille.getCell(5, 3), new int[]{3, 4, 7, 8});
+        addAnnotations(grille.getCell(5, 3), new int[]{3, 4, 7, 8, 1});
         addAnnotations(grille.getCell(5, 4), new int[]{3, 4, 7, 8});
 
       
         System.out.println();
 
         for(int i=0; i<9;i++){
-            System.out.println(grille.getCell(6, 2).getAnnotationsBool()[i]);
+            System.out.println(grille.getCell(8, 1).getAnnotationsBool()[i]);
         }
 
         HiddenSingle hiddenSingle = new HiddenSingle();
@@ -136,7 +137,7 @@ public class HiddenSingle implements InterfaceTech {
         hiddenSingle.applique(grille);
 
         for(int i=0; i<9;i++){
-            System.out.println(grille.getCell(6, 2).getAnnotationsBool()[i]);
+            System.out.println(grille.getCell(8, 1).getAnnotationsBool()[i]);
         }
 
         // Commande pour exécuter
@@ -154,8 +155,11 @@ public class HiddenSingle implements InterfaceTech {
 
         @Override
         public void executer() {
-            for(int i =0 ; i< Grid.NB_NUM ;i++){
+            for(int i =1 ; i< Grid.NB_NUM ;i++){
+                System.out.println(this.cellule.getAnnotations());
+                System.out.println(this.cellule.getPosition()[0] + " " + this.cellule.getPosition()[1]);
                 if(i!=this.val){
+                    System.out.println(this.cellule.getNumber());
                     cellule.removeAnnotation(i);
                 }
             }
