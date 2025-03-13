@@ -1,5 +1,8 @@
 package com.grp6;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Classe modelisant une cellule fixe, c'est-a-dire qu'elle ne peut pas être
  * modifié par le joueur.
@@ -10,7 +13,7 @@ public class FixCell implements Cell {
 
     /* ======= Variables d'instance ======= */
     protected int number;   // Chiffre stocké dans la cellule
-    private int[] position;             // Tableau de deux int [x,y] reprsesentant la position en x y
+    private final int[] position;   // Tableau de deux int [x,y] reprsesentant la position en x y
 
     /* ======= Méthodes d'instance ======= */
 
@@ -52,14 +55,16 @@ public class FixCell implements Cell {
         return number;
     }
 
+    public void setRedo (int number){}
+
     /**
      * Mettre un chiffre dans une cellule
      * /!\ Impossible pour une cellule fixe /!\
      * @param number Chiffre à mettre dans la cellule [int]
      */
     @Override
-    public void setNumber(int number) {
-        System.out.println("Il est impossible de mettre un nombre dans cette cellule");
+    public void setNumber(int number)  {
+        throw new NoPutNumberOnCellExeception ("Il est impossible de mettre un nombre dans cette cellule car elle est fixe  ");
     }
 
     /**
@@ -78,8 +83,18 @@ public class FixCell implements Cell {
      * @return tableau des présences des annotations [booleen[]]
      */
     @Override
-    public boolean[] getAnnotations() {
+    public boolean[] getAnnotationsBool() {
         return new boolean[Grid.NB_NUM];
+    }
+
+    /** 
+     * Récupérer les annotations de la cellule
+     * @return Liste des annotations 
+     */
+    @Override
+    public List<Integer> getAnnotations() {
+        List<Integer> l = new ArrayList<>();
+        return l;
     }
     
     /**
@@ -117,6 +132,25 @@ public class FixCell implements Cell {
     @Override
     public String toString() {
         return String.valueOf(this.getNumber());
+    }
+
+    /**
+     * Savoir si une cellule est modifiable
+     * @return Vrai si la cellule peut etre modifiée
+     */
+    @Override
+    public boolean isEditable() {
+        return false;
+    }
+
+    /**
+     * Clone une cellule fixe
+     * @return Une nouvelle instance de Cell (clone de la cellule)
+     */
+    @Override
+    public Cell clone() {
+        // Clonage superficiel, pas de besoin de cloner des objets internes.
+        return new FixCell(this.number,(this.position[0]*9+this.position[1]));
     }
     
 

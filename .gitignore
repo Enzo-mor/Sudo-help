@@ -1,0 +1,57 @@
+# Dossier de build Maven
+target/
+
+# Fichiers de log
+*.log
+
+# Fichiers générés par Maven
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Fichiers de dépendances téléchargées
+.mvn/
+!**/.mvn/wrapper/maven-wrapper.jar
+
+# Dossiers et fichiers spécifiques à VS Code
+.vscode/
+*.code-workspace
+
+# Fichiers IDE et éditeurs (IntelliJ, Eclipse, NetBeans)
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+
+# Cache de compilation Java
+bin/
+out/
+
+# Fichiers de test et rapports
+surefire-reports/
+failsafe-reports/
+test-output/
+
+# Fichiers temporaires et OS
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Fichiers de couverture de code
+jacoco.exec
+*.ec
+*.em
+
+# Bibliothèques externes
+lib/
+
+# Docker & Kubernetes (si applicable)
+docker-compose.override.yml
+*.kube/config
+

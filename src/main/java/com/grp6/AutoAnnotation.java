@@ -1,6 +1,8 @@
 package com.grp6;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -129,7 +131,7 @@ public class AutoAnnotation {
 
         for(int x = 0; x < 9; x++) {
             for(int y = 0; y < 9; y++) {
-                boolean[] ann = grid.getCell(x, y).getAnnotations();
+                boolean[] ann = grid.getCell(x, y).getAnnotationsBool();
                 System.out.print("\n--> " + x + "," + y + ": ");
                 for(int i = 0; i < Grid.NB_NUM; i++) {
                     if(ann[i]) System.out.print(i + 1 + " ");

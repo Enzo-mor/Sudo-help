@@ -10,34 +10,158 @@ package com.grp6;
  */
 public class NakedTriples implements InterfaceTech {
 
-    @Override
-    public boolean detect(Grid grille) {
+    private int[] donnerTriple(boolean[] tabBool){
+        int[] tab = new int[3];
+        int j = 0;
+        for(int i = 0; i<9;i++){
+            if(tabBool[i]){
+                tab[j] = i;
+                j++;
+            }
+        }
+        return tab;
+    }
 
-        int[] tab, tab_line, tab_column, tab_square;
-        for(int i=0; i<Grid.NB_NUM; i++){
-            tab = grille.numToPosForSubGrid(i);
-  
-            tab_line=nb_Num_Annotations(grille.getLine(i));
-            tab_column=nb_Num_Annotations(grille.getColumn(i));
-            tab_square=nb_Num_Annotations(grille.getFlatSubGrid(tab[0], tab[1]));   
+    private boolean detectTripleCarre(int num,Grid grille) {
 
-            
+        //tableau de pairs
+        int[][] tabTriple = new int[9][3];
+        int cptTriple = 0;
+
+        int cptAnnotation;
+        
+        // On récupère les cellules de la région
+        int[] indiceCell = grille.numToPosForSubGrid(num);
+        Cell mat[][] = grille.getSubGrid(indiceCell[0], indiceCell[1]);
+
+
+        //tableau de booléen pour les annotations
+        boolean[] tabBool = new boolean[9];
+
+        // On récupère les pairs de la région
+        for (int i =0; i<3 ;i++){
+            for (int j = 0; j<3 ;j++){
+                cptAnnotation = 0;
+             //   if (mat[i][j].getAnnotationsBool().length == 2){
+
+                    for (int k = 0; k<9;k++){
+                       // System.out.println("Annotation de la case  "+ i +" "+j+ " et de annotation : "+ k+" :"+ mat[i][j].getAnnotationsBool()[k]);
+                        if(mat[i][j].getAnnotationsBool()[k]){
+                            cptAnnotation++;
+                        }
+                    }
+                    if (cptAnnotation == 3) {
+                        tabBool = mat[i][j].getAnnotationsBool();
+                        tabTriple[cptTriple] = donnerTriple(tabBool);
+                        cptTriple++;                      
+                        
+                        }
+                    }
+            }
+        
+        //  System.out.println("verif tabTriple");
+        for(int i = 0; i<9;i++){
+            int[] temp = tabTriple[i];
+            //affichage du tableau temporaire
+         //   System.out.println("tabTemp["+i+"] : "+temp[0]+" "+temp[1]+" "+temp[2]);
+        //  System.out.println("tabTriple["+i+"] : "+tabTriple[i][0]+" "+tabTriple[i][1] +" "+tabTriple[i][2]);
+            for(int j = 0; j<9;j++){
+                //if de la violence (désolée)
+                if(temp[0] == tabTriple[j][0]  && temp[1] == tabTriple[j][1] && temp[2] == tabTriple[j][2] && temp[0] !=0 && i!=j){
+                    System.out.println("true de région");
+
+                    return true;
+                }
+            }
         }
         return false;
     }
 
-    private int[] nb_Num_Annotations(Cell[] tab){
-        int[] compteur;
-        compteur=new int[Grid.NB_NUM];
-        
-        for(int i=0;i<Grid.NB_NUM;i++){
-            if(tab[i].getAnnotations()[i]!=false){
-                compteur[i]++;
+    // traitement 0 : on récupère les annotations des lignes et colonnes
+    // traitement 1 : retitré les annotations qui plus que 3 chiffres
+    // traitement 2 : mettre dans un tableau les triplets 
+    // traitement 3 : verifier si les autres tuples du tableau sont utiliser dans le triplets (tous les chiffres du tuples )
+    // traitement 4 : si oui on retourne true sinon false
+    private boolean detectTriple(int num,Grid grille){
+
+        //tableau de pairs
+        int [][] tabTriple = new int[9][3];
+        int cptTriple = 0;
+
+        int cptAnnotation;
+
+
+        // On récupère les cellules dans les lignes et colonnes
+        Cell line[] = grille.getLine(num);
+        Cell col[] = grille.getColumn(num);
+
+        //tableau de booléen pour les annotations
+        boolean[] tabBool = new boolean[9];
+
+        // On récupère les pairs dans les lignes
+        for (int i = 0; i<9;i++){
+
+            cptAnnotation = 0;
+          
+            //vétification des annotations dans les lignes
+            for (int k = 0; k<9;k++){
+                if(line[i].getAnnotationsBool()[k]){
+                    cptAnnotation++;
+                }
+            }
+            if (cptAnnotation == 3 || cptAnnotation ==2 ) {
+                tabBool = line[i].getAnnotationsBool();
+                tabTriple[cptTriple] = donnerTriple(tabBool);
+                cptTriple++;                      
+                
+            }
+
+
+            cptAnnotation = 0;
+            //vérfication des annotations dans les colonnes
+            for (int k = 0; k<9;k++){
+                if(col[i].getAnnotationsBool()[k]){
+                    cptAnnotation++;
+                }
+            }
+            if (cptAnnotation == 3 || cptAnnotation == 2) {
+                tabBool = col[i].getAnnotationsBool();
+                tabTriple[cptTriple] = donnerTriple(tabBool);
+                cptTriple++;                      
+                
+            }
+                    
+            
+        }
+        // On vérifie si on a trouvé un triplet
+        for(int i = 0; i<9;i++){
+            int[] temp = tabTriple[i];
+            System.out.println("tabTemp["+i+"] : "+temp[0]+" "+temp[1]+" "+temp[2]);
+            System.out.println("tabTriple["+i+"] : "+tabTriple[i][0]+" "+tabTriple[i][1] +" " +tabTriple[i][2]);
+            for(int j = 0; j<9;j++){
+                //if de la violence (désolée)
+                if(temp[0] == tabTriple[j][0]  && temp[1] == tabTriple[j][1] && temp[2] == tabTriple[j][2] && temp[0] !=0 && i!=j){
+                    System.out.println("true de ligne et colonne");
+                    return true;
+                }
             }
         }
-
-        return compteur;
+        return false;
     }
+
+    @Override
+    public boolean detect(Grid grille) {
+        System.out.println("detect");
+        for(int i = 0; i<9;i++){
+            if(detectTripleCarre(i,grille) || detectTriple(i,grille)){
+                return true;
+            }
+        }
+        return false;
+    
+    }
+        
+
 
     @Override
     public void applique(Grid grille) {
@@ -47,21 +171,54 @@ public class NakedTriples implements InterfaceTech {
     public static void main(String[] args) {
         // Exemple de grille où un triplet nu peut être trouvé
         int[] data = {
-            2,5,0,4,7,3,6,1,8,
-            6,1,3,8,2,9,4,7,5,
-            7,8,4,5,6,1,9,2,3,
-            9,3,1,2,5,7,8,6,4,
-            5,4,7,6,8,3,1,9,2,
-            8,6,2,1,9,4,7,5,3,
-            1,7,8,3,4,2,5,9,6,
-            3,9,5,7,1,6,2,4,0,
-            4,2,6,9,0,5,3,8,7
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,9,3,0,0,0,0,
+            0,0,0,5,4,0,0,0,0,
+            0,0,0,0,8,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,4,0,0,0,0,0
         };
         Grid grille = new Grid(data);
         System.out.println(grille.toString());
 
-        NakedTriples nakedTriples = new NakedTriples();
-        System.out.println(nakedTriples.detect(grille));
+  
+
+        //annotations pour les colonnes
+        grille.getCell(0, 3).addAnnotation(2);
+        grille.getCell(0, 3).addAnnotation(6);
+        grille.getCell(0, 3).addAnnotation(7);
+
+        grille.getCell(1, 3).addAnnotation(1);
+        grille.getCell(1, 3).addAnnotation(2);
+        grille.getCell(1, 3).addAnnotation(3);
+        grille.getCell(1, 3).addAnnotation(6);
+        grille.getCell(1, 3).addAnnotation(7);
+        grille.getCell(1, 3).addAnnotation(8);
+
+        grille.getCell(2, 3).addAnnotation(1);
+        grille.getCell(2, 3).addAnnotation(2);
+        grille.getCell(2, 3).addAnnotation(3);
+        grille.getCell(2, 3).addAnnotation(7);
+        grille.getCell(2, 3).addAnnotation(8);
+
+        grille.getCell(5, 3).addAnnotation(2);
+        grille.getCell(5, 3).addAnnotation(6); 
+        grille.getCell(5, 3).addAnnotation(7);
+
+        grille.getCell(6, 3).addAnnotation(1);
+        grille.getCell(6, 3).addAnnotation(2);
+        grille.getCell(6, 3).addAnnotation(6);
+        grille.getCell(6, 3).addAnnotation(7);
+
+        grille.getCell(7, 3).addAnnotation(2);
+        grille.getCell(7, 3).addAnnotation(6);
+        grille.getCell(7, 3).addAnnotation(7);
+
+        NakedTriples nakedTriple = new NakedTriples();
+        System.out.println(nakedTriple.detect(grille));
 
         // Commande pour exécuter
         // mvn compile exec:java -Dexec.mainClass="com.grp6.NakedTriples"

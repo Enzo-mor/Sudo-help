@@ -1,7 +1,6 @@
 package com.grp6;
 
-import java.util.List;
-
+import java.util.ArrayList;
 /**
  * Technique : Singleton caché (Hidden Single)
  * Objectif : Trouver une case où un chiffre ne peut apparaître qu’à un seul endroit dans un bloc (ligne, colonne ou carré).
@@ -38,7 +37,7 @@ public class HiddenSingle implements InterfaceTech {
         
         for(int i=0;i<Grid.NB_NUM;i++){
             for(int j=0;j<Grid.NB_NUM;j++){
-                if(tab[i].getAnnotations()[j]==true){
+                if(tab[i].getAnnotationsBool()[j]==true){
                     compteur[j]++;
                 }
             }
@@ -59,7 +58,39 @@ public class HiddenSingle implements InterfaceTech {
     @Override
     public void applique(Grid grille) {
         // TODO: Implémenter l'application de la technique du singleton caché
+        ArrayList<Commande> commandes = new ArrayList<>();
+
+        
+        int[] tab;
+        int[] tab_line, tab_column, tab_square;
+        for(int i=0; i<Grid.NB_NUM; i++){
+            tab = grille.numToPosForSubGrid(i);
+  
+            tab_line=nb_Num_Annotations(grille.getLine(i));
+            tab_column=nb_Num_Annotations(grille.getColumn(i));
+            tab_square=nb_Num_Annotations(grille.getFlatSubGrid(tab[0], tab[1]));   
+            
+            for(int j=0; j<Grid.NB_NUM; j++){
+                System.out.println(j);
+                if(tab_line[j]==1 ){
+                    commandes.add(new CommandeApplique(grille.getLine(i)[j], j));
+                    System.out.println("ligne"+grille.getLine(i)[j]);
+                }
+                if(tab_column[j]==1 ){
+                    commandes.add(new CommandeApplique(grille.getColumn(i)[j], j));
+                    System.out.println("colonne"+grille.getColumn(i)[j]);
+                }
+                if (tab_square[j]==1){
+                    commandes.add(new CommandeApplique(grille.getFlatSubGrid(tab[0], tab[1])[j], j));
+                    System.out.println("carre"+grille.getFlatSubGrid(tab[0], tab[1])[j]);
+                }
+            }
+            
+        }
+        commandes.forEach(c -> c.executer());
+        
     }
+
 
     public static void main(String[] args) {
         // Exemple de grille où un singleton caché peut être trouvé
@@ -94,16 +125,42 @@ public class HiddenSingle implements InterfaceTech {
         addAnnotations(grille.getCell(5, 4), new int[]{3, 4, 7, 8});
 
       
-        for(int i=0; i<9; i++){
-            System.out.print(grille.getCell(6,0).getAnnotations()[i] + " ");
-        }
         System.out.println();
-        
+
+        for(int i=0; i<9;i++){
+            System.out.println(grille.getCell(6, 2).getAnnotationsBool()[i]);
+        }
 
         HiddenSingle hiddenSingle = new HiddenSingle();
         System.out.println(hiddenSingle.detect(grille));
+        hiddenSingle.applique(grille);
+
+        for(int i=0; i<9;i++){
+            System.out.println(grille.getCell(6, 2).getAnnotationsBool()[i]);
+        }
 
         // Commande pour exécuter
         // mvn compile exec:java -Dexec.mainClass="com.grp6.HiddenSingle"
+    }
+
+    private class CommandeApplique extends Commande{
+        private Cell cellule;
+        private int val;
+
+        public CommandeApplique(Cell cellule, int val) {
+            this.cellule = cellule;
+            this.val = val;
+        }
+
+        @Override
+        public void executer() {
+            for(int i =0 ; i< Grid.NB_NUM ;i++){
+                if(i!=this.val){
+                    cellule.removeAnnotation(i);
+                }
+            }
+        }
+
+
     }
 }

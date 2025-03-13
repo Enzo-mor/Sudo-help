@@ -1,5 +1,16 @@
 package com.grp6;
 
+import java.util.List;
+
+/**
+ * Classe modelisant une cellule flex, c'est-a-dire qu'elle peut être
+ * modifié par le joueur.
+ * 
+ * Cette classe hérite de 'FixCell'
+ * @author Kilian POUSSE
+ * @version 1.2
+ */
+
 /**
  * Classe modelisant une cellule flex, c'est-a-dire qu'elle peut être
  * modifié par le joueur.
@@ -39,6 +50,18 @@ public class FlexCell extends FixCell {
         }
     }
 
+    public void setRedo (int number){}
+
+    /**
+     * methode permettant de vider les annotations d'une cellule
+     * 
+     */
+    protected void trashAnnotation() {
+        for(int i = 0; i < Grid.NB_NUM; i++) {
+            this.annotations[i] = false;
+        }
+    }
+
     /**
      * Ajouter un annotation à la cellule
      * @param number Chiffre de l'annotation à ajouter [int]
@@ -71,10 +94,25 @@ public class FlexCell extends FixCell {
 
     /** 
      * Récupérer les annotations de la cellule
+     * @return Liste des annotations 
+     */
+    @Override
+    public List<Integer> getAnnotations() {
+        List<Integer> res = super.getAnnotations();
+        for(int i=0; i<annotations.length; i++) {
+            if(annotations[i])
+                res.add(i+1);
+        }
+
+        return res;
+    }
+
+    /** 
+     * Récupérer les annotations de la cellule
      * @return tableau des présences des annotations [booleen[]]
      */
     @Override
-    public boolean[] getAnnotations() {
+    public boolean[] getAnnotationsBool() {
         return this.annotations;
     }
 
@@ -116,5 +154,28 @@ public class FlexCell extends FixCell {
         
         }  
         return false;
+    }
+
+    /**
+     * Savoir si une cellule est modifiable
+     * @return Vrai si la cellule peut etre modifiée
+     */
+    @Override
+    public boolean isEditable() {
+        return true;
+    }
+
+     /**
+     * Clone une cellule flexible
+     * @return Une nouvelle instance de Cell (clone de la cellule)
+     */
+    @Override
+    public Cell clone() {
+        // Clone profond : création d'une nouvelle instance de FlexCell,
+        // et copie des annotations.
+        FlexCell clonedCell = new FlexCell(this.position[0]*9+this.position[1]);
+        clonedCell.number = this.number;
+        clonedCell.annotations = this.annotations.clone(); // Clonage profond du tableau d'annotations.
+        return clonedCell;
     }
 }

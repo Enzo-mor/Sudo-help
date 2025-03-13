@@ -1,8 +1,8 @@
 package com.grp6;
-import java.util.*;
-import java.util.stream.IntStream;
-
+import java.util.ArrayList;
+import java.util.List;
 import static java.util.stream.Collectors.toList;
+import java.util.stream.IntStream;
 
 public class LastPossible implements InterfaceTech{
     private static int SOLO = 1;
@@ -19,7 +19,7 @@ public class LastPossible implements InterfaceTech{
             //On récupère toute les annotations de chaque cellule
             List<boolean[]> annoteSolo =
                 cellules.parallelStream()
-                    .map(Cell::getAnnotations)
+                    .map(Cell::getAnnotationsBool)
                     .collect(toList());
             
             //On compte le nombre d'occurrences qu'une annotation est présente dans le subGrid
