@@ -156,7 +156,6 @@ public class FlexCell extends FixCell {
         return false;
     }
 
-<<<<<<< HEAD
     /**
      * Savoir si une cellule est modifiable
      * @return Vrai si la cellule peut etre modifiée
@@ -179,10 +178,4 @@ public class FlexCell extends FixCell {
         clonedCell.annotations = this.annotations.clone(); // Clonage profond du tableau d'annotations.
         return clonedCell;
     }
-=======
-    public boolean isEditable(){
-        return true;
-    }
-
->>>>>>> c987820fa9f76892ad05a039d08ef6ec1f73ceae
 }
