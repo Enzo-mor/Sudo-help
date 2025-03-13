@@ -10,8 +10,8 @@ package com.grp6;
  */
 public class NakedTriples implements InterfaceTech {
 
-    private int[] donnerTriple(boolean[] tabBool){
-        int[] tab = new int[3];
+    private int[] remplirTableau(boolean[] tabBool){
+        int[] tab = new int[9];
         int j = 0;
         for(int i = 0; i<9;i++){
             if(tabBool[i]){
@@ -85,8 +85,9 @@ public class NakedTriples implements InterfaceTech {
     private boolean detectTriple(int num,Grid grille){
 
         //tableau de pairs
-        int [][] tabTriple = new int[9][3];
-        int cptTriple = 0;
+        int [][] tabTripleCol = new int[9][3];
+        int [][] tabTripleLine = new int[9][3];
+        int indiceTab = 0;
 
         int cptAnnotation;
 
@@ -105,31 +106,20 @@ public class NakedTriples implements InterfaceTech {
           
             //vétification des annotations dans les lignes
             for (int k = 0; k<9;k++){
-                if(line[i].getAnnotationsBool()[k]){
-                    cptAnnotation++;
-                }
-            }
-            if (cptAnnotation == 3 || cptAnnotation ==2 ) {
-                tabBool = line[i].getAnnotationsBool();
-                tabTriple[cptTriple] = donnerTriple(tabBool);
-                cptTriple++;                      
-                
-            }
-
-
-            cptAnnotation = 0;
-            //vérfication des annotations dans les colonnes
-            for (int k = 0; k<9;k++){
                 if(col[i].getAnnotationsBool()[k]){
-                    cptAnnotation++;
+                    tabBool = line[i].getAnnotationsBool();
+                    tabTripleCol[indiceTab] = remplirTableau(tabBool);
+                    indiceTab++;
+                    
+                }
+                if(line[i].getAnnotationsBool()[k]){
+                    tabBool = line[i].getAnnotationsBool();
+                    tabTripleLine[indiceTab] = remplirTableau(tabBool);
+                    indiceTab++;
                 }
             }
-            if (cptAnnotation == 3 || cptAnnotation == 2) {
-                tabBool = col[i].getAnnotationsBool();
-                tabTriple[cptTriple] = donnerTriple(tabBool);
-                cptTriple++;                      
-                
-            }
+          
+            
                     
             
         }
