@@ -81,18 +81,18 @@ public class ProfileSelection {
         Button addProfileButton = new ProfileButton("Ajouter un profil");
 
         addProfileButton.setOnAction(e -> {
-            // Créer une nouvelle petite fenêtre pop-up (fenêtre modale)
+            // Creer une nouvelle petite fenetre pop-up (fenetre modale)
             Stage popupStage = new Stage();
-            popupStage.initModality(Modality.APPLICATION_MODAL); // Bloquer les interactions avec la fenêtre principale
-            popupStage.setTitle("Créer un profil"); // Définir le titre de la fenêtre
+            popupStage.initModality(Modality.APPLICATION_MODAL); // Bloquer les interactions avec la fenetre principale
+            popupStage.setTitle("Créer un profil"); // Definir le titre de la fenetre
 
             // Composants de l'interface utilisateur
-            Label label = new Label("Entrez le nom du profil :"); // Libellé au-dessus du champ de texte
+            Label label = new Label("Entrez le nom du profil :"); // Libelle au-dessus du champ de texte
             TextField nameField = new TextField(); // Champ de texte pour la saisie du nom du profil
-            Button confirmButton = new Button("Créer"); // Bouton pour confirmer la création du profil
-            // Gérer l'événement lors du clic sur le bouton "Créer"
+            Button confirmButton = new Button("Créer"); // Bouton pour confirmer la creation du profil
+            // Gerer l'evenement lors du clic sur le bouton "Creer"
             confirmButton.setOnAction(event -> {
-                String name = nameField.getText().trim(); // Récupérer le texte saisi et supprimer les espaces inutiles
+                String name = nameField.getText().trim(); // Recuperer le texte saisi et supprimer les espaces inutiles
                 if (!name.isEmpty()) {
                     try{
 
@@ -109,25 +109,25 @@ public class ProfileSelection {
                                 System.out.println("Impossible d'accéder à la BDD");
                             }
                             System.out.println("Nouveau profil ajouté : " + name); // Afficher un message dans la console
-                            updateProfiles(profileContainer, leftArrow, rightArrow, stage); // Mettre à jour l'affichage des profils
+                            updateProfiles(profileContainer, leftArrow, rightArrow, stage); // Mettre a jour l'affichage des profils
                         }
                     }
                     catch(SQLException er){
                         System.out.println("Impossible d'accéder à la BDD");
                     }
-                    popupStage.close(); // Fermer la fenêtre pop-up après l'ajout du profil
+                    popupStage.close(); // Fermer la fenetre pop-up apres l'ajout du profil
                 }
             });
 
-            // Créer une mise en page verticale avec un espacement entre les éléments
+            // Creer une mise en page verticale avec un espacement entre les elements
             VBox popupLayout = new VBox(10, label, nameField, confirmButton);
             popupLayout.setPadding(new Insets(10)); // Ajouter une marge pour une meilleure apparence
 
-            // Créer et appliquer la scène à la fenêtre pop-up
+            // Creer et appliquer la scene a la fenetre pop-up
             Scene scene = new Scene(popupLayout, 300, 150);
             popupStage.setScene(scene);
 
-            // Afficher la fenêtre pop-up et attendre l'interaction de l'utilisateur
+            // Afficher la fenetre pop-up et attendre l'interaction de l'utilisateur
             popupStage.showAndWait();
         });
 

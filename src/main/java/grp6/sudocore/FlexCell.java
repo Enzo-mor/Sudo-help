@@ -109,7 +109,7 @@ public final class FlexCell extends FixCell {
     @Override
     public Integer getLastAnnotation() {
         if (annotationsList.isEmpty()) {
-            return -1;
+            return 0;
         }
         return annotationsList.get(annotationsList.size()-1);
     }

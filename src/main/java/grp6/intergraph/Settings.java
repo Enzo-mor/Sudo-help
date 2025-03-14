@@ -30,26 +30,26 @@ class Settings extends Stage {
         // Ajouter un contour visible au champ de texte pour le rendre cliquable
         usernameField.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-background-color: lightgray; -fx-border-color: darkgray; -fx-border-width: 2px;");
 
-        // Image d'icône d'édition
+        // Image d'icone d'edition
         ImageView editIcon = new ImageView(new Image(getClass().getResourceAsStream("/pencil.png")));
         editIcon.setFitWidth(16);
         editIcon.setFitHeight(16);
 
-        // Placer le TextField et l'icône d'édition dans une HBox
+        // Placer le TextField et l'icone d'edition dans une HBox
         HBox usernameBox = new HBox(10, usernameField, editIcon);
         usernameBox.setStyle("-fx-font-size: 12px; -fx-font-weight: bold;");
 
-        // --- Gestion de l'édition du pseudo ---
+        // --- Gestion de l'edition du pseudo ---
 
-        // Vérification du texte du TextField lorsque l'utilisateur appuie sur "Entrée"
+        // Verification du texte du TextField lorsque l'utilisateur appuie sur "Entree"
         usernameField.setOnAction(e -> {
             String newName = usernameField.getText();
             if (!newName.isEmpty() && DBManager.renameProfile(MainMenu.getProfile(), newName)) {
-                MainMenu.getProfile().setPseudo(newName); // Met à jour le nom dans le programme
+                MainMenu.getProfile().setPseudo(newName); // Met a jour le nom dans le programme
             }
         });
 
-        // --- Paramètres ---
+        // --- Parametres ---
         CheckBox helpNotifications = new CheckBox("Notifications d'aide");
         CheckBox fullscreenMode = new CheckBox("Mode plein écran");
         CheckBox gridHighlight = new CheckBox("Surbrillance de la grille");
@@ -62,7 +62,7 @@ class Settings extends Stage {
         VBox settingsLayout = new VBox(10, usernameBox, helpNotifications, fullscreenMode, gridHighlight, numberHighlight, changeProfileButton, deleteProfileButton);
         settingsLayout.setStyle("-fx-padding: 20px;");
 
-        // --- Gestion Boutons Paramètres ---
+        // --- Gestion Boutons Parametres ---
         changeProfileButton.setOnAction(e -> {
             ProfileSelection.getInstance().showProfileSelection(stage);
             this.close();
@@ -73,7 +73,7 @@ class Settings extends Stage {
                 String profileName = MainMenu.getProfileName();
                 DBManager.deleteProfile(profileName);
 
-                // Affichage d'une fenêtre temporaire
+                // Affichage d'une fenetre temporaire
                 Stage popupStage = new Stage();
                 popupStage.initModality(Modality.APPLICATION_MODAL);
                 popupStage.setTitle("Suppression");
@@ -88,13 +88,13 @@ class Settings extends Stage {
                 Scene scene = new Scene(layout, 300, 100);
                 popupStage.setScene(scene);
 
-                // Centrer par rapport à la fenêtre principale
+                // Centrer par rapport a la fenetre principale
                 popupStage.setX(deleteProfileButton.getScene().getWindow().getX() + 200);
                 popupStage.setY(deleteProfileButton.getScene().getWindow().getY() + 100);
 
                 popupStage.show();
 
-                // Fermer automatiquement après 2 secondes
+                // Fermer automatiquement apres 2 secondes
                 Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), evt -> popupStage.close()));
                 timeline.setCycleCount(1);
                 timeline.play();
@@ -127,7 +127,7 @@ class Settings extends Stage {
         rotateAnimation.setCycleCount(1);
     }
 
-    // --- Fonction pour gérer l'ouverture/fermeture des paramètres ---
+    // --- Fonction pour gerer l'ouverture/fermeture des parametres ---
     public void toggleSettingsWindow() {
         if (settingsMode) {
             this.close(); // Ferme cette instance

@@ -161,19 +161,23 @@ public final class NumberCellAction extends ActionCell  {
         
     }
 
+    @Override
     public int getOldNumber(){
         return old_number;
     }
 
+    @Override
     public int getRedoNumber(){
         return redo_number;
     }
 
-    public void setRedo (int number){
-        this.redo_number=number;
-    }
-
+    @Override
     public int getNumber(){
         return number;
+    }
+
+    @Override
+    public void setNumber(int nb){
+        this.number=nb;
     }
 }

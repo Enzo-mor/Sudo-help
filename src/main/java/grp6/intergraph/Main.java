@@ -13,11 +13,11 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         try {
-            // Initialiser la base de données
+            // Initialiser la base de donnees
             DBManager.init();
             launch(args);
         } catch (Exception e) {
-            // Gestion des execptions lié à l'initilisation
+            // Gestion des execptions lie a l'initilisation
             System.err.println("Erreur : " + e.getMessage());
         }
     }

@@ -77,6 +77,19 @@ public  abstract class Action {
         return -1;
     }
      
+    public int getOldAnnotation() {
+        return -1;
+    }
+    
+    public int getRedoAnnotation() {
+        return -1;
+    }
+    
+    public int getAnnotation() {
+        return -1;
+    }
+    
+    public void setNumber(int nb) {}
     
 }
  

@@ -491,6 +491,8 @@ public final class Game {
                 histoActions += "Annulation de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
                 currentIndex--;
 
+                System.out.println("Undo : \n" + histoActions + "\n\n");
+
                 return;
             }
     
@@ -537,6 +539,8 @@ public final class Game {
                 currentIndex++;
                 actions.get(currentIndex).doAction();
                 histoActions += "Refaire de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
+
+                System.out.println("Redo : \n" + histoActions + "\n\n");
 
                 return;
             }
@@ -763,7 +767,6 @@ public final class Game {
     }
 
     public Action getLastAction() {
-        System.out.println("Current : " + currentIndex);
         if(currentIndex >= 0)
             return actions.get(currentIndex);
         return null;

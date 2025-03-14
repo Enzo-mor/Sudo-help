@@ -1,7 +1,8 @@
 package grp6.intergraph;
 import grp6.sudocore.*;
-import javafx.application.Platform;
+
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -10,6 +11,8 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.util.converter.IntegerStringConverter;
 
 
 public class SudokuGrid {
@@ -224,30 +227,39 @@ public class SudokuGrid {
     private void setupCellInteraction(Button cellButton, final int r, final int c, Label mainNumber, Text annotationText) {
         cellButton.setOnAction(e -> {
             String selectedStr = numberSelection.getSelectedNumber();
+
             Cell currentCell = gridSudoku.getCell(r, c);
-            Integer selectedInteger = Integer.valueOf(selectedStr);
-    
+
             if (!currentCell.isEditable()) {
                 System.out.println("Cette cellule est fixe et ne peut pas être modifiée.");
                 return;
             }
     
-            if (toolsPanel.getEraseMode()) {
-                resetCellDisplay(cellButton, mainNumber, annotationText);
-            } else if (toolsPanel.getAnnotationMode() && selectedStr != null) {
-                if (mainNumber.getText().isEmpty()) {
-                    if (!annotations[r][c].contains(selectedStr)) {
-                        addAnnotationToCell(r, c, selectedStr);
-                        actualGame.addAnnotation(r, c, selectedInteger);
-                    } else {
-                        removeAnnotationFromCell(r, c, selectedStr);
-                        actualGame.removeAnnotation(r, c, selectedInteger);
+            if (selectedStr != null) {
+                Integer selectedInteger = Integer.valueOf(selectedStr);
+                if(toolsPanel.getAnnotationMode()){
+                    if (mainNumber.getText().isEmpty()) {
+                        if (!annotations[r][c].contains(selectedStr)) {
+                            addAnnotationToCell(r, c, selectedStr);
+                            actualGame.addAnnotation(r, c, selectedInteger);
+                        } else {
+                            removeAnnotationFromCell(r, c, selectedStr);
+                            actualGame.removeAnnotation(r, c, selectedInteger);
+                        }
                     }
                 }
-            } else if (selectedStr != null) {
-                setNumberDisplay(cellButton, selectedStr, mainNumber, annotationText);
-                //TODO: verifier si le nombre que l'on veut mettre n;est pas deja dans la cell
-                actualGame.addNumber(r, c, selectedInteger);
+                else{
+                    //TODO: verifier si le nombre que l'on veut mettre n;est pas deja dans la cell
+                    if (mainNumber.getText().isEmpty() || !Integer.valueOf(mainNumber.getText()).equals(selectedInteger)) {
+                        actualGame.addNumber(r, c, selectedInteger);
+                    }
+                    
+                    setNumberDisplay(cellButton, selectedStr, mainNumber, annotationText);
+                }
+            }
+
+            if (toolsPanel.getEraseMode()) {
+                resetCellDisplay(cellButton, mainNumber, annotationText);
             }
         });
     }
@@ -263,8 +275,7 @@ public class SudokuGrid {
                 Label mainNumber = new Label();
                 Text annotationText = new Text();
 
-                if (cell instanceof FixCell) {
-                    FixCell fixCell = (FixCell) cell;
+                if (cell instanceof FixCell fixCell) {
                     if (fixCell.getNumber() == 0) {
                         mainNumber.setText("");
                     } else {
@@ -273,7 +284,7 @@ public class SudokuGrid {
                     }                    
                     annotationText.setText(""); 
                     cellButton.setGraphic(mainNumber);
-                } else if (cell instanceof FlexCell) {
+                } else {
                     setAnnotationDisplay(cellButton, row, col, annotationText);
                 }
             }
@@ -281,31 +292,27 @@ public class SudokuGrid {
     }
 
     private void resetGrid() {
+        clear();
+        setGrid();
+    }
+
+    /**
+     * Efface la grille de Sudoku en réinitialisant l'affichage et les annotations de chaque cellule.
+     * Parcourt chaque cellule de la grille 9x9, vide les annotations de chaque cellule,
+     * et réinitialise l'affichage de la cellule à son état par défaut.
+     */
+    private void clear() {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
-                Cell cellData = gridSudoku.getCell(row, col);
-    
-                Button cellButton = cells[row][col];
-                cellButton.setGraphic(null);
-    
-                Label mainNumber = new Label();
-                mainNumber.setFont(new Font(18));
-    
-                Text annotationText = new Text();
-                annotationText.setFont(new Font(10));
-    
-                annotations[row][col].clear();
-    
-                if (cellData instanceof FixCell) {
-                    int number = ((FixCell) cellData).getNumber();
-                    mainNumber.setText(number == 0 ? "" : String.valueOf(number));
-                    cellButton.setGraphic(mainNumber);
-                } else if (cellData instanceof FlexCell) {
-                    cellButton.setGraphic(mainNumber);
-                }
+                Button cellButton = cells[row][col]; // Récupère le bouton de la cellule actuelle
+                Node graphic = cellButton.getGraphic(); // Récupère le graphique associé au bouton
+                Label mainNumber = (graphic instanceof Label) ? (Label) graphic : new Label(); // Vérifie si le graphique est un Label, sinon crée un nouveau Label
+
+                annotations[row][col].clear(); // Vide les annotations de la cellule actuelle
+                resetCellDisplay(cellButton, mainNumber, null); // Réinitialise l'affichage de la cellule
             }
         }
-    }
+    }    
 
     private void resetButton() {
         numberSelection.resetSelectedNumber();

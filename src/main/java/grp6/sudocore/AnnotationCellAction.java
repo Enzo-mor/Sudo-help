@@ -33,8 +33,6 @@ public  class AnnotationCellAction extends ActionCell  {
      * represente l'ancienne valeur de la cellule
      */
     private int old_annotation;
-   /**
-    * 
     /**
      * represente la valeur de la cellule pour redo
      */
@@ -56,12 +54,15 @@ public  class AnnotationCellAction extends ActionCell  {
 
     @Override
     protected void doAction() {
-        this.game.grid.getCell(x, y).addAnnotation(redo_annotation);
+        game.grid.getCell(x, y).addAnnotation(redo_annotation);
     }
 
     @Override
     protected void undoAction() {
-        this.game.grid.getCell(x, y).removeAnnotation(annotation);
+        if(game.grid.getCell(x, y).getAnnotations().contains(annotation))
+            game.grid.getCell(x, y).removeAnnotation(annotation);
+        else
+            doAction();
     }
     
     @Override
@@ -127,7 +128,7 @@ public  class AnnotationCellAction extends ActionCell  {
      public   AnnotationCellActionDeserialiser(Game game){
         this.game=game;
      }
-    public AnnotationCellAction  deserialize(JsonElement jsonElement, Type vartype, JsonDeserializationContext context) throws JsonParseException{
+    public AnnotationCellAction deserialize(JsonElement jsonElement, Type vartype, JsonDeserializationContext context) throws JsonParseException{
         JsonObject jsonObject = jsonElement.getAsJsonObject();
         if (!jsonObject.has("x") || !jsonObject.has("y") || !jsonObject.has("number")|| !jsonObject.has("old_number")|| !jsonObject.has("type")) {
             throw new JsonParseException("Le JSON ne contient pas tous les champs requis : 'x', 'y', 'number','type'");
@@ -143,16 +144,19 @@ public  class AnnotationCellAction extends ActionCell  {
 
     }
 
+    @Override
     public int getOldAnnotation(){
         return old_annotation;
     }
 
+    @Override
     public int getRedoAnnotation(){
         return redo_annotation;
     }
-
-    public void setRedo (int annotation){
-        this.redo_annotation = annotation;
-    }
     
+    @Override
+    public int getAnnotation(){
+        return annotation;
+    }
+
 }

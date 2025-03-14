@@ -25,7 +25,7 @@ public interface Cell {
     public Integer getLastAnnotation();
 
      /**
-     * Savoir si une celluce est vide ou non
+     * Savoir si une cellule est vide ou non
      * @return 'true' si la cellule est vide, sinon 'false' [booleen]
      */
 

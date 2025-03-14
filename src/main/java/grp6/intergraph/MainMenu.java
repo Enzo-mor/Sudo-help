@@ -42,7 +42,7 @@ public class MainMenu {
 
         layout.getChildren().addAll(welcomeLabel, startGameButton, classementButton, exitButton);
 
-        // --- Bouton "gear" en bas à droite ---
+        // --- Bouton "gear" en bas a droite ---
         Button settingsButton = new Button();
         ImageView gearIcon = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/gear.png")));
         gearIcon.setFitWidth(30);
@@ -58,7 +58,7 @@ public class MainMenu {
         settingsWindow = new Settings(stage, gearIcon);
         settingsButton.setOnAction(e -> settingsWindow.toggleSettingsWindow());
 
-        // Conteneur pour aligner le bouton en bas à droite
+        // Conteneur pour aligner le bouton en bas a droite
         HBox bottomRightContainer = new HBox(settingsButton);
         bottomRightContainer.setAlignment(Pos.BOTTOM_RIGHT);
         bottomRightContainer.setStyle("-fx-padding: 10px;");
@@ -68,9 +68,9 @@ public class MainMenu {
         root.setCenter(layout); // Place le menu principal au centre
         root.setBottom(bottomRightContainer); // Place le bouton settings en bas
 
-        // --- Fermer toutes les fenêtres avec la croix ---
+        // --- Fermer toutes les fenetres avec la croix ---
         stage.setOnCloseRequest(e -> {
-            Platform.exit(); // Ferme toutes les fenêtres JavaFX
+            Platform.exit(); // Ferme toutes les fenetres JavaFX
             System.exit(0);  // Termine l'application proprement
         });
 

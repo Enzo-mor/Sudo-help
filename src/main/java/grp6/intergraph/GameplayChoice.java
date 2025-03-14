@@ -23,7 +23,7 @@ public class GameplayChoice {
         gameMode.setAlignment(Pos.CENTER);
 
         Button learningMode = new ProfileButton("Mode Apprentissage");
-        learningMode.setOnAction(e -> System.out.println("Paramètres ouverts"));
+        learningMode.setOnAction(e -> System.out.println("Parametres ouverts"));
 
         Button freeMode = new ProfileButton("Mode Libre");
         freeMode.setOnAction(e -> SudokuMenu.showSudokuLibrary(stage));
