@@ -1,7 +1,6 @@
 package com.grp6;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,87 +23,70 @@ public class NakedTriples implements InterfaceTech {
         }
         return tab;
     }
-
-    private int[] remplirTableau(boolean[] tabBool){
-        int[] tab = new int[9];
-        int j = 0;
-        for(int i = 0; i<9;i++){
-            if(tabBool[i]){
-                tab[j] = i+1;
-                j++;
-            }
-        }
-        return tab;
-    }
-
-    private boolean moinQueTrois(int[] tab){
-        int cpt = 0;
-        for(int i = 0; i<9;i++){
-            if(tab[i] != 0){
-                cpt++;
-            }
-        }
-        if(cpt < 3){
-            return true;
-        }
-        return false;
-
-       
-    }
+  
 
     private boolean detectTripleCarre(int num,Grid grille) {
 
-       /* //tableau de pairs
-        int[][] tabTriple = new int[9][3];
-        int cptTriple = 0;
-
-        int cptAnnotation;
-        
+      
         // On récupère les cellules de la région
         int[] indiceCell = grille.numToPosForSubGrid(num);
         Cell mat[][] = grille.getSubGrid(indiceCell[0], indiceCell[1]);
+        ArrayList<List<Integer>> tabCarre = new ArrayList<List<Integer>>();
+        ArrayList<List<Integer>> tabTriple = new ArrayList<List<Integer>>();
 
 
-        //tableau de booléen pour les annotations
-        boolean[] tabBool = new boolean[9];
 
-        // On récupère les pairs de la région
+
+        // On récupère les annotations de la région
         for (int i =0; i<3 ;i++){
             for (int j = 0; j<3 ;j++){
-                cptAnnotation = 0;
-             //   if (mat[i][j].getAnnotationsBool().length == 2){
-
-                    for (int k = 0; k<9;k++){
-                       // System.out.println("Annotation de la case  "+ i +" "+j+ " et de annotation : "+ k+" :"+ mat[i][j].getAnnotationsBool()[k]);
-                        if(mat[i][j].getAnnotationsBool()[k]){
-                            cptAnnotation++;
-                        }
-                    }
-                    if (cptAnnotation == 3) {
-                        tabBool = mat[i][j].getAnnotationsBool();
-                        tabTriple[cptTriple] = donnerTriple(tabBool);
-                        cptTriple++;                      
-                        
-                        }
-                    }
+                tabCarre.add(mat[i][j].getAnnotations());
             }
-        
-        //  System.out.println("verif tabTriple");
-        for(int i = 0; i<9;i++){
-            int[] temp = tabTriple[i];
-            //affichage du tableau temporaire
-         //   System.out.println("tabTemp["+i+"] : "+temp[0]+" "+temp[1]+" "+temp[2]);
-        //  System.out.println("tabTriple["+i+"] : "+tabTriple[i][0]+" "+tabTriple[i][1] +" "+tabTriple[i][2]);
-            for(int j = 0; j<9;j++){
-                //if de la violence (désolée)
-                if(temp[0] == tabTriple[j][0]  && temp[1] == tabTriple[j][1] && temp[2] == tabTriple[j][2] && temp[0] !=0 && i!=j){
-                    System.out.println("true de région");
+        }
 
-                    return true;
+        //traitement 1 : retitré les annotations qui on moin que 3 chiffres
+        for(int i=0;i<9;i++){
+            if(tabCarre.get(i).size() > 0 && tabCarre.get(i).size() <= 3){
+                tabTriple.add(tabCarre.get(i));
+            }
+        }
+
+        for(int i = 0; i<tabTriple.size();i++){
+            System.out.println("tabTriple["+i+"] : "+tabTriple.get(i));
+        }
+
+        //traitement 2 : mettre dans un tableau les triplets
+        List<Integer> tabTriplets = new ArrayList<Integer>();
+        
+        for(int i = 0; i<tabTriple.size();i++){
+            if (tabTriple.get(i).size() == 3){
+                for(int j = 0; j<tabTriple.get(i).size();j++){
+                    if(!tabTriplets.contains(tabTriple.get(i).get(j))){
+                        tabTriplets.add(tabTriple.get(i).get(j));
+                    }
                 }
             }
         }
-            */
+
+           //conter le nombre de differente valeur dans le tableau
+           List<Integer> ocurance = new ArrayList<Integer>();
+           for(int i = 0; i<tabTriple.size();i++){
+               for(int j = 0; j<tabTriple.get(i).size();j++){
+                   if(!ocurance.contains(tabTriple.get(i).get(j))){
+                       ocurance.add(tabTriple.get(i).get(j));
+                       
+                   }
+               }
+           }
+   
+           System.out.println("ocurance : "+ocurance);
+   
+           if (ocurance.size() == 3){
+               return true;
+               
+           }
+   
+     
         return false;
     }
 
@@ -129,15 +111,6 @@ public class NakedTriples implements InterfaceTech {
         for(int i= 0; i<9;i++){
             tabCol.add(remplirList(col[i].getAnnotationsBool()));
             tabLine.add(remplirList(line[i].getAnnotationsBool()));
-        }
-
-
-
-        //affichage des annotations
-        //validé
-        for(int i = 0; i<9;i++){
-            System.out.println("tabCol["+i+"] : "+tabCol.get(i));
-            System.out.println("tabLine["+i+"] : "+tabLine.get(i));
         }
 
          // traitement 1 : retitré les annotations qui on moin que 3 chiffres
@@ -180,7 +153,7 @@ public class NakedTriples implements InterfaceTech {
 
         System.out.println("tabTriplets : "+tabTriplets);
 
-        ArrayList<List<Integer>> tabCopy = tabTriple;
+        ///ArrayList<List<Integer>> tabCopy = tabTriple;
 
         // traitement 3 : verifier si les autres tuples du tableau sont utiliser dans le triplets
         /*for(int i =0;i<tabTriple.size();i++){
@@ -215,13 +188,10 @@ public class NakedTriples implements InterfaceTech {
 
     @Override
     public boolean detect(Grid grille) {
-        /*for(int i = 0; i<9;i++){
+        for(int i = 0; i<9;i++){
             if(detectTripleCarre(i,grille) || detectTriple(i,grille)){
                 return true;
             }
-        }*/
-        if(detectTriple(3,grille)){
-            return true;
         }
         return false;
     
@@ -240,9 +210,9 @@ public class NakedTriples implements InterfaceTech {
             0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,0,
-            0,0,0,9,3,0,0,0,0,
-            0,0,0,5,4,0,0,0,0,
-            0,0,0,0,8,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,0
@@ -253,7 +223,7 @@ public class NakedTriples implements InterfaceTech {
   
 
         //annotations pour les colonnes OK
-        grille.getCell(0, 3).addAnnotation(1);
+        /*grille.getCell(0, 3).addAnnotation(1);
         grille.getCell(0, 3).addAnnotation(6);
         grille.getCell(0, 3).addAnnotation(7);
 
@@ -281,7 +251,7 @@ public class NakedTriples implements InterfaceTech {
 
         grille.getCell(7, 3).addAnnotation(1);
         grille.getCell(7, 3).addAnnotation(6);
-        grille.getCell(7, 3).addAnnotation(7);
+        grille.getCell(7, 3).addAnnotation(7);*/
 
         /*grille.getCell(0, 3).addAnnotation(1);
         grille.getCell(0, 3).addAnnotation(3);
@@ -309,6 +279,37 @@ public class NakedTriples implements InterfaceTech {
 
         grille.getCell(8, 3).addAnnotation(5);
         grille.getCell(8, 3).addAnnotation(7);*/
+
+
+        //annotations pour les région
+        grille.getCell(0, 3).addAnnotation(2);
+        grille.getCell(0, 3).addAnnotation(4);
+
+        grille.getCell(1, 3).addAnnotation(2);
+        grille.getCell(1 ,3).addAnnotation(4);
+        grille.getCell(1, 3).addAnnotation(5);
+
+        grille.getCell(2, 3).addAnnotation(4);
+        grille.getCell(2, 3).addAnnotation(5);
+
+        grille.getCell(0, 5).addAnnotation(1);
+        grille.getCell(0, 5).addAnnotation(2);
+        grille.getCell(0, 5).addAnnotation(4);
+        grille.getCell(0, 5).addAnnotation(6);
+        grille.getCell(0, 5).addAnnotation(9);
+
+        grille.getCell(1, 5).addAnnotation(1);
+        grille.getCell(1, 5).addAnnotation(2);
+        grille.getCell(1, 5).addAnnotation(4);
+        grille.getCell(1, 5).addAnnotation(5);
+        grille.getCell(1, 5).addAnnotation(6);
+        
+        grille.getCell(2, 5).addAnnotation(1);
+        grille.getCell(2, 5).addAnnotation(4);
+        grille.getCell(2, 5).addAnnotation(5);
+        grille.getCell(2, 5).addAnnotation(6);
+        grille.getCell(2, 5).addAnnotation(9);
+
         
 
         NakedTriples nakedTriple = new NakedTriples();
