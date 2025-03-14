@@ -26,7 +26,7 @@ public class PointingPairs implements InterfaceTech {
     List<int[]> positions = new ArrayList<>();
     for (int i = 0; i < Grid.NB_SUBGRID; i++) {
         for (int j = 0; j < Grid.NB_SUBGRID; j++) {
-            if (subgrid[i][j].isEditable()&&subgrid[i][j].getAnnotations()[candidate - 1]) {
+            if (subgrid[i][j].isEditable()&&subgrid[i][j].getAnnotationsBool()[candidate - 1]) {
                 positions.add(new int[]{i, j});
             }
         }
@@ -99,7 +99,7 @@ public class PointingPairs implements InterfaceTech {
                                     Cell cell = grille.getCell(globalRow, c);
                                     if (!((globalRow == globalRow0 && c == globalCol0) ||
                                           (globalRow == globalRow1 && c == globalCol1))) {
-                                        if (cell.isEditable() && cell.getAnnotations()[candidate - 1]) {
+                                        if (cell.isEditable() && cell.getAnnotationsBool()[candidate - 1]) {
                                             cell.removeAnnotation(candidate);
                                             System.out.println("Suppression de " + candidate +
                                                     " en (" + globalRow + "," + c + ") par paire pointante (ligne)");
@@ -116,7 +116,7 @@ public class PointingPairs implements InterfaceTech {
                                     Cell cell = grille.getCell(r, globalCol);
                                     if (!((r == globalRow0 && globalCol == globalCol0) ||
                                           (r == globalRow1 && globalCol == globalCol1))) {
-                                        if (cell.isEditable() && cell.getAnnotations()[candidate - 1]) {
+                                        if (cell.isEditable() && cell.getAnnotationsBool()[candidate - 1]) {
                                             cell.removeAnnotation(candidate);
                                             System.out.println("Suppression de " + candidate +
                                                     " en (" + r + "," + globalCol + ") par paire pointante (colonne) ");

@@ -1,10 +1,9 @@
 package com.grp6;
 
 import java.util.ArrayList;
-/* ====== Importation des libreries java ====== */
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Cette classe represente une grille de Sudoku.
@@ -368,7 +367,7 @@ public class Grid implements Iterable<Cell> {
                 if (cell.isEditable()) {
                     StringBuilder sb = new StringBuilder();
                     for (int candidate = 1; candidate <= NB_NUM; candidate++) {
-                        if (cell.getAnnotations()[candidate - 1]) {
+                        if (cell.getAnnotationsBool()[candidate - 1]) {
                             if (sb.length() > 0) {
                                 sb.append(" | ");
                             }
