@@ -6,16 +6,10 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 
@@ -72,9 +66,19 @@ public class SudokuGame {
         topBar.getChildren().add(timerLabel);
 
         // Créer le panneau de sélection des chiffres
-        NumberSelection numberSelection = new NumberSelection();
+        
+        // 1. Créer le panneau des outils
         ToolsPanel toolsPanel = new ToolsPanel();
+
+        // 2. Créer la sélection des nombres SANS SudokuGrid
+        NumberSelection numberSelection = new NumberSelection(toolsPanel);
+
+        // 3. Créer la grille de Sudoku en lui passant NumberSelection
         SudokuGrid grid = new SudokuGrid(numberSelection, actualGame.getGrid(), toolsPanel, actualGame);
+
+        // 4. Associer la grille à NumberSelection maintenant qu'elle existe
+        numberSelection.setSudokuGrid(grid);
+
         grid.setGrid();
         ControlButtons controlsButtons = new ControlButtons(grid, actualGame);
 

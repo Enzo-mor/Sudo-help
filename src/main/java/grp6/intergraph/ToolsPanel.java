@@ -1,5 +1,8 @@
 package grp6.intergraph;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
@@ -86,6 +89,12 @@ public class ToolsPanel {
     public void setPencilButtonOn() {
         annotationMode = true;
         pencilButton.setStyle("-fx-background-color: lightgreen;");
+
+        // Réinitialiser le nombre sélctionné
+        if(NumberSelection.getSelectedNumber() != null) {
+            NumberSelection.resetSelectedNumber();
+            NumberSelection.clearSelection();
+        }
     }
 
     public void setEraseButtonOff() {
@@ -96,5 +105,13 @@ public class ToolsPanel {
     public void setPencilButtonOff() {
         annotationMode = false;
         pencilButton.setStyle("");
+
+        // Remettre le style de la cellule selectionné d'avant par default
+        Button selectedCell = SudokuGrid.getSelectedCell();
+        int selectedRow = SudokuGrid.getSelectedRow();
+        int selectedCol = SudokuGrid.getSelectedCol();
+        if (selectedCell != null) {
+            selectedCell.setStyle((selectedRow / 3 + selectedCol / 3) % 2 == 0 ? "-fx-background-color: lightblue;" : "-fx-background-color: white;");
+        }
     }
 }

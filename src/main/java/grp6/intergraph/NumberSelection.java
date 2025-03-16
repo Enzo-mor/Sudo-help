@@ -6,10 +6,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class NumberSelection {
-    private VBox numberSelection;
-    private String selectedNumber = null;
+    private static VBox numberSelection;
+    private static String selectedNumber = null;
+    private ToolsPanel toolsPanel; // Ajout du panneau d'outils
+    private SudokuGrid sudokuGrid; // Référence à la grille Sudoku
 
-    public NumberSelection() {
+    public NumberSelection(ToolsPanel toolsPanel) {
+        this.toolsPanel = toolsPanel;
+        this.sudokuGrid = sudokuGrid;
+
         numberSelection = new VBox(5);
         numberSelection.setAlignment(Pos.CENTER);
     
@@ -44,14 +49,30 @@ public class NumberSelection {
     }
 
     private void selectNumber(Button button) {
-
-        // Vérifier si les boutons sont bien trouvés
-        var buttons = numberSelection.lookupAll(".button");
-
-        buttons.forEach(node -> ((Button) node).setStyle("")); 
-        button.setStyle("-fx-background-color: lightgreen;");
-        
-        setSelectedNumber(button.getText());
+        String numberStr = button.getText();
+        Integer number = Integer.valueOf(numberStr);
+    
+        if (toolsPanel.getAnnotationMode() && sudokuGrid != null && sudokuGrid.getSelectedCell() != null) {
+            // Mode annotation activé → Ajouter/Supprimer une annotation
+            int row = sudokuGrid.getSelectedRow();
+            int col = sudokuGrid.getSelectedCol();
+    
+            if (!sudokuGrid.hasAnnotation(row, col, numberStr)) {
+                sudokuGrid.addAnnotationToCell(row, col, numberStr);
+                sudokuGrid.getGame().addAnnotation(row, col, number);
+            } else {
+                sudokuGrid.removeAnnotationFromCell(row, col, numberStr);
+                sudokuGrid.getGame().removeAnnotation(row, col, number);
+            }
+        } else {
+            // Mode normal → Sélection du nombre
+            var buttons = numberSelection.lookupAll(".button");
+            buttons.forEach(node -> ((Button) node).setStyle(""));  
+            button.setStyle("-fx-background-color: lightgreen;");
+    
+            // Stocke le nombre sélectionné
+            setSelectedNumber(numberStr);
+        }
     }
 
     // Getters
@@ -59,7 +80,7 @@ public class NumberSelection {
         return numberSelection;
     }
 
-    public String getSelectedNumber() {
+    public static String getSelectedNumber() {
         return selectedNumber;
     }
 
@@ -68,11 +89,15 @@ public class NumberSelection {
         this.selectedNumber = selectedNumber;
     }
 
-    public void resetSelectedNumber() {
-        this.selectedNumber = null;
+    public void setSudokuGrid(SudokuGrid sudokuGrid) {
+        this.sudokuGrid = sudokuGrid;
     }
 
-    public void clearSelection() {
+    public static void resetSelectedNumber() {
+        selectedNumber = null;
+    }
+
+    public static void clearSelection() {
         var buttons = numberSelection.lookupAll(".button");
         buttons.forEach(node -> ((Button) node).setStyle("")); 
     }
