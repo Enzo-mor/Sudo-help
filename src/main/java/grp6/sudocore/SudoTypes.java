@@ -25,7 +25,11 @@ public final class SudoTypes {
         /**
          * Enum pour les actions de suppression d'annotation sur les cellules
          */
-        ANNOTATION_REMOVE_CELL_ACTION("action de suppression de l'annotation");
+        ANNOTATION_REMOVE_CELL_ACTION("action de suppression de l'annotation"),
+        /**
+         * 
+         */
+        ERASE_ACTION("action d'effacement de la cellule");
 
         private final String description;
         ActionType(String value) {

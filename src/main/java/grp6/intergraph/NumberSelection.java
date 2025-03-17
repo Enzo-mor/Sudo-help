@@ -52,10 +52,10 @@ public class NumberSelection {
         String numberStr = button.getText();
         Integer number = Integer.valueOf(numberStr);
     
-        if (toolsPanel.getAnnotationMode() && sudokuGrid != null && sudokuGrid.getSelectedCell() != null) {
+        if (toolsPanel.getAnnotationMode() && sudokuGrid != null && SudokuGrid.getSelectedCell() != null) {
             // Mode annotation activé → Ajouter/Supprimer une annotation
-            int row = sudokuGrid.getSelectedRow();
-            int col = sudokuGrid.getSelectedCol();
+            int row = SudokuGrid.getSelectedRow();
+            int col = SudokuGrid.getSelectedCol();
     
             if (!sudokuGrid.hasAnnotation(row, col, numberStr)) {
                 sudokuGrid.addAnnotationToCell(row, col, numberStr);

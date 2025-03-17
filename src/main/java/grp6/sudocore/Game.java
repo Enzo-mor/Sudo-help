@@ -491,8 +491,6 @@ public final class Game {
                 histoActions += "Annulation de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
                 currentIndex--;
 
-                System.out.println("Undo : \n" + histoActions + "\n\n");
-
                 return;
             }
     
@@ -525,42 +523,34 @@ public final class Game {
     */
     public void redoAction() throws IllegalStateException {
 
-        try {
-            if (!canRedo()) {
-                throw new IllegalStateException("Impossible de refaire l'action car aucune action n'a été annulée.");
-            }
-            if (gameState == GameState.NOT_STARTED || gameState == GameState.FINISHED||gameState==GameState.PAUSED) {
-                throw new IllegalStateException("Aucune action ne peut être effectuée car le jeu est en pause ou n'a pas encore été démarré ou est est déjà terminé.");
-            }
-    
-            // Vérifier si l'action suivante est une ActionCell
-            if (actions.get(currentIndex + 1) instanceof ActionCell) {
-             // Si oui, on l'exécute et on s'arrête immédiatement
-                currentIndex++;
-                actions.get(currentIndex).doAction();
-                histoActions += "Refaire de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
+        if (!canRedo()) {
+            throw new IllegalStateException("Impossible de refaire l'action car aucune action n'a été annulée.");
+        }
+        if (gameState == GameState.NOT_STARTED || gameState == GameState.FINISHED||gameState==GameState.PAUSED) {
+            throw new IllegalStateException("Aucune action ne peut être effectuée car le jeu est en pause ou n'a pas encore été démarré ou est est déjà terminé.");
+        }
 
-                System.out.println("Redo : \n" + histoActions + "\n\n");
+        // Vérifier si l'action suivante est une ActionCell
+        if (actions.get(currentIndex + 1) instanceof ActionCell) {
+            // Si oui, on l'exécute et on s'arrête immédiatement
+            currentIndex++;
+            actions.get(currentIndex).doAction();
+            histoActions += "Refaire de l'action " + (currentIndex + 1) + " : " + actions.get(currentIndex) + "\n";
 
-                return;
-            }
-    
-            // Sinon, on refait toutes les actions suivantes jusqu'à la première ActionCell trouvée
-            while (canRedo()) {
-                currentIndex++;
-                Action action = actions.get(currentIndex);
-                action.doAction();
-                histoActions += "Refaire de l'action " + (currentIndex + 1) + " : " + action + "\n";
-                
-                // Si on trouve une ActionCell, on s'arrête immédiatement
-                if (action instanceof ActionCell) {
-                    break;
-                }
-            }
+            return;
+        }
+
+        // Sinon, on refait toutes les actions suivantes jusqu'à la première ActionCell trouvée
+        while (canRedo()) {
+            currentIndex++;
+            Action action = actions.get(currentIndex);
+            action.doAction();
+            histoActions += "Refaire de l'action " + (currentIndex + 1) + " : " + action + "\n";
             
-        } catch (Exception e) {
-            // TODO: handle exception
-            System.err.println(e.getMessage());
+            // Si on trouve une ActionCell, on s'arrête immédiatement
+            if (action instanceof ActionCell) {
+                break;
+            }
         }
         
 
@@ -778,7 +768,7 @@ public final class Game {
      */
     public List<int[]> evaluate() {
         return grid.evaluate();
-    }    
+    }
 
     /**
      * Permet de supprimer toutes les actions après l'action courante
@@ -789,6 +779,30 @@ public final class Game {
             histoActions+="supression de l'action "+(currentIndex+ (actions.size()-currentIndex)+1)+" : "+actions.getLast()+"\n";
             actions.removeLast();
         }
+    }
+
+    /**
+     * Permet de supprimer toutes les actions d'une cellule
+     */
+    public void deleteActionsOfCell(int x, int y) {
+        int size = actions.size();
+        for (int i = 0 ; i < size; i++) {
+            Action a = actions.get(i);
+            if (a instanceof NumberCellAction nca && nca.getRow() == x && nca.getColumn() == y) {
+                nca.undoAction();
+            }
+            if (a instanceof AnnotationCellAction aca && aca.getRow() == x && aca.getColumn() == y) {
+                aca.undoAction();
+            }
+        }
+    }
+
+    public int getCurrentIndex(){
+        return currentIndex;
+    }
+
+    public Action getAction(int index){
+        return actions.get(index);
     }
 
     public static void main(String[] args) {

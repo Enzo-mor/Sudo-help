@@ -70,7 +70,7 @@ public  class AnnotationCellAction extends ActionCell  {
         return ActionType.ANNOTATION_CELL_ACTION;
     }
     @Override
-    public JsonObject serialise(){
+    public JsonObject serialise() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("type",actionType().getDescription());
         jsonObject.addProperty("x", x);
@@ -119,7 +119,7 @@ public  class AnnotationCellAction extends ActionCell  {
          * methode de serialiser la l'action
          */
        public  JsonElement serialize(AnnotationCellAction action, Type vartype, JsonSerializationContext context){
-        return action.serialise();
+            return action.serialise();
        }
     }
 

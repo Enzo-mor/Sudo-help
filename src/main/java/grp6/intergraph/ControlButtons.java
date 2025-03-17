@@ -32,6 +32,9 @@ public class ControlButtons {
         restartButton.setOnAction(e -> {
             sudokuGrid.resetInterface();
             sudokuGame.restartGame();
+
+            // Forcer la suppression des actions passées
+            sudokuGame.deleteActionsAfterCurrent();
         });
 
         // Ajoute l'action sur le bouton "Annuler"
@@ -45,32 +48,9 @@ public class ControlButtons {
             redoAction();
         });
 
-        // Ajoute l'action sur le bouton "Verifier"
+        // Ajoute l'action sur le bouton "Vérifier"
         checkButton.setOnAction(e -> {
-            List<int[]> eval = sudokuGame.evaluate();
-        
-            if (!eval.isEmpty()) {
-                // Colorier les cellules avec des erreurs en rouge
-                sudokuGrid.setCellsColorError(eval);
-        
-                // Faire une copie des erreurs pour reinitialiser les couleurs plus tard
-                List<int[]> originalErrors = new ArrayList<>(eval);
-        
-                // Creer une pause de 1 seconde avant d'annuler les erreurs
-                Timeline pause = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-                    // Annuler les actions jusqu'a corriger les erreurs
-                    undoUntilFirstError(eval);
-        
-                    // Remettre la couleur par defaut en utilisant la copie
-                    sudokuGrid.setCellsColorDefault(originalErrors);
-        
-                    // Nettoyer l'historique apres l'annulation
-                    sudokuGame.deleteActionsAfterCurrent();
-                }));
-        
-                pause.setCycleCount(1);
-                pause.play();
-            }
+            putErrorsRed();
         });
 
 
@@ -83,52 +63,137 @@ public class ControlButtons {
     }
 
     public void undoAction(Action currentAction){
+        /* Modification cote affichage */
         if(currentAction != null){
             int row = currentAction.getRow();
             int col = currentAction.getColumn();
-
-            if (currentAction instanceof NumberCellAction) {
-                sudokuGrid.setCellDisplay(row, col, currentAction.getOldNumber());
+            if(sudokuGrid.isLastActionEraser(row, col)) {
+                sudokuGrid.modifyStateEraser(row, col, false);
+                if (currentAction instanceof NumberCellAction) {
+                    sudokuGrid.setCellDisplay(row, col, currentAction.getNumber());
+                } else {
+                    sudokuGrid.setAnnotationDisplay(SudokuGrid.getButton(row, col), row, col, null);
+                }
             } else {
-                String numberString = String.valueOf(currentAction.getAnnotation());
-                sudokuGrid.removeAnnotationFromCell(row, col, numberString);
+                if (currentAction instanceof NumberCellAction) {
+                    if(currentAction.getOldNumber() == 0 && sudokuGrid.hasAnnotations(row, col))
+                        sudokuGrid.setAnnotationDisplay(SudokuGrid.getButton(row, col), row, col, null);
+                    else
+                        sudokuGrid.setCellDisplay(row, col, currentAction.getOldNumber());
+                } else {
+                    String numberString = String.valueOf(currentAction.getAnnotation());
+                    if (!sudokuGrid.hasAnnotation(row, col, numberString))
+                        sudokuGrid.addAnnotationToCell(row, col, numberString);
+                    else
+                        sudokuGrid.removeAnnotationFromCell(row, col, numberString);
+                }
+    
+                /* Modification cote bdd */
+                sudokuGame.undoAction();
             }
 
-            /* Modification cote bdd */
-            sudokuGame.undoAction();
         }
     }
 
     public void redoAction() {
         /* Modification cote bdd */
-        sudokuGame.redoAction();
-
-        /* Modification cote affichage */
-        Action currentAction = sudokuGame.getLastAction();
-        if(currentAction != null) {
+        try {
+            sudokuGame.redoAction();
             
-            int row = currentAction.getRow();
-            int col = currentAction.getColumn();
-            
-            if(currentAction instanceof NumberCellAction) {
-                sudokuGrid.setCellDisplay(row, col, currentAction.getRedoNumber());
-            } else {
-                String redoNumberString = String.valueOf(currentAction.getRedoAnnotation());
-                sudokuGrid.addAnnotationToCell(row, col, redoNumberString);
+            /* Modification cote affichage */
+            Action currentAction = sudokuGame.getLastAction();
+            if(currentAction != null) {
+                
+                int row = currentAction.getRow();
+                int col = currentAction.getColumn();
+                
+                if(currentAction instanceof NumberCellAction) {
+                    sudokuGrid.setCellDisplay(row, col, currentAction.getRedoNumber());
+                } else {
+                    String redoNumberString = String.valueOf(currentAction.getRedoAnnotation());
+                    if (!sudokuGrid.hasAnnotation(row, col, redoNumberString))
+                        sudokuGrid.addAnnotationToCell(row, col, redoNumberString);
+                    else
+                        sudokuGrid.removeAnnotationFromCell(row, col, redoNumberString);
+                }
             }
+
+        } catch (IllegalStateException  e) {
+            System.err.println(e.getMessage());
         }
+
     }
 
-    // Annuler les actions jusqu'a corriger toutes les erreurs
-    private void undoUntilFirstError(List<int[]> errors) {
-        Action currentAction = sudokuGame.getLastAction();
-
-        while (currentAction != null && !errors.isEmpty()) {
-            undoAction(currentAction);
-            currentAction = sudokuGame.getLastAction();
-
-            // Met a jour les erreurs restantes
-            errors.retainAll(sudokuGame.evaluate());
+    private void putErrorsRed() {
+        // Étape 1 : Identifier les erreurs sans effectuer d'undo / redo
+        List<int[]> eval = evaluateWithUndoRedo();
+    
+        // Si des erreurs ont été détectées
+        if (!eval.isEmpty()) {
+            // Colorier les cellules avec des erreurs en rouge
+            sudokuGrid.setCellsColorError(eval);
+    
+            // Créer une pause de 1 seconde (1000 ms) avant d'annuler les erreurs
+            Timeline pause = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                // Annuler les actions jusqu'à la première erreur
+                undoActionsUntilErrorsResolved();
+    
+                // Remettre la couleur par défaut après avoir annulé les erreurs
+                sudokuGrid.setCellsColorDefault(eval);
+    
+                // Supprimer les actions passées après l'état actuel
+                sudokuGame.deleteActionsAfterCurrent();
+            }));
+    
+            pause.setCycleCount(1);
+            pause.play();
         }
+    }
+    
+    private void undoActionsUntilErrorsResolved() {
+        // Annuler les actions jusqu'à ce que `evaluate()` retourne une liste vide
+        List<int[]> finalEval = sudokuGame.evaluate();
+        
+        while (!finalEval.isEmpty()) {
+            Action currentAction = sudokuGame.getLastAction();
+            if (currentAction != null) {
+                undoAction(currentAction);  // Annuler l'action
+            }
+            // Réévaluer l'état du Sudoku après chaque annulation
+            finalEval = sudokuGame.evaluate();
+        }
+    }
+    
+
+    private List<int[]> evaluateWithUndoRedo() {
+        // Initialiser les listes pour stocker les coordonnées des erreurs
+        List<int[]> errorCells = new ArrayList<>();
+        
+        // Étape 1 : Annuler les actions jusqu'à ce que `evaluate()` retourne une liste vide
+        List<int[]> currentEvaluation = sudokuGame.evaluate();
+        int undoCount = 0;  // Compter le nombre d'actions undo
+    
+        while (!currentEvaluation.isEmpty()) {
+            
+            // Annuler l'action la plus récente
+            Action currentAction = sudokuGame.getLastAction();
+            if (currentAction != null) {
+                int[] coordinates = {currentAction.getRow(), currentAction.getColumn()};
+                errorCells.add(coordinates);
+                undoAction(currentAction);
+                undoCount++;  // Incrémenter le compteur d'undo
+            }
+    
+            // Réévaluer l'état du Sudoku après l'annulation
+            currentEvaluation = sudokuGame.evaluate();
+        }
+    
+        // Étape 2 : Refaites exactement `undoCount` actions annulées avec redoAction()
+        for (int i = 0; i < undoCount; i++) {
+            redoAction();  // Réapplique chaque action annulée
+        }
+    
+        // Retourner la liste des coordonnées à colorier
+        return errorCells;
     }
 }
