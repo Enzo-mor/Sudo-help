@@ -27,6 +27,9 @@ public class Help {
     /** Liste des messages d'aide */
     private String[] messages;
 
+    /** Nom de la technique */
+    private String name;
+
     /* ====== Constructeurs ====== */
 
     /**
@@ -42,6 +45,8 @@ public class Help {
 
         // Initialisation de la grille d'affichage
         grid = new boolean[Grid.NB_NUM][Grid.NB_NUM];
+
+        name = techName;
     }
 
     /* ===== Getters & Setters ===== */
@@ -92,6 +97,14 @@ public class Help {
         } else {
             throw new IllegalArgumentException("Le niveau d'aide doit être compris entre 1 et " + NB_LVL);
         }
+    }
+
+    /**
+     * Recuperattion du nom de la technique
+     * @return Nom de la technique
+     */
+    public String getName() {
+        return name;
     }
 
     /* ======= Méthodes d'affichage ======= */

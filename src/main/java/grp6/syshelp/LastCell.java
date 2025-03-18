@@ -11,7 +11,7 @@ public class LastCell implements InterfaceTech {
 
     @Override
     public Help getHelp(Grid grille) {
-        Help aide = new Help("LastCell");
+        Help aide = new Help(getClass().getSimpleName());
 
         for (int i = 0; i < Grid.NB_NUM; i++) {
             // Vérifie les colonnes

@@ -7,7 +7,7 @@ public class NakedSingleton implements InterfaceTech {
 
     @Override
     public Help getHelp(Grid grille) {
-        Help aide = new Help("SingletonsNus");
+        Help aide = new Help(getClass().getSimpleName());
 
         for (int i = 0; i < Grid.NB_NUM; i++) {
             // Vérifie les colonnes

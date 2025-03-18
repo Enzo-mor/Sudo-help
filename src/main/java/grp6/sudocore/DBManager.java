@@ -423,7 +423,6 @@ public final class DBManager {
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<Game>();
-            // TODO: handle exception
         }
        
     }
@@ -663,7 +662,6 @@ public static void main(String[] args) {
         //DBManager.saveGame(new Game(DBManager.getGrid(2),new Profile("pierre")));
     } catch (Exception e) {
         System.err.println(e.getMessage());
-        // TODO: handle exception
 
 }
 }
