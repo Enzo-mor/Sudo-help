@@ -118,6 +118,15 @@ public class FixCell implements Cell {
         return this.number == 0;
     }
 
+    /**
+     * Permet de decter si un tableau d'annotation ne contient qu'une entrée
+     * @return un boolean qui est vrai quand il n'y a qu'une annotation
+     */
+    @Override
+    public boolean OnlyOneAnnotation() {
+        return false;
+    }
+
     /** 
      * Transforme la cellule en chaîne de caractères
      * @return La chaîne de caractères correspondante [String]

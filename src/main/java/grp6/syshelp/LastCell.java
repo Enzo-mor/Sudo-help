@@ -1,65 +1,92 @@
 package grp6.syshelp;
 
-import grp6.sudocore.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class LastCell implements InterfaceTech  {
+import grp6.sudocore.Cell;
+import grp6.sudocore.Grid;
+
+public class LastCell implements InterfaceTech {
+
     @Override
-    public boolean detect(Grid grille) {
+    public Help getHelp(Grid grille) {
+        Help aide = new Help("LastCell");
 
-        for(int i = 0; i < Grid.NB_NUM;i++){
-            if(grille.numberOfFullCell(Grid.Shape.COLUMN,i) == 8 || grille.numberOfFullCell(Grid.Shape.LINE,i) == 8 || grille.numberOfFullCell(Grid.Shape.SQUARE,i) == 8){
-                return true;
+        for (int i = 0; i < Grid.NB_NUM; i++) {
+            // Vérifie les colonnes
+            if (grille.numberOfFullCell(Grid.Shape.COLUMN, i) == 8) {
+                Cell emptyCell = findEmptyCell(grille.getColumn(i));
+                if (emptyCell != null) {
+                    int pos[] = emptyCell.getPosition();
+                    aide.addPos(pos[0], pos[1]);
+                    aide.addColumn(i);
+                    aide.setMessage(1, "Fait attention aux "+findLastNumber(grille.getColumn(i)));
+                    aide.setMessage(2, "Fait attention aux colonnes");
+                    aide.setMessage(3, "Regarde ici");
+                    return aide;
+                }
+            }
+            // Vérifie les lignes
+            else if (grille.numberOfFullCell(Grid.Shape.LINE, i) == 8) {
+                Cell emptyCell = findEmptyCell(grille.getLine(i));
+                if (emptyCell != null) {
+                    int pos[] = emptyCell.getPosition();
+                    //Message d'aide
+                    aide.addPos(pos[0], pos[1]);
+                    aide.addLine(i);
+                    aide.setMessage(1, "Fait attention aux "+findLastNumber(grille.getLine(i)));
+                    aide.setMessage(2, "Fait attention aux lignes");
+                    aide.setMessage(3, "Regarde ici");
+                    return aide;
+                }
+            }
+            // Vérifie les carrés
+            else if (grille.numberOfFullCell(Grid.Shape.SQUARE, i) == 8) {
+                int[] temp = grille.numToPosForSubGrid(i);
+                Cell emptyCell = findEmptyCell(grille.getFlatSubGrid(temp[0],temp[1]));
+                if (emptyCell != null) {
+                    int pos[] = emptyCell.getPosition();
+                    aide.addPos(pos[0], pos[1]);
+                    aide.addSquare(i);
+                    aide.setMessage(1, "Fait attention aux "+findLastNumber(grille.getFlatSubGrid(temp[0], temp[1])));
+                    aide.setMessage(2, "Fait attention aux régions");
+                    aide.setMessage(3, "Regarde ici");
+                    return aide;
+                }
             }
         }
-        return false;   
+        return null; // Aucun coup trouvé
     }
-    @Override
-    public void applique(Grid grille){
-        
+
+    /**
+     * Trouve la cellule vide dans une liste de cellules.
+     * @param cells Liste des cellules (ligne, colonne ou carré)
+     * @return La cellule vide trouvée, sinon null.
+     */
+    private Cell findEmptyCell(Cell[] cells){
+        for (Cell cell : cells){
+            if (cell.isEmpty()){
+                return cell;
+            }
+        }
+        return null;
     }
-    public static void main(String[] args){
-         //grille  (pour les collones )
-        int[] data={
-        2,5,9,4,7,3,0,1,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        Grid grille = new Grid(data);
-        System.out.println(grille.toString());
-        LastCell lastCell = new LastCell();
-        System.out.println(lastCell.detect(grille));
 
-         //grille  (pour les lignes )
-        int[] dataLigne={
-            2,0,0,0,0,0,0,0,0,
-            1,0,0,0,0,0,0,0,0,
-            3,0,0,0,0,0,0,0,0,
-            4,0,0,0,0,0,0,0,0,
-            5,0,0,0,0,0,0,0,0,
-            6,0,0,0,0,0,0,0,0,
-            7,0,0,0,0,0,0,0,0,
-            8,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0};
-        Grid grilleLigne = new Grid(dataLigne);
-        System.out.println(grilleLigne.toString());
-        LastCell LastLigne = new LastCell();
-        System.out.println(LastLigne.detect(grilleLigne));
-
-        //grille  (pour les carrés )
-        int[] dataCarre={
-            1,6,0,0,0,0,0,0,0,
-            2,5,8,0,0,0,0,0,0,
-            3,4,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0};Grid grilleCarre =new Grid(dataCarre);
-        System.out.println(grilleCarre.toString());
-
-        LastCell LastCarre = new LastCell();
-        System.out.println(LastCarre.detect(grilleCarre));
-
+    /**
+     * Trouve le nombre manquant dans une liste de Cell.
+     * @param cells Liste des cellules (ligne, colonne ou carré)
+     * @return Le number qui doit aller dans la cellule vide.
+     */
+    private int findLastNumber(Cell[] cells){
+        List<Integer> list = new ArrayList<>(Collections.nCopies(10, 0));
+        for (Cell cell : cells){
+            int c = cell.getNumber();
+            list.set(cell.getNumber(),list.get(c)+1);
+        }
+        for(int i=0;i<10;i++){
+            if(list.get(i) == 0)return i;
+        }
+        return 0;
     }
 }

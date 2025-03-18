@@ -1,6 +1,6 @@
 package grp6.intergraph;
 
-import grp6.sudocore.*;
+import grp6.sudocore.DBManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

@@ -42,6 +42,12 @@ public interface Cell {
      */
     public String toString();
 
+    /**
+     * Permet de decter si un tableau d'annotation ne contient qu'une entrée
+     * @return un boolean qui est vrai quand il n'y a qu'une annotation
+     */
+    public boolean OnlyOneAnnotation();
+
     
      /**
      * Savoir si une cellule est modifiable

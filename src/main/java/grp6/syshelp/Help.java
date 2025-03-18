@@ -1,193 +1,208 @@
 package grp6.syshelp;
 
-import grp6.sudocore.*;
-
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.Point;
+
+import grp6.sudocore.Grid;
 
 /**
- * Cette classe represente une aide qui sera apporte par le Systeme d'aide.
- * Attention, avant de recuperer un message de cette aide, il faut initialiser 
- * la Base de Donnees avec la class 'DBManager'.
- * @author Kilian POUSSE
+ * Cette classe représente une aide qui sera apportée par le Système d'aide.
+ * Elle contient des messages d'aide et les cellules concernées par cette aide.
  * 
- * @see SysHelp Classe qui represente le systeme d'aide
- * @see DBManager Classe qui gere la base de donnees
+ * @author Kilian POUSSE
  */
 public class Help {
 
     /* ===== Constantes de classe ===== */
     
-    /** Nombre de niveau d'aide disponible */
+    /** Nombre de niveaux d'aide disponibles */
     public static final int NB_LVL = 3;
 
+    /* ===== Variables d'instances ===== */
 
-
-
-    /* ===== Variable d'instances ===== */
-
-    /** Liste des positions des cellules qui doit etre visible */
+    /** Liste des positions des cellules à mettre en valeur */
     private boolean[][] grid;
 
-    /** Liste des messages d'aide a affciher au joueur */
+    /** Liste des messages d'aide */
     private String[] messages;
 
-
-
-
-    /* ====== Constructeurs d'instances ====== */
+    /* ====== Constructeurs ====== */
 
     /**
-     * Constructeur d'une instance d'une aide depuis un type d'aide
-     * @param techName
+     * Constructeur d'une aide associée à une technique spécifique.
+     * @param techName Nom de la technique utilisée pour générer cette aide.
      */
     public Help(String techName) {
-        // TODO - Recuperer depuis la bdd les messages selon un type d'aide
+        // Initialisation des messages avec des valeurs par défaut
         messages = new String[NB_LVL];
+        for (int i = 0; i < NB_LVL; i++) {
+            messages[i] = "Message d'aide de niveau " + (i + 1) + " non défini.";
+        }
+
+        // Initialisation de la grille d'affichage
         grid = new boolean[Grid.NB_NUM][Grid.NB_NUM];
     }
 
-
-    /* ===== Getter & Setter ===== */
+    /* ===== Getters & Setters ===== */
 
     /**
-     * Getter: Recuperation des positions des cellules qui doit etre visible
-     * @return positions des cellules qui doit etre visible
+     * Récupère les positions des cellules mises en valeur.
+     * @return Matrice booléenne indiquant les cellules concernées.
      */
     public boolean[][] getPositions() {
         return grid;
     }
 
     /**
-     * Retourne la liste des cellules a afficher
-     * @return liste des cellules a afficher
+     * Retourne la liste des cellules à afficher sous forme de liste de points.
+     * @return Liste des cellules concernées.
      */
     public List<Point> getDisplay() {
         List<Point> res = new ArrayList<>();
-        for(int i=0; i<Grid.NB_NUM; i++) {
-            for(int j=0; j<Grid.NB_NUM; j++) {
-                if(grid[i][j]) res.add(new Point(i, j));
+        for (int i = 0; i < Grid.NB_NUM; i++) {
+            for (int j = 0; j < Grid.NB_NUM; j++) {
+                if (grid[i][j]) res.add(new Point(i, j));
             }
         }
         return res;
     }
 
-
-
-    /* ======= Methodes d'instances ======= */
-
     /**
-     * Ajout une position dans l'affichage de l'aide
-     * @param x Coordonnee sur la ligne
-     * @param y Coordonnee sur la colonne
+     * Définit un message d'aide à un niveau spécifique.
+     * @param level Niveau d'aide (1, 2 ou 3).
+     * @param message Texte du message d'aide.
      */
-    public void addPos(int x, int y) {
-        grid[x][y] = true;
+    public void setMessage(int level, String message) {
+        if (level >= 1 && level <= NB_LVL) {
+            messages[level - 1] = message;
+        } else {
+            throw new IllegalArgumentException("Le niveau d'aide doit être compris entre 1 et " + NB_LVL);
+        }
     }
 
     /**
-     * Ajout une ligne a l'affichage 
-     * @param i indice de la ligne
+     * Récupère le message d'aide d'un niveau donné.
+     * @param level Niveau d'aide (1, 2 ou 3).
+     * @return Message correspondant au niveau d'aide.
+     */
+    public String getMessage(int level) {
+        if (level >= 1 && level <= NB_LVL) {
+            return messages[level - 1];
+        } else {
+            throw new IllegalArgumentException("Le niveau d'aide doit être compris entre 1 et " + NB_LVL);
+        }
+    }
+
+    /* ======= Méthodes d'affichage ======= */
+
+    /**
+     * Ajoute une cellule à l'affichage de l'aide.
+     * @param x Coordonnée ligne.
+     * @param y Coordonnée colonne.
+     */
+    public void addPos(int x, int y) {
+        if (x >= 0 && x < Grid.NB_NUM && y >= 0 && y < Grid.NB_NUM) {
+            grid[x][y] = true;
+        }
+    }
+
+    /**
+     * Ajoute une ligne entière à l'affichage.
+     * @param i Indice de la ligne.
      */
     public void addLine(int i) {
-        for(int j=0; j<Grid.NB_NUM; j++) {
+        for (int j = 0; j < Grid.NB_NUM; j++) {
             addPos(i, j);
         }
     }
 
     /**
-     * Ajout une colonne a l'affichage 
-     * @param i indice de la colonne
+     * Ajoute une colonne entière à l'affichage.
+     * @param i Indice de la colonne.
      */
-    public void addColomn(int i) {
-        for(int j=0; j<Grid.NB_NUM; j++) {
+    public void addColumn(int i) {
+        for (int j = 0; j < Grid.NB_NUM; j++) {
             addPos(j, i);
         }
     }
 
     /**
-    * Ajoute une sous-grille à l'affichage 
-    * @param i Indice sur X de la sous-grille (indexe de 0 à 2)
-    * @param j Indice sur Y de la sous-grille (indexe de 0 à 2)
-    */
+     * Ajoute une sous-grille à l'affichage.
+     * @param i Indice ligne de la sous-grille (0 à 2).
+     * @param j Indice colonne de la sous-grille (0 à 2).
+     */
     public void addSquare(int i, int j) {
-        int n_line = Grid.NB_SUBGRID * i;  
-        int n_column = Grid.NB_SUBGRID * j; 
+        if (i < 0 || i >= 3 || j < 0 || j >= 3) return;
 
-        for(int di = 0; di < Grid.NB_SUBGRID; di++) {
-            for(int dj = 0; dj < Grid.NB_SUBGRID; dj++) {
-                addPos(di + n_line, dj + n_column);
+        int startRow = Grid.NB_SUBGRID * i;  
+        int startCol = Grid.NB_SUBGRID * j; 
+
+        for (int di = 0; di < Grid.NB_SUBGRID; di++) {
+            for (int dj = 0; dj < Grid.NB_SUBGRID; dj++) {
+                addPos(startRow + di, startCol + dj);
             }
         }
     }
 
     /**
-     * Ajoute une sous-grille à l'affichage
-     * @param i Indice de la sous-grille (indexe de 0 à 8)
+     * Ajoute une sous-grille à l'affichage via son index (0 à 8).
+     * @param i Indice de la sous-grille.
      */
     public void addSquare(int i) {
         addSquare(i / 3, i % 3);
     }
 
-
-
     @Override
     public String toString() {
-        String res = "";
-        for(int i=0; i<NB_LVL; i++) {
-            res += "Niveau d'aide n°1:\n   " + messages[i] + "\n";
+        StringBuilder res = new StringBuilder();
+        
+        // Affichage des messages
+        for (int i = 0; i < NB_LVL; i++) {
+            res.append("Niveau d'aide n°").append(i + 1).append(":\n   ").append(messages[i]).append("\n");
         }
 
+        // Affichage de la grille
         boolean[][] pos = getPositions();
-        for(int i = 0; i < Grid.NB_NUM; i++) {
+        for (int i = 0; i < Grid.NB_NUM; i++) {
             for (int j = 0; j < Grid.NB_NUM; j++) {
-                if(pos[i][j]) {
-                    res += "X ";
-                }
-                else {
-                    res += "  ";
-                }
+                res.append(pos[i][j] ? "X " : ". ");
 
-                // Ajouter une separation verticale tous les 3 colonnes (sauf à la fin)
-                if(j % 3 == 2 && j != Grid.NB_NUM - 1) {
-                    res += "| ";
+                // Séparation verticale
+                if (j % 3 == 2 && j != Grid.NB_NUM - 1) {
+                    res.append("| ");
                 }
             }
-            res += "\n";
+            res.append("\n");
 
-            // Ajouter un separateur horizontal tous les 3 lignes (sauf à la fin)
-            if(i % 3 == 2 && i != Grid.NB_NUM - 1) {
-                res += "------+-------+------\n";
+            // Séparateur horizontal
+            if (i % 3 == 2 && i != Grid.NB_NUM - 1) {
+                res.append("------+-------+------\n");
             }
         }
-        return res;
+        return res.toString();
     }
 
     public static void main(String[] args) {
-        
-        for(int i=0; i<9; i++) {
-            Help help = new Help("supercool");
+        // Test affichage ligne par ligne
+        for (int i = 0; i < 9; i++) {
+            Help help = new Help("Test");
             help.addLine(i);
-
             System.out.println(help);
         }
 
-        for(int i=0; i<9; i++) {
-            Help help = new Help("supercool");
-            help.addColomn(i);
-
+        // Test affichage colonne par colonne
+        for (int i = 0; i < 9; i++) {
+            Help help = new Help("Test");
+            help.addColumn(i);
             System.out.println(help);
         }
 
-        for(int i=0; i<9; i++) {
-            Help help = new Help("supercool");
+        // Test affichage par sous-grilles
+        for (int i = 0; i < 9; i++) {
+            Help help = new Help("Test");
             help.addSquare(i);
-
             System.out.println(help);
         }
-
     }
-
-
 }

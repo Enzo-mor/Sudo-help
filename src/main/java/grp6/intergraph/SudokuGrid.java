@@ -1,15 +1,18 @@
 package grp6.intergraph;
-import grp6.sudocore.*;
-import javafx.application.Platform;
+import java.util.ArrayList;
+import java.util.List;
+
+import grp6.sudocore.Cell;
+import grp6.sudocore.FixCell;
+import grp6.sudocore.FlexCell;
+import grp6.sudocore.Game;
+import grp6.sudocore.Grid;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class SudokuGrid {

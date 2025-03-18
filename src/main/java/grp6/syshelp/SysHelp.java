@@ -1,9 +1,10 @@
 package grp6.syshelp;
 
-import grp6.sudocore.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import grp6.sudocore.Cell;
+import grp6.sudocore.Grid;
 
 /**
  * Class: représente le système d'aide pour la résolution d'un Sudoku.
@@ -34,19 +35,19 @@ public class SysHelp {
     public static final List<InterfaceTech> TECHNIQUES = new ArrayList<>();
     static {
         TECHNIQUES.add(new LastCell());         //  1-Derniere case lible
-        TECHNIQUES.add(new LastPossible());     //  2-Derniere case restante
-        TECHNIQUES.add(new LastNumber());       //  3-Dernier chiffre possible
-      //TECHNIQUES.add(new NakedSingleton());   //  4-Singletons nus
-        TECHNIQUES.add(new NakedPairs());       //  5-Paires nus
-        TECHNIQUES.add(new NakedTriples());     //  6-Triplets nus
-        TECHNIQUES.add(new HiddenSingle());     //  7-Singletons cachés
-        TECHNIQUES.add(new HiddenPairs());      //  8-Paires cachées 
-        TECHNIQUES.add(new HiddenTriples());    //  9-Triplets cachés
-        TECHNIQUES.add(new PointingPairs());    // 10-Paires pointantes
-        TECHNIQUES.add(new PointingTriples());  // 11-Triplets pointants
-        TECHNIQUES.add(new XWing());            // 12-XWing
-        TECHNIQUES.add(new YWing());            // 13-YWing
-        TECHNIQUES.add(new Swordfish());        // 14-Swordfish
+        //TECHNIQUES.add(new LastPossible());     //  2-Derniere case restante
+        //TECHNIQUES.add(new LastNumber());       //  3-Dernier chiffre possible
+        TECHNIQUES.add(new NakedSingleton());   //  4-Singletons nus
+        //TECHNIQUES.add(new NakedPairs());       //  5-Paires nus
+        //TECHNIQUES.add(new NakedTriples());     //  6-Triplets nus
+        //TECHNIQUES.add(new HiddenSingle());     //  7-Singletons cachés
+        //TECHNIQUES.add(new HiddenPairs());      //  8-Paires cachées 
+        //TECHNIQUES.add(new HiddenTriples());    //  9-Triplets cachés
+        //TECHNIQUES.add(new PointingPairs());    // 10-Paires pointantes
+        //TECHNIQUES.add(new PointingTriples());  // 11-Triplets pointants
+        //TECHNIQUES.add(new XWing());            // 12-XWing
+        //TECHNIQUES.add(new YWing());            // 13-YWing
+        //TECHNIQUES.add(new Swordfish());        // 14-Swordfish
     }
 
     /**
@@ -63,75 +64,46 @@ public class SysHelp {
         return false;
     }
 
-    /**
-     * Recherche des techniques applicable sur la grille actuel
-     * @return
-     */
-    public static List<InterfaceTech> search(Grid g) {
-        System.out.println("Recherche de techniques dans la grille ......");
-        List<InterfaceTech> techs = new ArrayList<>();
-        Grid grid = g/* .clone()*/; // TODO - Quand il y aura le merge general, remettre le clonnage
-
-        for(InterfaceTech t: TECHNIQUES) {
-            String techName = t.getClass().getSimpleName();
-            System.out.println("Technique a check: " + techName);
-
-            // D: Detecter une technique
-            if(t.detect(grid)) {    
-                          
-                
-                System.out.println("La technique '" + techName + "' a ete trouvee");
-
-                // A: Appliquer la techinque
-                t.applique(grid);
-                techs.add(t);
-
-                // V: Verifie si un coups est possible
-                if(check(grid)) {
-                    System.out.println("Un coups a ete trouvee avec la thechnique: " + techName);
-                    break;
-                }
-
+    public static Help generateHelp(Grid g) {
+        Grid clone = g.clone();
+        AutoAnnotation.generate(clone);
+    
+        for (InterfaceTech tech : TECHNIQUES) {
+            Help help = tech.getHelp(clone);
+            if (help != null) {
+                return help; 
             }
-            
         }
-
-        return techs;
+    
+        return null; 
     }
-
-    /**
-     * Demande de l'aide au systeme d'aide 
-     * @return L'aide trouver par le systeme d'aide
-     */
-    public static int ask(Grid g) {
-        
-        List<InterfaceTech> techs = SysHelp.search(g);
-
-        // TODO - Recuperer les messages d'aides ou construire, je ne sais pas mdr
-
-        return 0;
-    }
+    
 
     public static void main(String[] args) {
         int[] data = {
-                0,0,0, 0,8,7, 3,0,9,
-                0,0,0, 9,0,6, 0,0,0,
-                0,4,5, 0,0,0, 0,0,0,
+            0,0,0,0,8,5,0,0,0,
+            0,0,0,9,3,7,0,0,0,
+            0,0,0,2,1,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,
+            0,0,0,4,0,0,0,0,0
+        };
+        Grid grille = new Grid(data);  
 
-                0,0,4, 8,0,0, 6,0,5,
-                2,8,0, 0,0,0, 0,9,1,
-                5,0,6, 0,0,1, 7,0,0,
+        System.out.println("🔹 Grille de départ :");
+        System.out.println(grille);
 
-                0,0,0, 0,0,0, 5,6,0,
-                0,0,0, 3,0,8, 0,0,0,
-                4,0,8, 5,6,0, 0,0,0
-            };
-        Grid grid = new Grid(data);
+        // Demande d'aide au système
+        Help help = SysHelp.generateHelp(grille);
 
-        System.out.println(grid);
-
-        List<InterfaceTech> techs = SysHelp.search(grid);
-
-        System.out.println(techs);
+        // Affichage du résultat
+        if (help != null) {
+            System.out.println(help);
+        } else {
+            System.out.println("Aucune aide trouvée.");
+        }
     }
 }

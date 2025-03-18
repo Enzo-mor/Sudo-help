@@ -170,7 +170,7 @@ public final class Grid implements Iterable<Cell> {
      * 
      * @throws IndexOutOfBoundsException si l'indice est invalide
      */
-    public  Cell[] getLine(int i) {
+    public Cell[] getLine(int i) {
         if(!isValidIndex(i)) {
             throw new IndexOutOfBoundsException("Indice de ligne invalide: " + i);
         }

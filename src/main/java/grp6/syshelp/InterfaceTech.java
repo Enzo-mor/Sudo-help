@@ -1,11 +1,8 @@
 package grp6.syshelp;
 
-import grp6.sudocore.*;
+import grp6.sudocore.Grid;
 
 public interface InterfaceTech {
-    
-    public boolean detect(Grid grille);
-
-    //Applique la technique dans une copie de la grille du joueur
-    public void applique(Grid grilleJoueur);
+    public Help getHelp(Grid grille);
 }
+

@@ -1,14 +1,21 @@
 package grp6.intergraph;
-import grp6.sudocore.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import grp6.sudocore.Action;
+import grp6.sudocore.Cell;
+import grp6.sudocore.FlexCell;
+import grp6.sudocore.Game;
+import grp6.sudocore.NumberCellAction;
+import grp6.syshelp.AutoAnnotation;
+import grp6.syshelp.Help;
+import grp6.syshelp.SysHelp;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.util.Duration;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
-
-import java.util.*;
+import javafx.util.Duration;
 
 public class ControlButtons {
     private final HBox controlButtons;
@@ -27,6 +34,41 @@ public class ControlButtons {
         Button helpButton = new Button("Aide");
         Button checkButton = new Button("Vérifier");
         Button restartButton = new Button("Recommencer");
+
+        //SYSHELP
+        Button sysHelpButton = new Button("Sudo-Help");
+        Button autoAnnotButton = new Button("AA");
+
+        //SYSHELP
+        sysHelpButton.setStyle("-fx-background-color: purple; -fx-text-fill: white;");
+        autoAnnotButton.setStyle("-fx-background-color: purple; -fx-text-fill: white;");
+
+        //SYSHELP
+        sysHelpButton.setOnAction(e -> {
+            Help help = SysHelp.generateHelp(sudokuGame.getGrid());
+            if(help != null){
+                System.out.println(help);
+            }else{
+                System.out.println("Aucune aide trouvée.");
+            }
+        });
+        //SYSHELP
+        autoAnnotButton.setOnAction(e -> {
+            for(int i = 0;i<9;i++){
+                for(int j = 0;j<9;j++){
+                    Cell c = sudokuGame.getGrid().getCell(i, j);
+                    if(c instanceof FlexCell){
+                        AutoAnnotation.generate(sudokuGame.getGrid(), c, i, j);
+                        for(int z = 0;z<9;z++){
+                            c.addAnnotation(1);
+                            if(c.getAnnotationsBool()[z]){
+                                grid.addAnnotationToCell(i,j,""+(z+1));
+                            }
+                        }
+                    }
+                }
+            }
+        });
 
         // Ajoute l'action sur le bouton "Recommencer"
         restartButton.setOnAction(e -> {
@@ -82,8 +124,8 @@ public class ControlButtons {
             }
         });
 
-
-        controlButtons.getChildren().addAll(undoButton, redoButton, helpButton, checkButton, restartButton);
+        //SYSHELP
+        controlButtons.getChildren().addAll(undoButton, redoButton, helpButton, checkButton, restartButton, sysHelpButton,autoAnnotButton);
     }
 
     // Getters

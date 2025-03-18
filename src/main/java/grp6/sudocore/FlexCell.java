@@ -123,6 +123,20 @@ public final class FlexCell extends FixCell {
         return annotationsList.get(annotationsList.size()-1);
     }
 
+     /**
+     * Permet de decter si un tableau d'annotation ne contient qu'une entrée
+     * @return un boolean qui est vrai quand il n'y a qu'une annotation
+     */
+    public boolean OnlyOneAnnotation() {
+        int count =0;
+        for(int i = 0;i<annotations.length;i++){
+            if(annotations[i]){
+                count++;
+            }
+        }
+        return count == 1;
+    }
+
     /** 
      * Néttoyer la cellule (la vider)
      */

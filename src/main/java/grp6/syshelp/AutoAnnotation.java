@@ -1,12 +1,14 @@
 package grp6.syshelp;
 
-import grp6.sudocore.*;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import grp6.sudocore.Cell;
+import grp6.sudocore.FlexCell;
+import grp6.sudocore.Grid;
 
 /**
  * Classe permettant la generation automatique des annotations
