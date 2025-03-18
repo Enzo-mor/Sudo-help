@@ -60,7 +60,6 @@ public class ControlButtons {
                     if(c instanceof FlexCell){
                         AutoAnnotation.generate(sudokuGame.getGrid(), c, i, j);
                         for(int z = 0;z<9;z++){
-                            c.addAnnotation(1);
                             if(c.getAnnotationsBool()[z]){
                                 grid.addAnnotationToCell(i,j,""+(z+1));
                             }
