@@ -130,13 +130,17 @@ public final class SudoTypes {
      */
     public enum GameState {
         /**
-         * Enum pour l'etat du jeu non commencé ou en arrêt
+         * Enum pour l'etat du jeu non commencé
          */
         NOT_STARTED("jeu est en arrêt"),
         /**
+         * Enum pour l'etat du jeu commencé mais pas encore terminé
+         */
+        IS_STARTED("jeu existe"),
+        /**
          * Enum pour l'etat du jeu en cours
          */
-         IN_PROGRESS("jeu encours"),
+         IN_PROGRESS("jeu en cours"),
         /**
          * Enum pour l'etat du jeu en pause
          */
@@ -163,6 +167,23 @@ public final class SudoTypes {
          */
         public String getDescription() {
             return description;
+        }
+
+        public String getName(){
+            switch (this) {
+                case NOT_STARTED:
+                    return "NOT_STARTED";
+                case IS_STARTED:
+                    return "IS_STARTED";
+                case IN_PROGRESS:
+                    return "IN_PROGRESS";
+                case PAUSED:
+                    return "PAUSED";
+                case FINISHED:
+                    return "FINISHED";
+                default:
+                    return "UNKNOWN";
+            }
         }
     }
 

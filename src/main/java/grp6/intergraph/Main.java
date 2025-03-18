@@ -16,6 +16,7 @@ public class Main extends Application {
             // Initialiser la base de donnees
             DBManager.init();
             launch(args);
+            //DBManager.deleteAllGames();
         } catch (Exception e) {
             // Gestion des execptions lie a l'initilisation
             System.err.println("Erreur : " + e.getMessage());

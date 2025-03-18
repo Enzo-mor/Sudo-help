@@ -1,5 +1,6 @@
 package grp6.sudocore;
 
+import grp6.sudocore.SudoTypes.GameState;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;

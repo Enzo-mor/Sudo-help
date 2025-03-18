@@ -1,5 +1,6 @@
 package grp6.intergraph;
 import grp6.sudocore.*;
+import grp6.sudocore.SudoTypes.GameState;
 
 import java.sql.SQLException;
 import javafx.application.Platform;
@@ -20,16 +21,16 @@ public class SudokuGame {
 
     public static void showSudokuGame(Stage primaryStage, Sudoku selectedSudoku) {
 
-        actualGame = selectedSudoku.getGame();
-        Grid gridSudokuBase = DBManager.getGrid(selectedSudoku.getId());
-        
-        //Gestion du chronometre
-        if(selectedSudoku.gameExists()){
-            // Reprise de la partie et du chronometre
+        Grid gridSudokuBase = null;
+
+        if (selectedSudoku.getStatus() == GameState.IS_STARTED) {
+            actualGame = selectedSudoku.getGame();
             actualGame.resumeGame();
         }
+        
         else {
             try {
+                gridSudokuBase = DBManager.getGrid(selectedSudoku.getId());
                 actualGame = new Game(gridSudokuBase, MainMenu.getProfile());
             } catch (SQLException e) {
                 System.out.println("Error when starting new game");
@@ -74,12 +75,12 @@ public class SudokuGame {
         NumberSelection numberSelection = new NumberSelection(toolsPanel);
 
         // 3. Créer la grille de Sudoku en lui passant NumberSelection
-        SudokuGrid grid = new SudokuGrid(numberSelection, actualGame.getGrid(), toolsPanel, actualGame);
+        SudokuGrid grid = new SudokuGrid(numberSelection, toolsPanel, actualGame);
 
         // 4. Associer la grille à NumberSelection maintenant qu'elle existe
         numberSelection.setSudokuGrid(grid);
 
-        grid.setGrid();
+        grid.loadGrid(gridSudokuBase);
         ControlButtons controlsButtons = new ControlButtons(grid, actualGame);
 
         VBox rightPanel = new VBox(20);
@@ -111,12 +112,32 @@ public class SudokuGame {
         Button cancelButton = new ProfileButton("Annuler");
     
         menuSelectButton.setOnAction(e -> {
+            try {
+                actualGame.stopGame();
+            } catch (SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (InterruptedException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            System.out.println(actualGame.getGameState());
             alert.setResult(ButtonType.OK);
             alert.close();
             SudokuMenu.showSudokuLibrary(primaryStage);
         });
     
         menuButton.setOnAction(e -> {
+            try {
+                actualGame.stopGame();
+            } catch (SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (InterruptedException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            System.out.println(actualGame.getGameState());
             alert.setResult(ButtonType.OK);
             alert.close();
             MainMenu.showMainMenu(primaryStage, MainMenu.getProfile());

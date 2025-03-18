@@ -4,8 +4,8 @@ grp6/sudocore/Action.class
 grp6/sudocore/NoPutNumberOnCellExeception.class
 grp6/sudocore/SudoTypes.class
 grp6/sudocore/Main.class
-grp6/sudocore/Grid.class
 grp6/sudocore/SudokuSolver.class
+grp6/sudocore/Grid.class
 grp6/sudocore/SudoTypes$ActionType.class
 grp6/sudocore/AnnotationRemoveCellAction.class
 grp6/intergraph/NumberSelection.class
@@ -16,8 +16,8 @@ grp6/sudocore/AnnotationCellAction.class
 grp6/intergraph/MainMenu.class
 grp6/intergraph/GameplayChoice.class
 grp6/sudocore/DBManager.class
-grp6/sudocore/ActionManagerApply.class
 grp6/sudocore/NumberCellAction$NumberCellActionDeserialiser.class
+grp6/sudocore/ActionManagerApply.class
 grp6/intergraph/MenusController.class
 grp6/intergraph/Sudoku.class
 grp6/sudocore/Profile.class
@@ -37,8 +37,8 @@ grp6/sudocore/ActionManagerApply$1.class
 grp6/sudocore/FixCell.class
 grp6/intergraph/ToolsPanel.class
 grp6/sudocore/NoCompatibleActionGameException.class
-grp6/intergraph/Main.class
 grp6/intergraph/ProfileSelection.class
+grp6/intergraph/Main.class
 grp6/sudocore/NumberCellAction$NumberCellActionSerialiser.class
 grp6/intergraph/Settings.class
 grp6/sudocore/SudoTypes$GameState.class

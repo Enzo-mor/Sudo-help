@@ -2,6 +2,7 @@ package grp6.intergraph;
 import grp6.sudocore.*;
 import grp6.sudocore.SudoTypes.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +11,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class SudokuMenu {
@@ -26,7 +29,6 @@ public class SudokuMenu {
      * @param stage La fenêtre principale dans laquelle la bibliothèque est affichée.
      */
     public static void showSudokuLibrary(Stage stage) {
-        List<Game> games = DBManager.getGamesForProfile(MainMenu.getProfileName());
         currentPage = 0;
 
         // Création des boutons de navigation
@@ -48,7 +50,7 @@ public class SudokuMenu {
         sudokuContainer.setMinHeight(400);
 
         // Récupération et initialisation des grilles de Sudoku
-        List<Sudoku> sudokus = initializeSudokus(games);
+        List<Sudoku> sudokus = initializeSudokus();
 
         // Actions des flèches de navigation
         leftArrow.setOnAction(e -> {
@@ -100,7 +102,7 @@ public class SudokuMenu {
             case FINISHED:
                 statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/star.png")));
                 break;
-            case IN_PROGRESS:
+            case IS_STARTED:
                 statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/pause.png")));
                 break;
             default:
@@ -141,7 +143,8 @@ public class SudokuMenu {
     /**
      * Initialise la liste des Sudokus disponibles.
      */
-    private static List<Sudoku> initializeSudokus(List<Game> games) {
+    private static List<Sudoku> initializeSudokus() {
+        List<Game> games = DBManager.getGamesForProfile(MainMenu.getProfileName());
         List<Sudoku> sudokus = new ArrayList<>();
 
         int sizeEasy = DBManager.getGridSizeWithDifficulty(Difficulty.EASY);
@@ -165,7 +168,8 @@ public class SudokuMenu {
         }
 
         games.stream().forEach(game-> {
-            sudokus.get(game.getGrid().getId()).modifyInfo(game.getElapsedTime(), game.getScore(), game.getGameState(), game);
+            sudokus.get(game.getGrid().getId()-1).modifyInfo(game.getElapsedTime(), game.getScore(), game.getGameState(), game);
+            System.out.println("Game : " + game.getGrid().getId() + " - " + game.getElapsedTime() + " - " + game.getScore() + " - " + game.getGameState());
         });
         return sudokus;
     }
@@ -190,7 +194,58 @@ public class SudokuMenu {
             sudokuContainer.add(sudokuBox, (i - startIndex) % columns, (i - startIndex) / columns);
 
             final int selectedSudokuId = i;
-            sudokuBox.setOnMouseClicked(e -> SudokuGame.showSudokuGame(stage, sudokus.get(selectedSudokuId)));
+            sudokuBox.setOnMouseClicked(e -> {
+                if(sudoku.getStatus() == GameState.IS_STARTED || sudoku.getStatus() == GameState.FINISHED) {
+
+                    System.out.println(sudoku.getGame().getGameState());
+                
+                    // Creer une nouvelle petite fenetre pop-up (fenetre modale)
+                    Stage popupStage = new Stage();
+                    popupStage.initModality(Modality.APPLICATION_MODAL); // Bloquer les interactions avec la fenetre principale
+                    popupStage.setTitle("Reprendre la partie");
+
+                    // Composants de l'interface utilisateur
+                    Label label = new Label("Voulez vous reprendre votre partie en cours ou recommencer de zéro ?"); // Libelle au-dessus du champ de texte
+                    Button reloadButton = new Button("Reprendre"); // Bouton pour confirmer la creation du profil
+                    Button restartButton = new Button("Recommencer"); // Bouton pour confirmer la creation du profil
+
+                    // Gerer l'evenement lors du clic sur le bouton "Creer"
+                    reloadButton.setOnAction(event -> {
+                        Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
+                        SudokuGame.showSudokuGame(stage, selectedSudoku);
+                        popupStage.close(); // Fermer la fenetre pop-up apres l'ajout du profil
+                    });
+                    
+                    restartButton.setOnAction(event -> {
+                        Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
+                        try {
+                            DBManager.deleteGame(selectedSudoku.getGame().getId());
+                        } catch (SQLException e1) {
+                            e1.printStackTrace();
+                        }
+                        selectedSudoku.setStatus(GameState.NOT_STARTED);
+                        selectedSudoku.getGame().setGameState(GameState.NOT_STARTED);
+                        SudokuGame.showSudokuGame(stage, selectedSudoku);
+                        popupStage.close(); // Fermer la fenetre pop-up apres l'ajout du profil
+                    });
+
+                    // Creer une mise en page verticale avec un espacement entre les elements
+                    VBox popupLayout = new VBox(10, label, restartButton, reloadButton);
+                    popupLayout.setPadding(new Insets(10)); // Ajouter une marge pour une meilleure apparence
+
+                    // Creer et appliquer la scene a la fenetre pop-up
+                    Scene scene = new Scene(popupLayout, 300, 150);
+                    popupStage.setScene(scene);
+
+                    // Afficher la fenetre pop-up et attendre l'interaction de l'utilisateur
+                    popupStage.showAndWait();
+                }
+                else {
+                    System.out.println("COUCOU");
+                    Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
+                    SudokuGame.showSudokuGame(stage, selectedSudoku);
+                }
+            });
         }
 
         leftArrow.setDisable(currentPage == 0);

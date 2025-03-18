@@ -132,12 +132,9 @@ public final class Game {
         calculateProgressRate();
         this.elapsedTime = 0; 
         currentIndex=-1;
-        gameState=GameState.NOT_STARTED;
+        this.gameState=GameState.NOT_STARTED;
         score=0;
         this.timer = Executors.newScheduledThreadPool(1);
-
-
-
     }
     /**
      * cette methode permet de recommencer une partie en renitialisant la grille
@@ -153,6 +150,12 @@ public final class Game {
         score=0;
         this.grid.resetGrid();
         startGame();
+        try {
+            saveGame();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     /**
      * cette methode retourne id du jeux
@@ -174,7 +177,7 @@ public final class Game {
       * @param elapsedTime represente le temps ecoulé
       */
 
-     protected Game( long id,Grid grid,Profile profile, String createdDate, String lastModifDate, double progressRate, long elapsedTime){
+     protected Game( long id,Grid grid,Profile profile, String createdDate, String lastModifDate, double progressRate, long elapsedTime, String gameState){
         this.id=id;
         this.grid=grid;
         this.profile=profile;
@@ -182,7 +185,8 @@ public final class Game {
         this.lastModifDate=lastModifDate;
         this.progressRate=progressRate;
         this.elapsedTime=elapsedTime;
-        gameState=GameState.NOT_STARTED;
+        System.out.println(gameState);
+        this.gameState = gameState.equals("IS_STARTED")?GameState.IS_STARTED:GameState.FINISHED;
         this.timer = Executors.newScheduledThreadPool(1);
     }
 
@@ -290,8 +294,7 @@ public final class Game {
           }
           if(gameState==GameState.FINISHED){
                 throw new IllegalStateException("le jeu a déja été terminé");
-          } 
-          
+          }
          if(gameState==GameState.PAUSED){
                 throw new IllegalStateException("le jeu est déjà en pause");
           }
@@ -326,8 +329,8 @@ public final class Game {
             if(gameState==GameState.IN_PROGRESS){
                 throw new IllegalStateException("le jeu est déjà en cours");
             }
-            startTimer();
             gameState=GameState.IN_PROGRESS;
+            startTimer();
         } catch (Exception e) {
            System.err.println(e.getMessage());
         }
@@ -350,11 +353,14 @@ public final class Game {
                     timer.shutdownNow(); // Force l'arrêt après 4 secondes attente
                 }
             }
+
+            gameState=GameState.IS_STARTED;
             saveGame();
             
         } catch (InterruptedException e) {
             // TODO: handle exception
              System.err.println("le timer est déjà arrêté "+e.getMessage());
+             gameState=GameState.IS_STARTED;
              saveGame();
         }
         catch(SQLException e){
@@ -438,6 +444,7 @@ public final class Game {
          currentIndex++;
 
         updateGame();
+        saveGame();
 
 
          return this;
@@ -754,6 +761,10 @@ public final class Game {
      */
     public GameState getGameState() {
         return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 
     public Action getLastAction() {

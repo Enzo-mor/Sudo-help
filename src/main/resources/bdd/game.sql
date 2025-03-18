@@ -7,6 +7,7 @@ CREATE TABLE game(
     progress_rate REAL not null,
     score INTEGER DEFAULT 0,
     actions TEXT,
-    elapsed_time INTEGER DEFAULT 0
+    elapsed_time INTEGER DEFAULT 0,
+    game_state TEXT not null
 
 );

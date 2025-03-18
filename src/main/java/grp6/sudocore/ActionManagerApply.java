@@ -12,6 +12,8 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
+import grp6.sudocore.SudoTypes.GameState;
+
 /**
  * Cette classe permet de gerer la serialisation et la deserialisation d'une liste actions
  * 

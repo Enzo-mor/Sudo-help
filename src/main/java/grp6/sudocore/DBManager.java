@@ -390,6 +390,7 @@ public final class DBManager {
                       , rs.getString("last_modifed_date")
                       , rs.getDouble("progress_rate")
                       , rs.getLong("elapsed_time")
+                      , rs.getString("game_state")
                       );
                      game.applyActions(ActionManagerApply.deserializeList(rs.getString("actions"), game));
                     res.add(game );
@@ -525,15 +526,16 @@ protected static void saveGame(Game game) throws SQLException{
             if(!DBManager.profileExists(game.getProfile().getPseudo()))
             game.getProfile().save();
 
-        String sql = "INSERT INTO game (id_game, grid,player,created_date, last_modifed_date,progress_rate,score,actions,elapsed_time) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+        String sql = "INSERT INTO game (id_game, grid,player,created_date, last_modifed_date,progress_rate,score,actions,elapsed_time, game_state) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
             "ON CONFLICT(id_game) DO UPDATE SET " +
             "player = excluded.player, " +
             "last_modifed_date = excluded.last_modifed_date, " +
             "progress_rate = excluded.progress_rate, " +
             "score = excluded.score;"+ 
             "actions=excluded.actions"+
-            "elapsed_time=excluded.elapsed_time";
+            "elapsed_time=excluded.elapsed_time"+
+            "game_state=excluded.game_state";
             try (Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -546,9 +548,11 @@ protected static void saveGame(Game game) throws SQLException{
             pstmt.setInt(7, game.getScore());
             pstmt.setString(8, game.JsonEncodeActionsGame());
             pstmt.setLong(9,game.getElapsedTime());
+            pstmt.setString(10, game.getGameState().getName());
 
             pstmt.executeUpdate();
             System.out.println("Jeu enregistré avec succès !");
+            System.err.println("TEST : " + game.getGameState().getName());
 
         } catch (SQLException e) {
             e.printStackTrace();

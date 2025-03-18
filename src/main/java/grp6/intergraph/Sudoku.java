@@ -54,5 +54,13 @@ public class Sudoku {
         this.status=state;
         this.game=game;
     }
+
+    public String toString(){
+        return name;
+    }
+
+    public void setStatus(GameState status) {
+        this.status = status;
+    }
 }
 

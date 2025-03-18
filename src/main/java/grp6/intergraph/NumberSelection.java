@@ -4,6 +4,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 
 public class NumberSelection {
     private static VBox numberSelection;
@@ -50,19 +52,31 @@ public class NumberSelection {
 
     private void selectNumber(Button button) {
         String numberStr = button.getText();
-        Integer number = Integer.valueOf(numberStr);
+        int number = Integer.parseInt(numberStr);
+        Button numberButton = SudokuGrid.getSelectedCell();
     
-        if (toolsPanel.getAnnotationMode() && sudokuGrid != null && SudokuGrid.getSelectedCell() != null) {
-            // Mode annotation activé → Ajouter/Supprimer une annotation
-            int row = SudokuGrid.getSelectedRow();
-            int col = SudokuGrid.getSelectedCol();
-    
-            if (!sudokuGrid.hasAnnotation(row, col, numberStr)) {
-                sudokuGrid.addAnnotationToCell(row, col, numberStr);
-                sudokuGrid.getGame().addAnnotation(row, col, number);
-            } else {
-                sudokuGrid.removeAnnotationFromCell(row, col, numberStr);
-                sudokuGrid.getGame().removeAnnotation(row, col, number);
+        if (toolsPanel.getAnnotationMode() && sudokuGrid != null && numberButton != null) {
+            
+            String cellText = numberButton.getText().trim();
+
+            if (!numberButton.getChildrenUnmodifiable().isEmpty() && numberButton.getChildrenUnmodifiable().get(0) instanceof Label) {
+                Label label = (Label) numberButton.getChildrenUnmodifiable().get(0);
+                cellText = label.getText().trim();
+            }
+                
+            // On peut ajouter une annotation que si le bouton ne contient pas de nombre donc number vaut 0
+            if(cellText.isEmpty() || cellText.equals("0")) {
+                // Mode annotation activé → Ajouter/Supprimer une annotation
+                int row = SudokuGrid.getSelectedRow();
+                int col = SudokuGrid.getSelectedCol();
+        
+                if (!sudokuGrid.hasAnnotation(row, col, numberStr)) {
+                    sudokuGrid.addAnnotationToCell(row, col, numberStr);
+                    sudokuGrid.getGame().addAnnotation(row, col, number);
+                } else {
+                    sudokuGrid.removeAnnotationFromCell(row, col, numberStr);
+                    sudokuGrid.getGame().removeAnnotation(row, col, number);
+                }
             }
         } else {
             // Mode normal → Sélection du nombre

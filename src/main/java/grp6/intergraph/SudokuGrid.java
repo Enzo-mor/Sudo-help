@@ -32,12 +32,12 @@ public class SudokuGrid {
      * @param toolsP [ToolsPanel] 
      * @param actualGame [Game]
      */
-    public SudokuGrid(NumberSelection numberSelection, Grid gridData, ToolsPanel toolsP, Game actualGame) {
+    public SudokuGrid(NumberSelection numberSelection, ToolsPanel toolsP, Game actualGame) {
         this.grid = new GridPane();
         this.toolsPanel = toolsP;
         this.numberSelection = numberSelection;
-        this.gridSudoku = gridData;
         this.actualGame = actualGame;
+        this.gridSudoku = actualGame.getGrid();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 this.actionEraser[i][j] = false;
@@ -334,6 +334,35 @@ public class SudokuGrid {
 
     // ------------ Méthodes de mise à jour de la grille ------------ //
 
+    public void loadGrid(Grid gridSudokuBase) {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                Cell cellGame = gridSudoku.getCell(i, j);
+                Cell cellBDD = gridSudokuBase.getCell(i, j);
+                Button cellButton = cells[i][j]; // Récupère le bouton de la cellule actuelle
+                Label mainNumber = new Label();
+                Text annotationText = new Text();
+
+                if(cellGame.getNumber() == cellBDD.getNumber()) {
+                    if (cellBDD instanceof FixCell fixCell) {
+                        if (fixCell.getNumber() == 0) {
+                            mainNumber.setText("");
+                        } else {
+                            mainNumber.setFont(new Font(18));
+                            mainNumber.setText(String.valueOf(fixCell.getNumber()));
+                        }                    
+                        annotationText.setText(""); 
+                        cellButton.setGraphic(mainNumber);
+                    } else {
+                        setAnnotationDisplay(cellButton, i, j, annotationText);
+                    }
+                } else {
+                    setNumberDisplay(cellButton, String.valueOf(cellGame.getNumber()), mainNumber, annotationText);
+                }
+            }
+        }
+    }
+
     public void setGrid() {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
@@ -382,8 +411,8 @@ public class SudokuGrid {
     }
 
     private void resetButton() {
-        numberSelection.resetSelectedNumber();
-        numberSelection.clearSelection();
+        NumberSelection.resetSelectedNumber();
+        NumberSelection.clearSelection();
         
         toolsPanel.setEraseButtonOff();
         toolsPanel.setPencilButtonOff();
