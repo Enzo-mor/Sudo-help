@@ -13,12 +13,7 @@ public class LastNumber implements InterfaceTech {
     public Help getHelp(Grid grille) {
         Help aide = new Help(getClass().getSimpleName());
 
-        
-        ArrayList<Integer> listeColl = new ArrayList<>();
-        ArrayList<Integer> listeLine = new ArrayList<>();
-        ArrayList<Integer> listeSquare = new ArrayList<>();
 
-        int[]  d;
         AutoAnnotation.generate(grille);
         for(int i=0; i<Grid.NB_NUM; i++){
             for(int j=0; j<Grid.NB_NUM; j++){      
@@ -29,6 +24,7 @@ public class LastNumber implements InterfaceTech {
                     aide.setMessage(1,"Fait attention au "+grille.getCell(i,j).getAnnotations().get(0));
                     aide.setMessage(2,"Fait attention aux ligne "+i);
                     aide.setMessage(3,"Regarde la cellule ligne :  "+ i +", colone : "+ j+" Bissous" );
+                    return aide;
                 }
             }
         }
