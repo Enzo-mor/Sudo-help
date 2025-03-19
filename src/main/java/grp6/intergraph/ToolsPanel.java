@@ -1,8 +1,5 @@
 package grp6.intergraph;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
@@ -10,11 +7,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 
 public class ToolsPanel {
-    private VBox tools;
+    private final VBox tools;
     private boolean eraseMode = false;    // Mode gomme
     private boolean annotationMode = false; // Mode annotation
-    private Button eraseButton;
-    private Button pencilButton;
+    private final Button eraseButton;
+    private final Button pencilButton;
 
     public ToolsPanel() {
         this.tools = new VBox(15);

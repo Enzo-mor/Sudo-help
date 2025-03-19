@@ -134,10 +134,6 @@ public final class SudoTypes {
          */
         NOT_STARTED("jeu est en arrêt"),
         /**
-         * Enum pour l'etat du jeu commencé mais pas encore terminé
-         */
-        IS_STARTED("jeu existe"),
-        /**
          * Enum pour l'etat du jeu en cours
          */
          IN_PROGRESS("jeu en cours"),
@@ -173,8 +169,6 @@ public final class SudoTypes {
             switch (this) {
                 case NOT_STARTED:
                     return "NOT_STARTED";
-                case IS_STARTED:
-                    return "IS_STARTED";
                 case IN_PROGRESS:
                     return "IN_PROGRESS";
                 case PAUSED:

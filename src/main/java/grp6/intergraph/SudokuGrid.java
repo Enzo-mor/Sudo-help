@@ -16,6 +16,7 @@ public class SudokuGrid {
     private final ToolsPanel toolsPanel; // Panneau des outils
     private final NumberSelection numberSelection; // Panneau de sélection des chiffres
     private static final Button[][] cells = new Button[9][9]; // Stocke les boutons des cellules
+    @SuppressWarnings("unchecked")
     private final List<String>[][] annotations = new ArrayList[9][9];
     private final boolean[][] actionEraser = new boolean[9][9];
     private final Grid gridSudoku; // Grille de sudoku
@@ -335,12 +336,20 @@ public class SudokuGrid {
     // ------------ Méthodes de mise à jour de la grille ------------ //
 
     public void loadGrid(Grid gridSudokuBase) {
+        if (gridSudokuBase == null) {
+            System.err.println("Error: gridSudokuBase is null!");
+            return; // Exit early to prevent a NullPointerException
+        }
+
+        Grid gridSudokuGame = actualGame.getGrid();
+        
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                Cell cellGame = gridSudoku.getCell(i, j);
+                Cell cellGame = gridSudokuGame.getCell(i, j);
                 Cell cellBDD = gridSudokuBase.getCell(i, j);
                 Button cellButton = cells[i][j]; // Récupère le bouton de la cellule actuelle
                 Label mainNumber = new Label();
+                mainNumber.setFont(new Font(18));
                 Text annotationText = new Text();
 
                 if(cellGame.getNumber() == cellBDD.getNumber()) {
@@ -348,7 +357,6 @@ public class SudokuGrid {
                         if (fixCell.getNumber() == 0) {
                             mainNumber.setText("");
                         } else {
-                            mainNumber.setFont(new Font(18));
                             mainNumber.setText(String.valueOf(fixCell.getNumber()));
                         }                    
                         annotationText.setText(""); 
@@ -361,6 +369,21 @@ public class SudokuGrid {
                 }
             }
         }
+    }
+    /*
+    * Methode pour recharger une grille deja demarree
+    * @param game Partie du joueur associee a la grille
+    */
+    public void reload(Grid originalGrid){
+        setGrid();
+        List<Action> actions = actualGame.getActions();
+        actualGame.clearActions();
+        for (int i = 0 ; i< actions.size(); i++){
+            System.out.println("TAILLE ACTIONS : " + actions.size());
+            actualGame.executeAction(actions.get(i));
+        }
+        actualGame.clearActions();
+        loadGrid(originalGrid);
     }
 
     public void setGrid() {

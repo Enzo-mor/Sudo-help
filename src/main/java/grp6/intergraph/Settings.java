@@ -103,7 +103,7 @@ class Settings extends Stage {
                 this.close();
                 
             } catch (SQLException e1) {
-                e1.printStackTrace();
+                System.err.println("Error deleting profile: " + e1.getMessage());
             }
         });
 

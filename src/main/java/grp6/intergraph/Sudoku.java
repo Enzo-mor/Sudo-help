@@ -5,7 +5,7 @@ import grp6.sudocore.SudoTypes.GameState;
 
 public class Sudoku {
     private final int id;
-    private String name;
+    private final String name;
     private long bestTime;
     private int score;
     private GameState status;
@@ -55,6 +55,7 @@ public class Sudoku {
         this.game=game;
     }
 
+    @Override
     public String toString(){
         return name;
     }

@@ -42,9 +42,8 @@ protected final int y;
           throw new NoCompatibleActionGameException("l'action ne peut etre crée car la cellule doit etre editable ou flexible");
       }
 
-    } catch (Exception e) {
-      // TODO: handle exception
-      e.printStackTrace();
+    } catch (NoEditableCellExeception | NoCompatibleActionGameException e) {
+      System.err.println(e.getMessage());
     }  
   }
 

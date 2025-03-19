@@ -3,6 +3,7 @@ import grp6.sudocore.*;
 import grp6.sudocore.SudoTypes.GameState;
 
 import java.sql.SQLException;
+
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,16 +22,15 @@ public class SudokuGame {
 
     public static void showSudokuGame(Stage primaryStage, Sudoku selectedSudoku) {
 
-        Grid gridSudokuBase = null;
+        Grid gridSudokuBase = DBManager.getGrid(selectedSudoku.getId());
 
-        if (selectedSudoku.getStatus() == GameState.IS_STARTED) {
+        if (selectedSudoku.getStatus() == GameState.IN_PROGRESS && selectedSudoku.getGame() != null) {
             actualGame = selectedSudoku.getGame();
             actualGame.resumeGame();
         }
         
         else {
             try {
-                gridSudokuBase = DBManager.getGrid(selectedSudoku.getId());
                 actualGame = new Game(gridSudokuBase, MainMenu.getProfile());
             } catch (SQLException e) {
                 System.out.println("Error when starting new game");
@@ -80,16 +80,13 @@ public class SudokuGame {
         // 4. Associer la grille à NumberSelection maintenant qu'elle existe
         numberSelection.setSudokuGrid(grid);
 
-        grid.loadGrid(gridSudokuBase);
+        grid.reload(gridSudokuBase);
+        
         ControlButtons controlsButtons = new ControlButtons(grid, actualGame);
 
-        VBox rightPanel = new VBox(20);
-        rightPanel.getChildren().addAll(numberSelection.getNumberSelection(), toolsPanel.getTools(), controlsButtons.getControlButtons());
-        HBox layout = new HBox(20);
-        layout.getChildren().addAll(grid.getGridPane(), rightPanel);
-
-        VBox mainLayout = new VBox(10);
-        mainLayout.getChildren().addAll(topBar, layout);
+        VBox rightPanel = new VBox(20, numberSelection.getNumberSelection(), toolsPanel.getTools(), controlsButtons.getControlButtons());
+        HBox layout = new HBox(20, grid.getGridPane(), rightPanel);
+        VBox mainLayout = new VBox(10, topBar, layout);
 
         Scene scene = new Scene(mainLayout, 800, 600);
         primaryStage.setTitle(selectedSudoku.getName() + " - " + MainMenu.getProfileName());
@@ -101,7 +98,9 @@ public class SudokuGame {
 
     private static void showExitDialog(Stage primaryStage) {
 
-        actualGame.pauseGame();
+        if (actualGame != null) {
+            actualGame.pauseGame();
+        }
 
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("Retour au menu");
@@ -112,50 +111,45 @@ public class SudokuGame {
         Button cancelButton = new ProfileButton("Annuler");
     
         menuSelectButton.setOnAction(e -> {
-            try {
-                actualGame.stopGame();
-            } catch (SQLException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            } catch (InterruptedException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+            if (actualGame != null) {
+                try {
+                    actualGame.stopGame();
+                } catch (SQLException | InterruptedException e1) {
+                    System.err.println("Error stopping the game: " + e1.getMessage());
+                }
+                actualGame = null;
             }
-            System.out.println(actualGame.getGameState());
             alert.setResult(ButtonType.OK);
             alert.close();
             SudokuMenu.showSudokuLibrary(primaryStage);
         });
     
         menuButton.setOnAction(e -> {
-            try {
-                actualGame.stopGame();
-            } catch (SQLException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            } catch (InterruptedException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+            if (actualGame != null) {
+                try {
+                    actualGame.stopGame();
+                } catch (SQLException | InterruptedException e1) {
+                    System.err.println("Error stopping the game: " + e1.getMessage());
+                }
+                actualGame = null;
             }
-            System.out.println(actualGame.getGameState());
             alert.setResult(ButtonType.OK);
             alert.close();
             MainMenu.showMainMenu(primaryStage, MainMenu.getProfile());
         });
     
         cancelButton.setOnAction(e -> {
-            actualGame.resumeGame(); // Reprendre le chrono
+            if (actualGame != null) {
+                actualGame.resumeGame();
+            }
             alert.setResult(ButtonType.CANCEL);
             alert.close();
         });
     
-        HBox buttons = new HBox();
-        buttons.getChildren().addAll(menuSelectButton, menuButton, cancelButton);
+        HBox buttons = new HBox(10, menuSelectButton, menuButton, cancelButton);
         buttons.setAlignment(Pos.CENTER);
-        buttons.setSpacing(10);
     
         alert.getDialogPane().setContent(buttons);
-    
         alert.showAndWait();
     }
 }

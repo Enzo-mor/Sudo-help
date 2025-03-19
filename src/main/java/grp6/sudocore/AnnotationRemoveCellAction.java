@@ -54,8 +54,7 @@ public class AnnotationRemoveCellAction extends AnnotationCellAction {
                 //AnnotationRemoveCellAction annotation = new AnnotationRemoveCellAction(new Game(DBManager.getGrid(2),new Profile("philippe")), 0, 0, 3);
                  //System.out.println(annotation.serialise());
             } catch (Exception e) {
-                // TODO: handle exception
-                e.printStackTrace();
+                System.err.println("An error occurred: " + e.getMessage());
             }
             
         

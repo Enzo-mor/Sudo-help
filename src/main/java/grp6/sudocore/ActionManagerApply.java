@@ -1,8 +1,11 @@
 package grp6.sudocore;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -11,8 +14,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
-
-import grp6.sudocore.SudoTypes.GameState;
 
 /**
  * Cette classe permet de gerer la serialisation et la deserialisation d'une liste actions
@@ -54,7 +55,7 @@ public class ActionManagerApply {
     * Gestion  désérialisation des objets Action
     */
     private static class ActionManagerDeserialiser implements JsonDeserializer<Action> {
-        private Game game;
+        private final Game game;
         public ActionManagerDeserialiser(Game game){
         this.game=game;
         }
@@ -65,15 +66,16 @@ public class ActionManagerApply {
                  Class <? extends Action> subAction=ActionFactory.getClassFromType(json.getAsJsonObject().get("type").getAsString());
                  java.lang.reflect.Method method=subAction.getMethod("jsonDecode", String.class,Game.class);
                  return (Action) method.invoke(subAction, json.toString(), game);
-                 } catch (Exception e) {
-                    e.printStackTrace();
+                 } catch (JsonParseException | IllegalAccessException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+                    System.err.println("Error during deserialization: " + e.getMessage());
                     throw new JsonParseException("echec lors de le deserialisation : ", e);
                 }   
          }
     }
      private static  class ActionManagerserialiser implements JsonSerializer<Action> {
 
-
+    
+    @Override
     public  JsonElement serialize(Action action, Type vartype, JsonSerializationContext context){
      return action.serialise();
     }
@@ -107,8 +109,8 @@ public class ActionManagerApply {
             action.doAction();
             System.out.println("Action exécutée : " + action);
         }*/
-        } catch (Exception e) {
-            // TODO: handle exception
+        } catch (SQLException e) {
+            System.err.println("Error during deserialization: " + e.getMessage());
         }
 
         

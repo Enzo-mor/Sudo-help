@@ -4,18 +4,16 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 
 public class NumberSelection {
     private static VBox numberSelection;
     private static String selectedNumber = null;
-    private ToolsPanel toolsPanel; // Ajout du panneau d'outils
+    private final ToolsPanel toolsPanel; // Ajout du panneau d'outils
     private SudokuGrid sudokuGrid; // Référence à la grille Sudoku
 
     public NumberSelection(ToolsPanel toolsPanel) {
         this.toolsPanel = toolsPanel;
-        this.sudokuGrid = sudokuGrid;
 
         numberSelection = new VBox(5);
         numberSelection.setAlignment(Pos.CENTER);
@@ -100,7 +98,7 @@ public class NumberSelection {
 
     // Setters
     public void setSelectedNumber(String selectedNumber) {
-        this.selectedNumber = selectedNumber;
+        NumberSelection.selectedNumber = selectedNumber;
     }
 
     public void setSudokuGrid(SudokuGrid sudokuGrid) {

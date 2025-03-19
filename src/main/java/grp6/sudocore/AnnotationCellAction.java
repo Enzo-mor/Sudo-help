@@ -32,11 +32,11 @@ public  class AnnotationCellAction extends ActionCell  {
     /**
      * represente l'ancienne valeur de la cellule
      */
-    private int old_annotation;
+    private final int old_annotation;
     /**
      * represente la valeur de la cellule pour redo
      */
-    private int redo_annotation;
+    private final int redo_annotation;
 
     /**
      * constructeur permettant de creer une action qui permet d'ajouter une annotation à une cellule specifique de la grille
@@ -114,13 +114,14 @@ public  class AnnotationCellAction extends ActionCell  {
     }
 
     private class AnnotationCellActionSerialiser implements JsonSerializer<AnnotationCellAction>{
-       private JsonObject obj;
+       
         /**
          * methode de serialiser la l'action
          */
-       public  JsonElement serialize(AnnotationCellAction action, Type vartype, JsonSerializationContext context){
-            return action.serialise();
-       }
+         @Override
+        public  JsonElement serialize(AnnotationCellAction action, Type vartype, JsonSerializationContext context){
+                return action.serialise();
+        }
     }
 
      private static class AnnotationCellActionDeserialiser implements JsonDeserializer<AnnotationCellAction> {
@@ -128,6 +129,8 @@ public  class AnnotationCellAction extends ActionCell  {
      public   AnnotationCellActionDeserialiser(Game game){
         this.game=game;
      }
+
+    @Override
     public AnnotationCellAction deserialize(JsonElement jsonElement, Type vartype, JsonDeserializationContext context) throws JsonParseException{
         JsonObject jsonObject = jsonElement.getAsJsonObject();
         if (!jsonObject.has("x") || !jsonObject.has("y") || !jsonObject.has("number")|| !jsonObject.has("old_number")|| !jsonObject.has("type")) {

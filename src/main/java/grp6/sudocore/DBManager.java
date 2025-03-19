@@ -136,8 +136,8 @@ public final class DBManager {
     private static boolean tableExists(String tableName) throws SQLException {
         String query = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
     
-        try(Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+        try(Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
     
             pstmt.setString(1, tableName);
             ResultSet rs = pstmt.executeQuery();
@@ -165,8 +165,8 @@ public final class DBManager {
             }
     
             String query = "SELECT * FROM grid WHERE id_grid = ?";
-            try(Connection conn = getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+            try(Connection connection = getConnection();
+                 PreparedStatement pstmt = connection.prepareStatement(query)) {
     
                 pstmt.setInt(1, id);
                 ResultSet rs = pstmt.executeQuery();
@@ -184,9 +184,12 @@ public final class DBManager {
                     throw new IllegalArgumentException("Aucune grille trouvée avec l'ID: " + id);
                 }
             }
-        } catch(Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erreur lors du chargement de la grille avec l'ID: " + id, e);
+        } catch(SQLException e) {
+            System.err.println("Erreur SQL lors de l'exécution du script : " + e.getMessage());
+            throw new RuntimeException("Erreur SQL lors du chargement de la grille avec l'ID: " + id, e);
+        } catch(IllegalArgumentException e) {
+            System.err.println("Argument illégal : " + e.getMessage());
+            throw new RuntimeException("Argument illégal lors du chargement de la grille avec l'ID: " + id, e);
         }
     }
 
@@ -203,21 +206,21 @@ public final class DBManager {
                 executeSqlScript(getConnection(), "game");
             }
 
-        String query = "SELECT COALESCE(MAX(id_game), 0) FROM game";
-        try(Connection conn = getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query)) {
-            ResultSet rs = pstmt.executeQuery();
-            if(rs.next())
-            return rs.getInt(1);
-        } catch(SQLException e) {
+            String query = "SELECT COALESCE(MAX(id_game), 0) FROM game";
+            try(Connection connexion = getConnection();
+                PreparedStatement pstmt = connexion.prepareStatement(query)) {
+                ResultSet rs = pstmt.executeQuery();
+                if(rs.next())
+                return rs.getInt(1);
+            } catch(SQLException e) {
+                System.err.println("Erreur lors de la récupération du dernier ID de partie : " + e.getMessage());
+            }
+            return 0;
+            }
+        catch(SQLException | RuntimeException e) {
             System.err.println("Erreur lors de la récupération du dernier ID de partie : " + e.getMessage());
-        }
-          return 0;
-        }
-        catch(Exception e) {
-            e.printStackTrace();
             throw new RuntimeException("Erreur lors du l'execution du script: " + e);
-    }
+        }
     }
 
     
@@ -237,8 +240,8 @@ public final class DBManager {
             }
     
             String query = "SELECT * FROM grid";
-            try(Connection conn = getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+            try(Connection connexion = getConnection();
+                 PreparedStatement pstmt = connexion.prepareStatement(query)) {
     
                 ResultSet rs = pstmt.executeQuery();
     
@@ -256,8 +259,8 @@ public final class DBManager {
                 }
             }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch(SQLException e) {
+            System.err.println("Erreur lors de la récupération des jeux : " + e.getMessage());
             throw new RuntimeException("Erreur lors du chargement des grilles: " + e);
         }
 
@@ -282,8 +285,8 @@ public final class DBManager {
             }
     
             String query = "SELECT * FROM profile";
-            try(Connection conn = getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+            try(Connection connexion = getConnection();
+                 PreparedStatement pstmt = connexion.prepareStatement(query)) {
     
                 ResultSet rs = pstmt.executeQuery();
     
@@ -294,8 +297,8 @@ public final class DBManager {
                 }
             }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch(SQLException e) {
+            System.err.println("Erreur lors de la suppression des jeux pour le profil : " + e.getMessage());
             throw new RuntimeException("Erreur lors du chargement des profiles: " + e);
         }
 
@@ -321,8 +324,8 @@ public final class DBManager {
          .anyMatch(p->p.getPseudo().equalsIgnoreCase(profile.getPseudo()))){
 
       String query = "INSERT INTO profile(pseudo) VALUES(?)";
-       Connection conn=getConnection();
-       PreparedStatement stmt =conn.prepareStatement(query);
+       Connection connexion = getConnection();
+       PreparedStatement stmt =connexion.prepareStatement(query);
         stmt.setString(1, profile.getPseudo());
         stmt.executeUpdate();
 
@@ -344,8 +347,8 @@ public final class DBManager {
 
         String query = "SELECT COUNT(*) FROM profile WHERE LOWER(pseudo) = LOWER(?)";
 
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+        try (Connection connexion = getConnection();
+             PreparedStatement pstmt = connexion.prepareStatement(query)) {
 
             pstmt.setString(1, profileName);
             ResultSet rs = pstmt.executeQuery();
@@ -354,7 +357,7 @@ public final class DBManager {
                 return rs.getInt(1) > 0; // Retourne true si au moins un profil est trouvé
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur lors de la vérification de l'existence du profil : " + e.getMessage());
         }
         return false; 
     }
@@ -376,8 +379,8 @@ public final class DBManager {
             }
     
             String query = "SELECT * FROM game";
-            try(Connection conn = getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+            try(Connection connexion = getConnection();
+                 PreparedStatement pstmt = connexion.prepareStatement(query)) {
     
                 ResultSet rs = pstmt.executeQuery();
     
@@ -397,8 +400,8 @@ public final class DBManager {
                 }
             }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch(SQLException e) {
+            System.err.println("Erreur lors de la suppression des jeux pour le profil : " + e.getMessage());
             throw new RuntimeException("Erreur lors de l'execution du script: " + e);
         }
 
@@ -421,10 +424,9 @@ public final class DBManager {
             }
             return games;
             
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la suppression des jeux pour le profil : " + e.getMessage());
             return new ArrayList<Game>();
-            // TODO: handle exception
         }
        
     }

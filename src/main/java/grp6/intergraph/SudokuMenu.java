@@ -11,7 +11,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -99,23 +98,15 @@ public class SudokuMenu {
         statusIcon.setFitHeight(24);
 
         switch (sudoku.getStatus()) {
-            case FINISHED:
-                statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/star.png")));
-                break;
-            case IS_STARTED:
-                statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/pause.png")));
-                break;
-            default:
-                statusIcon.setVisible(false);
-                break;
+            case FINISHED -> statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/star.png")));
+            case IN_PROGRESS -> statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/pause.png")));
+            default -> statusIcon.setVisible(false);
         }
 
         VBox contentBox = new VBox(3);
         contentBox.setAlignment(Pos.CENTER);
 
-        if (statusIcon != null) {
-            contentBox.getChildren().add(statusIcon);
-        }
+        contentBox.getChildren().add(statusIcon);
         contentBox.getChildren().addAll(scoreLabel, bestTimeLabel);
 
         sudokuBox.getChildren().addAll(nameLabel, contentBox);
@@ -128,15 +119,9 @@ public class SudokuMenu {
      */
     private static void updateDifficultyLabel(Label difficultyLabel, Sudoku sudoku) {
         switch (sudoku.getName().charAt(7)) {
-            case 'F':
-                difficultyLabel.setText("Facile");
-                break;
-            case 'M':
-                difficultyLabel.setText("Moyen");
-                break;
-            case 'D':
-                difficultyLabel.setText("Difficile");
-                break;
+            case 'F' -> difficultyLabel.setText("Facile");
+            case 'M' -> difficultyLabel.setText("Moyen");
+            case 'D' -> difficultyLabel.setText("Difficile");
         }
     }
 
@@ -195,9 +180,7 @@ public class SudokuMenu {
 
             final int selectedSudokuId = i;
             sudokuBox.setOnMouseClicked(e -> {
-                if(sudoku.getStatus() == GameState.IS_STARTED || sudoku.getStatus() == GameState.FINISHED) {
-
-                    System.out.println(sudoku.getGame().getGameState());
+                if(sudoku.getStatus() == GameState.IN_PROGRESS || sudoku.getStatus() == GameState.FINISHED) {
                 
                     // Creer une nouvelle petite fenetre pop-up (fenetre modale)
                     Stage popupStage = new Stage();
@@ -221,7 +204,7 @@ public class SudokuMenu {
                         try {
                             DBManager.deleteGame(selectedSudoku.getGame().getId());
                         } catch (SQLException e1) {
-                            e1.printStackTrace();
+                            System.err.println("Error deleting game: " + e1.getMessage());
                         }
                         selectedSudoku.setStatus(GameState.NOT_STARTED);
                         selectedSudoku.getGame().setGameState(GameState.NOT_STARTED);
@@ -241,7 +224,6 @@ public class SudokuMenu {
                     popupStage.showAndWait();
                 }
                 else {
-                    System.out.println("COUCOU");
                     Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
                     SudokuGame.showSudokuGame(stage, selectedSudoku);
                 }

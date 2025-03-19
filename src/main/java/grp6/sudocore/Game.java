@@ -2,7 +2,6 @@ package grp6.sudocore;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -186,7 +185,19 @@ public final class Game {
         this.progressRate=progressRate;
         this.elapsedTime=elapsedTime;
         System.out.println(gameState);
-        this.gameState = gameState.equals("IS_STARTED")?GameState.IS_STARTED:GameState.FINISHED;
+        switch(gameState) {
+            case "IN_PROGRESS":
+                this.gameState = GameState.IN_PROGRESS;
+                break;
+            case "PAUSED":
+                this.gameState = GameState.PAUSED;
+                break;
+            case "FINISHED":
+                this.gameState = GameState.FINISHED;
+                break;
+            default:
+                this.gameState = GameState.NOT_STARTED;
+        }
         this.timer = Executors.newScheduledThreadPool(1);
     }
 
@@ -329,6 +340,7 @@ public final class Game {
             if(gameState==GameState.IN_PROGRESS){
                 throw new IllegalStateException("le jeu est déjà en cours");
             }
+            
             gameState=GameState.IN_PROGRESS;
             startTimer();
         } catch (Exception e) {
@@ -354,13 +366,13 @@ public final class Game {
                 }
             }
 
-            gameState=GameState.IS_STARTED;
+            gameState = GameState.IN_PROGRESS;
+
             saveGame();
             
         } catch (InterruptedException e) {
-            // TODO: handle exception
              System.err.println("le timer est déjà arrêté "+e.getMessage());
-             gameState=GameState.IS_STARTED;
+             gameState=GameState.IN_PROGRESS;
              saveGame();
         }
         catch(SQLException e){
@@ -720,7 +732,7 @@ public final class Game {
     }
 
     /**
-     *  cette methode permet de mettre à jour le jeu 
+     *  Cette methode permet de mettre à jour le jeu 
      *  et de le sauvegarder
      */
     private void updateGame(){
@@ -730,8 +742,8 @@ public final class Game {
 
 
     /**
-     * cette methode retourne toutes les actions effectués sous formes de json
-     * @return
+     * Cette methode retourne toutes les actions effectués sous formes de json
+     * @return 
      */
     public String JsonEncodeActionsGame(){
 
@@ -739,10 +751,10 @@ public final class Game {
     }
 
     /**
-     * cette permet de calculer le taux de pogression du jeux
+     * Cette permet de calculer le taux de progression du jeux
      */
     private void calculateProgressRate(){
-       progressRate= (((double) (grid.getNumberFlexCell()-grid.evaluate().size()))/grid.getNumberFlexCell())*100;
+       progressRate = (((double) (grid.getNumberFlexCell()-grid.evaluate().size()))/grid.getNumberFlexCell())*100;
     }
 
     /**
@@ -814,6 +826,14 @@ public final class Game {
 
     public Action getAction(int index){
         return actions.get(index);
+    }
+
+    public List<Action> getActions(){
+        return actions;
+    }
+
+    public void clearActions(){
+        actions.clear();
     }
 
     public static void main(String[] args) {

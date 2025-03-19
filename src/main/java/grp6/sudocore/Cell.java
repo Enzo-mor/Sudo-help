@@ -34,6 +34,7 @@ public interface Cell {
      * Transforme la cellule en chaîne de caractères
      * @return La chaîne de caractères correspondante [String]
      */
+    @Override
     public String toString();
 
     
