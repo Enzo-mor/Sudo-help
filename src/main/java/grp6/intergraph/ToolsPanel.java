@@ -87,6 +87,8 @@ public class ToolsPanel {
         annotationMode = true;
         pencilButton.setStyle("-fx-background-color: lightgreen;");
 
+        SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
+
         // Réinitialiser le nombre sélctionné
         if(NumberSelection.getSelectedNumber() != null) {
             NumberSelection.resetSelectedNumber();

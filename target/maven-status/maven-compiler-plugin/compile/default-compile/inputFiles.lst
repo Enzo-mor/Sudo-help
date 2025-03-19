@@ -1,6 +1,7 @@
 /home/nathan/Univ/L3/Génie Logiciel 2/Sudo-help/src/main/java/grp6/sudocore/Cell.java
 /home/nathan/Univ/L3/Génie Logiciel 2/Sudo-help/src/main/java/grp6/intergraph/SudokuGrid.java
 /home/nathan/Univ/L3/Génie Logiciel 2/Sudo-help/src/main/java/grp6/intergraph/MainMenu.java
+/home/nathan/Univ/L3/Génie Logiciel 2/Sudo-help/src/main/java/grp6/intergraph/SudokuDisplay.java
 /home/nathan/Univ/L3/Génie Logiciel 2/Sudo-help/src/main/java/grp6/intergraph/MenusController.java
 /home/nathan/Univ/L3/Génie Logiciel 2/Sudo-help/src/main/java/grp6/sudocore/ActionManagerApply.java
 /home/nathan/Univ/L3/Génie Logiciel 2/Sudo-help/src/main/java/grp6/sudocore/GameTimeListener.java

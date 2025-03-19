@@ -39,17 +39,20 @@ public class ControlButtons {
 
         // Ajoute l'action sur le bouton "Annuler"
         undoButton.setOnAction(e -> {
+            SudokuDisplay.resetGrid(sudokuGrid.getGridPane());
             Action currentAction = sudokuGame.getLastAction();
             undoAction(currentAction);
         });
 
         // Ajoute l'action sur le bouton "Refaire"
         redoButton.setOnAction(e -> {
+            SudokuDisplay.resetGrid(sudokuGrid.getGridPane());
             redoAction();
         });
 
         // Ajoute l'action sur le bouton "Verifier"
         checkButton.setOnAction(e -> {
+            SudokuDisplay.resetGrid(sudokuGrid.getGridPane());
             putErrorsRed();
         });
 
