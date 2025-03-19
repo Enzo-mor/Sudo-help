@@ -40,10 +40,8 @@ public class NakedPairs implements InterfaceTech {
         for (int i =0; i<3 ;i++){
             for (int j = 0; j<3 ;j++){
                 cptAnnotation = 0;
-             //   if (mat[i][j].getAnnotationsBool().length == 2){
 
                     for (int k = 0; k<9;k++){
-                       // System.out.println("Annotation de la case  "+ i +" "+j+ " et de annotation : "+ k+" :"+ mat[i][j].getAnnotationsBool()[k]);
                         if(mat[i][j].getAnnotationsBool()[k]){
                             cptAnnotation++;
                         }
@@ -60,9 +58,6 @@ public class NakedPairs implements InterfaceTech {
         //  System.out.println("verif tabPair");
         for(int i = 0; i<9;i++){
             int[] temp = tabPair[i];
-            //affichage du tableau temporaire
-            //System.out.println("tabTemp["+i+"] : "+temp[0]+" "+temp[1]);
-            //System.out.println("tabPair["+i+"] : "+tabPair[i][0]+" "+tabPair[i][1]);
             for(int j = 0; j<9;j++){
                 //if de la violence (désolée)
                 if(temp[0] == tabPair[j][0]  && temp[1] == tabPair[j][1] && temp[0] !=0 && i!=j){
@@ -76,6 +71,7 @@ public class NakedPairs implements InterfaceTech {
     }
 
     private boolean detectPairs(int num,Grid grille){
+
 
         //tableau de pairs
         int [][] tabPair = new int[9][2];
@@ -103,6 +99,7 @@ public class NakedPairs implements InterfaceTech {
                 }
             }
             if (cptAnnotation == 2) {
+                aide.addLine(num);
                 tabBool = line[i].getAnnotationsBool();
                 tabPair[cptPair] = donnerPair(tabBool);
                 cptPair++;                      
@@ -118,6 +115,7 @@ public class NakedPairs implements InterfaceTech {
                 }
             }
             if (cptAnnotation == 2) {
+                aide.addColumn(num);
                 tabBool = col[i].getAnnotationsBool();
                 tabPair[cptPair] = donnerPair(tabBool);
                 cptPair++;                      
@@ -142,11 +140,6 @@ public class NakedPairs implements InterfaceTech {
         return false;
     }
         
-
-
-        
-
-
     @Override
     public Help getHelp(Grid grille) {
         System.out.println("detect");
