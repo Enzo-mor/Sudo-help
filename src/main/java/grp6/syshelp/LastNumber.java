@@ -23,7 +23,7 @@ public class LastNumber implements InterfaceTech {
         for(int i=0; i<Grid.NB_NUM; i++){
             for(int j=0; j<Grid.NB_NUM; j++){      
                 if(grille.getCell(i,j).getAnnotations().size()==1){
-                    aide.addPos(i,j)
+                    aide.addPos(i,j);
                     aide.addLine(i);
 
                     aide.setMessage(1,"Fait attention au "+grille.getCell(i,j).getAnnotations().get(0));
