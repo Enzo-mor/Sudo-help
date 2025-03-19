@@ -446,17 +446,22 @@ public final class Game {
         
         deleteActionsAfterCurrent();
 
-         action.doAction();
-         actions.add(action);
-         histoActions+="Action "+(currentIndex+2)+" : "+action.toString()+"\n";
-         currentIndex++;
+        action.doAction();
+        actions.add(action);
+        histoActions+="Action "+(currentIndex+2)+" : "+action.toString()+"\n";
+        currentIndex++;
 
 
         updateGame();
+
+        // Vérifie si la grille est complète et correcte
+        if(grid.isFinished())
+            gameState = GameState.FINISHED;
+
         saveGame();
 
 
-         return this;
+        return this;
 
         } catch (Exception e) {
             // TODO: handle exception

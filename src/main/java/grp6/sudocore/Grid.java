@@ -359,6 +359,22 @@ public final class Grid implements Iterable<Cell> {
     }
 
     /**
+     * Vérifie si la grille est entièrement remplie et correctement résolue.
+     * @return true si la grille est totalement identique à solvedCells, false sinon.
+     */
+    public boolean isFinished() {
+        for (int i = 0; i < Grid.NB_NUM; i++) {
+            for (int j = 0; j < Grid.NB_NUM; j++) {
+                int idx = Grid.NB_NUM * i + j;
+                if (cells.get(idx).getNumber() != solvedCells.get(idx).getNumber()) {
+                    return false; // Une erreur détectée, la grille n'est pas totalement correcte
+                }
+            }
+        }
+        return true; // La grille est complètement correcte
+    }
+
+    /**
      * Evaluer une grille (verifier si elle bonne)
      * @return Nombre d'erreur
      */

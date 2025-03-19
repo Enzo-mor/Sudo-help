@@ -14,7 +14,6 @@ import java.util.List;
 public class SudokuGrid {
     private final GridPane grid;
     private final ToolsPanel toolsPanel; // Panneau des outils
-    private final NumberSelection numberSelection; // Panneau de sélection des chiffres
     private static final Button[][] cells = new Button[9][9]; // Stocke les boutons des cellules
     @SuppressWarnings("unchecked")
     private final List<String>[][] annotations = new ArrayList[9][9];
@@ -33,10 +32,9 @@ public class SudokuGrid {
      * @param toolsP [ToolsPanel] 
      * @param actualGame [Game]
      */
-    public SudokuGrid(NumberSelection numberSelection, ToolsPanel toolsP, Game actualGame) {
+    public SudokuGrid(ToolsPanel toolsP, Game actualGame) {
         this.grid = new GridPane();
         this.toolsPanel = toolsP;
-        this.numberSelection = numberSelection;
         this.actualGame = actualGame;
         this.gridSudoku = actualGame.getGrid();
         for (int i = 0; i < 9; i++) {

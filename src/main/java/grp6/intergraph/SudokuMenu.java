@@ -91,7 +91,7 @@ public class SudokuMenu {
 
         Label nameLabel = new Label(sudoku.getName());
         Label scoreLabel = new Label("Score : " + (sudoku.getScore() == 0 ? "-" : sudoku.getScore()));
-        Label bestTimeLabel = new Label("Temps : " + sudoku.getBestTime());
+        Label bestTimeLabel = new Label("Temps : " + formatTime(sudoku.getBestTime()));
 
         ImageView statusIcon = new ImageView();
         statusIcon.setFitWidth(24);
@@ -231,7 +231,12 @@ public class SudokuMenu {
 
         leftArrow.setDisable(currentPage == 0);
         rightArrow.setDisable(endIndex >= sudokus.size());
-        
-        
+    }
+
+    private static String formatTime(long seconds) {
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long secs = seconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, secs);
     }
 }
