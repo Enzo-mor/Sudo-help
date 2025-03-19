@@ -50,7 +50,7 @@ public class LastCell implements InterfaceTech {
                     aide.addPos(pos[0], pos[1]);
                     aide.addSquare(i);
                     aide.setMessage(1, "Fait attention aux "+findLastNumber(grille.getFlatSubGrid(temp[0], temp[1])));
-                    aide.setMessage(2, "Fait attention aux régions");
+                    aide.setMessage(2, "Fait attention aux carrés");
                     aide.setMessage(3, "Regarde ici");
                     return aide;
                 }
