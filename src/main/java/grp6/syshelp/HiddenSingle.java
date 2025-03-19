@@ -16,14 +16,39 @@ public class HiddenSingle implements InterfaceTech {
         int[] tab_line, tab_column, tab_square;
         for(int i=0; i<Grid.NB_NUM; i++){
             tab = grille.numToPosForSubGrid(i);
-  
+
             tab_line=nb_Num_Annotations(grille.getLine(i));
             tab_column=nb_Num_Annotations(grille.getColumn(i));
             tab_square=nb_Num_Annotations(grille.getFlatSubGrid(tab[0], tab[1]));   
             
             for(int j=0; j<Grid.NB_NUM; j++){
-                if(tab_line[j]==1 || tab_column[j]==1 || tab_square[j]==1){
+                System.out.println(tab_column[j]);
+                
+                if(tab_line[j]==1 ){
+                    int pos[] = grille.getLine(i)[tab_line[Grid.NB_NUM]].getPosition();
+                    aide.addPos(pos[0], pos[1]);
+                    aide.addLine(i);
+                    aide.setMessage(1,"Tu peux utiliser le singleton caché");
+                    aide.setMessage(2,"La technique est utilisable avec un"+j);
+                    aide.setMessage( 3,"Regarde ici");
                     return aide;
+                }if( tab_column[j]==1 ){
+                    int pos[] = grille.getColumn(i)[tab_column[Grid.NB_NUM]].getPosition();
+                    aide.addPos(pos[0], pos[1]);
+                    aide.addColumn(i);
+                    aide.setMessage(1,"Tu peux utiliser le singleton caché");
+                    aide.setMessage(2,"La technique est utilisable avec un"+j);
+                    aide.setMessage( 3,"Regarde ici");
+                    return aide;
+                } if (tab_square[j]==1){
+                    int pos[] = grille.getSubGrid(tab[0], tab[1])[tab_square[Grid.NB_NUM]/3][tab_square[Grid.NB_NUM]%3].getPosition();
+                    aide.addPos(pos[0], pos[1]);
+                    aide.addSquare(i);
+                    aide.setMessage(1,"Tu peux utiliser le singleton caché");
+                    aide.setMessage(2,"La technique est utilisable avec un"+j);
+                    aide.setMessage( 3,"Regarde ici");
+                    return aide;
+
                 }
             }
             
@@ -67,7 +92,8 @@ public class HiddenSingle implements InterfaceTech {
             }
         }
     }*/
-
+    /*
+    
     public void applique(Grid grille) {
         // TODO: Implémenter l'application de la technique du singleton caché
         ArrayList<Commande> commandes = new ArrayList<>();
@@ -100,9 +126,9 @@ public class HiddenSingle implements InterfaceTech {
         }
         commandes.forEach(c -> c.executer());
         
-    }
+    }*/
 
-
+    
     public static void main(String[] args) {
         // Exemple de grille où un singleton caché peut être trouvé
         int[] data = {
@@ -143,22 +169,17 @@ public class HiddenSingle implements InterfaceTech {
       
         System.out.println();
 
-        for(int i=0; i<9;i++){
-            System.out.println(grille.getCell(6, 2).getAnnotationsBool()[i]);
-        }
+        
 
         HiddenSingle hiddenSingle = new HiddenSingle();
-        System.out.println(hiddenSingle.detect(grille));
-        hiddenSingle.applique(grille);
+        System.out.println(hiddenSingle.getHelp(grille));
 
-        for(int i=0; i<9;i++){
-            System.out.println(grille.getCell(6, 2).getAnnotationsBool()[i]);
-        }
+        
 
         // Commande pour exécuter
         // mvn compile exec:java -Dexec.mainClass="com.grp6.HiddenSingle"
     }
-
+    /*
     private class CommandeApplique extends Commande{
         private Cell cellule;
         private int val;
@@ -178,5 +199,5 @@ public class HiddenSingle implements InterfaceTech {
         }
 
 
-    }
+    }*/
 }

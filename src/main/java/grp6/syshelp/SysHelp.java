@@ -37,10 +37,10 @@ public class SysHelp {
         TECHNIQUES.add(new LastCell());         //  1-Derniere case lible
         //TECHNIQUES.add(new LastPossible());     //  2-Derniere case restante
         TECHNIQUES.add(new LastNumber());       //  3-Dernier chiffre possible
-        TECHNIQUES.add(new NakedSingleton());   //  4-Singletons nus
+        //TECHNIQUES.add(new NakedSingleton());   //  4-Singletons nus
         //TECHNIQUES.add(new NakedPairs());       //  5-Paires nus
         //TECHNIQUES.add(new NakedTriples());     //  6-Triplets nus
-        //TECHNIQUES.add(new HiddenSingle());     //  7-Singletons cachés
+        TECHNIQUES.add(new HiddenSingle());     //  7-Singletons cachés
         //TECHNIQUES.add(new HiddenPairs());      //  8-Paires cachées 
         //TECHNIQUES.add(new HiddenTriples());    //  9-Triplets cachés
         //TECHNIQUES.add(new PointingPairs());    // 10-Paires pointantes
