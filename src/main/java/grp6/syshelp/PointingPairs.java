@@ -55,7 +55,9 @@ public class PointingPairs implements InterfaceTech{
     public String getName(){
         return "Pairs pointantes";
     }
-     public Help getHelp(Grid grille){
+    
+    public Help getHelp(Grid grille){
+        Help help = new Help(getClass().getSimpleName());
 
         for (int i = 0; i < Grid.NB_SUBGRID; i++) 
         for (int j = 0; j < Grid.NB_SUBGRID; j++) {
@@ -78,7 +80,6 @@ public class PointingPairs implements InterfaceTech{
                     int globalRow1 = startRow + row1;
                     int globalCol1 = startCol + col1;
 
-                    Help help = new Help(this.getName());
                     int globalRow = startRow + row0;
                     help.addSquare(i, j);
                     help.setMessage(1,"veuillez faire attention aux annotions  "+annotation+" dans la sous grille"); 

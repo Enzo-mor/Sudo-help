@@ -12,6 +12,8 @@ public class LastPossible implements InterfaceTech{
     
     
     public Help getHelp(Grid grille){
+        Help aide = new Help(getClass().getSimpleName());
+
         for(int j=0; j<Grid.NB_NUM; j++){
             int[] num =grille.numToPosForSubGrid(j);
             Cell[] car_cells=grille.getFlatSubGrid(num[0],num[1]);
@@ -42,7 +44,7 @@ public class LastPossible implements InterfaceTech{
 
                     aide.setMessage(1,"Fait attention au "+i);
                     aide.setMessage(2,"Fait attention aux Carré (3*3) "+leCarre(j));
-                    aide.setMessage(3,"Regarde LA"+);
+                    aide.setMessage(3,"Regarde dans cette zone");
                     return h;
                 }
         }

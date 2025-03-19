@@ -11,8 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class LastCellTest {
 
+    /** Technique utilisee pour le teste */
+    private InterfaceTech tech = new LastCell();
+
     /** Nom de la technique */
-    private String techName = LastCell.class.getSimpleName();
+    private String techName = tech.getClass().getSimpleName();
 
     /**
      * Test sur une ligne
@@ -39,10 +42,11 @@ public class LastCellTest {
         Grid grid = new Grid(data);
 
         // Application de la technique sur la grille
-        Help help = SysHelp.generateHelp(grid);
+        AutoAnnotation.generate(grid);
+        Help help = tech.getHelp(grid);
 
-        assertNotNull(help, "L'objet help ne doit pas être null");
-        assertEquals(help.getName(), techName);
+        assertNotNull(help, "Aucune Technique a ete trouve");
+        assertEquals(help.getName(), techName, "Mauvaise technique");
     }
 
     /**
@@ -70,10 +74,10 @@ public class LastCellTest {
         Grid grid = new Grid(data);
 
         // Application de la technique sur la grille
-        Help help = SysHelp.generateHelp(grid);
-
-        assertNotNull(help, "L'objet help ne doit pas être null");
-        assertEquals(help.getName(), techName);
+        AutoAnnotation.generate(grid);
+        Help help = tech.getHelp(grid);
+        assertNotNull(help, "Aucune Technique a ete trouve");
+        assertEquals(help.getName(), techName, "Mauvaise technique");
     }
 
     /**
@@ -101,9 +105,10 @@ public class LastCellTest {
         Grid grid = new Grid(data);
 
         // Application de la technique sur la grille
-        Help help = SysHelp.generateHelp(grid);
+        AutoAnnotation.generate(grid);
+        Help help = tech.getHelp(grid);
 
-        assertNotNull(help, "L'objet help ne doit pas être null");
-        assertEquals(help.getName(), techName);
+        assertNotNull(help, "Aucune Technique a ete trouve");
+        assertEquals(help.getName(), techName, "Mauvaise technique");
     }
 }

@@ -23,7 +23,7 @@ public class LastNumber implements InterfaceTech {
 
                     aide.setMessage(1,"Fait attention au "+grille.getCell(i,j).getAnnotations().get(0));
                     aide.setMessage(2,"Fait attention aux ligne "+i);
-                    aide.setMessage(3,"Regarde la cellule colone : "+ j+" Bissous" );
+                    aide.setMessage(3,"Regarde la cellule colonne : "+ j+" Bissous" );
                     return aide;
                 }
             }
