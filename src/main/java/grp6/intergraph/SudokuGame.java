@@ -48,14 +48,14 @@ public class SudokuGame {
         homeButton.setStyle("-fx-background-color: transparent;");
         homeButton.setOnAction(e -> showExitDialog(primaryStage));
 
-        // Créer le topBar HBox avec le bouton Home et le Timer à droite
+        // Creer le topBar HBox avec le bouton Home et le Timer à droite
         HBox topBar = new HBox(10);
         topBar.setPadding(new Insets(10));
 
         // Ajouter le bouton Home à la gauche de la barre
         topBar.getChildren().add(homeButton);
 
-        // Créer un espace flexible qui va pousser le timer à droite
+        // Creer un espace flexible qui va pousser le timer à droite
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);  // L'espace prend tout l'espace restant
         topBar.getChildren().add(spacer);
@@ -66,15 +66,15 @@ public class SudokuGame {
 
         topBar.getChildren().add(timerLabel);
 
-        // Créer le panneau de sélection des chiffres
+        // Creer le panneau de selection des chiffres
         
-        // 1. Créer le panneau des outils
+        // 1. Creer le panneau des outils
         ToolsPanel toolsPanel = new ToolsPanel();
 
-        // 2. Créer la sélection des nombres SANS SudokuGrid
+        // 2. Creer la selection des nombres SANS SudokuGrid
         NumberSelection numberSelection = new NumberSelection(toolsPanel);
 
-        // 3. Créer la grille de Sudoku en lui passant NumberSelection
+        // 3. Creer la grille de Sudoku en lui passant NumberSelection
         SudokuGrid grid = new SudokuGrid(numberSelection, toolsPanel, actualGame);
 
         // 4. Associer la grille à NumberSelection maintenant qu'elle existe

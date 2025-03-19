@@ -76,6 +76,7 @@ public  class AnnotationCellAction extends ActionCell  {
         jsonObject.addProperty("x", x);
         jsonObject.addProperty("y", y);
         jsonObject.addProperty("number", annotation);
+        jsonObject.addProperty("old_number", old_annotation);
         return jsonObject; 
 
     }
@@ -126,25 +127,23 @@ public  class AnnotationCellAction extends ActionCell  {
 
      private static class AnnotationCellActionDeserialiser implements JsonDeserializer<AnnotationCellAction> {
         private final Game game;
-     public   AnnotationCellActionDeserialiser(Game game){
-        this.game=game;
-     }
 
-    @Override
-    public AnnotationCellAction deserialize(JsonElement jsonElement, Type vartype, JsonDeserializationContext context) throws JsonParseException{
-        JsonObject jsonObject = jsonElement.getAsJsonObject();
-        if (!jsonObject.has("x") || !jsonObject.has("y") || !jsonObject.has("number")|| !jsonObject.has("old_number")|| !jsonObject.has("type")) {
-            throw new JsonParseException("Le JSON ne contient pas tous les champs requis : 'x', 'y', 'number','type'");
+        public AnnotationCellActionDeserialiser(Game game){
+            this.game=game;
         }
-         return new AnnotationCellAction(
-           game, 
-           jsonObject.get("x").getAsInt(),
-           jsonObject.get("y").getAsInt(),
-           jsonObject.get("number").getAsInt(),
-           jsonObject.get("old_number").getAsInt());
-       }
 
-
+        public AnnotationCellAction deserialize(JsonElement jsonElement, Type vartype, JsonDeserializationContext context) throws JsonParseException{
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            if (!jsonObject.has("x") || !jsonObject.has("y") || !jsonObject.has("number")|| !jsonObject.has("old_number") || !jsonObject.has("type")) {
+                throw new JsonParseException("Le JSON ne contient pas tous les champs requis : 'x', 'y', 'number','type'");
+            }
+            return new AnnotationCellAction(
+            game, 
+            jsonObject.get("x").getAsInt(),
+            jsonObject.get("y").getAsInt(),
+            jsonObject.get("number").getAsInt(),
+            jsonObject.get("old_number").getAsInt());
+        }
     }
 
     @Override

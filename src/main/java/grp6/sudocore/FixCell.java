@@ -78,6 +78,7 @@ public class FixCell implements Cell {
         return 1;
     }
     
+
     /**
      * Enlever une annotation d'une cellule
      * /!\ Impossible pour une cellule fixe /!\
@@ -86,6 +87,11 @@ public class FixCell implements Cell {
     @Override
     public void removeAnnotation(int number) {
         System.out.println("Il est impossible d'enlever une annotation à cette cellule");
+    }
+
+    @Override
+    public boolean hasAnnotations() {
+        return false;
     }
 
     /** 

@@ -340,29 +340,35 @@ public class SudokuGrid {
             System.err.println("Error: gridSudokuBase is null!");
             return; // Exit early to prevent a NullPointerException
         }
-
-        Grid gridSudokuGame = actualGame.getGrid();
         
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                Cell cellGame = gridSudokuGame.getCell(i, j);
+                Cell cellGame = actualGame.getGrid().getCell(i, j);
                 Cell cellBDD = gridSudokuBase.getCell(i, j);
                 Button cellButton = cells[i][j]; // Récupère le bouton de la cellule actuelle
                 Label mainNumber = new Label();
                 mainNumber.setFont(new Font(18));
                 Text annotationText = new Text();
 
-                if(cellGame.getNumber() == cellBDD.getNumber()) {
-                    if (cellBDD instanceof FixCell fixCell) {
-                        if (fixCell.getNumber() == 0) {
+                if (cellGame.getNumber() == cellBDD.getNumber()) {
+                    if (cellGame instanceof FlexCell) {
+                        if (cellGame.hasAnnotations()) {
+                            setAnnotationDisplay(cellButton, i, j, annotationText);
+                            for (Integer annotation : cellGame.getAnnotations()) {
+                                addAnnotationToCell(i, j, annotation.toString());
+                            }
+                        }
+                        
+                    } else {
+                        if (cellGame.getNumber() == 0) {
                             mainNumber.setText("");
                         } else {
-                            mainNumber.setText(String.valueOf(fixCell.getNumber()));
-                        }                    
-                        annotationText.setText(""); 
+                            mainNumber.setText(String.valueOf(cellGame.getNumber()));
+                            
+                        }
+                        annotationText.setText("");                    
                         cellButton.setGraphic(mainNumber);
-                    } else {
-                        setAnnotationDisplay(cellButton, i, j, annotationText);
+                        
                     }
                 } else {
                     setNumberDisplay(cellButton, String.valueOf(cellGame.getNumber()), mainNumber, annotationText);
@@ -374,22 +380,24 @@ public class SudokuGrid {
     * Methode pour recharger une grille deja demarree
     * @param game Partie du joueur associee a la grille
     */
-    public void reload(Grid originalGrid){
+    public void reload(Grid originalGrid) {
         setGrid();
         List<Action> actions = actualGame.getActions();
+        List<Action> actionsCopy = new ArrayList<>(actions);
         actualGame.clearActions();
         for (int i = 0 ; i< actions.size(); i++){
-            System.out.println("TAILLE ACTIONS : " + actions.size());
             actualGame.executeAction(actions.get(i));
         }
         actualGame.clearActions();
+        actualGame.getActions().addAll(actionsCopy);
         loadGrid(originalGrid);
     }
 
     public void setGrid() {
+        Grid newGrid = DBManager.getGrid(actualGame.getGrid().getId());
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
-                Cell cell = gridSudoku.getCell(row, col);
+                Cell cell = newGrid.getCell(row, col);
                 Button cellButton = cells[row][col];
                 Label mainNumber = new Label();
                 Text annotationText = new Text();

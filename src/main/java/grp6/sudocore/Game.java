@@ -37,7 +37,7 @@ import javafx.application.Platform;
 public final class Game {
 
 
-  //================ variable d'instance===========
+  //================ variable d'instance ===========
     /**
      *  represente le profil du joeur
      */
@@ -184,7 +184,6 @@ public final class Game {
         this.lastModifDate=lastModifDate;
         this.progressRate=progressRate;
         this.elapsedTime=elapsedTime;
-        System.out.println(gameState);
         switch(gameState) {
             case "IN_PROGRESS":
                 this.gameState = GameState.IN_PROGRESS;
@@ -337,9 +336,6 @@ public final class Game {
             if(gameState==GameState.FINISHED){
                 throw new IllegalStateException("le jeu a déja été terminé");
             } 
-            if(gameState==GameState.IN_PROGRESS){
-                throw new IllegalStateException("le jeu est déjà en cours");
-            }
             
             gameState=GameState.IN_PROGRESS;
             startTimer();
@@ -454,6 +450,7 @@ public final class Game {
          actions.add(action);
          histoActions+="Action "+(currentIndex+2)+" : "+action.toString()+"\n";
          currentIndex++;
+
 
         updateGame();
         saveGame();

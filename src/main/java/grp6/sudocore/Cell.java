@@ -69,6 +69,8 @@ public interface Cell {
      */
     public void removeAnnotation(int number);
 
+    public boolean hasAnnotations();
+
     /** 
      * Néttoyer la cellule (la vider)
      */

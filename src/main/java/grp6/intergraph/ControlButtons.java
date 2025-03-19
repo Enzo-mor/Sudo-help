@@ -33,7 +33,7 @@ public class ControlButtons {
             sudokuGrid.resetInterface();
             sudokuGame.restartGame();
 
-            // Forcer la suppression des actions passées
+            // Forcer la suppression des actions passees
             sudokuGame.deleteActionsAfterCurrent();
         });
 
@@ -48,7 +48,7 @@ public class ControlButtons {
             redoAction();
         });
 
-        // Ajoute l'action sur le bouton "Vérifier"
+        // Ajoute l'action sur le bouton "Verifier"
         checkButton.setOnAction(e -> {
             putErrorsRed();
         });
@@ -125,23 +125,23 @@ public class ControlButtons {
     }
 
     private void putErrorsRed() {
-        // Étape 1 : Identifier les erreurs sans effectuer d'undo / redo
+        // etape 1 : Identifier les erreurs sans effectuer d'undo / redo
         List<int[]> eval = evaluateWithUndoRedo();
     
-        // Si des erreurs ont été détectées
+        // Si des erreurs ont ete detectees
         if (!eval.isEmpty()) {
             // Colorier les cellules avec des erreurs en rouge
             sudokuGrid.setCellsColorError(eval);
     
-            // Créer une pause de 1 seconde (1000 ms) avant d'annuler les erreurs
+            // Creer une pause de 1 seconde (1000 ms) avant d'annuler les erreurs
             Timeline pause = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-                // Annuler les actions jusqu'à la première erreur
+                // Annuler les actions jusqu'à la premiere erreur
                 undoActionsUntilErrorsResolved();
     
-                // Remettre la couleur par défaut après avoir annulé les erreurs
+                // Remettre la couleur par defaut apres avoir annule les erreurs
                 sudokuGrid.setCellsColorDefault(eval);
     
-                // Supprimer les actions passées après l'état actuel
+                // Supprimer les actions passees apres l'etat actuel
                 sudokuGame.deleteActionsAfterCurrent();
             }));
     
@@ -159,41 +159,41 @@ public class ControlButtons {
             if (currentAction != null) {
                 undoAction(currentAction);  // Annuler l'action
             }
-            // Réévaluer l'état du Sudoku après chaque annulation
+            // Reevaluer l'etat du Sudoku apres chaque annulation
             finalEval = sudokuGame.evaluate();
         }
     }
     
 
     private List<int[]> evaluateWithUndoRedo() {
-        // Initialiser les listes pour stocker les coordonnées des erreurs
+        // Initialiser les listes pour stocker les coordonnees des erreurs
         List<int[]> errorCells = new ArrayList<>();
         
-        // Étape 1 : Annuler les actions jusqu'à ce que `evaluate()` retourne une liste vide
+        // etape 1 : Annuler les actions jusqu'à ce que `evaluate()` retourne une liste vide
         List<int[]> currentEvaluation = sudokuGame.evaluate();
         int undoCount = 0;  // Compter le nombre d'actions undo
     
         while (!currentEvaluation.isEmpty()) {
             
-            // Annuler l'action la plus récente
+            // Annuler l'action la plus recente
             Action currentAction = sudokuGame.getLastAction();
             if (currentAction != null) {
                 int[] coordinates = {currentAction.getRow(), currentAction.getColumn()};
                 errorCells.add(coordinates);
                 undoAction(currentAction);
-                undoCount++;  // Incrémenter le compteur d'undo
+                undoCount++;  // Incrementer le compteur d'undo
             }
     
-            // Réévaluer l'état du Sudoku après l'annulation
+            // Reevaluer l'etat du Sudoku apres l'annulation
             currentEvaluation = sudokuGame.evaluate();
         }
     
-        // Étape 2 : Refaites exactement `undoCount` actions annulées avec redoAction()
+        // etape 2 : Refaites exactement `undoCount` actions annulees avec redoAction()
         for (int i = 0; i < undoCount; i++) {
-            redoAction();  // Réapplique chaque action annulée
+            redoAction();  // Reapplique chaque action annulee
         }
     
-        // Retourner la liste des coordonnées à colorier
+        // Retourner la liste des coordonnees à colorier
         return errorCells;
     }
 }

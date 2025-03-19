@@ -10,7 +10,7 @@ public class NumberSelection {
     private static VBox numberSelection;
     private static String selectedNumber = null;
     private final ToolsPanel toolsPanel; // Ajout du panneau d'outils
-    private SudokuGrid sudokuGrid; // Référence à la grille Sudoku
+    private SudokuGrid sudokuGrid; // Reference à la grille Sudoku
 
     public NumberSelection(ToolsPanel toolsPanel) {
         this.toolsPanel = toolsPanel;
@@ -64,7 +64,7 @@ public class NumberSelection {
                 
             // On peut ajouter une annotation que si le bouton ne contient pas de nombre donc number vaut 0
             if(cellText.isEmpty() || cellText.equals("0")) {
-                // Mode annotation activé → Ajouter/Supprimer une annotation
+                // Mode annotation active -> Ajouter/Supprimer une annotation
                 int row = SudokuGrid.getSelectedRow();
                 int col = SudokuGrid.getSelectedCol();
         
@@ -77,12 +77,12 @@ public class NumberSelection {
                 }
             }
         } else {
-            // Mode normal → Sélection du nombre
+            // Mode normal → Selection du nombre
             var buttons = numberSelection.lookupAll(".button");
             buttons.forEach(node -> ((Button) node).setStyle(""));  
             button.setStyle("-fx-background-color: lightgreen;");
     
-            // Stocke le nombre sélectionné
+            // Stocke le nombre selectionne
             setSelectedNumber(numberStr);
         }
     }

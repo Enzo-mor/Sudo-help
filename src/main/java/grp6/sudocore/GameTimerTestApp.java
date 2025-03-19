@@ -35,11 +35,11 @@ public class GameTimerTestApp extends Application {
         primaryStage.show();
 
         // Arrêter le timer à la fermeture de la fenêtre
-        primaryStage.setOnCloseRequest(event -> {
+        primaryStage.setOnCloseRequest(e -> {
             try {
                 game.stopGame();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
         });
        

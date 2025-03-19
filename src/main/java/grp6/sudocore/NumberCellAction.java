@@ -140,25 +140,22 @@ public final class NumberCellAction extends ActionCell  {
          *  constructeur de la classe 
          * @param grid represente la grille qui sera contenu dans l'annotation
          */
-     public   NumberCellActionDeserialiser(Game game){
-        this.game=game;
-     }
-    public NumberCellAction  deserialize(JsonElement jsonElement, Type vartype, JsonDeserializationContext context) throws JsonParseException{
-        JsonObject jsonObject = jsonElement.getAsJsonObject();
-        if (!jsonObject.has("x") || !jsonObject.has("y") || !jsonObject.has("number")|| !jsonObject.has("old_number")||!jsonObject.has("type")) {
-            throw new JsonParseException("Le JSON ne contient pas tous les champs requis : 'x', 'y', 'number','old_number','type");
+        public NumberCellActionDeserialiser(Game game){
+            this.game=game;
         }
-         return new NumberCellAction(
-           game, 
-           jsonObject.get("x").getAsInt(),
-           jsonObject.get("y").getAsInt(),
-           jsonObject.get("number").getAsInt(), 
-           jsonObject.get("old_number").getAsInt());
-    }
 
-
-    
-        
+        public NumberCellAction  deserialize(JsonElement jsonElement, Type vartype, JsonDeserializationContext context) throws JsonParseException{
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            if (!jsonObject.has("x") || !jsonObject.has("y") || !jsonObject.has("number")|| !jsonObject.has("old_number") || !jsonObject.has("type")) {
+                throw new JsonParseException("Le JSON ne contient pas tous les champs requis : 'x', 'y', 'number','old_number','type");
+            }
+            return new NumberCellAction(
+            game, 
+            jsonObject.get("x").getAsInt(),
+            jsonObject.get("y").getAsInt(),
+            jsonObject.get("number").getAsInt(), 
+            jsonObject.get("old_number").getAsInt());
+        }
     }
 
     @Override

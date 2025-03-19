@@ -15,6 +15,8 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
+
+
 /**
  * Cette classe permet de gerer la serialisation et la deserialisation d'une liste actions
  * 
@@ -68,7 +70,7 @@ public class ActionManagerApply {
                  return (Action) method.invoke(subAction, json.toString(), game);
                  } catch (JsonParseException | IllegalAccessException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
                     System.err.println("Error during deserialization: " + e.getMessage());
-                    throw new JsonParseException("echec lors de le deserialisation : ", e);
+                    throw new JsonParseException("echec lors de la deserialisation : ", e);
                 }   
          }
     }

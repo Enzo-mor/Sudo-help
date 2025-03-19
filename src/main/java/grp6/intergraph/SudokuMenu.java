@@ -154,7 +154,6 @@ public class SudokuMenu {
 
         games.stream().forEach(game-> {
             sudokus.get(game.getGrid().getId()-1).modifyInfo(game.getElapsedTime(), game.getScore(), game.getGameState(), game);
-            System.out.println("Game : " + game.getGrid().getId() + " - " + game.getElapsedTime() + " - " + game.getScore() + " - " + game.getGameState());
         });
         return sudokus;
     }
@@ -213,7 +212,7 @@ public class SudokuMenu {
                     });
 
                     // Creer une mise en page verticale avec un espacement entre les elements
-                    VBox popupLayout = new VBox(10, label, restartButton, reloadButton);
+                    VBox popupLayout = new VBox(10, label, reloadButton, restartButton);
                     popupLayout.setPadding(new Insets(10)); // Ajouter une marge pour une meilleure apparence
 
                     // Creer et appliquer la scene a la fenetre pop-up

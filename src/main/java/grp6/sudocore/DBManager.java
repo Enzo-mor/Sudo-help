@@ -428,8 +428,8 @@ public final class DBManager {
             System.err.println("Erreur lors de la suppression des jeux pour le profil : " + e.getMessage());
             return new ArrayList<Game>();
         }
-       
     }
+    
     /**
      *  methode permettant de supprimer un jeu dans la base de donnée
      * @param id represente id du jeu
@@ -524,20 +524,20 @@ protected static void saveGame(Game game) throws SQLException{
     if(!tableExists("game")) {
         System.err.println("La table 'profile' n'existe pas. Initialisation en cours...");
         executeSqlScript(getConnection(), "game");
-            }
-            if(!DBManager.profileExists(game.getProfile().getPseudo()))
-            game.getProfile().save();
+    }
+    if(!DBManager.profileExists(game.getProfile().getPseudo()))
+    game.getProfile().save();
 
         String sql = "INSERT INTO game (id_game, grid,player,created_date, last_modifed_date,progress_rate,score,actions,elapsed_time, game_state) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-            "ON CONFLICT(id_game) DO UPDATE SET " +
-            "player = excluded.player, " +
-            "last_modifed_date = excluded.last_modifed_date, " +
-            "progress_rate = excluded.progress_rate, " +
-            "score = excluded.score;"+ 
-            "actions=excluded.actions"+
-            "elapsed_time=excluded.elapsed_time"+
-            "game_state=excluded.game_state";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+                    "ON CONFLICT(id_game) DO UPDATE SET " +
+                    "player = excluded.player, " +
+                    "last_modifed_date = excluded.last_modifed_date, " +
+                    "progress_rate = excluded.progress_rate, " +
+                    "score = excluded.score, " +
+                    "actions = excluded.actions, " +  
+                    "elapsed_time = excluded.elapsed_time, " +  
+                    "game_state = excluded.game_state";
             try (Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -553,8 +553,6 @@ protected static void saveGame(Game game) throws SQLException{
             pstmt.setString(10, game.getGameState().getName());
 
             pstmt.executeUpdate();
-            System.out.println("Jeu enregistré avec succès !");
-            System.err.println("TEST : " + game.getGameState().getName());
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -114,6 +114,11 @@ public final class FlexCell extends FixCell {
         return annotationsList.get(annotationsList.size()-1);
     }
 
+    @Override
+    public boolean hasAnnotations() {
+        return !getAnnotations().isEmpty();
+    }
+
     /** 
      * Néttoyer la cellule (la vider)
      */
