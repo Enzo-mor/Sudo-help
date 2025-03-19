@@ -10,6 +10,8 @@ import java.util.List;
  * - Si dans un bloc (carré, ligne ou colonne), il y a 3 cases contenant exactement 3 chiffres possibles, formant ainsi une combinaison unique (ex : {1,2,3}, {1,2}, {2,3}).
  * - Ces chiffres n'apparaissent pas ailleurs dans ce bloc.
  * - On peut alors supprimer ces 3 chiffres des annotations des autres cases du même bloc.
+ * @author Dylan Grammont
+ * 
  */
 public class NakedTriples implements InterfaceTech {
     
@@ -153,17 +155,6 @@ public class NakedTriples implements InterfaceTech {
 
         System.out.println("tabTriplets : "+tabTriplets);
 
-        ///ArrayList<List<Integer>> tabCopy = tabTriple;
-
-        // traitement 3 : verifier si les autres tuples du tableau sont utiliser dans le triplets
-        /*for(int i =0;i<tabTriple.size();i++){
-            for(int j=tabTriple.get(i).size()-1;j>-1;j--){
-                if(tabTriplets.contains(tabTriple.get(i).get(j)) ){
-                    tabCopy.get(i).remove(j);
-                }
-            }
-        }
-        */
 
         //conter le nombre de differente valeur dans le tableau
         List<Integer> ocurance = new ArrayList<Integer>();
