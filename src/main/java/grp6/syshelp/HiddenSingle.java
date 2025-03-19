@@ -102,7 +102,7 @@ public class HiddenSingle implements InterfaceTech {
         int[] tab;
         int[] tab_line, tab_column, tab_square;
         for(int i=0; i<Grid.NB_NUM; i++){
-            tab = grille.numToPosForSubGrid(i);
+            tab = grille.numToPosForSubGrid(i); 
   
             tab_line=nb_Num_Annotations(grille.getLine(i));
             tab_column=nb_Num_Annotations(grille.getColumn(i));
