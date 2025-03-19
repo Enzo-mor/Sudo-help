@@ -61,8 +61,12 @@ public class NakedPairs implements InterfaceTech {
             for(int j = 0; j<9;j++){
                 //if de la violence (désolée)
                 if(temp[0] == tabPair[j][0]  && temp[1] == tabPair[j][1] && temp[0] !=0 && i!=j){
-                    System.out.println("true de région");
 
+                    System.out.println("true de région");
+                    aide.addSquare(num);
+                    aide.setMessage(1, "Fait attention aux carrés");
+                    aide.setMessage(2, "Fait attention aux "+temp[0]+" "+temp[1]);
+                    aide.setMessage(3, "Regarde les annotations"+temp[0]+" "+temp[1]+"le carré : "+num);
                     return true;
                 }
             }
