@@ -26,7 +26,7 @@ public class LastNumber implements InterfaceTech {
                     aide.addPos(i,j)
                     aide.addLine(i);
 
-                    aide.setMessage(1,"Fait attention au "+grille.getCell(i,j).getAnnotations()[0]);
+                    aide.setMessage(1,"Fait attention au "+grille.getCell(i,j).getAnnotations().get(0));
                     aide.setMessage(2,"Fait attention aux ligne "+i);
                     aide.setMessage(3,"Regarde la cellule ligne :  "+ i +", colone : "+ j+" Bissous" );
                 }
