@@ -36,7 +36,7 @@ public class SysHelp {
     static {
         TECHNIQUES.add(new LastCell());         //  1-Derniere case lible
         //TECHNIQUES.add(new LastPossible());     //  2-Derniere case restante
-        //TECHNIQUES.add(new LastNumber());       //  3-Dernier chiffre possible
+        TECHNIQUES.add(new LastNumber());       //  3-Dernier chiffre possible
         TECHNIQUES.add(new NakedSingleton());   //  4-Singletons nus
         //TECHNIQUES.add(new NakedPairs());       //  5-Paires nus
         //TECHNIQUES.add(new NakedTriples());     //  6-Triplets nus
@@ -81,7 +81,7 @@ public class SysHelp {
 
     public static void main(String[] args) {
         int[] data = {
-            0,0,0,0,8,5,0,0,0,
+            0,2,1,4,8,5,6,7,9,
             0,0,0,9,3,7,0,0,0,
             0,0,0,2,1,0,0,0,0,
             0,0,0,0,0,0,0,0,0,
