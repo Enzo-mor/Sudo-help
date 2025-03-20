@@ -97,6 +97,8 @@ public class SudokuMenu {
         statusIcon.setFitWidth(24);
         statusIcon.setFitHeight(24);
 
+        System.out.println("Status: " + sudoku.getStatus() + " | Id : " + sudoku.getId());
+
         switch (sudoku.getStatus()) {
             case FINISHED -> statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/star.png")));
             case IN_PROGRESS -> statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/pause.png")));
@@ -184,41 +186,29 @@ public class SudokuMenu {
                     // Creer une nouvelle petite fenetre pop-up (fenetre modale)
                     Stage popupStage = new Stage();
                     popupStage.initModality(Modality.APPLICATION_MODAL); // Bloquer les interactions avec la fenetre principale
-                    popupStage.setTitle("Reprendre la partie");
-
+                    popupStage.setTitle("Confirmation"); // Titre de la fenetre
+                
                     // Composants de l'interface utilisateur
-                    Label label = new Label("Voulez vous reprendre votre partie en cours ou recommencer de zéro ?"); // Libelle au-dessus du champ de texte
-                    Button reloadButton = new Button("Reprendre"); // Bouton pour confirmer la creation du profil
-                    Button restartButton = new Button("Recommencer"); // Bouton pour confirmer la creation du profil
-
-                    // Gerer l'evenement lors du clic sur le bouton "Creer"
-                    reloadButton.setOnAction(event -> {
-                        Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
-                        SudokuGame.showSudokuGame(stage, selectedSudoku);
-                        popupStage.close(); // Fermer la fenetre pop-up apres l'ajout du profil
-                    });
+                    Button restartButton = getNewRestartButton(stage, sudokus, selectedSudokuId, popupStage);
                     
-                    restartButton.setOnAction(event -> {
-                        Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
-                        try {
-                            DBManager.deleteGame(selectedSudoku.getGame().getId());
-                        } catch (SQLException e1) {
-                            System.err.println("Error deleting game: " + e1.getMessage());
-                        }
-                        selectedSudoku.setStatus(GameState.NOT_STARTED);
-                        selectedSudoku.getGame().setGameState(GameState.NOT_STARTED);
-                        SudokuGame.showSudokuGame(stage, selectedSudoku);
-                        popupStage.close(); // Fermer la fenetre pop-up apres l'ajout du profil
-                    });
-
+                    VBox popupLayout;
+                    if(sudoku.getStatus() == GameState.IN_PROGRESS) {
+                        Label label = new Label("Voulez vous reprendre votre partie en cours ou recommencer de zéro ?");
+                        Button reloadButton = getNewReloadButton(stage, sudokus, selectedSudokuId, popupStage);
+                        popupLayout = new VBox(10, label, reloadButton, restartButton);
+                    }
+                    else {
+                        Label label = new Label("Voulez vous recommencer ?");
+                        popupLayout = new VBox(10, label, restartButton);
+                    }
+                    
                     // Creer une mise en page verticale avec un espacement entre les elements
-                    VBox popupLayout = new VBox(10, label, reloadButton, restartButton);
                     popupLayout.setPadding(new Insets(10)); // Ajouter une marge pour une meilleure apparence
-
+                
                     // Creer et appliquer la scene a la fenetre pop-up
                     Scene scene = new Scene(popupLayout, 300, 150);
                     popupStage.setScene(scene);
-
+                
                     // Afficher la fenetre pop-up et attendre l'interaction de l'utilisateur
                     popupStage.showAndWait();
                 }
@@ -233,10 +223,50 @@ public class SudokuMenu {
         rightArrow.setDisable(endIndex >= sudokus.size());
     }
 
+    /**
+     * Formate le temps en secondes en une chaîne de caractères au format HH:MM:SS.
+     */
     private static String formatTime(long seconds) {
         long hours = seconds / 3600;
         long minutes = (seconds % 3600) / 60;
         long secs = seconds % 60;
         return String.format("%02d:%02d:%02d", hours, minutes, secs);
     }
+
+
+    
+    private static Button getNewRestartButton(Stage stage, List<Sudoku> sudokus, int selectedSudokuId, Stage popupStage) {
+        Button restartButton = new Button("Recommencer"); // Bouton pour confirmer la creation du profil
+    
+        restartButton.setOnAction(event -> {
+            Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
+            try {
+                DBManager.deleteGame(selectedSudoku.getGame().getId());
+            } catch (SQLException e1) {
+                System.err.println("Error deleting game: " + e1.getMessage());
+            }
+            selectedSudoku.setStatus(GameState.NOT_STARTED);
+            selectedSudoku.getGame().setGameState(GameState.NOT_STARTED);
+            SudokuGame.showSudokuGame(stage, selectedSudoku);
+            popupStage.close();
+        });
+    
+        return restartButton;
+    }
+
+    private static Button getNewReloadButton(Stage stage, List<Sudoku> sudokus, int selectedSudokuId, Stage popupStage) {
+        Button reloadButton = new Button("Reprendre"); // Bouton pour confirmer la creation du profil
+
+        reloadButton.setOnAction(event -> {
+            Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
+            SudokuGame.showSudokuGame(stage, selectedSudoku);
+            popupStage.close();
+        });
+
+        return reloadButton;
+    }
 }
+
+
+
+

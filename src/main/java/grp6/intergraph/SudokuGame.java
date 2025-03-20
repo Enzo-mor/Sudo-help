@@ -83,7 +83,7 @@ public class SudokuGame {
         ControlButtons controlsButtons = new ControlButtons(grid, actualGame);
 
         VBox rightPanel = new VBox(20, numberSelection.getNumberSelection(), toolsPanel.getTools(), controlsButtons.getControlButtons());
-        HBox layout = new HBox(20, grid.getGridPane(), rightPanel);
+        HBox layout = new HBox(20, SudokuGrid.getGridPane(), rightPanel);
         VBox mainLayout = new VBox(10, topBar, layout);
 
         Scene scene = new Scene(mainLayout, 800, 600);
@@ -103,7 +103,16 @@ public class SudokuGame {
                 }
                 
                 /* Méthode d'effet */
-                SudokuDisplay.showEndGameEffect(grid.getGridPane(), primaryStage, actualGame);
+                SudokuDisplay.showEndGameEffect(SudokuGrid.getGridPane(), primaryStage);
+
+                if (actualGame != null) {
+                    try {
+                        actualGame.stopGame();
+                    } catch (SQLException | InterruptedException e1) {
+                        System.err.println("Error stopping the game: " + e1.getMessage());
+                    }
+                    actualGame = null;
+                }
             }
         }));
         gameStateChecker.setCycleCount(Animation.INDEFINITE);

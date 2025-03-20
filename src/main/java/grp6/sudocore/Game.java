@@ -362,7 +362,8 @@ public final class Game {
                 }
             }
 
-            gameState = GameState.IN_PROGRESS;
+            if(gameState != GameState.FINISHED)
+                gameState = GameState.IN_PROGRESS;
 
             saveGame();
             
@@ -755,7 +756,7 @@ public final class Game {
     /**
      * Cette permet de calculer le taux de progression du jeux
      */
-    private void calculateProgressRate(){
+    private void calculateProgressRate() {
        progressRate = (((double) (grid.getNumberFlexCell()-grid.evaluate().size()))/grid.getNumberFlexCell())*100;
     }
 

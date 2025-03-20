@@ -1,8 +1,8 @@
 package grp6.intergraph;
 
-import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
-import grp6.sudocore.Game;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -42,18 +42,21 @@ public class SudokuDisplay {
         resetGrid(grid);
 
         for (Node node : grid.getChildren()) {
-            // Récupérer la cellule à la position spécifique
-            if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == col) {
-                if (node instanceof Button) {
-                    Button button = (Button) node;
-                    // Laisser la cellule sélectionnée visible normalement
-                    button.setStyle("-fx-background-color: white;");
-                }
-            } else {
-                // Assombrir toutes les autres cellules
-                if (node instanceof Button) {
-                    Button button = (Button) node;
-                    button.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+            Integer nodeRow = GridPane.getRowIndex(node);
+            Integer nodeCol = GridPane.getColumnIndex(node);
+
+            if (nodeRow == null || nodeCol == null) {
+                continue; // Évite les erreurs si les indices sont null
+            }
+
+            if (node instanceof Button button) {
+                if (nodeRow == row && nodeCol == col) {
+                    // Appliquer le style normal à la cellule sélectionnée
+                    button.setStyle(getHighlightStyle(row, col));
+                } else {
+                    // Assombrir toutes les autres cellules
+                    darkerCell(button);
+                    darkerCell(button);
                 }
             }
         }
@@ -64,30 +67,38 @@ public class SudokuDisplay {
         // Réinitialiser la grille avant de surligner
         resetGrid(grid);
 
+        // Utiliser un Set pour une recherche plus efficace
+        Set<String> highlightedCells = new HashSet<>();
+        for (int[] coord : coordinates) {
+            highlightedCells.add(coord[0] + "," + coord[1]);
+        }
+
         for (Node node : grid.getChildren()) {
-            boolean isHighlighted = false;
-            // Vérifier si la cellule est dans la liste des coordonnées
-            for (int[] coord : coordinates) {
-                if (GridPane.getRowIndex(node) == coord[0] && GridPane.getColumnIndex(node) == coord[1]) {
-                    isHighlighted = true;
-                    break;
-                }
+            Integer row = GridPane.getRowIndex(node);
+            Integer col = GridPane.getColumnIndex(node);
+
+            if (row == null || col == null) {
+                continue;
             }
 
-            if (isHighlighted) {
-                // Laisser la cellule spécifique normale
-                if (node instanceof Button) {
-                    Button button = (Button) node;
-                    button.setStyle("-fx-background-color: white;");
-                }
-            } else {
-                // Assombrir toutes les autres cellules
-                if (node instanceof Button) {
-                    Button button = (Button) node;
-                    button.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+            if (node instanceof Button button) {
+                if (highlightedCells.contains(row + "," + col)) {
+                    button.setStyle(getHighlightStyle(row, col));
+                } else {
+                    darkerCell(button);
+                    darkerCell(button);
                 }
             }
         }
+    }
+
+    /**
+     * Retourne le style à appliquer pour une cellule surlignée.
+     */
+    private static String getHighlightStyle(int row, int col) {
+        return (row / 3 + col / 3) % 2 == 0 
+            ? "-fx-background-color: lightblue;" 
+            : "-fx-background-color: white;";
     }
 
     // Méthode pour teindre la ligne et la colonne du dernier bouton cliqué en assombrissant leur couleur actuelle
@@ -101,22 +112,7 @@ public class SudokuDisplay {
                 if (node instanceof Button) {
                     Button button = (Button) node;
 
-                    // Vérifier si le bouton a un fond défini
-                    String buttonStyle = button.getStyle();
-                    if (buttonStyle.contains("-fx-background-color")) {
-                        // Si un fond est défini, on peut le récupérer et assombrir
-                        String colorString = buttonStyle.split(":")[1].trim().replace(";", "");
-                        Color currentColor = Color.web(colorString); // Convertir la couleur de fond en objet Color
-                        // Assombrir la couleur
-                        Color darkerColor = currentColor.darker();
-                        // Appliquer la couleur assombrie
-                        button.setStyle("-fx-background-color: " + toRgbString(darkerColor) + ";");
-                    } else {
-                        // Si aucun fond n'est défini, utiliser une couleur par défaut
-                        Color defaultColor = Color.WHITE;
-                        Color darkerColor = defaultColor.darker();
-                        button.setStyle("-fx-background-color: " + toRgbString(darkerColor) + ";");
-                    }
+                    darkerCell(button);
                 }
             }
         }
@@ -127,22 +123,7 @@ public class SudokuDisplay {
                 if (node instanceof Button) {
                     Button button = (Button) node;
 
-                    // Vérifier si le bouton a un fond défini
-                    String buttonStyle = button.getStyle();
-                    if (buttonStyle.contains("-fx-background-color")) {
-                        // Si un fond est défini, on peut le récupérer et assombrir
-                        String colorString = buttonStyle.split(":")[1].trim().replace(";", "");
-                        Color currentColor = Color.web(colorString); // Convertir la couleur de fond en objet Color
-                        // Assombrir la couleur
-                        Color darkerColor = currentColor.darker();
-                        // Appliquer la couleur assombrie
-                        button.setStyle("-fx-background-color: " + toRgbString(darkerColor) + ";");
-                    } else {
-                        // Si aucun fond n'est défini, utiliser une couleur par défaut
-                        Color defaultColor = Color.WHITE;
-                        Color darkerColor = defaultColor.darker();
-                        button.setStyle("-fx-background-color: " + toRgbString(darkerColor) + ";");
-                    }
+                    darkerCell(button);
                 }
             }
         }
@@ -153,11 +134,28 @@ public class SudokuDisplay {
         return "rgb(" + (int)(color.getRed() * 255) + ", " + (int)(color.getGreen() * 255) + ", " + (int)(color.getBlue() * 255) + ")";
     }
 
-    public static void showEndGameEffect(GridPane grid, Stage primaryStage, Game actualGameParam) {
+    private static void darkerCell(Button button) {
+        // Vérifier si le bouton a un fond défini
+        String buttonStyle = button.getStyle();
+        if (buttonStyle.contains("-fx-background-color")) {
+            // Si un fond est défini, on peut le récupérer et assombrir
+            String colorString = buttonStyle.split(":")[1].trim().replace(";", "");
+            Color currentColor = Color.web(colorString); // Convertir la couleur de fond en objet Color
+            // Assombrir la couleur
+            Color darkerColor = currentColor.darker();
+            // Appliquer la couleur assombrie
+            button.setStyle("-fx-background-color: " + toRgbString(darkerColor) + ";");
+        } else {
+            // Si aucun fond n'est défini, utiliser une couleur par défaut
+            Color defaultColor = Color.WHITE;
+            Color darkerColor = defaultColor.darker();
+            button.setStyle("-fx-background-color: " + toRgbString(darkerColor) + ";");
+        }
+    }
+
+    public static void showEndGameEffect(GridPane grid, Stage primaryStage) {
 
         resetGrid(grid);
-        
-        final Game actualGame = actualGameParam;
         // Calculer les dimensions du GridPane
         int rows = grid.getRowCount();
         int cols = grid.getColumnCount();
@@ -182,9 +180,7 @@ public class SudokuDisplay {
                 // Récupérer chaque cellule de la grille
                 for (javafx.scene.Node node : grid.getChildren()) {
                     if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == col) {
-                        if (node instanceof Button) {  // Si la cellule est un bouton
-                            Button button = (Button) node;
-    
+                        if (node instanceof Button button) {
                             // Calculer la distance du centre de la grille
                             double distanceX = Math.abs(col - centerX);
                             double distanceY = Math.abs(row - centerY);
@@ -244,18 +240,9 @@ public class SudokuDisplay {
                                         alert.setHeaderText("Félicitations !");
                                         alert.setContentText("Vous avez terminé le Sudoku !");
                                         alert.showAndWait();
-    
+
                                         // Changer de scène après l'animation
                                         SudokuMenu.showSudokuLibrary(primaryStage); // Ou MainMenu.showMainMenu si nécessaire
-
-                                        if (actualGame != null) {
-                                            try {
-                                                actualGame.stopGame();
-                                            } catch (SQLException | InterruptedException e1) {
-                                                System.err.println("Error stopping the game: " + e1.getMessage());
-                                            }
-                                            SudokuGrid.setGame(null);
-                                        }
                                     });
                                 }
                             });

@@ -73,6 +73,14 @@ public class SudokuGrid {
                     grid.add(cell, col, row);
                 }
             }
+
+            // SudokuDisplay.highlightCell(grid, 5, 5);
+            // int[][] centerHighlight = {
+            //     {3, 3}, {3, 4}, {3, 5},
+            //     {4, 3}, {4, 4}, {4, 5},
+            //     {5, 3}, {5, 4}, {5, 5}
+            // };
+            // SudokuDisplay.highlightCells(grid, centerHighlight);
         }
     
         // ------------ Nombre ------------ // 
@@ -310,6 +318,8 @@ public class SudokuGrid {
                     Cell currentCell = gridSudoku.getCell(r, c);
     
                     if (!currentCell.isEditable()) {
+                        // Appeler la méthode pour surligner la ligne et la colonne
+                        SudokuDisplay.highlightRowAndColumn(grid, r, c);
                         System.out.println("Cette cellule est fixe et ne peut pas être modifiée.");
                         return;
                     }
