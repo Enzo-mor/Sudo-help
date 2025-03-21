@@ -39,7 +39,7 @@ public class Help {
     public Help(String techName) {
         // Initialisation des messages avec des valeurs par défaut
         messages = new String[NB_LVL];
-        for (int i = 0; i < NB_LVL; i++) {
+        for(int i = 0; i < NB_LVL; i++) {
             messages[i] = "Message d'aide de niveau " + (i + 1) + " non défini.";
         }
 
@@ -63,11 +63,11 @@ public class Help {
      * Retourne la liste des cellules à afficher sous forme de liste de points.
      * @return Liste des cellules concernées.
      */
-    public List<Point> getDisplay() {
-        List<Point> res = new ArrayList<>();
-        for (int i = 0; i < Grid.NB_NUM; i++) {
-            for (int j = 0; j < Grid.NB_NUM; j++) {
-                if (grid[i][j]) res.add(new Point(i, j));
+    public List<int[]> getDisplay() {
+        List<int[]> res = new ArrayList<>();
+        for(int i = 0; i < Grid.NB_NUM; i++) {
+            for(int j = 0; j < Grid.NB_NUM; j++) {
+                if(grid[i][j]) res.add(new int[] {i, j});
             }
         }
         return res;
@@ -79,7 +79,7 @@ public class Help {
      * @param message Texte du message d'aide.
      */
     public void setMessage(int level, String message) {
-        if (level >= 1 && level <= NB_LVL) {
+        if(level >= 1 && level <= NB_LVL) {
             messages[level - 1] = message;
         } else {
             throw new IllegalArgumentException("Le niveau d'aide doit être compris entre 1 et " + NB_LVL);
@@ -92,7 +92,7 @@ public class Help {
      * @return Message correspondant au niveau d'aide.
      */
     public String getMessage(int level) {
-        if (level >= 1 && level <= NB_LVL) {
+        if(level >= 1 && level <= NB_LVL) {
             return messages[level - 1];
         } else {
             throw new IllegalArgumentException("Le niveau d'aide doit être compris entre 1 et " + NB_LVL);
@@ -115,7 +115,7 @@ public class Help {
      * @param y Coordonnée colonne.
      */
     public void addPos(int x, int y) {
-        if (x >= 0 && x < Grid.NB_NUM && y >= 0 && y < Grid.NB_NUM) {
+        if(x >= 0 && x < Grid.NB_NUM && y >= 0 && y < Grid.NB_NUM) {
             grid[x][y] = true;
         }
     }
@@ -125,7 +125,7 @@ public class Help {
      * @param i Indice de la ligne.
      */
     public void addLine(int i) {
-        for (int j = 0; j < Grid.NB_NUM; j++) {
+        for(int j = 0; j < Grid.NB_NUM; j++) {
             addPos(i, j);
         }
     }
@@ -135,7 +135,7 @@ public class Help {
      * @param i Indice de la colonne.
      */
     public void addColumn(int i) {
-        for (int j = 0; j < Grid.NB_NUM; j++) {
+        for(int j = 0; j < Grid.NB_NUM; j++) {
             addPos(j, i);
         }
     }
@@ -146,13 +146,13 @@ public class Help {
      * @param j Indice colonne de la sous-grille (0 à 2).
      */
     public void addSquare(int i, int j) {
-        if (i < 0 || i >= 3 || j < 0 || j >= 3) return;
+        if(i < 0 || i >= 3 || j < 0 || j >= 3) return;
 
         int startRow = Grid.NB_SUBGRID * i;  
         int startCol = Grid.NB_SUBGRID * j; 
 
-        for (int di = 0; di < Grid.NB_SUBGRID; di++) {
-            for (int dj = 0; dj < Grid.NB_SUBGRID; dj++) {
+        for(int di = 0; di < Grid.NB_SUBGRID; di++) {
+            for(int dj = 0; dj < Grid.NB_SUBGRID; dj++) {
                 addPos(startRow + di, startCol + dj);
             }
         }
@@ -171,25 +171,25 @@ public class Help {
         StringBuilder res = new StringBuilder("HELP("+getName()+"):\n");
         
         // Affichage des messages
-        for (int i = 0; i < NB_LVL; i++) {
+        for(int i = 0; i < NB_LVL; i++) {
             res.append("Niveau d'aide n°").append(i + 1).append(":\n   ").append(messages[i]).append("\n");
         }
 
         // Affichage de la grille
         boolean[][] pos = getPositions();
-        for (int i = 0; i < Grid.NB_NUM; i++) {
-            for (int j = 0; j < Grid.NB_NUM; j++) {
+        for(int i = 0; i < Grid.NB_NUM; i++) {
+            for(int j = 0; j < Grid.NB_NUM; j++) {
                 res.append(pos[i][j] ? "X " : ". ");
 
                 // Séparation verticale
-                if (j % 3 == 2 && j != Grid.NB_NUM - 1) {
+                if(j % 3 == 2 && j != Grid.NB_NUM - 1) {
                     res.append("| ");
                 }
             }
             res.append("\n");
 
             // Séparateur horizontal
-            if (i % 3 == 2 && i != Grid.NB_NUM - 1) {
+            if(i % 3 == 2 && i != Grid.NB_NUM - 1) {
                 res.append("------+-------+------\n");
             }
         }
@@ -198,21 +198,21 @@ public class Help {
 
     public static void main(String[] args) {
         // Test affichage ligne par ligne
-        for (int i = 0; i < 9; i++) {
+        for(int i = 0; i < 9; i++) {
             Help help = new Help("Test");
             help.addLine(i);
             System.out.println(help);
         }
 
         // Test affichage colonne par colonne
-        for (int i = 0; i < 9; i++) {
+        for(int i = 0; i < 9; i++) {
             Help help = new Help("Test");
             help.addColumn(i);
             System.out.println(help);
         }
 
         // Test affichage par sous-grilles
-        for (int i = 0; i < 9; i++) {
+        for(int i = 0; i < 9; i++) {
             Help help = new Help("Test");
             help.addSquare(i);
             System.out.println(help);

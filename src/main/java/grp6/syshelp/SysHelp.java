@@ -89,6 +89,8 @@ public class SysHelp {
     
 
     public static void main(String[] args) {
+        SudoLog.setDebug(true);
+
         int[] data = {
             6,1,0, 9,0,8, 4,0,0,
             9,8,0, 5,0,0, 0,0,0,
