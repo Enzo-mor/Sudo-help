@@ -168,7 +168,7 @@ public class Help {
 
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder();
+        StringBuilder res = new StringBuilder("HELP("+getName()+"):\n");
         
         // Affichage des messages
         for (int i = 0; i < NB_LVL; i++) {

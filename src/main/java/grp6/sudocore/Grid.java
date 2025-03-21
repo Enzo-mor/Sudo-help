@@ -80,17 +80,24 @@ public final class Grid implements Iterable<Cell> {
      * Constructeur de la classe 'Grid'.
      */
     public Grid(int[] data) {
+        SudoLog.debug("Creation d'une grille");
         this.id = 0;
         this.cells = new ArrayList<>();
 
         for(int i=0; i<data.length; i++) {
             int num = data[i];
-            Cell cell = new FlexCell(i/Grid.NB_NUM, i%Grid.NB_NUM);
+            int x = i/Grid.NB_NUM;
+            int y = i%Grid.NB_NUM;
+            SudoLog.debug("Construction cellule de la grille ("+x+","+y+")");
+            Cell cell = new FlexCell(x, y);
             cell.setNumber(num);
             cells.add(cell);
         } 
+        SudoLog.debug("Fin creation des cellules");
         this.difficulty = SudoTypes.Difficulty.EASY;
+        SudoLog.debug("Resolution de la grille");
         this.solvedCells = SudokuSolver.solveCells(this.cells);
+        SudoLog.debug("Fin creation de la grille");
     }
 
     /**

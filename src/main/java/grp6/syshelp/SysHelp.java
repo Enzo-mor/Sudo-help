@@ -5,6 +5,7 @@ import java.util.List;
 
 import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
+import grp6.sudocore.SudoLog;
 
 /**
  * Class: représente le système d'aide pour la résolution d'un Sudoku.
@@ -45,7 +46,7 @@ public class SysHelp {
         //TECHNIQUES.add(new HiddenTriples());    //  9-Triplets cachés
         TECHNIQUES.add(new PointingPairs());    // 10-Paires pointantes
         TECHNIQUES.add(new PointingTriples());  // 11-Triplets pointants
-        //TECHNIQUES.add(new XWing());            // 12-XWing
+        TECHNIQUES.add(new XWing());            // 12-XWing
         //TECHNIQUES.add(new YWing());            // 13-YWing
         //TECHNIQUES.add(new Swordfish());        // 14-Swordfish
     }
@@ -64,34 +65,44 @@ public class SysHelp {
         return false;
     }
 
+    /**
+     * Generation d'une aide a partir d'une grille donnee
+     * @param g Grille du joueur
+     * @return L'aide qui peut etre apporte par le Systeme d'aide
+     */
     public static Help generateHelp(Grid g) {
+        SudoLog.debug("Clone de la grille");
         Grid clone = g.clone();
+        SudoLog.debug("Generation des annotations");
         AutoAnnotation.generate(clone);
     
         for (InterfaceTech tech : TECHNIQUES) {
+            SudoLog.debug("Teste avec " + tech.getClass().getSimpleName());
             Help help = tech.getHelp(clone);
             if (help != null) {
                 return help; 
             }
         }
     
-        return null; 
+        return new NoHelp(); 
     }
     
 
     public static void main(String[] args) {
         int[] data = {
-            0,2,1,4,8,5,6,7,9,
-            0,0,0,9,3,7,0,0,0,
-            0,0,0,2,1,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,
-            0,0,0,4,0,0,0,0,0
+            6,1,0, 9,0,8, 4,0,0,
+            9,8,0, 5,0,0, 0,0,0,
+            5,0,3, 0,0,6, 0,1,9,
+
+            0,0,0, 6,0,0, 5,0,4,
+            0,0,2, 0,9,0, 3,8,6,
+            8,0,5, 0,2,3, 0,7,0,
+
+            0,0,0, 0,0,4, 0,0,7,
+            0,5,6, 0,0,0, 1,4,8,
+            7,0,8, 0,0,0, 2,9,5
         };
-        Grid grille = new Grid(data);  
+        Grid grille = new Grid(data); 
 
         System.out.println("🔹 Grille de départ :");
         System.out.println(grille);
@@ -99,11 +110,6 @@ public class SysHelp {
         // Demande d'aide au système
         Help help = SysHelp.generateHelp(grille);
 
-        // Affichage du résultat
-        if (help != null) {
-            System.out.println(help);
-        } else {
-            System.out.println("Aucune aide trouvée.");
-        }
+        System.out.println(help);
     }
 }
