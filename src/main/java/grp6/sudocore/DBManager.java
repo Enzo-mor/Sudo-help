@@ -391,9 +391,10 @@ public final class DBManager {
                       , DBManager.getProfile(rs.getString("player"))
                       , rs.getString("created_date")
                       , rs.getString("last_modifed_date")
-                      , rs.getDouble("progress_rate")
+                      , rs.getInt("score")
                       , rs.getLong("elapsed_time")
                       , rs.getString("game_state")
+                      , rs.getDouble("progress_rate")
                       );
                      game.applyActions(ActionManagerApply.deserializeList(rs.getString("actions"), game));
                     res.add(game );

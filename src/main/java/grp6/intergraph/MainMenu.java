@@ -55,7 +55,7 @@ public class MainMenu {
         rotateAnimation.setByAngle(180);
         rotateAnimation.setCycleCount(1);
 
-        settingsWindow = new Settings(stage, gearIcon);
+        settingsWindow = Settings.getInstance(stage, gearIcon);
         settingsButton.setOnAction(e -> settingsWindow.toggleSettingsWindow());
 
         // Conteneur pour aligner le bouton en bas a droite

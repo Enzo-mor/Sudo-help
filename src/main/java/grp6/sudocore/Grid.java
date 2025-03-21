@@ -376,7 +376,7 @@ public final class Grid implements Iterable<Cell> {
 
     /**
      * Evaluer une grille (verifier si elle bonne)
-     * @return Nombre d'erreur
+     * @return Liste des coordonees des chiffres mal places
      */
     public List<int[]> evaluate() {
         List<int[]> res = new ArrayList<>();
@@ -387,6 +387,24 @@ public final class Grid implements Iterable<Cell> {
                     error[0] = i;
                     error[1] = j;
                     res.add(error);
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Evaluer une grille (verifier si elle bonne)
+     * @return Nombre de chiffres bien places dans la grille
+     */
+    public int nbCorrectCells() {
+        int res = 0;
+        int idx;
+        for(int i=0; i<Grid.NB_NUM; i++) {
+            for(int j=0; j<Grid.NB_NUM; j++) {
+                idx=NB_NUM*i+j;
+                if((cells.get(idx).getNumber() == solvedCells.get(idx).getNumber()) && cells.get(idx) instanceof FlexCell) {
+                    res+=1;
                 }
             }
         }

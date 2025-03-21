@@ -52,6 +52,7 @@ public class ControlButtons {
 
         // Ajoute l'action sur le bouton "Verifier"
         checkButton.setOnAction(e -> {
+            sudokuGame.decreaseScore("check");
             SudokuDisplay.resetGrid(sudokuGrid.getGridPane());
             putErrorsRed();
         });

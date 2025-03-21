@@ -132,7 +132,7 @@ public final class Game {
         this.elapsedTime = 0; 
         currentIndex=-1;
         this.gameState=GameState.NOT_STARTED;
-        score=0;
+        score=1000;
         this.timer = Executors.newScheduledThreadPool(1);
     }
     /**
@@ -176,14 +176,15 @@ public final class Game {
       * @param elapsedTime represente le temps ecoulé
       */
 
-     protected Game( long id,Grid grid,Profile profile, String createdDate, String lastModifDate, double progressRate, long elapsedTime, String gameState){
+     protected Game( long id,Grid grid,Profile profile, String createdDate, String lastModifDate, int score, long elapsedTime, String gameState, double progressRate){
         this.id=id;
         this.grid=grid;
         this.profile=profile;
         this.createdDate=createdDate;
         this.lastModifDate=lastModifDate;
-        this.progressRate=progressRate;
+        this.score=score;
         this.elapsedTime=elapsedTime;
+        this.progressRate=progressRate;
         switch(gameState) {
             case "IN_PROGRESS":
                 this.gameState = GameState.IN_PROGRESS;
@@ -757,14 +758,28 @@ public final class Game {
      * Cette permet de calculer le taux de progression du jeux
      */
     private void calculateProgressRate() {
-       progressRate = (((double) (grid.getNumberFlexCell()-grid.evaluate().size()))/grid.getNumberFlexCell())*100;
+        progressRate = (((double)grid.nbCorrectCells()) / ((double) grid.getNumberFlexCell())) * 100 ;
+        progressRate = Math.round(progressRate * 100.0) / 100.0;
+    }
+
+    /**
+     * Methode permettant de reduire le score de la partie
+     * @param mode Permet de savoir si le joueur pert des points parce qu'il a verifie sa grille ou parce qu'il a utilise l'aide
+     */
+    public void decreaseScore(String mode){
+        if(mode.equals("check")){
+            this.score = this.score - 50;
+        }
+        else {
+            this.score = this.score - 20;
+        }
     }
 
     /**
      *  cette methode retourne le taux de progression de la partie en pourcentage
      *  le taux de progression represente le pourcentage de case resolue dans la grille
      * 
-     * @return le  pourcentage des cases réussits
+     * @return le  pourcentage des cases correctes
      */
     public double getProgressRate() {
         return progressRate;

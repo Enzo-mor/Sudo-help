@@ -2,23 +2,24 @@ package grp6.sudocore;
 
 import com.google.gson.JsonObject;
 /**
- * cette classe permet d'effectuer les diffrentes actions ou interactions  avec le jeu de sudoku
- * toutes les actions du jeu heritent de cette classe et les actions appliquées sur les cellules du jeu ne concerneront que les cellules flexibles ou editable.
- * elle permet de faire l'action et de l'annuler
- * elle permet aussi de serialiser et deserialiser les actions
+ * Cette classe permet d'effectuer les differentes actions ou interactions avec le jeu de sudoku.
+ * Toutes les actions du jeu heritent de cette classe et les actions appliquees sur les cellules du jeu ne concerneront que les cellules flexibles ou editables.
+ * Elle permet de faire l'action et de l'annuler ainsi que de serialiser et deserialiser les actions pour le stockage dans la base de donnees.
  * 
  * @version 1.0
  * @see Game
  * @see ActionManagerApply
+ * @author Taise DE THESE
+ * @author Kilian POUSSE
  */
 public  abstract class Action {
     /**
-     * represente le jeu sur lequel les actions seront appliquées
+     * Represente le jeu sur lequel les actions seront appliquees
      */
     final protected Game game; 
     /**
-     * constructeur des actions
-     * @param game represente le jeu sur lequel les actions seront appliquées
+     * Constructeur des actions
+     * @param game represente le jeu sur lequel les actions seront appliquees
      */
     public Action(Game game){
         this.game = game;

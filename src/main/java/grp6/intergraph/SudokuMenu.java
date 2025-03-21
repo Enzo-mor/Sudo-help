@@ -90,14 +90,24 @@ public class SudokuMenu {
         sudokuBox.setStyle("-fx-background-color: #939cb5; -fx-padding: 10; -fx-border-color: black; -fx-border-width: 1; -fx-border-radius: 5;");
 
         Label nameLabel = new Label(sudoku.getName());
-        Label scoreLabel = new Label("Score : " + (sudoku.getScore() == 0 ? "-" : sudoku.getScore()));
-        Label bestTimeLabel = new Label("Temps : " + formatTime(sudoku.getBestTime()));
+        Label scoreLabel;
+        if(sudoku.getGame()!=null){
+            if(sudoku.getGame().getGameState()==GameState.FINISHED){
+                scoreLabel = new Label("Score : " + sudoku.getScore());
 
+            }
+            else {
+                scoreLabel = new Label(sudoku.getGame().getProgressRate() + " %");
+            }
+        }
+        else {
+            scoreLabel = new Label(" - % ");
+        }
+        Label bestTimeLabel = new Label("Temps : " + formatTime(sudoku.getBestTime()));
+    
         ImageView statusIcon = new ImageView();
         statusIcon.setFitWidth(24);
         statusIcon.setFitHeight(24);
-
-        System.out.println("Status: " + sudoku.getStatus() + " | Id : " + sudoku.getId());
 
         switch (sudoku.getStatus()) {
             case FINISHED -> statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/star.png")));

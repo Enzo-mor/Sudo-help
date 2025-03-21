@@ -17,10 +17,13 @@ import javafx.util.Duration;
 class Settings extends Stage {
 
     private boolean settingsMode = false;
+    private static boolean highlightRowCol = false;
+    private static boolean highlightNumbers = false;
     private final RotateTransition rotateAnimation;
-    
+    private static Settings instance = null;
 
-    public Settings(Stage stage, ImageView gearIcon) {
+
+    private Settings(Stage stage, ImageView gearIcon) {
         setTitle("Paramètres");
 
         // --- HBox pour afficher/modifier le pseudo ---
@@ -52,18 +55,19 @@ class Settings extends Stage {
         // --- Parametres ---
         CheckBox helpNotifications = new CheckBox("Notifications d'aide");
         CheckBox fullscreenMode = new CheckBox("Mode plein écran");
-        CheckBox gridHighlight = new CheckBox("Surbrillance de la grille");
-        CheckBox numberHighlight = new CheckBox("Surbrillance des chiffres");
+        CheckBox checkHighlightRowCol = new CheckBox("Marquage des lignes/colonnes");
+        CheckBox numberHighlight = new CheckBox("Marquage des chiffres");
 
         Button changeProfileButton = new Button("Changer de profil");
         Button deleteProfileButton = new Button("Supprimer profil");
         deleteProfileButton.setStyle("-fx-text-fill: red;");
 
-        VBox settingsLayout = new VBox(10, usernameBox, helpNotifications, fullscreenMode, gridHighlight, numberHighlight, changeProfileButton, deleteProfileButton);
+        VBox settingsLayout = new VBox(10, usernameBox, helpNotifications, fullscreenMode, checkHighlightRowCol, numberHighlight, changeProfileButton, deleteProfileButton);
         settingsLayout.setStyle("-fx-padding: 20px;");
 
         // --- Gestion Boutons Parametres ---
         changeProfileButton.setOnAction(e -> {
+            instance=null;
             ProfileSelection.getInstance().showProfileSelection(stage);
             this.close();
         });
@@ -99,6 +103,7 @@ class Settings extends Stage {
                 timeline.setCycleCount(1);
                 timeline.play();
 
+                instance=null;
                 ProfileSelection.getInstance().showProfileSelection(stage);
                 this.close();
                 
@@ -118,6 +123,19 @@ class Settings extends Stage {
             });
         });
 
+        // -- Button highlight row/col --
+        checkHighlightRowCol.setOnAction(e -> {
+            highlightRowCol = !highlightRowCol;
+            if(!highlightRowCol)
+                SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
+        });
+
+        // -- Button number highlight --
+        numberHighlight.setOnAction(e -> {
+            highlightNumbers = !highlightNumbers;
+            if(!highlightNumbers)
+                SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
+        });
 
         Scene scene = new Scene(settingsLayout, 250, 300);
         setScene(scene);
@@ -143,5 +161,21 @@ class Settings extends Stage {
             rotateAnimation.setByAngle(45);
             rotateAnimation.play();
         }
+    }
+
+    public static Settings getInstance(Stage stage, ImageView gearIcon){
+        if(instance == null){
+            instance = new Settings(stage, gearIcon);
+        }
+        return instance;
+    }
+
+
+    public static boolean getHighlightRowCol() {
+        return highlightRowCol;
+    }
+
+    public static boolean getHighlightNumbers() {
+        return highlightNumbers;
     }
 }

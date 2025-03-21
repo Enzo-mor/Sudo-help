@@ -1,8 +1,11 @@
 package grp6.intergraph;
 
+import grp6.sudocore.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
+import grp6.sudocore.Grid;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -20,8 +23,7 @@ public class SudokuDisplay {
     // Méthode pour réinitialiser toutes les cellules de la grille à une couleur par défaut
     public static void resetGrid(GridPane grid) {
         for (Node node : grid.getChildren()) {
-            if (node instanceof Button) {
-                Button button = (Button) node;
+            if (node instanceof Button button) {
                 int row = GridPane.getRowIndex(node);
                 int col = GridPane.getColumnIndex(node);
 
@@ -32,32 +34,6 @@ public class SudokuDisplay {
 
                 // Appliquer la couleur calculée
                 button.setStyle(defaultColor);
-            }
-        }
-    }
-
-    // Méthode pour afficher une oeillère : une cellule reste normale, les autres deviennent sombres
-    public static void highlightCell(GridPane grid, int row, int col) {
-        // Réinitialiser la grille avant de surligner
-        resetGrid(grid);
-
-        for (Node node : grid.getChildren()) {
-            Integer nodeRow = GridPane.getRowIndex(node);
-            Integer nodeCol = GridPane.getColumnIndex(node);
-
-            if (nodeRow == null || nodeCol == null) {
-                continue; // Évite les erreurs si les indices sont null
-            }
-
-            if (node instanceof Button button) {
-                if (nodeRow == row && nodeCol == col) {
-                    // Appliquer le style normal à la cellule sélectionnée
-                    button.setStyle(getHighlightStyle(row, col));
-                } else {
-                    // Assombrir toutes les autres cellules
-                    darkerCell(button);
-                    darkerCell(button);
-                }
             }
         }
     }
@@ -92,6 +68,44 @@ public class SudokuDisplay {
         }
     }
 
+    public static void highlightSameNumbers(GridPane gridPane, Grid grid, int number) {
+        // Réinitialiser la grille avant de surligner
+        resetGrid(gridPane);
+
+        // Parcourir les cellules du grid
+        for (int r = 0; r < gridPane.getRowCount(); r++) {  // Supposons qu'il existe une méthode getRowCount() pour obtenir le nombre de lignes
+            for (int c = 0; c < gridPane.getColumnCount(); c++) {  // Supposons qu'il existe une méthode getColumnCount() pour obtenir le nombre de colonnes
+                // Récupérer la cellule à la position (r, c) dans le Grid
+                Cell cell = grid.getCell(r, c);  // Supposons qu'il existe une méthode getCell(r, c) pour obtenir la cellule
+    
+                // Vérifier si la cellule contient le nombre recherché
+                if (cell != null && cell.getNumber() == number) {
+                    // Trouver le bouton dans le GridPane à la même position (r, c)
+                    Node buttonNode = getButtonFromGridPane(gridPane, r, c);  // Méthode pour récupérer le bouton à la position (r, c)
+    
+                    if (buttonNode instanceof Button button) {
+                        button.setStyle("-fx-background-color: #aee9fc");
+                    }
+                }
+            }
+        }
+    }
+    
+    // Méthode pour récupérer le bouton d'un GridPane à la position (r, c)
+    private static Node getButtonFromGridPane(GridPane gridPane, int r, int c) {      
+        // Parcourir les enfants du GridPane et vérifier la position
+        for (Node node : gridPane.getChildren()) {
+            Integer row = GridPane.getRowIndex(node);
+            Integer col = GridPane.getColumnIndex(node);
+    
+            if (row != null && col != null && row == r && col == c) {
+                return node;
+            }
+        }
+        return null;  // Retourne null si aucun bouton n'est trouvé à cette position
+    }
+    
+
     /**
      * Retourne le style à appliquer pour une cellule surlignée.
      */
@@ -106,24 +120,18 @@ public class SudokuDisplay {
         // Réinitialiser la grille avant de surligner
         resetGrid(grid);
 
-        // Parcourir toutes les cellules pour la ligne
+        // Parcourir toutes les cellules pour la ligne et la colonne
         for (Node node : grid.getChildren()) {
-            if (GridPane.getRowIndex(node) == clickedRow) {
-                if (node instanceof Button) {
-                    Button button = (Button) node;
-
-                    darkerCell(button);
+            if (node instanceof Button button) {
+                Integer row = GridPane.getRowIndex(node) != null ? GridPane.getRowIndex(node) : 0;
+                Integer col = GridPane.getColumnIndex(node) != null ? GridPane.getColumnIndex(node) : 0;
+                if (row == clickedRow || col == clickedCol) {
+                    lighterCell(button);
                 }
-            }
-        }
 
-        // Parcourir toutes les cellules pour la colonne
-        for (Node node : grid.getChildren()) {
-            if (GridPane.getColumnIndex(node) == clickedCol) {
-                if (node instanceof Button) {
-                    Button button = (Button) node;
-
-                    darkerCell(button);
+                // Ajouter une bordure rouge au bouton sélectionné
+                if (row == clickedRow && col == clickedCol) {
+                    button.setStyle(button.getStyle() + "; -fx-border-color: lightgray; -fx-border-width: 2px;");
                 }
             }
         }
@@ -153,6 +161,31 @@ public class SudokuDisplay {
         }
     }
 
+    private static void lighterCell(Button button) {
+        String buttonStyle = button.getStyle();
+        if (buttonStyle.contains("-fx-background-color")) {
+            String colorString = buttonStyle.split(":")[1].trim().replace(";", "");
+            Color currentColor = Color.web(colorString);
+    
+            // Rendre "lightblue" plus clair et "white" plus démarqué
+            Color modifiedColor;
+            if (currentColor.equals(Color.LIGHTBLUE)) {
+                modifiedColor = Color.web("#aee9fc");
+            } else if (currentColor.equals(Color.WHITE)) {
+                modifiedColor = Color.web("#e4f9ff");
+            } else {
+                modifiedColor = Color.web("#aee9fc");
+            }
+    
+            button.setStyle("-fx-background-color: " + toRgbString(modifiedColor) + ";");
+        } else {
+            // Si pas de fond défini, mettre une couleur plus marquée par défaut
+            button.setStyle("-fx-background-color: lightgray;");
+        }
+    }
+    
+
+    // Méthode pour afficher un effet de fin de jeu
     public static void showEndGameEffect(GridPane grid, Stage primaryStage) {
 
         resetGrid(grid);

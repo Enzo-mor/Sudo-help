@@ -7,7 +7,6 @@ import java.time.chrono.ThaiBuddhistChronology;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -19,6 +18,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.animation.RotateTransition;
+
 
 
 public class SudokuGame {
@@ -26,6 +27,10 @@ public class SudokuGame {
     private static final double MIN_HEIGHT = 500;
     private static Game actualGame;
     private static final Timeline gameStateChecker = new Timeline();
+
+
+    private static Settings settingsWindow = null;
+    private static RotateTransition rotateAnimation;
 
     public static void showSudokuGame(Stage primaryStage, Sudoku selectedSudoku) {
 
@@ -86,7 +91,36 @@ public class SudokuGame {
         HBox layout = new HBox(20, SudokuGrid.getGridPane(), rightPanel);
         VBox mainLayout = new VBox(10, topBar, layout);
 
-        Scene scene = new Scene(mainLayout, 800, 600);
+
+         // --- Bouton "gear" en bas a droite ---
+        Button settingsButton = new Button();
+        ImageView gearIcon = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/gear.png")));
+        gearIcon.setFitWidth(30);
+        gearIcon.setFitHeight(30);
+        settingsButton.setGraphic(gearIcon);
+        settingsButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+
+        // --- Animation de rotation ---
+        rotateAnimation = new RotateTransition(Duration.millis(500), gearIcon);
+        rotateAnimation.setByAngle(180);
+        rotateAnimation.setCycleCount(1);
+
+        settingsWindow = Settings.getInstance(primaryStage, gearIcon);
+        settingsButton.setOnAction(e -> settingsWindow.toggleSettingsWindow());
+
+        // Conteneur pour aligner le bouton en bas a droite
+        HBox bottomRightContainer = new HBox(settingsButton);
+        bottomRightContainer.setAlignment(Pos.BOTTOM_RIGHT);
+        bottomRightContainer.setStyle("-fx-padding: 10px;");
+
+        // --- BorderPane pour organiser la mise en page ---
+        BorderPane root = new BorderPane();
+        root.setCenter(mainLayout); // Place le menu principal au centre
+        root.setBottom(bottomRightContainer); // Place le bouton settings en bas
+
+        
+
+        Scene scene = new Scene(root, 800, 600);
         primaryStage.setTitle(selectedSudoku.getName() + " - " + MainMenu.getProfileName());
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(MIN_WIDTH);

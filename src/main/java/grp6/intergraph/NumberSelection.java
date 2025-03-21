@@ -27,7 +27,14 @@ public class NumberSelection {
             numButtonsTop[index] = new Button(String.valueOf(i));
             numButtonsTop[index].setMinSize(50, 50);
             numButtonsTop[index].setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-            numButtonsTop[index].setOnAction(e -> selectNumber(numButtonsTop[index]));
+            numButtonsTop[index].setOnAction(e -> {
+                selectNumber(numButtonsTop[index]);
+
+                // Marquage des cellules qui ont la même valeur
+                if(Settings.getHighlightNumbers())
+                    SudokuDisplay.highlightSameNumbers(SudokuGrid.getGridPane(), SudokuGrid.getGrid(), Integer.parseInt(getSelectedNumber()));
+            });
+
             topNumbers.getChildren().add(numButtonsTop[index]);
         }
     
@@ -40,7 +47,13 @@ public class NumberSelection {
             numButtonsBottom[index] = new Button(String.valueOf(i));
             numButtonsBottom[index].setMinSize(50, 50);
             numButtonsBottom[index].setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-            numButtonsBottom[index].setOnAction(e -> selectNumber(numButtonsBottom[index]));
+            numButtonsBottom[index].setOnAction(e -> {
+                selectNumber(numButtonsBottom[index]);
+
+                // Marquage des cellules qui ont la même valeur
+                if(Settings.getHighlightNumbers())
+                    SudokuDisplay.highlightSameNumbers(SudokuGrid.getGridPane(), SudokuGrid.getGrid(), Integer.parseInt(getSelectedNumber()));
+            });
 
             bottomNumbers.getChildren().add(numButtonsBottom[index]);
         }
@@ -84,6 +97,7 @@ public class NumberSelection {
     
             // Stocke le nombre selectionne
             setSelectedNumber(numberStr);
+
         }
     }
 
