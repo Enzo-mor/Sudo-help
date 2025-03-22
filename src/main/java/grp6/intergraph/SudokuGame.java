@@ -19,17 +19,65 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.animation.RotateTransition;
 
+/**
+ * Classe SudokuGame
+ * Cette classe gere l'affichage de la fenetre de jeu Sudoku et le processus du jeu en lui-meme.
+ * Elle permet a l'utilisateur de jouer au Sudoku, de faire des choix, et de suivre l'etat du jeu en temps reel.
+ * 
+ * @author Perron Nathan
+ * @author Rasson Emma
+ * @see Game
+ * @see Sudoku
+ * @see DBManager
+ * @see Settings
+ * @see MainMenu
+ * @see SudokuGame
+ * @see SudokuGrid
+ */
 public class SudokuGame {
+
+    /** 
+     * Largeur minimale de la fenetre du jeu 
+     */
     private static final double MIN_WIDTH = 600;
+
+    /** 
+     * Hauteur minimale de la fenetre du jeu 
+     */
     private static final double MIN_HEIGHT = 500;
+
+    /** 
+     * Instance du jeu actuel 
+     */
     private static Game actualGame;
+
+    /** 
+     * Timeline pour verifier l'etat du jeu a chaque seconde 
+     */
     private static final Timeline gameStateChecker = new Timeline();
+
+    /** 
+     * Fenetre de parametres de jeu 
+     */
     private static Settings settingsWindow = null;
+
+    /** 
+     * Animation de rotation pour le bouton des parametres 
+     */
     private static RotateTransition rotateAnimation;
 
+
+    /**
+     * Affiche la fenetre du jeu Sudoku.
+     * Cette methode initialise le jeu avec une grille selectionnee et cree l'interface utilisateur.
+     * 
+     * @param primaryStage La fenetre principale de l'application [Stage]
+     * @param selectedSudoku Le Sudoku selectionne pour le jeu [Sudoku]
+     */
     public static void showSudokuGame(Stage primaryStage, Sudoku selectedSudoku) {
         Grid gridSudokuBase = DBManager.getGrid(selectedSudoku.getId());
 
+        // Initialisation du jeu en fonction de son etat
         if (selectedSudoku.getStatus() == GameState.IN_PROGRESS && selectedSudoku.getGame() != null) {
             actualGame = selectedSudoku.getGame();
             actualGame.resumeGame();
@@ -40,11 +88,11 @@ public class SudokuGame {
             } catch (SQLException e) {
                 System.out.println("Error when starting new game");
             }
-            // Initialisation de la partie et du chronomètre 
+            // Initialisation de la partie et du chronometre 
             actualGame.startGame();
         }
         
-        // Bouton retour (Maison)
+        // Creation du bouton "retour a la maison"
         Button homeButton = new Button();
         ImageView homeIcon = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/home.png")));
         homeIcon.setFitWidth(30);
@@ -53,11 +101,11 @@ public class SudokuGame {
         homeButton.setStyle("-fx-background-color: transparent;");
         homeButton.setOnAction(e -> showExitDialog(primaryStage));
 
-        // Timer
+        // Creation du timer
         Label timerLabel =  new Label("00:00:00");
         actualGame.setGameTimeListener(timer -> Platform.runLater(() -> timerLabel.setText(timer)));
 
-        // Icônes Livre et Info
+        // Creation des icônes Livre et Info
         ImageView bookIcon = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/book.png")));
         bookIcon.setFitWidth(30);
         bookIcon.setFitHeight(30);
@@ -96,7 +144,7 @@ public class SudokuGame {
         settingsButton.setGraphic(gearIcon);
         settingsButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
 
-        // --- Animation de rotation ---
+        // --- Animation de rotation pour le bouton des parametres ---
         rotateAnimation = new RotateTransition(Duration.millis(500), gearIcon);
         rotateAnimation.setByAngle(180);
         rotateAnimation.setCycleCount(1);
@@ -108,25 +156,21 @@ public class SudokuGame {
         ToolsPanel toolsPanel = new ToolsPanel();                                   // 1. Creer le panneau des outils
         NumberSelection numberSelection = new NumberSelection(toolsPanel);          // 2. Creer la selection des nombres
         SudokuGrid grid = new SudokuGrid(toolsPanel, actualGame);                   // 3. Creer la grille de Sudoku
-        numberSelection.setSudokuGrid(grid);                                        // 4. Associer la grille à NumberSelection maintenant qu'elle existe
+        numberSelection.setSudokuGrid(grid);                                        // 4. Associer la grille a NumberSelection maintenant qu'elle existe
         grid.reload(gridSudokuBase);
         ControlButtons controlsButtons = new ControlButtons(grid, actualGame);
 
         // --- Conteneur du panneau droit sans le bouton settings ---
-        VBox rightPanelContent = new VBox(20, 
-        numberSelection.getNumberSelection(), 
-        toolsPanel.getTools(), 
-        controlsButtons.getControlButtons()
-        );
-        rightPanelContent.setAlignment(Pos.CENTER); // Centre le contenu verticalement
+        VBox rightPanelContent = new VBox(20, numberSelection.getNumberSelection(), toolsPanel.getTools(), controlsButtons.getControlButtons());
+        rightPanelContent.setAlignment(Pos.CENTER);
 
-        // --- Conteneur principal du panneau droit (inclut rightPanelContent et un espace flexible) ---
+        // --- Conteneur principal du panneau droit ---
         VBox rightPanel = new VBox();
         rightPanel.setAlignment(Pos.CENTER);
         rightPanel.getChildren().add(rightPanelContent);
         VBox.setVgrow(rightPanelContent, Priority.ALWAYS); // Permet d'occuper tout l'espace disponible
 
-        // --- Conteneur pour le bouton settings, aligné en bas à droite ---
+        // --- Conteneur pour le bouton settings, aligne en bas a droite ---
         HBox settingsContainer = new HBox(settingsButton);
         settingsContainer.setAlignment(Pos.BOTTOM_RIGHT);
         settingsContainer.setPadding(new Insets(10, 10, 10, 10)); // Ajoute un peu de marge
@@ -136,9 +180,9 @@ public class SudokuGame {
         rightPanelWrapper.setCenter(rightPanel);  // Centre le contenu principal verticalement
         rightPanelWrapper.setBottom(settingsContainer); // Met le bouton settings en bas
 
-        // --- Layout global avec la grille à gauche et le panneau droit à droite ---
+        // --- Layout global avec la grille a gauche et le panneau droit a droite ---
         HBox layout = new HBox(20, SudokuGrid.getGridPane(), rightPanelWrapper);
-        layout.setAlignment(Pos.CENTER_LEFT); // Garde la grille bien alignée à gauche        
+        layout.setAlignment(Pos.CENTER_LEFT); // Garde la grille bien alignee a gauche        
 
         VBox mainLayout = new VBox(10, topBar, layout);
 
@@ -153,7 +197,7 @@ public class SudokuGame {
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.show();
 
-        // Vérification automatique de la fin du jeu
+        // Verification automatique de la fin du jeu
         gameStateChecker.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event -> {
             if (actualGame.getGameState() == GameState.FINISHED) {
                 
@@ -162,7 +206,7 @@ public class SudokuGame {
                     actualGame.pauseGame();
                 }
                 
-                /* Méthode d'effet */
+                /* Methode d'effet */
                 SudokuDisplay.showEndGameEffect(SudokuGrid.getGridPane(), primaryStage);
 
                 if (actualGame != null) {
@@ -179,7 +223,12 @@ public class SudokuGame {
         gameStateChecker.play();
     }
 
-
+    /**
+     * Affiche une boîte de dialogue de confirmation pour quitter le jeu.
+     * Cette methode permet a l'utilisateur de retourner au menu de selection ou au menu principal.
+     * 
+     * @param primaryStage La fenetre principale de l'application [Stage]
+     */
     private static void showExitDialog(Stage primaryStage) {
         
         if (actualGame != null) {
@@ -195,6 +244,7 @@ public class SudokuGame {
         Button menuButton = new ProfileButton("Menu Principal");
         Button cancelButton = new ProfileButton("Annuler");
         
+        // Traitement de quand on clique sur le bouton de retour au choix du sudoku
         menuSelectButton.setOnAction(e -> {
             if (actualGame != null) {
                 try {
@@ -209,6 +259,7 @@ public class SudokuGame {
             SudokuMenu.showSudokuLibrary(primaryStage);
         });
         
+        // Traitement de quand on clique sur le bouton de retour au menu
         menuButton.setOnAction(e -> {
             if (actualGame != null) {
                 try {
@@ -223,6 +274,7 @@ public class SudokuGame {
             MainMenu.showMainMenu(primaryStage, MainMenu.getProfile());
         });
         
+        // Traitement de quand on clique sur le bouton d'annulation
         cancelButton.setOnAction(e -> {
             if (actualGame != null) {
                 actualGame.resumeGame();

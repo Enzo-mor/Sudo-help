@@ -20,18 +20,37 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+
+/**
+ * Classe SudokuMenu
+ * Cette classe represente le menu où l'utilisateur peut selectionner un Sudoku depuis la bibliotheque disponible.
+ * Elle gere l'affichage des Sudokus par page, ainsi que les interactions de navigation et les actions possibles sur
+ * chaque grille de Sudoku (reprendre ou recommencer un jeu en cours).
+ * 
+ * @author Perron Nathan
+ * @author Rasson Emma
+ * @see StyledContent
+ * @see SudokuMenu
+ * @see DBManager
+ * @see Sudoku
+ * @see SudokuGame
+ */
 public class SudokuMenu {
+
+    /**
+     * Variable qui garde en memoire la page actuelle du menu de Sudokus.
+     */
     private static int currentPage = 0;
 
     /**
-     * Affiche la bibliothèque des grilles de Sudoku disponibles pour l'utilisateur.
-     *
-     * @param stage La fenêtre principale dans laquelle la bibliothèque est affichée.
+     * Affiche la bibliotheque des grilles de Sudoku disponibles pour l'utilisateur.
+     * 
+     * @param stage La fenetre principale dans laquelle la bibliotheque est affichee.
      */
     public static void showSudokuLibrary(Stage stage) {
         currentPage = 0;
 
-        // Création des boutons de navigation
+        // Creation des boutons de navigation
         Button leftArrow = new Button("<");
         leftArrow.setDisable(true);
         Button rightArrow = new Button(">");
@@ -39,7 +58,7 @@ public class SudokuMenu {
         StyledContent.applyArrowButtonStyle(leftArrow);
         StyledContent.applyArrowButtonStyle(rightArrow);
 
-        // Label pour afficher la difficulté
+        // Label pour afficher la difficulte
         Label difficultyLabel = new Label();
         difficultyLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
@@ -52,10 +71,10 @@ public class SudokuMenu {
         sudokuContainer.setMinWidth(600);
         sudokuContainer.setMinHeight(400);
 
-        // Récupération et initialisation des grilles de Sudoku
+        // Recuperation et initialisation des grilles de Sudoku
         List<Sudoku> sudokus = initializeSudokus();
 
-        // Actions des flèches de navigation
+        // Actions des fleches de navigation
         leftArrow.setOnAction(e -> {
             currentPage--;
             SudokuMenu.showSudokuList(sudokuContainer, stage, sudokus, difficultyLabel, leftArrow, rightArrow);
@@ -68,7 +87,7 @@ public class SudokuMenu {
 
         SudokuMenu.showSudokuList(sudokuContainer, stage, sudokus, difficultyLabel, leftArrow, rightArrow);
 
-        // Mise en page des éléments
+        // Mise en page des elements
         HBox navigation = new HBox(20, leftArrow, sudokuContainer, rightArrow);
         navigation.setAlignment(Pos.CENTER);
 
@@ -87,7 +106,10 @@ public class SudokuMenu {
     }
 
     /**
-     * Crée un conteneur stylisé affichant les informations d'un Sudoku spécifique.
+     * Cree un conteneur stylise affichant les informations d'un Sudoku specifique.
+     * 
+     * @param sudoku Le Sudoku a afficher.
+     * @return Un conteneur VBox contenant les informations du Sudoku.
      */
     public static VBox createSudokuBox(Sudoku sudoku) {
         VBox sudokuBox = new VBox(8);
@@ -145,7 +167,10 @@ public class SudokuMenu {
     }
 
     /**
-     * Met à jour le label de difficulté en fonction du Sudoku affiché.
+     * Met a jour le label de difficulte en fonction du Sudoku affiche.
+     * 
+     * @param difficultyLabel Le label affichant la difficulte.
+     * @param sudoku Le Sudoku dont on veut mettre a jour la difficulte.
      */
     private static void updateDifficultyLabel(Label difficultyLabel, Sudoku sudoku) {
         switch (sudoku.getName().charAt(7)) {
@@ -156,7 +181,9 @@ public class SudokuMenu {
     }
 
     /**
-     * Initialise la liste des Sudokus disponibles.
+     * Initialise la liste des Sudokus disponibles a partir de la base de donnees.
+     * 
+     * @return Une liste de Sudokus recuperes et initialises.
      */
     private static List<Sudoku> initializeSudokus() {
         List<Game> games = DBManager.getGamesForProfile(MainMenu.getProfileName());
@@ -190,7 +217,14 @@ public class SudokuMenu {
 
 
     /**
-     * Affiche la liste des Sudokus par difficulté.
+     * Affiche la liste des Sudokus par difficulte, avec la possibilite de naviguer entre les pages.
+     * 
+     * @param sudokuContainer Le conteneur où les grilles seront affichees.
+     * @param stage La fenetre principale.
+     * @param sudokus La liste des Sudokus a afficher.
+     * @param difficultyLabel Le label de la difficulte actuelle.
+     * @param leftArrow Le bouton de navigation a gauche.
+     * @param rightArrow Le bouton de navigation a droite.
      */
     private static void showSudokuList(GridPane sudokuContainer, Stage stage, List<Sudoku> sudokus, Label difficultyLabel, Button leftArrow, Button rightArrow) {
         sudokuContainer.getChildren().clear();
@@ -252,7 +286,10 @@ public class SudokuMenu {
     }
 
     /**
-     * Formate le temps en secondes en une chaîne de caractères au format HH:MM:SS.
+     * Formate le temps en secondes en une chaîne de caracteres au format HH:MM:SS.
+     * 
+     * @param seconds Le temps en secondes a formater.
+     * @return La chaîne de caracteres formatee sous la forme HH:MM:SS.
      */
     private static String formatTime(long seconds) {
         long hours = seconds / 3600;
@@ -261,8 +298,15 @@ public class SudokuMenu {
         return String.format("%02d:%02d:%02d", hours, minutes, secs);
     }
 
-
-    
+    /**
+     * Cree un bouton pour recommencer un jeu a partir de la fenetre pop-up.
+     * 
+     * @param stage La fenetre principale.
+     * @param sudokus La liste des Sudokus disponibles.
+     * @param selectedSudokuId L'identifiant du Sudoku selectionne.
+     * @param popupStage La fenetre pop-up.
+     * @return Le bouton de recommencement.
+     */
     private static Button getNewRestartButton(Stage stage, List<Sudoku> sudokus, int selectedSudokuId, Stage popupStage) {
         Button restartButton = new Button("Recommencer"); // Bouton pour confirmer la creation du profil
     
@@ -282,6 +326,15 @@ public class SudokuMenu {
         return restartButton;
     }
 
+    /**
+     * Cree un bouton pour reprendre un jeu a partir de la fenetre pop-up.
+     * 
+     * @param stage La fenetre principale.
+     * @param sudokus La liste des Sudokus disponibles.
+     * @param selectedSudokuId L'identifiant du Sudoku selectionne.
+     * @param popupStage La fenetre pop-up.
+     * @return Le bouton de reprise.
+     */
     private static Button getNewReloadButton(Stage stage, List<Sudoku> sudokus, int selectedSudokuId, Stage popupStage) {
         Button reloadButton = new Button("Reprendre"); // Bouton pour confirmer la creation du profil
 

@@ -10,11 +10,42 @@ import javafx.scene.layout.HBox;
 
 import java.util.*;
 
+/**
+ * Classe ControlButtons
+ * Cette classe represente un ensemble de boutons de contrôle pour interagir avec une grille de Sudoku.
+ * Elle permet d'annuler, refaire, verifier et recommencer le jeu.
+ * 
+ * @author Perron Nathan
+ * @author Rasson Emma
+ * @see SudokuGrid
+ * @see Game
+ * @see StyledContent
+ * @see SudokuDisplay
+ * @see Action  
+ */
 public class ControlButtons {
+    /** 
+     * Conteneur des boutons de contrôle 
+     */
     private final HBox controlButtons;
+
+    /** 
+     * Grille de Sudoku associee 
+     */
     private SudokuGrid sudokuGrid;
+
+    /** 
+     * Jeu de Sudoku en cours 
+     */
     private Game sudokuGame;
 
+
+    /**
+     * Constructeur de ControlButtons
+     * 
+     * @param grid Grille de Sudoku associee [SudokuGrid]
+     * @param sudokuG Instance du jeu de Sudoku [Game]
+     */
     public ControlButtons(SudokuGrid grid, Game sudokuG) {
         this.sudokuGame = sudokuG;
         this.sudokuGrid = grid;
@@ -68,11 +99,20 @@ public class ControlButtons {
         controlButtons.getChildren().addAll(undoButton, redoButton, helpButton, checkButton, restartButton);
     }
 
-    // Getters
+    /**
+     * Retourne l'ensemble des boutons de contrôle.
+     * 
+     * @return Conteneur HBox contenant les boutons [HBox]
+     */
     public HBox getControlButtons() {
         return controlButtons;
     }
 
+    /**
+     * Annule la derniere action effectuee sur la grille.
+     * 
+     * @param currentAction Derniere action realisee [Action]
+     */
     public void undoAction(Action currentAction){
         /* Modification cote affichage */
         if(currentAction != null){
@@ -106,6 +146,9 @@ public class ControlButtons {
         }
     }
 
+    /**
+     * Refait la derniere action annulee sur la grille.
+     */
     public void redoAction() {
         /* Modification cote bdd */
         try {
@@ -135,6 +178,9 @@ public class ControlButtons {
 
     }
 
+    /**
+     * Met en evidence les erreurs detectees dans la grille de Sudoku.
+     */
     private void putErrorsRed() {
         // etape 1 : Identifier les erreurs sans effectuer d'undo / redo
         List<int[]> eval = evaluateWithUndoRedo();
@@ -146,11 +192,11 @@ public class ControlButtons {
     
             // Creer une pause de 1 seconde (1000 ms) avant d'annuler les erreurs
             Timeline pause = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-                // Annuler les actions jusqu'à la premiere erreur
+                // Annuler les actions jusqu'a la premiere erreur
                 undoActionsUntilErrorsResolved();
     
                 // Remettre la couleur par defaut apres avoir annule les erreurs
-                sudokuGrid.setCellsColorDefault(eval);
+                SudokuGrid.setCellsColorDefault(eval);
     
                 // Supprimer les actions passees apres l'etat actuel
                 sudokuGame.deleteActionsAfterCurrent();
@@ -161,8 +207,11 @@ public class ControlButtons {
         }
     }
     
+    /**
+     * Annule les actions jusqu'a ce que les erreurs soient corrigees.
+     */
     private void undoActionsUntilErrorsResolved() {
-        // Annuler les actions jusqu'à ce que `evaluate()` retourne une liste vide
+        // Annuler les actions jusqu'a ce que `evaluate()` retourne une liste vide
         List<int[]> finalEval = sudokuGame.evaluate();
         
         while (!finalEval.isEmpty()) {
@@ -176,11 +225,16 @@ public class ControlButtons {
     }
     
 
+    /**
+     * Evalue les erreurs avec un processus d'annulation/refaire.
+     * 
+     * @return Liste des coordonnees des cellules en erreur [List<int[]>]
+     */
     private List<int[]> evaluateWithUndoRedo() {
         // Initialiser les listes pour stocker les coordonnees des erreurs
         List<int[]> errorCells = new ArrayList<>();
         
-        // etape 1 : Annuler les actions jusqu'à ce que `evaluate()` retourne une liste vide
+        // etape 1 : Annuler les actions jusqu'a ce que `evaluate()` retourne une liste vide
         List<int[]> currentEvaluation = sudokuGame.evaluate();
         int undoCount = 0;  // Compter le nombre d'actions undo
     
@@ -204,7 +258,7 @@ public class ControlButtons {
             redoAction();  // Reapplique chaque action annulee
         }
     
-        // Retourner la liste des coordonnees à colorier
+        // Retourner la liste des coordonnees a colorier
         return errorCells;
     }
 }

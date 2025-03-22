@@ -16,14 +16,52 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
+/**
+ * Classe ProfileSelection
+ * Cette classe gere l'affichage et la selection des profils de l'application Sudoku.
+ * Elle permet a l'utilisateur de choisir un profil existant, d'en creer un nouveau
+ * ou de continuer en tant qu'invite.
+ * 
+ * @author Perron Nathan
+ * @author Rasson Emma
+ * @see Profile
+ * @see DBManager
+ * @see StyledContent
+ * @see MainMenu
+ */
 public class ProfileSelection {
+
+    /** 
+     * Liste des profils disponibles 
+     */
     private final List<Profile> profiles = DBManager.getProfiles();
+
+    /** 
+     * Profil selectionne par defaut 
+     */
     private Profile selectedProfile = new Profile("Invité");
+
+    /** 
+     * Page actuelle pour l'affichage des profils 
+     */
     private int currentPage = 0;
+
+    /** 
+     * Instance unique de ProfileSelection 
+     */
     private static ProfileSelection instance = null;
 
+
+    /**
+     * Constructeur prive pour le singleton
+     */
     private ProfileSelection() {}
 
+    /**
+     * Retourne l'instance unique de ProfileSelection.
+     * 
+     * @return Instance de ProfileSelection [ProfileSelection]
+     */
     public static ProfileSelection getInstance() {
         if (instance == null) {
             instance = new ProfileSelection();
@@ -31,6 +69,11 @@ public class ProfileSelection {
         return instance;
     }
 
+    /**
+     * Affiche la fenetre de selection du profil.
+     * 
+     * @param stage Fenetre principale de l'application [Stage]
+     */
     public void showProfileSelection(Stage stage) {
         StackPane root = new StackPane();
         VBox layout = new VBox(20);
@@ -43,7 +86,6 @@ public class ProfileSelection {
 
         Button leftArrow = new Button("<");
         leftArrow.setDisable(true);
-
         Button rightArrow = new Button(">");
 
         StyledContent.applyArrowButtonStyle(leftArrow);
@@ -60,97 +102,27 @@ public class ProfileSelection {
         });
 
         updateProfiles(profileContainer, leftArrow, rightArrow, stage);
-
+        
         HBox navigation = new HBox(10, leftArrow, profileContainer, rightArrow);
         navigation.setAlignment(Pos.CENTER);
-
         navigation.setStyle("-fx-background-color: #939cb5;");
-
-        navigation.autosize();
-
-        Button guestButton = new ProfileButton("Continuer en tant qu'invité");
         
+        Button guestButton = new ProfileButton("Continuer en tant qu'invité");
         guestButton.setOnAction(e -> {
-            instance=null;
+            instance = null;
             MainMenu.showMainMenu(stage, selectedProfile);
-            });
+        });
         
         Button quitButton = new ProfileButton("Quitter");
-        quitButton.setOnAction(e -> {
-            Platform.exit();
-        });
+        quitButton.setOnAction(e -> Platform.exit());
 
         Button addProfileButton = new ProfileButton("Ajouter un profil");
-
+        addProfileButton.setOnAction(e -> showAddProfilePopup(stage, profileContainer, leftArrow, rightArrow));
+        
         StyledContent.applyButtonBoxStyle(guestButton);
         StyledContent.applyButtonBoxStyle(quitButton);
         StyledContent.applyButtonBoxStyle(addProfileButton);
-
-        addProfileButton.setOnAction(e -> {
-            // Creer une nouvelle petite fenetre pop-up (fenetre modale)
-            Stage popupStage = new Stage();
-            popupStage.initModality(Modality.APPLICATION_MODAL); // Bloquer les interactions avec la fenetre principale
-            popupStage.setTitle("Créer un profil"); // Definir le titre de la fenetre
-
-            // Composants de l'interface utilisateur
-            Label label = new Label("Entrez le nom du profil :"); // Libelle au-dessus du champ de texte
-            TextField nameField = new TextField(); // Champ de texte pour la saisie du nom du profil
-
-            // Limiter la longueur du texte à 20 caractères
-            TextFormatter<String> textFormatter = new TextFormatter<>(change -> {
-                if (change.getControlNewText().length() > 20) {
-                    return null; // Refuser l'ajout si la longueur dépasse 20
-                }
-                return change;
-            });
-            nameField.setTextFormatter(textFormatter);
-
-            Button confirmButton = new Button("Créer"); // Bouton pour confirmer la creation du profil
-
-            // Gerer l'evenement lors du clic sur le bouton "Creer"
-            confirmButton.setOnAction(event -> {
-                String name = nameField.getText().trim(); // Recuperer le texte saisi et supprimer les espaces inutiles
-                if (!name.isEmpty()) {
-                    try{
-                        if (DBManager.profileExists(name)){
-                            System.out.println("Le profil " + name + " existe déjà");
-                        }
-                        else{
-                            Profile newProf= new Profile(name);
-                            profiles.add(newProf); // Ajouter un nouveau profil avec un identifiant unique
-                            try {
-                                DBManager.saveProfile(newProf);
-                            }
-                            catch (SQLException err){
-                                System.out.println("Impossible d'accéder à la BDD");
-                            }
-                            System.out.println("Nouveau profil ajouté : " + name); // Afficher un message dans la console
-                            updateProfiles(profileContainer, leftArrow, rightArrow, stage); // Mettre a jour l'affichage des profils
-                        }
-                    }
-                    catch(SQLException er){
-                        System.out.println("Impossible d'accéder à la BDD");
-                    }
-                    popupStage.close(); // Fermer la fenetre pop-up apres l'ajout du profil
-                }
-            });
-
-            // Ajouter un gestionnaire d'événements pour détecter la touche "Entrée"
-            nameField.setOnAction(event -> confirmButton.fire()); // Lorsque "Entrée" est pressée, déclencher le bouton
-
-            // Creer une mise en page verticale avec un espacement entre les elements
-            VBox popupLayout = new VBox(10, label, nameField, confirmButton);
-            popupLayout.setPadding(new Insets(10)); // Ajouter une marge pour une meilleure apparence
-
-            // Creer et appliquer la scene a la fenetre pop-up
-            Scene scene = new Scene(popupLayout, 300, 150);
-            popupStage.setScene(scene);
-
-            // Afficher la fenetre pop-up et attendre l'interaction de l'utilisateur
-            popupStage.showAndWait();
-        });
-
-
+        
         layout.getChildren().addAll(titleLabel, navigation, addProfileButton, guestButton, quitButton);
         root.getChildren().add(layout);
 
@@ -160,9 +132,16 @@ public class ProfileSelection {
         stage.show();
     }
 
+    /**
+     * Met a jour l'affichage des profils disponibles.
+     * 
+     * @param profileContainer Conteneur des profils [HBox]
+     * @param leftArrow Bouton de navigation vers la gauche [Button]
+     * @param rightArrow Bouton de navigation vers la droite [Button]
+     * @param stage Fenetre principale [Stage]
+     */
     private void updateProfiles(HBox profileContainer, Button leftArrow, Button rightArrow, Stage stage) {
         profileContainer.getChildren().clear();
-
         int profilesPerPage = 3;
         int startIndex = currentPage * profilesPerPage;
         int endIndex = Math.min(startIndex + profilesPerPage, profiles.size());
@@ -170,26 +149,62 @@ public class ProfileSelection {
         for (int i = startIndex; i < endIndex; i++) {
             VBox profileBox = new VBox(10);
             profileBox.setAlignment(Pos.CENTER);
-
             ImageView profileImage = new ImageView(new Image(getClass().getResource("/profil.png").toExternalForm()));
             profileImage.setFitWidth(100);
             profileImage.setFitHeight(100);
-
             Label profileName = new Label(profiles.get(i).getPseudo());
             profileName.setStyle("-fx-font-size: 16px;");
-
             profileBox.getChildren().addAll(profileImage, profileName);
             profileContainer.getChildren().add(profileBox);
 
             final Profile profile = profiles.get(i);
             profileBox.setOnMouseClicked(e -> {
                 selectedProfile = profile;
-                instance=null;
+                instance = null;
                 MainMenu.showMainMenu(stage, selectedProfile);
             });
         }
 
         leftArrow.setDisable(currentPage == 0);
         rightArrow.setDisable(endIndex == profiles.size());
+    }
+
+    /**
+     * Affiche une fenetre pop-up pour ajouter un nouveau profil.
+     * 
+     * @param stage Fenetre principale [Stage]
+     * @param profileContainer Conteneur des profils [HBox]
+     * @param leftArrow Bouton gauche de navigation [Button]
+     * @param rightArrow Bouton droit de navigation [Button]
+     */
+    private void showAddProfilePopup(Stage stage, HBox profileContainer, Button leftArrow, Button rightArrow) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle("Créer un profil");
+
+        Label label = new Label("Entrez le nom du profil :");
+        TextField nameField = new TextField();
+        nameField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() > 20 ? null : change));
+        Button confirmButton = new Button("Créer");
+        confirmButton.setOnAction(e -> {
+            String name = nameField.getText().trim();
+            try {
+                if (!name.isEmpty() && !DBManager.profileExists(name)) {
+                    Profile newProfile = new Profile(name);
+                    profiles.add(newProfile);
+                    DBManager.saveProfile(newProfile);
+                    updateProfiles(profileContainer, leftArrow, rightArrow, stage);
+                }
+            } catch (SQLException ex) {
+                System.err.println("Error: " + ex.getMessage());
+            }
+            popupStage.close();
+        });
+
+        nameField.setOnAction(e -> confirmButton.fire());
+        VBox popupLayout = new VBox(10, label, nameField, confirmButton);
+        popupLayout.setPadding(new Insets(10));
+        popupStage.setScene(new Scene(popupLayout, 300, 150));
+        popupStage.showAndWait();
     }
 }

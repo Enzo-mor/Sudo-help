@@ -4,12 +4,14 @@ import grp6.sudocore.Game;
 import grp6.sudocore.SudoTypes.GameState;
 
 /**
- * Représente un jeu de Sudoku avec des informations sur son état, son temps record et son score.
+ * Cette classe represente un jeu de Sudoku avec des informations sur son etat, son temps record et son score.
+ * Elle permet de gerer les differentes donnees relatives a un jeu de Sudoku, telles que le meilleur temps,
+ * le score obtenu et l'etat actuel du jeu.
  * 
- * @author PERRON
- * @author RASSON
- * @see Game
- * @see GameState
+ * @author PERRON Nathan
+ * @author RASSON Emma
+ * @see Game Classe representant une instance de jeu de Sudoku.
+ * @see GameState Enumeration des etats possibles d'un jeu de Sudoku.
  */
 public class Sudoku {
 
@@ -34,23 +36,23 @@ public class Sudoku {
     private int score;
 
     /**
-     * État actuel du jeu
+     * Etat actuel du jeu
      */
     private GameState status;
 
     /**
-     * Instance du jeu associée à ce Sudoku
+     * Instance du jeu associee a ce Sudoku
      */
     private Game game;
 
     /**
      * Constructeur de la classe Sudoku.
      * 
-     * @param id        Identifiant unique du jeu
-     * @param name      Nom du jeu
-     * @param bestTime  Meilleur temps enregistré pour ce jeu
-     * @param score     Score obtenu
-     * @param status    État du jeu
+     * @param id Identifiant unique du jeu [int]
+     * @param name Nom du jeu [String]
+     * @param bestTime Meilleur temps enregistre pour ce jeu [long]
+     * @param score Score obtenu [int]
+     * @param status Etat du jeu [GameState]
      */
     public Sudoku(int id, String name, long bestTime, int score, GameState status) {
         this.id=id;
@@ -64,7 +66,7 @@ public class Sudoku {
     /**
      * Retourne l'identifiant unique du jeu.
      * 
-     * @return L'identifiant unique du jeu
+     * @return L'identifiant unique du jeu [int]
      */
     public int getId() {
         return id;
@@ -73,16 +75,16 @@ public class Sudoku {
     /**
      * Renvoie le nom du jeu.
      * 
-     * @return Le nom du jeu.
+     * @return Le nom du jeu [String]
      */
     public String getName() { 
         return name;
     }
 
     /**
-     * Retourne le meilleur temps enregistré.
+     * Retourne le meilleur temps enregistre.
      * 
-     * @return Le meilleur temps
+     * @return Le meilleur temps [Long]
      */
     public Long getBestTime() { 
         return bestTime;
@@ -91,34 +93,34 @@ public class Sudoku {
     /**
      * Retourne le score obtenu.
      * 
-     * @return Le score du jeu
+     * @return Le score du jeu [int]
      */
     public int getScore() { 
         return score;
     }
 
     /**
-     * Retourne l'état actuel du jeu.
+     * Retourne l'etat actuel du jeu.
      * 
-     * @return L'état du jeu
+     * @return L'etat du jeu [GameState]
      */
     public GameState getStatus() { 
         return status;
     }
 
     /**
-     * Vérifie si une instance de Game est associé à ce Sudoku.
+     * Verifie si une instance de Game est associee a ce Sudoku.
      * 
-     * @return true si une partie existe, false sinon.
+     * @return true si une partie existe, false sinon [boolean]
      */
     public boolean gameExists(){
         return this.game!=null;
     }
 
     /**
-     * Retourne l'instance du jeu associée.
+     * Retourne l'instance du jeu associee.
      * 
-     * @return L'instance de Game ou null si elle n'existe pas.
+     * @return L'instance de Game ou null si elle n'existe pas [Game]
      */
     public Game getGame(){
         return game;
@@ -127,10 +129,10 @@ public class Sudoku {
     /**
      * Modifie les informations du jeu.
      * 
-     * @param time  Nouveau meilleur temps
-     * @param score Nouveau score
-     * @param state Nouvel état du jeu
-     * @param game  Nouvelle instance de Game associé
+     * @param time Nouveau meilleur temps [long]
+     * @param score Nouveau score [int]
+     * @param state Nouvel etat du jeu [GameState]
+     * @param game Nouvelle instance de Game associee [Game]
      */
     public void modifyInfo(long time, int score, GameState state, Game game) {
         this.bestTime=time;
@@ -140,9 +142,9 @@ public class Sudoku {
     }
 
     /**
-     * Retourne le nom du jeu sous forme de chaîne de caractères.
+     * Retourne le nom du jeu sous forme de chaîne de caracteres.
      * 
-     * @return Le nom du jeu
+     * @return Le nom du jeu [String]
      */
     @Override
     public String toString(){
@@ -150,9 +152,9 @@ public class Sudoku {
     }
 
     /**
-     * Met à jour l'état du jeu.
+     * Met a jour l'etat du jeu.
      * 
-     * @param status    Le nouvel état du jeu
+     * @param status Le nouvel etat du jeu [GameState]
      */
     public void setStatus(GameState status) {
         this.status = status;

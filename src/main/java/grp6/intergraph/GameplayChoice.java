@@ -8,8 +8,25 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+/**
+ * Classe GameplayChoice
+ * Cette classe gere l'affichage du choix du mode de jeu.
+ * Elle permet de selectionner entre le mode Apprentissage et le mode Libre.
+ * 
+ * @author Perron Nathan
+ * @author Rasson Emma
+ * @see ProfileButton
+ * @see StyledContent
+ * @see SudokuMenu
+ * @see MainMenu
+ */
 public class GameplayChoice {
     
+    /**
+     * Affiche la fenetre de selection du mode de jeu.
+     * 
+     * @param stage Fenetre principale de l'application [Stage]
+     */
     public static void showGameplayChoice(Stage stage) {
 
         VBox layout = new VBox(30);
