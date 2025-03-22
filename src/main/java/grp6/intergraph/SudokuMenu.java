@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -34,6 +35,9 @@ public class SudokuMenu {
         Button leftArrow = new Button("<");
         leftArrow.setDisable(true);
         Button rightArrow = new Button(">");
+
+        StyledContent.applyArrowButtonStyle(leftArrow);
+        StyledContent.applyArrowButtonStyle(rightArrow);
 
         // Label pour afficher la difficulté
         Label difficultyLabel = new Label();
@@ -69,6 +73,7 @@ public class SudokuMenu {
         navigation.setAlignment(Pos.CENTER);
 
         Button backButton = new ProfileButton("Retour");
+        StyledContent.applyButtonStyle(backButton);
         backButton.setOnAction(e -> GameplayChoice.showGameplayChoice(stage));
 
         VBox layout = new VBox(15, difficultyLabel, navigation, backButton);
@@ -82,32 +87,45 @@ public class SudokuMenu {
     }
 
     /**
-     * Crée un conteneur affichant les informations d'un Sudoku spécifique.
+     * Crée un conteneur stylisé affichant les informations d'un Sudoku spécifique.
      */
-    private static VBox createSudokuBox(Sudoku sudoku) {
-        VBox sudokuBox = new VBox(5);
+    public static VBox createSudokuBox(Sudoku sudoku) {
+        VBox sudokuBox = new VBox(8);
         sudokuBox.setAlignment(Pos.CENTER);
-        sudokuBox.setStyle("-fx-background-color: #939cb5; -fx-padding: 10; -fx-border-color: black; -fx-border-width: 1; -fx-border-radius: 5;");
+        sudokuBox.setPadding(new Insets(15));
+        sudokuBox.setMinSize(120, 120);
+        sudokuBox.setMaxSize(140, 140);
+
+        StyledContent.applySudokuBoxStyle(sudokuBox);
 
         Label nameLabel = new Label(sudoku.getName());
-        Label scoreLabel;
-        if(sudoku.getGame()!=null){
-            if(sudoku.getGame().getGameState()==GameState.FINISHED){
-                scoreLabel = new Label("Score : " + sudoku.getScore());
+        nameLabel.setMinWidth(200);
+        nameLabel.setAlignment(Pos.CENTER);
+        nameLabel.setWrapText(false);
+        nameLabel.setMaxWidth(Region.USE_COMPUTED_SIZE);
+        nameLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: white; -fx-font-weight: bold;");
 
-            }
-            else {
+        Label scoreLabel;
+        if (sudoku.getGame() != null) {
+            if (sudoku.getGame().getGameState() == GameState.FINISHED) {
+                scoreLabel = new Label("Score : " + sudoku.getScore());
+            } else {
                 scoreLabel = new Label(sudoku.getGame().getProgressRate() + " %");
             }
-        }
-        else {
+        } else {
             scoreLabel = new Label(" - % ");
         }
+        scoreLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+
         Label bestTimeLabel = new Label("Temps : " + formatTime(sudoku.getBestTime()));
-    
+        bestTimeLabel.setAlignment(Pos.CENTER);
+        bestTimeLabel.setWrapText(false);
+        bestTimeLabel.setMaxWidth(Region.USE_COMPUTED_SIZE);
+        bestTimeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+
         ImageView statusIcon = new ImageView();
-        statusIcon.setFitWidth(24);
-        statusIcon.setFitHeight(24);
+        statusIcon.setFitWidth(28);
+        statusIcon.setFitHeight(28);
 
         switch (sudoku.getStatus()) {
             case FINISHED -> statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/star.png")));
@@ -115,14 +133,14 @@ public class SudokuMenu {
             default -> statusIcon.setVisible(false);
         }
 
-        VBox contentBox = new VBox(3);
+        VBox contentBox = new VBox(5);
+        contentBox.setMinWidth(200);
+        contentBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
         contentBox.setAlignment(Pos.CENTER);
-
-        contentBox.getChildren().add(statusIcon);
-        contentBox.getChildren().addAll(scoreLabel, bestTimeLabel);
+        contentBox.getChildren().addAll(statusIcon, scoreLabel, bestTimeLabel);
 
         sudokuBox.getChildren().addAll(nameLabel, contentBox);
-        
+
         return sudokuBox;
     }
 

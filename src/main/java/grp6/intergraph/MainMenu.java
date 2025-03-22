@@ -29,12 +29,15 @@ public class MainMenu {
         welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         Button startGameButton = new ProfileButton("Jouer");
+        StyledContent.applyButtonBoxStyle(startGameButton);
         startGameButton.setOnAction(e -> GameplayChoice.showGameplayChoice(stage));
 
         Button classementButton = new ProfileButton("Classement");
+        StyledContent.applyButtonBoxStyle(classementButton);
         classementButton.setOnAction(e -> System.out.println("Classement ouvert"));
 
         Button exitButton = new ProfileButton("Quitter");
+        StyledContent.applyButtonBoxStyle(exitButton);
         exitButton.setOnAction(e -> {
             settingsWindow.close();
             stage.close();

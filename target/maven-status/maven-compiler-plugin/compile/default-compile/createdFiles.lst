@@ -31,6 +31,7 @@ grp6/sudocore/Grid$GridIterator.class
 grp6/intergraph/SudokuGame.class
 grp6/sudocore/FlexCell.class
 grp6/intergraph/SudokuMenu.class
+grp6/intergraph/StyledContent.class
 grp6/intergraph/ControlButtons.class
 grp6/sudocore/AnnotationCellAction$AnnotationCellActionDeserialiser.class
 grp6/sudocore/ActionFactory.class

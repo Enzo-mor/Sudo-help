@@ -46,6 +46,9 @@ public class ProfileSelection {
 
         Button rightArrow = new Button(">");
 
+        StyledContent.applyArrowButtonStyle(leftArrow);
+        StyledContent.applyArrowButtonStyle(rightArrow);
+
         leftArrow.setOnAction(e -> {
             currentPage--;
             updateProfiles(profileContainer, leftArrow, rightArrow, stage);
@@ -79,6 +82,10 @@ public class ProfileSelection {
 
         Button addProfileButton = new ProfileButton("Ajouter un profil");
 
+        StyledContent.applyButtonBoxStyle(guestButton);
+        StyledContent.applyButtonBoxStyle(quitButton);
+        StyledContent.applyButtonBoxStyle(addProfileButton);
+
         addProfileButton.setOnAction(e -> {
             // Creer une nouvelle petite fenetre pop-up (fenetre modale)
             Stage popupStage = new Stage();
@@ -88,13 +95,23 @@ public class ProfileSelection {
             // Composants de l'interface utilisateur
             Label label = new Label("Entrez le nom du profil :"); // Libelle au-dessus du champ de texte
             TextField nameField = new TextField(); // Champ de texte pour la saisie du nom du profil
+
+            // Limiter la longueur du texte à 20 caractères
+            TextFormatter<String> textFormatter = new TextFormatter<>(change -> {
+                if (change.getControlNewText().length() > 20) {
+                    return null; // Refuser l'ajout si la longueur dépasse 20
+                }
+                return change;
+            });
+            nameField.setTextFormatter(textFormatter);
+
             Button confirmButton = new Button("Créer"); // Bouton pour confirmer la creation du profil
+
             // Gerer l'evenement lors du clic sur le bouton "Creer"
             confirmButton.setOnAction(event -> {
                 String name = nameField.getText().trim(); // Recuperer le texte saisi et supprimer les espaces inutiles
                 if (!name.isEmpty()) {
                     try{
-
                         if (DBManager.profileExists(name)){
                             System.out.println("Le profil " + name + " existe déjà");
                         }
@@ -117,6 +134,9 @@ public class ProfileSelection {
                     popupStage.close(); // Fermer la fenetre pop-up apres l'ajout du profil
                 }
             });
+
+            // Ajouter un gestionnaire d'événements pour détecter la touche "Entrée"
+            nameField.setOnAction(event -> confirmButton.fire()); // Lorsque "Entrée" est pressée, déclencher le bouton
 
             // Creer une mise en page verticale avec un espacement entre les elements
             VBox popupLayout = new VBox(10, label, nameField, confirmButton);

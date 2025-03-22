@@ -27,6 +27,10 @@ public class NumberSelection {
             numButtonsTop[index] = new Button(String.valueOf(i));
             numButtonsTop[index].setMinSize(50, 50);
             numButtonsTop[index].setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+            // Appliquer le style défini dans StyledContent
+            StyledContent.styleButton(numButtonsTop[index]);
+
             numButtonsTop[index].setOnAction(e -> {
                 selectNumber(numButtonsTop[index]);
 
@@ -47,6 +51,10 @@ public class NumberSelection {
             numButtonsBottom[index] = new Button(String.valueOf(i));
             numButtonsBottom[index].setMinSize(50, 50);
             numButtonsBottom[index].setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+            // Appliquer le style défini dans StyledContent
+            StyledContent.styleButton(numButtonsBottom[index]);
+
             numButtonsBottom[index].setOnAction(e -> {
                 selectNumber(numButtonsBottom[index]);
 
@@ -90,10 +98,20 @@ public class NumberSelection {
                 }
             }
         } else {
+
+            // Vérifie si le bouton cliqué est déjà sélectionné
+            if (numberStr.equals(getSelectedNumber())) {
+                StyledContent.setInactiveButton(button); // Rétablit le style par défaut
+                setSelectedNumber(null);
+                return;
+            }
+
             // Mode normal → Selection du nombre
             var buttons = numberSelection.lookupAll(".button");
-            buttons.forEach(node -> ((Button) node).setStyle(""));  
-            button.setStyle("-fx-background-color: lightgreen;");
+            buttons.forEach(node -> StyledContent.setInactiveButton((Button) node));
+
+            // Applique le style actif au bouton sélectionné
+            StyledContent.setActiveButton(button);
     
             // Stocke le nombre selectionne
             setSelectedNumber(numberStr);

@@ -30,9 +30,10 @@ public class ToolsPanel {
         pencilButton = new Button();
 
         eraseButton.setGraphic(binIcon);
+        StyledContent.styleButton(eraseButton);
         eraseButton.setOnAction(e -> {
             boolean newMode = !getEraseMode();
-
+            
             if (newMode) {
                 setEraseButtonOn();
                 setPencilButtonOff();
@@ -40,8 +41,9 @@ public class ToolsPanel {
                 setEraseButtonOff();
             }
         });
-
+        
         pencilButton.setGraphic(pencilIcon);
+        StyledContent.styleButton(pencilButton);
         pencilButton.setOnAction(e -> {
             boolean newMode = !getAnnotationMode();
 
@@ -80,12 +82,14 @@ public class ToolsPanel {
     // Setters
     public void setEraseButtonOn() {
         eraseMode = true;
-        eraseButton.setStyle("-fx-background-color: lightgreen;");
+        StyledContent.setActiveButton(eraseButton);
+        StyledContent.setInactiveButton(pencilButton);
     }
 
     public void setPencilButtonOn() {
         annotationMode = true;
-        pencilButton.setStyle("-fx-background-color: lightgreen;");
+        StyledContent.setActiveButton(pencilButton);
+        StyledContent.setInactiveButton(eraseButton); 
 
         SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
 
@@ -98,12 +102,12 @@ public class ToolsPanel {
 
     public void setEraseButtonOff() {
         eraseMode = false;
-        eraseButton.setStyle("");
+        StyledContent.setInactiveButton(eraseButton);
     }
 
     public void setPencilButtonOff() {
         annotationMode = false;
-        pencilButton.setStyle("");
+        StyledContent.setInactiveButton(pencilButton);
 
         // Remettre le style de la cellule selectionné d'avant par default
         Button selectedCell = SudokuGrid.getSelectedCell();

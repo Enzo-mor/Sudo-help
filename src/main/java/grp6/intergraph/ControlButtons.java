@@ -19,7 +19,7 @@ public class ControlButtons {
         this.sudokuGame = sudokuG;
         this.sudokuGrid = grid;
         
-        controlButtons = new HBox(10);
+        controlButtons = new HBox(5);
         controlButtons.setAlignment(Pos.CENTER);
 
         Button undoButton = new Button("Annuler");
@@ -27,6 +27,13 @@ public class ControlButtons {
         Button helpButton = new Button("Aide");
         Button checkButton = new Button("Verifier");
         Button restartButton = new Button("Recommencer");
+
+        // Appliquer le style aux boutons
+        StyledContent.applyButtonStyle(undoButton);
+        StyledContent.applyButtonStyle(redoButton);
+        StyledContent.applyButtonStyle(helpButton);
+        StyledContent.applyButtonStyle(checkButton);
+        StyledContent.applyButtonStyle(restartButton);
 
         // Ajoute l'action sur le bouton "Recommencer"
         restartButton.setOnAction(e -> {
@@ -39,21 +46,21 @@ public class ControlButtons {
 
         // Ajoute l'action sur le bouton "Annuler"
         undoButton.setOnAction(e -> {
-            SudokuDisplay.resetGrid(sudokuGrid.getGridPane());
+            SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
             Action currentAction = sudokuGame.getLastAction();
             undoAction(currentAction);
         });
 
         // Ajoute l'action sur le bouton "Refaire"
         redoButton.setOnAction(e -> {
-            SudokuDisplay.resetGrid(sudokuGrid.getGridPane());
+            SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
             redoAction();
         });
 
         // Ajoute l'action sur le bouton "Verifier"
         checkButton.setOnAction(e -> {
             sudokuGame.decreaseScore("check");
-            SudokuDisplay.resetGrid(sudokuGrid.getGridPane());
+            SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
             putErrorsRed();
         });
 
