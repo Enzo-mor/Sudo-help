@@ -24,8 +24,8 @@ import javafx.animation.RotateTransition;
  * Cette classe gere l'affichage de la fenetre de jeu Sudoku et le processus du jeu en lui-meme.
  * Elle permet a l'utilisateur de jouer au Sudoku, de faire des choix, et de suivre l'etat du jeu en temps reel.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  * @see Game
  * @see Sudoku
  * @see DBManager

@@ -9,8 +9,8 @@ import javafx.scene.layout.VBox;
  * Cette classe fournit des methodes utilitaires pour appliquer des styles CSS personnalises
  * aux composants JavaFX tels que les boutons et les conteneurs.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  */
 public class StyledContent {
 

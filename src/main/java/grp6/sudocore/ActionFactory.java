@@ -1,22 +1,23 @@
 package grp6.sudocore;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.JsonParseException;
 
 /***
- * cette classe permet de stocker les classe qui implemente l'interface action.
- *  le but est de les recuperer dynamiquement en connaissant seulement le type(type action) des classes implementant l'interface Action
- * dans le but d'invoquer dynamiquent les methodes des ces classé implementant l'interface Action par le biais de la
- * reflexion
+ * Cette classe permet de stocker les classes qui implementent l'interface Action.
  * 
- * @author Taise de Thèse
- * @version 1.0
+ * @author DE THESE Taise
+ * @see Action
+ * @see AnnotationCellAction
+ * @see NumberCellAction
+ * @see AnnotationRemoveCellAction
  */
 public class ActionFactory {
 
     /***
-     * variable contenant le type d'action 
+     * Variable contenant le type d'action.
      */
     private static final Map<String, Class<? extends Action>> actionMap = new HashMap<>();
 
@@ -26,14 +27,18 @@ public class ActionFactory {
         actionMap.put(SudoTypes.ActionType.ANNOTATION_REMOVE_CELL_ACTION.getDescription(), AnnotationRemoveCellAction.class);
     }
 
-    /**Récupère dynamiquement la classe associée à un type donné
-     * @param type represente le type ou la clé  permettant de recuperer la classe correspond
-     * @return  la classe correspondant
-     * */
+    /***
+     * Recupere dynamiquement la classe associee a un type donne.
+     * 
+     * @param type Le type ou la cle permettant de recuperer la classe correspondante.
+     * @return La classe correspondant au type donne.
+     * @throws JsonParseException Si le type n'a pas ete trouve.
+     */
     public static Class<? extends Action> getClassFromType(String type) throws JsonParseException {
 
-        if(!actionMap.keySet().contains(type))
-         throw new JsonParseException("le type :"+type+" n'a pas été trouvée ");
+        if (!actionMap.containsKey(type)) {
+            throw new JsonParseException("Le type : " + type + " n'a pas ete trouve.");
+        }
         return actionMap.get(type);
     }
 }

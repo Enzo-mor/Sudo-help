@@ -10,8 +10,8 @@ import javafx.stage.Stage;
  * Point d'entree principal de l'application Sudoku.
  * Cette classe initialise la base de donnees et demarre l'interface graphique.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  * @see DBManager
  * @see MenusController
  */

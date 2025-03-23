@@ -11,8 +11,8 @@ import javafx.scene.control.Button;
  * Classe representant un panneau d'outils permettant a l'utilisateur de choisir entre les modes gomme et annotation.
  * Le panneau contient deux boutons : un pour activer le mode gomme et un autre pour activer le mode annotation.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  * @see StyledContent
  * @see SudokuDisplay
  * @see SudokuGrid
@@ -147,6 +147,15 @@ public class ToolsPanel {
         eraseMode = true;
         StyledContent.setActiveButton(eraseButton);
         StyledContent.setInactiveButton(pencilButton);
+
+        // Reinitialisation de la grille de Sudoku
+        SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
+
+        // Reinitialiser le nombre selectionne
+        if(NumberSelection.getSelectedNumber() != null) {
+            NumberSelection.resetSelectedNumber();
+            NumberSelection.clearSelection();
+        }
     }
 
     /**
@@ -174,6 +183,10 @@ public class ToolsPanel {
     public void setEraseButtonOff() {
         eraseMode = false;
         StyledContent.setInactiveButton(eraseButton);
+        // Reinitialiser la cellule selectionnee
+        SudokuGrid.setSelectedCell(null);
+        SudokuGrid.setSelectedRow(-1);
+        SudokuGrid.setSelectedCol(-1);
     }
 
     /**

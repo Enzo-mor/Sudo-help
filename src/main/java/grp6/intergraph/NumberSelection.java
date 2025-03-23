@@ -12,8 +12,8 @@ import javafx.scene.control.Label;
  * Elle permet de choisir un chiffre et de l'afficher dans la grille,
  * en tenant compte du mode d'annotation et du marquage des nombres identiques.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  * @see SudokuGrid
  * @see ToolsPanel
  * @see StyledContent
@@ -202,6 +202,6 @@ public class NumberSelection {
      */
     public static void clearSelection() {
         var buttons = numberSelection.lookupAll(".button");
-        buttons.forEach(node -> ((Button) node).setStyle("")); 
+        buttons.forEach(node -> StyledContent.setInactiveButton((Button) node)); 
     }
 }

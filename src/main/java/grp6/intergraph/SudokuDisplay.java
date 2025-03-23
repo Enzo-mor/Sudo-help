@@ -21,8 +21,8 @@ import javafx.util.Duration;
  * Elle permet de reinitialiser la grille, de surligner des cellules, d'afficher des effets visuels a la fin d'une partie,
  * et de gerer des interactions telles que la mise en surbrillance des lignes, colonnes, ou chiffres similaires.
  *
- * @author Nathan PERRON
- * @author Emma RASSON
+ * @author PERRON Nathan
+ * @author RASSON Emma
  *
  */
 public class SudokuDisplay {

@@ -15,166 +15,222 @@ import com.google.gson.JsonSerializer;
 import grp6.sudocore.SudoTypes.ActionType;
 
 /**
- * cette classe permet de gerer les actions de modification d'une cellule d'un jeu de sudoku
- * elle permet de modifier la valeur d'une cellule
+ * Cette classe permet de gerer les actions de modification d'une cellule
+ * dans un jeu de Sudoku. Elle permet de modifier la valeur d'une cellule.
  * 
- * @version 1.0
- * @see Game 
+ * @author DE THESE Taise
+ * @see Game
  * @see ActionManagerApply
  * @see Action
  * @see ActionCell
  * @see SudoTypes
  */
-public final class NumberCellAction extends ActionCell  {
+public final class NumberCellAction extends ActionCell {
+
     /**
-     * represente le nombre à ajouter en annotation
+     * Le nombre a ajouter en annotation.
      */
     private int number;
+
     /**
-     * represente l'ancienne valeur de la cellule
+     * L'ancienne valeur de la cellule avant modification.
      */
     private int old_number;
+
     /**
-     * represente la valeur de la cellule pour redo
+     * La valeur de la cellule pour la fonction de redo.
      */
     private int redo_number;
 
     /**
-    * methode permettant de creer une action qui permet de modifier une valeur à une cellule specifique de la grille
-    * @param game represente le jeu contenant la grille à modifier
-    * @param x represente les coordonnées X 
-    * @param y represente les coordonnées Y
-    * @param number represente la nouvelle valeur à modifier
-    * @param old_number represente l'anciene valeur presente à  cette position
-    */
+     * Constructeur permettant de creer une action pour modifier la valeur d'une cellule
+     * specifique dans la grille.
+     * 
+     * @param game Le jeu contenant la grille à modifier.
+     * @param x Coordonnée X de la cellule.
+     * @param y Coordonnée Y de la cellule.
+     * @param number La nouvelle valeur à attribuer à la cellule.
+     * @param old_number L'ancienne valeur présente à cette position.
+     */
     public NumberCellAction(Game game, int x, int y, int number, int old_number) {
-        super(game,x,y);
+        super(game, x, y);
         this.number = number;
         this.old_number = old_number;
         this.redo_number = number;
     }
-    
+
     /**
-     * methode permettant de retourner la chaine representant l'action
-     * @return
+     * Retourne une chaîne representant l'action effectuée.
+     * 
+     * @return La chaîne decrivant l'action de modification de la cellule.
      */
     @Override
-    public String toString(){
-        return "modification de la valeur de la cellule à la position : x = "+x+" et y = "+y+" de "+old_number+" à "+number;
+    public String toString() {
+        return "Modification de la valeur de la cellule à la position : x = " + x + " et y = " + y 
+                + " de " + old_number + " à " + number;
     }
 
+    /**
+     * Effectue l'action de modification de la cellule.
+     */
     @Override
-     protected void doAction() {
+    protected void doAction() {
         game.grid.getCell(x, y).setNumber(redo_number);
     }
 
+    /**
+     * Annule l'action effectuee, remettant la cellule à son ancienne valeur.
+     */
     @Override
     protected void undoAction() {
         game.grid.getCell(x, y).setNumber(old_number);
     }
 
+    /**
+     * Retourne le type de l'action (NUMBER_CELL_ACTION).
+     * 
+     * @return Le type de l'action.
+     */
     @Override
-    public SudoTypes.ActionType actionType(){
-        return  ActionType.NUMBER_CELL_ACTION;
+    public SudoTypes.ActionType actionType() {
+        return ActionType.NUMBER_CELL_ACTION;
     }
 
-    public JsonObject serialise(){
+    /**
+     * Serialise l'action NumberCellAction en un objet JSON.
+     * 
+     * @return Un objet JSON representant l'action.
+     */
+    public JsonObject serialise() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("type",actionType().getDescription());
+        jsonObject.addProperty("type", actionType().getDescription());
         jsonObject.addProperty("x", x);
         jsonObject.addProperty("y", y);
         jsonObject.addProperty("number", number);
         jsonObject.addProperty("old_number", old_number);
-        return jsonObject; 
-
+        return jsonObject;
     }
 
+    /**
+     * Encode l'action NumberCellAction en une chaine JSON.
+     * 
+     * @return Une chaine JSON représentant l'action.
+     */
     @Override
-    public String jsonEncode(){
-        //creation de l'adaptateur Gson qui permet de matcher notre classe  NumberCellAction avec la classe NumberCellActionSerialiser 
-        Gson gson=new GsonBuilder()
-                  .registerTypeAdapter(NumberCellAction.class, new NumberCellActionSerialiser() )
-                  .create();
+    public String jsonEncode() {
+        // Creation de l'adaptateur Gson permettant de lier la classe NumberCellAction
+        // avec le serialiseur NumberCellActionSerialiser.
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(NumberCellAction.class, new NumberCellActionSerialiser())
+                .create();
         return gson.toJson(this);
     }
 
-     /***
-     * cette methode permet de déserialiser une action
+    /**
+     * Permet de deserialiser une action a partir d'une chaine JSON.
      * 
-     * @param  json represente la chaine contenant le json à decoder
-     * @
-     * @throws Exception leve une exception si le json est incompatible à l'action ou incorrect
+     * @param json La chaine JSON a decoder.
+     * @param game Le jeu dans lequel l'action doit être appliquee.
+     * @return L'action deserialisee sous forme de NumberCellAction.
+     * @throws Exception Si le JSON est incompatible avec l'action ou incorrect.
      */
-    public  static NumberCellAction jsonDecode(String json,Game game) throws Exception{
-        try{
-            Gson gson=new GsonBuilder()
-            .registerTypeAdapter(NumberCellAction.class, new NumberCellActionDeserialiser(game) )
-            .create();
-             return gson.fromJson(json, NumberCellAction.class);
-        }catch ( JsonParseException e) {
+    public static NumberCellAction jsonDecode(String json, Game game) throws Exception {
+        try {
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(NumberCellAction.class, new NumberCellActionDeserialiser(game))
+                    .create();
+            return gson.fromJson(json, NumberCellAction.class);
+        } catch (JsonParseException e) {
             throw new JsonParseException("Erreur de désérialisation : " + e.getMessage(), e);
         }
     }
 
     /**
-         * methode de serialiser la l'action NumberCellAction en objet json
-         * qui nous permettra de genrer le String plus tard 
-         */
-    private class NumberCellActionSerialiser implements JsonSerializer<NumberCellAction>{
-
-       
-       public  JsonElement serialize(NumberCellAction action, Type vartype, JsonSerializationContext context){
+     * Serialise l'action NumberCellAction en un objet JSON.
+     */
+    private class NumberCellActionSerialiser implements JsonSerializer<NumberCellAction> {
+        public JsonElement serialize(NumberCellAction action, Type vartype, JsonSerializationContext context) {
             return action.serialise();
-       }
+        }
     }
+
     /**
-         * methode de déserialiser en objet json en une action de type 
-         * NumberCellAction>
-         */
+     * Deserialise un objet JSON en une action NumberCellAction.
+     */
     private static class NumberCellActionDeserialiser implements JsonDeserializer<NumberCellAction> {
-        /**
-         * represente le jeu dans lequel qui sera contenu dans l'annotation
-         */
+
         private Game game;
+
         /**
-         *  constructeur de la classe 
-         * @param grid represente la grille qui sera contenu dans l'annotation
+         * Constructeur de la classe.
+         * 
+         * @param game Le jeu contenant la grille pour l'action.
          */
-        public NumberCellActionDeserialiser(Game game){
-            this.game=game;
+        public NumberCellActionDeserialiser(Game game) {
+            this.game = game;
         }
 
-        public NumberCellAction  deserialize(JsonElement jsonElement, Type vartype, JsonDeserializationContext context) throws JsonParseException{
+        /**
+         * Deserialise l'element JSON en une action NumberCellAction.
+         * 
+         * @param jsonElement L'element JSON à désérialiser.
+         * @param vartype Le type attendu pour la deserialisation.
+         * @param context Le contexte de deserialisation.
+         * @return L'action NumberCellAction correspondante.
+         * @throws JsonParseException Si des erreurs sont rencontrees lors de la deserialisation.
+         */
+        public NumberCellAction deserialize(JsonElement jsonElement, Type vartype, JsonDeserializationContext context) throws JsonParseException {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            if (!jsonObject.has("x") || !jsonObject.has("y") || !jsonObject.has("number")|| !jsonObject.has("old_number") || !jsonObject.has("type")) {
-                throw new JsonParseException("Le JSON ne contient pas tous les champs requis : 'x', 'y', 'number','old_number','type");
+            if (!jsonObject.has("x") || !jsonObject.has("y") || !jsonObject.has("number") || !jsonObject.has("old_number") || !jsonObject.has("type")) {
+                throw new JsonParseException("Le JSON ne contient pas tous les champs requis : 'x', 'y', 'number', 'old_number', 'type'");
             }
             return new NumberCellAction(
-            game, 
-            jsonObject.get("x").getAsInt(),
-            jsonObject.get("y").getAsInt(),
-            jsonObject.get("number").getAsInt(), 
-            jsonObject.get("old_number").getAsInt());
+                    game,
+                    jsonObject.get("x").getAsInt(),
+                    jsonObject.get("y").getAsInt(),
+                    jsonObject.get("number").getAsInt(),
+                    jsonObject.get("old_number").getAsInt());
         }
     }
 
+    /**
+     * Retourne l'ancienne valeur de la cellule.
+     * 
+     * @return L'ancienne valeur de la cellule.
+     */
     @Override
-    public int getOldNumber(){
+    public int getOldNumber() {
         return old_number;
     }
 
+    /**
+     * Retourne la valeur de la cellule pour redo.
+     * 
+     * @return La valeur pour redo.
+     */
     @Override
-    public int getRedoNumber(){
+    public int getRedoNumber() {
         return redo_number;
     }
 
+    /**
+     * Retourne la nouvelle valeur de la cellule.
+     * 
+     * @return La nouvelle valeur de la cellule.
+     */
     @Override
-    public int getNumber(){
+    public int getNumber() {
         return number;
     }
 
+    /**
+     * Modifie la valeur de la cellule.
+     * 
+     * @param nb La nouvelle valeur a attribuer à la cellule.
+     */
     @Override
-    public void setNumber(int nb){
-        this.number=nb;
+    public void setNumber(int nb) {
+        this.number = nb;
     }
 }
+

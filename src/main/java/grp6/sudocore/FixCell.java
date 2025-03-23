@@ -4,24 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe modelisant une cellule fixe, c'est-a-dire qu'elle ne peut pas être
- * modifié par le joueur.
+ * Classe modelisant une cellule fixe, c'est-a-dire qu'elle ne peut pas etre
+ * modifiee par le joueur.
  * 
- * Cette classe suite l'interface 'Cell'
- * @author Kilian POUSSE
- * @version 1.1
+ * @author POUSSE Kilian
+ * @see Cell
+ * @see Grid
+ * @see NoPutNumberOnCellExeception
  */
 public class FixCell implements Cell {
 
     /* ======= Variables d'instance ======= */
-    /** Chiffre stocké dans la cellule */
+    /** Chiffre stocke dans la cellule */
     protected int number; 
 
-    /* ======= Méthodes d'instance ======= */
+    /* ======= Methodes d'instance ======= */
 
     /**
      * Constructeur de la classe 'FixCell'.
-     * @param number Chiffre qui sera stoqué dans la cellule [int]
+     * 
+     * @param number Chiffre qui sera stocke dans la cellule [int]
      */
     public FixCell(int number) {
         // Le chiffre doit etre valide: number in [0, 9] // 0 == vide
@@ -29,14 +31,15 @@ public class FixCell implements Cell {
             this.number = number;
         }
         else {
-            System.err.println("Impossible d'initialiser cette cellule: " + number + " doit etre inclue dans [0, " + Grid.NB_NUM + "]");
+            System.err.println("Impossible d'initialiser cette cellule: " + number + " doit etre incluse dans [0, " + Grid.NB_NUM + "]");
             this.number = 0;
         }
     }
 
     /**
-     * Recupérer le chiffre de la cellule
-     * @return Entier représentant le chiffre (0 si vide) [int]
+     * Recuperer le chiffre de la cellule.
+     * 
+     * @return Entier representant le chiffre (0 si vide) [int]
      */
     @Override
     public int getNumber() {
@@ -44,28 +47,33 @@ public class FixCell implements Cell {
     }
 
     /**
-     * Mettre un chiffre dans une cellule
+     * Mettre un chiffre dans une cellule.
      * /!\ Impossible pour une cellule fixe /!\
-     * @param number Chiffre à mettre dans la cellule [int]
+     * 
+     * @param number Chiffre a mettre dans la cellule [int]
+     * @throws NoPutNumberOnCellExeception Si le joueur essaie de modifier une cellule fixe
+     * @see NoPutNumberOnCellExeception
      */
     @Override
     public void setNumber(int number)  {
-        throw new NoPutNumberOnCellExeception ("Il est impossible de mettre un nombre dans cette cellule car elle est fixe  ");
+        throw new NoPutNumberOnCellExeception("Il est impossible de mettre un nombre dans cette cellule car elle est fixe.");
     }
 
     /**
-     * Ajouter un annotation à la cellule
+     * Ajouter une annotation a la cellule.
      * /!\ Impossible pour une cellule fixe /!\
-     * @param number Chiffre de l'annotation à ajouter [int]
+     * 
+     * @param number Chiffre de l'annotation a ajouter [int]
      */
     @Override
     public void addAnnotation(int number) {
-        System.out.println("Il est impossible d'ajouter une annotation à cette cellule");
+        System.out.println("Il est impossible d'ajouter une annotation a cette cellule");
     }
 
     /** 
-     * Récupérer les annotations de la cellule
-     * @return Liste des annotations 
+     * Recuperer les annotations de la cellule.
+     * 
+     * @return Liste des annotations [List<Integer>]
      */
     @Override
     public List<Integer> getAnnotations() {
@@ -73,29 +81,39 @@ public class FixCell implements Cell {
         return l;
     }
 
+    /**
+     * Recuperer la derniere annotation de la cellule.
+     * 
+     * @return La derniere annotation [Integer]
+     */
     @Override
     public Integer getLastAnnotation() {
         return 1;
     }
-    
 
     /**
-     * Enlever une annotation d'une cellule
+     * Enlever une annotation d'une cellule.
      * /!\ Impossible pour une cellule fixe /!\
-     * @param number Chiffre de l'annotation à retirer [int]
+     * 
+     * @param number Chiffre de l'annotation a retirer [int]
      */
     @Override
     public void removeAnnotation(int number) {
-        System.out.println("Il est impossible d'enlever une annotation à cette cellule");
+        System.out.println("Il est impossible d'enlever une annotation a cette cellule");
     }
 
+    /**
+     * Savoir si la cellule a des annotations.
+     * 
+     * @return true si la cellule a des annotations, sinon false [boolean]
+     */
     @Override
     public boolean hasAnnotations() {
         return false;
     }
 
     /** 
-     * Néttoyer la cellule (la vider)
+     * Nettoyer la cellule (la vider).
      * /!\ Impossible pour une cellule fixe /!\
      */
     @Override
@@ -104,8 +122,9 @@ public class FixCell implements Cell {
     }
 
     /**
-     * Savoir si une celluce est vide ou non
-     * @return 'true' si la cellule est vide, sinon 'false' [booleen]
+     * Savoir si une cellule est vide ou non.
+     * 
+     * @return 'true' si la cellule est vide, sinon 'false' [boolean]
      */
     @Override
     public boolean isEmpty() {
@@ -113,17 +132,19 @@ public class FixCell implements Cell {
     }
 
     /** 
-     * Transforme la cellule en chaîne de caractères
-     * @return La chaîne de caractères correspondante [String]
+     * Transformer la cellule en chaine de caracteres.
+     * 
+     * @return La chaine de caracteres correspondante [String]
      */
     @Override
     public String toString() {
         return String.valueOf(this.getNumber());
     }
-    
+
     /**
-     * Savoir si une cellule est modifiable
-     * @return Vrai si la cellule peut etre modifiée
+     * Savoir si une cellule est modifiable.
+     * 
+     * @return true si la cellule peut etre modifiee, sinon false [boolean]
      */
     @Override
     public boolean isEditable() {
@@ -131,7 +152,8 @@ public class FixCell implements Cell {
     }
 
     /**
-     * Clone une cellule fixe
+     * Cloner une cellule fixe.
+     * 
      * @return Une nouvelle instance de Cell (clone de la cellule)
      */
     @Override

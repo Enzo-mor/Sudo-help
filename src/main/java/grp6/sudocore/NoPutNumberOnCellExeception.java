@@ -1,15 +1,21 @@
 package grp6.sudocore;
 /**
- * Exception levée lorsqu'on tente de mettre un chiffre sur une cellule
+ * Exception levee lorsqu'on tente d'assigner un chiffre a une cellule
  * non modifiable.
- * @author Taise de Thèse
- * @version 1.0
- * @see ReadOnlyCell
- * @see Cell
+ * 
+ * @author DE THESE Taise
+ * @see ReadOnlyCell Classe representant une cellule en lecture seule.
+ * @see Cell Interface des cellules dans la grille.
  */
 public class NoPutNumberOnCellExeception extends RuntimeException {
+
+    /**
+     * Constructeur de l'exception.
+     * 
+     * @param message Message detaillant la cause de l'exception.
+     */
     public NoPutNumberOnCellExeception(String message) {
         super(message);
     }
-    
 }
+

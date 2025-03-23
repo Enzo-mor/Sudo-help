@@ -7,8 +7,8 @@ import javafx.scene.control.Button;
  * Cette classe represente un bouton personnalise utilise pour les profils dans l'application Sudoku.
  * Elle applique automatiquement un style et une taille predefinis aux boutons.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  */
 public class ProfileButton extends Button {
 

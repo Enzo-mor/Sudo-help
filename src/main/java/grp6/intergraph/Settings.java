@@ -20,8 +20,8 @@ import javafx.util.Duration;
  * Elle permet de modifier les preferences utilisateur telles que le pseudo, 
  * les options d'affichage et la gestion des profils.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  * @see DBManager
  * @see SudokuGrid
  * @see SudokuDisplay

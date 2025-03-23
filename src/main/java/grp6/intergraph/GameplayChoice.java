@@ -13,8 +13,8 @@ import javafx.stage.Stage;
  * Cette classe gere l'affichage du choix du mode de jeu.
  * Elle permet de selectionner entre le mode Apprentissage et le mode Libre.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  * @see ProfileButton
  * @see StyledContent
  * @see SudokuMenu

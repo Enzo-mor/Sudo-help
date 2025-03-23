@@ -6,20 +6,19 @@ import java.util.List;
 
 /**
  * Classe permettant de resoudre des sudokus.
- * @author K. POUSSE
- * @version 1.0
+ * @author POUSSE Kilian
  */
 public final class SudokuSolver {
 
     /**
-     * Resu la liste des cellules donnée en parametre et renvoie 
-     * la solution sans modifier l'originale
+     * Resout la liste des cellules donnee en parametre et renvoie 
+     * la solution sans modifier l'originale.
      * @param cells Liste de cellules
      * @return Solution de la liste
      */
     public static List<Cell> solveCells(List<Cell> cells) {
         List<Cell> res = new ArrayList<>();
-        // Dupplique la liste
+        // Duplication de la liste
         for(Cell c: cells) {
             res.add(c.clone());
         }
@@ -30,8 +29,8 @@ public final class SudokuSolver {
     }
 
     /**
-     * Résu une liste de cellules (la la liste donnée sera modifiée)
-     * @param cells Liste à résoudre
+     * Resout une liste de cellules (la liste donnee sera modifiee).
+     * @param cells Liste a resoudre
      * @return Si une solution existe
      */
     private static boolean solve(List<Cell> cells) {
@@ -49,7 +48,7 @@ public final class SudokuSolver {
                             if(solve(cells)) {
                                 return true;
                             }
-                            // Vérification avant d'appeler clear
+                            // Verification avant d'appeler clear
                             if(cells.get(idx).isEditable()) {
                                 cells.get(idx).clear();
                             }
@@ -63,29 +62,29 @@ public final class SudokuSolver {
     }
     
     /**
-     * Verifie si une cellule est valide
+     * Verifie si une cellule est valide.
      * @param cells Liste des cellules
-     * @param row Numéro de la ligne
-     * @param col Numéro de la colonne
+     * @param row Numero de la ligne
+     * @param col Numero de la colonne
      * @param num Chiffre dans la cellule
-     * @return Vrai si la cellule est vrai sinon Faux
+     * @return Vrai si la cellule est valide, sinon Faux
      */
     private static boolean isValid(List<Cell> cells, int row, int col, int num) {
-        // Vérifie la ligne
+        // Verifie la ligne
         for(int j=0; j<Grid.NB_NUM; j++) {
             if(cells.get(Grid.NB_NUM*row+j).getNumber() == num) {
                 return false;
             }
         }
 
-        // Vérifie la colonne
+        // Verifie la colonne
         for(int i=0; i<Grid.NB_NUM; i++) {
             if(cells.get(Grid.NB_NUM*i+col).getNumber() == num) {
                 return false;
             }
         }
 
-        // Vérifie le carré 3x3
+        // Verifie le carre 3x3
         int boxRowStart = row - row % 3;
         int boxColStart = col - col % 3;
 
@@ -101,28 +100,29 @@ public final class SudokuSolver {
         return true;
     }
 
+
     /**
-     * Résu une grille (change la grille d'origine)
-     * @param grid Grille à résoudre
+     * Resout une grille (modifie la grille d'origine).
+     * @param grid Grille a resoudre
      */
     public static void solveGrid(Grid grid) {
         List<Cell> cells = new ArrayList<>();
-        // Créer des FlexCell, et non des FixCell, pour pouvoir les modifier
+        // Creer des FlexCell, et non des FixCell, pour pouvoir les modifier
         for(int i = 0; i < Grid.NB_NUM; i++) {
             for(int j = 0; j < Grid.NB_NUM; j++) {
                 int num = grid.getCell(i, j).getNumber();
                 // Utilisation de FlexCell au lieu de FixCell pour les cellules modifiables
                 Cell cell = new FlexCell();
                 cell.setNumber(num);
-                cells.add(cell); // Notez que vous devez créer des FlexCell ici
+                cells.add(cell); // Notez que vous devez creer des FlexCell ici
             }
         }
         solve(cells);
     }
-    
+
     /**
-     * Tests le temps d'execution des methodes de resolution
-     * @throws SQLException Erreur liée à la BdD
+     * Teste le temps d'execution des methodes de resolution.
+     * @throws SQLException Erreur liee a la BDD
      */
     public static void test() throws SQLException {
         DBManager.init();
@@ -132,25 +132,25 @@ public final class SudokuSolver {
         for(int id=1; id<=n; id++) {
             Grid g = DBManager.getGrid(id);
             System.out.println("\n ========== " + "Grille n°" + id + " ========== ");
-            System.out.println("Grille à résoudre:");
+            System.out.println("Grille a resoudre:");
             System.out.println(g);
 
             long startTime = System.currentTimeMillis();
             solveGrid(g);
             long endTime = System.currentTimeMillis();
 
-            System.out.println("Grille résolue:");
+            System.out.println("Grille resolue:");
             System.out.println(Grid.toString(g.getSolvedCells()));
 
             long time = endTime - startTime;
             totalTime += time;
 
-            System.out.println("Temps de résolution de la grille n°" + id + ": " + time + " ms");
+            System.out.println("Temps de resolution de la grille n°" + id + ": " + time + " ms");
 
         }
 
         double averageTime =(double) totalTime / n;
-        System.out.println("\nTemps total de résolution de toutes les grilles: " + totalTime + " ms");
-        System.out.println("Temps moyen de résolution pour chaques grilles: " + averageTime + " ms");
+        System.out.println("\nTemps total de resolution de toutes les grilles: " + totalTime + " ms");
+        System.out.println("Temps moyen de resolution pour chaque grille: " + averageTime + " ms");
     }
 }

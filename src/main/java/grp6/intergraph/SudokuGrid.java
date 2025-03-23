@@ -17,8 +17,8 @@ import java.util.List;
  * Elle gere l'affichage des cellules, l'ajout d'annotations, les interactions avec l'utilisateur, 
  * ainsi que la mise a jour des actions de la partie.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  * @see ToolsPanel
  * @see Game
  * @see Settings
@@ -737,5 +737,32 @@ public class SudokuGrid {
      */
     public static void setGame(Game game) {
         actualGame = game;
+    }
+
+    /**
+     * Modifie le bouton selectionne
+     * 
+     * @param button Le nouveau bouton selectionne
+     */
+    public static void setSelectedCell(Button button) {
+        selectedCell = button;
+    }
+
+    /**
+     * Modifie la ligne selectionnee
+     * 
+     * @param row La nouvelle ligne selectionnee
+     */
+    public static void setSelectedRow(int row) {
+        selectedRow = row;
+    }
+
+    /**
+     * Modifie la colonne selectionnee
+     * 
+     * @param col La nouvelle colonne selectionnee
+     */
+    public static void setSelectedCol(int col) {
+        selectedCol = col;
     }
 }

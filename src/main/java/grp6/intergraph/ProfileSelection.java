@@ -22,8 +22,8 @@ import javafx.scene.image.Image;
  * Elle permet a l'utilisateur de choisir un profil existant, d'en creer un nouveau
  * ou de continuer en tant qu'invite.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  * @see Profile
  * @see DBManager
  * @see StyledContent

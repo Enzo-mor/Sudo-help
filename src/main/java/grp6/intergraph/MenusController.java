@@ -6,8 +6,8 @@ import javafx.stage.Stage;
  * Cette classe gere le lancement des differents menus de l'application.
  * Elle permet d'afficher l'ecran de selection de profil au demarrage.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  * @see ProfileSelection
  */
 public class MenusController {

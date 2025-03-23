@@ -15,8 +15,8 @@ import java.util.*;
  * Cette classe represente un ensemble de boutons de contrôle pour interagir avec une grille de Sudoku.
  * Elle permet d'annuler, refaire, verifier et recommencer le jeu.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  * @see SudokuGrid
  * @see Game
  * @see StyledContent

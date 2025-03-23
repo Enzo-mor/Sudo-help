@@ -27,8 +27,8 @@ import javafx.stage.Stage;
  * Elle gere l'affichage des Sudokus par page, ainsi que les interactions de navigation et les actions possibles sur
  * chaque grille de Sudoku (reprendre ou recommencer un jeu en cours).
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  * @see StyledContent
  * @see SudokuMenu
  * @see DBManager

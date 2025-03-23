@@ -16,8 +16,8 @@ import javafx.util.Duration;
  * Cette classe gere l'affichage et les interactions du menu principal de l'application Sudoku.
  * Elle permet d'acceder aux differents modes de jeu, au classement et aux parametres.
  * 
- * @author Perron Nathan
- * @author Rasson Emma
+ * @author PERRON Nathan
+ * @author RASSON Emma
  * @see Profile
  * @see Settings
  * @see GameplayChoice
@@ -72,7 +72,7 @@ public class MainMenu {
         // Bouton pour afficher le classement
         Button classementButton = new ProfileButton("Classement");
         StyledContent.applyButtonBoxStyle(classementButton);
-        classementButton.setOnAction(e -> System.out.println("Classement ouvert"));
+        classementButton.setOnAction(e -> LeaderboardMenu.showLeaderBoard(stage));
 
         // Bouton pour quitter l'application
         Button exitButton = new ProfileButton("Quitter");
