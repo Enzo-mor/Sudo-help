@@ -3,23 +3,22 @@ package grp6.sudocore;
 import java.sql.SQLException;
 
 /**
- * Classe représentant les profiles.
- * @author Kilian POUSSE
- * @author Taise de Thèse
+ * Classe representant les profils.
+ * @author POUSSE Kilian
+ * @author DE THESE Taise
  */
 public class Profile {
     
     /* ====== Variables d'instance ====== */
 
-    /** Pseudonyme du profile */
+    /** Pseudonyme du profil */
     private String pseudo;
-
 
     /* ====== Constructeur d'instances ======= */
 
     /**
-     * Contructeur de la classe Profile
-     * @param pseudo Pseudonyme du profile
+     * Constructeur de la classe Profile
+     * @param pseudo Pseudonyme du profil
      */
     public Profile(String pseudo) {
         this.pseudo = pseudo;
@@ -28,29 +27,30 @@ public class Profile {
     /* ====== Getter & Setter ====== */
 
     /**
-     * Getter: Récupération du pseudonyme
-     * @return Pseudonyme du profile
+     * Getter: Recuperation du pseudonyme
+     * @return Pseudonyme du profil
      */
     public String getPseudo() {
         return pseudo;
     }
 
     public void setPseudo(String pseudo) {
-        this.pseudo=pseudo;
+        this.pseudo = pseudo;
     }
 
-    /* ====== Méthodes d'instance ====== */
+    /* ====== Methodes d'instance ====== */
 
     @Override
     public String toString() {
         return "<Profile: " + getPseudo() + ">";
     }
-  /***
-   *  cette methode permet de sauvegarder un profile dans la base de données
-   *  avant d'utliser cette methode la base de donnée devra d'abord etre initialiser
-   * @throws SQLException leve une exeception en cas d'erreur de connection
-   * @see DBManager
-   */
+
+    /***
+     * Permet de sauvegarder un profil dans la base de donnees.
+     * Avant d'appeler cette methode, la base de donnees doit d'abord etre initialise.
+     * @throws SQLException Lève une exception en cas d'erreur de connexion
+     * @see DBManager
+     */
     public void save() throws SQLException{
         DBManager.saveProfile(this);
     }

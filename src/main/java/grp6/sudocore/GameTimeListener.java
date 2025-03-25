@@ -1,14 +1,17 @@
 package grp6.sudocore;
 
 /**
- * Inteface  permettant de mettre à jour le temps 
- * passé dans le jeux jeu
+ * Interface permettant de mettre a jour le temps passe dans le jeu.
+ * 
+ * @author DE THESE Taise
+ * @see Game
  */
 public interface GameTimeListener {
 
     /**
-     * methode permettant de mettre à jour le temps passé dans le jeu
-     * @param elapsedTime represente le temps passé dans le jeu
+     * Met a jour le temps passe dans le jeu.
+     * @param elapsedTime Le temps ecoule dans le jeu.
      */
     void onTimeUpdated(String elapsedTime);
 }
+

@@ -5,83 +5,84 @@ import java.util.List;
 /**
  * Cette interface permet de representer une cellule modifiable d'une grille
  * de Sudoku.
- * @author Kilian POUSSE
- * @version 1.1
+ * 
+ * @author POUSSE Kilian
  */
 public interface Cell {
-      /**
-     * Recupérer le chiffre de la cellule
-     * @return Entier représentant le chiffre (0 si vide) [int]
+    
+    /**
+     * Recuperer le chiffre de la cellule.
+     * 
+     * @return Entier representant le chiffre (0 si vide) [int]
      */
     public int getNumber();
 
     /** 
-     * Récupérer les annotations de la cellule
-     * @return Liste des annotations 
+     * Recuperer les annotations de la cellule.
+     * 
+     * @return Liste des annotations
      */
     public List<Integer> getAnnotations();
 
-    /** 
-     * Récupérer les annotations de la cellule
-     * @return Liste des annotations 
+    /**
+     * Recuperer la derniere annotation de la cellule.
+     * 
+     * @return Derniere annotation
      */
-    public boolean[] getAnnotationsBool();
-
-
     public Integer getLastAnnotation();
 
-     /**
-     * Savoir si une celluce est vide ou non
-     * @return 'true' si la cellule est vide, sinon 'false' [booleen]
+    /**
+     * Verifier si la cellule est vide ou non.
+     * 
+     * @return 'true' si la cellule est vide, sinon 'false' [boolean]
      */
+    public boolean isEmpty();
 
-     
-    /** 
-     * Transforme la cellule en chaîne de caractères
-     * @return La chaîne de caractères correspondante [String]
+    /**
+     * Transforme la cellule en chaine de caracteres.
+     * 
+     * @return La chaine de caracteres correspondante [String]
      */
+    @Override
     public String toString();
 
     /**
-     * Permet de decter si un tableau d'annotation ne contient qu'une entrée
-     * @return un boolean qui est vrai quand il n'y a qu'une annotation
-     */
-    public boolean OnlyOneAnnotation();
-
-    
-     /**
-     * Savoir si une cellule est modifiable
-     * @return Vrai si la cellule peut etre modifiée
+     * Savoir si une cellule est modifiable.
+     * 
+     * @return 'true' si la cellule peut etre modifiee, 'false' sinon [boolean]
      */
     public boolean isEditable();
 
-  /**
-   * cette methode verifie si une cellule est vide 
-   * @return
-   */
-    public boolean isEmpty();   
+    /**
+     * Verifier si la cellule a des annotations.
+     * 
+     * @return 'true' si la cellule a des annotations, 'false' sinon [boolean]
+     */
+    public boolean hasAnnotations();
 
     /**
-     * Mettre un chiffre dans une cellule
-     * @param number Chiffre à mettre dans la cellule [int]
+     * Mettre un chiffre dans une cellule.
+     * 
+     * @param number Chiffre a mettre dans la cellule [int]
      */
     public void setNumber(int number);
 
     /**
-     * Ajouter un annotation à la cellule
-     * @param number Chiffre de l'annotation à ajouter [int]
+     * Ajouter une annotation a la cellule.
+     * 
+     * @param number Chiffre de l'annotation a ajouter [int]
      */
     public void addAnnotation(int number);
 
-
     /**
-     * Enlever une annotation d'une cellule
-     * @param number Chiffre de l'annotation à retirer [int]
+     * Enlever une annotation d'une cellule.
+     * 
+     * @param number Chiffre de l'annotation a retirer [int]
      */
     public void removeAnnotation(int number);
 
-    /** 
-     * Néttoyer la cellule (la vider)
+    /**
+     * Nettoyer la cellule (la vider).
      */
     public void clear();
 

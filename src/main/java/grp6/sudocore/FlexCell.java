@@ -4,35 +4,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe modelisant une cellule flex, c'est-a-dire qu'elle peut être
- * modifié par le joueur.
+ * Classe modelisant une cellule flexible, c'est-a-dire qu'elle peut etre
+ * modifiee par le joueur.
  * 
- * Cette classe hérite de 'FixCell'
- * @author Kilian POUSSE
- * @version 1.2
+ * Cette classe herite de 'FixCell' et permet de manipuler des annotations 
+ * (valeurs possibles mais non definitives) en plus de la valeur de la cellule.
+ * 
+ * @author POUSSE Kilian
+ * @see FixCell
+ * @see Grid
+ * @see Cell
  */
 public final class FlexCell extends FixCell {
 
     /* ======= Variables d'instance ======= */
     /** Tableau des annotations (si annotations[i]==true, i+1 est annotée dans la cellule) */
     protected boolean[] annotations;  
-    /** Tableau des annotations (si annotations[i]==true, i+1 est annotée dans la cellule) */
+    /** Liste des annotations (si annotations[i]==true, i+1 est annotée dans la cellule) */
     protected List<Integer> annotationsList;  
 
     /* ======= Méthodes d'instance ======= */
 
     /**
-     * Constructeur de la classe 'FlexCell'
+     * Constructeur de la classe 'FlexCell'.
      */
-    public FlexCell(int i, int j) {
-        super(0, i, j);
+    public FlexCell() {
+        super(0);
         // Initialise le tableau des annotations à false
         this.annotations = new boolean[Grid.NB_NUM];
         this.annotationsList = new ArrayList<>();
     }
 
     /**
-     * Mettre un chiffre dans une cellule
+     * Mettre un chiffre dans une cellule.
      * @param number Chiffre à mettre dans la cellule [int]
      */
     @Override
@@ -47,8 +51,7 @@ public final class FlexCell extends FixCell {
     }
 
     /**
-     * methode permettant de vider les annotations d'une cellule
-     * 
+     * Methode permettant de vider les annotations d'une cellule.
      */
     protected void trashAnnotation() {
         for(int i = 0; i < Grid.NB_NUM; i++) {
@@ -57,13 +60,13 @@ public final class FlexCell extends FixCell {
     }
 
     /**
-     * Ajouter un annotation à la cellule
+     * Ajouter une annotation à la cellule.
      * @param number Chiffre de l'annotation à ajouter [int]
      */
     @Override
     public void addAnnotation(int number) {
         if(Grid.isValidNumber(number)){
-            // Mettre le booleen à true pour signaler que 'number' est présant dans l'annotation
+            // Mettre le booleen à true pour signaler que 'number' est présent dans l'annotation
             this.annotations[number-1] = true;
             this.annotationsList.add(number);
         }
@@ -71,9 +74,9 @@ public final class FlexCell extends FixCell {
             System.err.println("Impossible d'ajouter une annotation dans cette cellule: " + number + " doit etre inclue dans ]0, " + Grid.NB_NUM + "]");
         }
     }
-    
+
     /**
-     * Enlever une annotation d'une cellule
+     * Enlever une annotation d'une cellule.
      * @param number Chiffre de l'annotation à retirer [int]
      */
     @Override
@@ -89,13 +92,13 @@ public final class FlexCell extends FixCell {
     }
 
     /** 
-     * Récupérer les annotations de la cellule
-     * @return Liste des annotations 
+     * Récupérer les annotations de la cellule.
+     * @return Liste des annotations [List<Integer>]
      */
     @Override
     public List<Integer> getAnnotations() {
         List<Integer> res = super.getAnnotations();
-        for(int i=0; i<annotations.length; i++) {
+        for(int i = 0; i < annotations.length; i++) {
             if(annotations[i])
                 res.add(i+1);
         }
@@ -104,49 +107,36 @@ public final class FlexCell extends FixCell {
     }
 
     /** 
-     * Récupérer les annotations de la cellule
-     * @return Liste des annotations 
-     */
-    @Override
-    public boolean[] getAnnotationsBool() {
-        return annotations;
-    }
-
-    /**
-     * 
+     * Récupérer la dernière annotation de la cellule.
+     * @return La dernière annotation [Integer]
      */
     @Override
     public Integer getLastAnnotation() {
         if (annotationsList.isEmpty()) {
-            return -1;
+            return 0;
         }
-        return annotationsList.get(annotationsList.size()-1);
+        return annotationsList.get(annotationsList.size() - 1);
     }
 
-     /**
-     * Permet de decter si un tableau d'annotation ne contient qu'une entrée
-     * @return un boolean qui est vrai quand il n'y a qu'une annotation
+    /**
+     * Vérifier si la cellule possède des annotations.
+     * @return true si la cellule a des annotations, sinon false [boolean]
      */
-    public boolean OnlyOneAnnotation() {
-        int count =0;
-        for(int i = 0;i<annotations.length;i++){
-            if(annotations[i]){
-                count++;
-            }
-        }
-        return count == 1;
+    @Override
+    public boolean hasAnnotations() {
+        return !getAnnotations().isEmpty();
     }
 
     /** 
-     * Néttoyer la cellule (la vider)
+     * Nettoyer la cellule (la vider).
      */
     @Override  
     public void clear() {
         this.number = 0;
     }
-    
+
     /** 
-     * Transforme la cellule en chaîne de caractères
+     * Transformer la cellule en chaîne de caractères.
      * @return La chaîne de caractères correspondante [String]
      */
     @Override
@@ -159,23 +149,23 @@ public final class FlexCell extends FixCell {
     }
 
     /**
-     * Savoir si une cellule est modifiable
-     * @return Vrai si la cellule peut etre modifiée
+     * Savoir si une cellule est modifiable.
+     * @return true si la cellule peut etre modifiée, sinon false [boolean]
      */
     @Override
     public boolean isEditable() {
         return true;
     }
 
-     /**
-     * Clone une cellule flexible
+    /**
+     * Cloner une cellule flexible.
      * @return Une nouvelle instance de Cell (clone de la cellule)
      */
     @Override
     public Cell clone() {
         // Clone profond : création d'une nouvelle instance de FlexCell,
         // et copie des annotations.
-        FlexCell clonedCell = new FlexCell(position[0], position[1]);
+        FlexCell clonedCell = new FlexCell();
         clonedCell.number = this.number;
         clonedCell.annotations = this.annotations.clone(); // Clonage profond du tableau d'annotations.
         return clonedCell;

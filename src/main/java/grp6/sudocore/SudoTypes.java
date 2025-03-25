@@ -1,8 +1,11 @@
 package grp6.sudocore;
 
 /**
- * cette classe permet de definir les types de données utilisées dans le jeu de sudoku
- * elle permet de definir les types d'actions, les types de cellules, les niveaux de difficulté et les etats du jeu etc..
+ * Cette classe permet de definir les types de donnees utilises dans le jeu de sudoku.
+ * Elle permet de definir les types d'actions, les types de cellules, les niveaux de difficulte, les etats du jeu, etc.
+ * 
+ * @author DE THESE Taise
+ * @author POUSSE Kilian
  */
 public final class SudoTypes {
 
@@ -25,21 +28,26 @@ public final class SudoTypes {
         /**
          * Enum pour les actions de suppression d'annotation sur les cellules
          */
-        ANNOTATION_REMOVE_CELL_ACTION("action de suppression de l'annotation");
+        ANNOTATION_REMOVE_CELL_ACTION("Action de suppression de l'annotation"),
+        /**
+         * Enum pour les actions d'effacement de la cellule
+         */
+        ERASE_ACTION("Action d'effacement de la cellule");
 
         private final String description;
+        
         ActionType(String value) {
             this.description = value;
         }
 
         @Override
         public String toString() {
-            // TODO Auto-generated method stub
             return this.description;
         }
+
         /**
-         * methode pour retourner la valeur de l'enum
-         * @return la valeur de l'enum
+         * Methode pour retourner la valeur de l'enum
+         * @return La valeur de l'enum
          */
         public String getDescription() {
             return description;
@@ -60,46 +68,67 @@ public final class SudoTypes {
         FLEXIBLE_CELL;
     }
 
+
     /**
-     * Enum pour les niveaux de difficulté
-     * les niveaux de difficulté sont : facile, moyen et difficile et sont representés par les valeurs 1, 2 et 3
+     * Enum pour les niveaux de difficulte.
+     * Les niveaux de difficulte sont : facile, moyen et difficile, representes par les valeurs 1, 2 et 3.
      */
     public enum Difficulty {
         /**
-         * Enum pour le niveau de difficulté facile
+         * Enum pour le niveau de difficulte facile
          */
-        EASY(1,"facile"), 
+        EASY(1, "facile"), 
         /**
-         * Enum pour le niveau de difficulté moyen
+         * Enum pour le niveau de difficulte moyen
          */
-        MEDIUM(2,"moyen"),
+        MEDIUM(2, "moyen"),
         /**
-         * Enum pour le niveau de difficulté difficile
+         * Enum pour le niveau de difficulte difficile
          */
-         HARD(3,"difficile");
+        HARD(3, "difficile");
 
-        public String getDescription() {
-            return description;
-        }
+        /**
+         * Niveau de difficulte associe a l'enum.
+         */
         private final int level;
+
+        /**
+         * Description textuelle de l'enum.
+         */
         private final String description;
 
         Difficulty(int level, String description) {
             this.level = level;
-            this.description=description;
+            this.description = description;
         }
+
         /**
-         * methode pour retourner le niveau de l'enum
-         * @return
+         * Permet d'obtenir la description de l'enum.
+         * @return La description correspondant à l'enum.
+         */
+        public String getDescription() {
+            return description;
+        }
+
+        /**
+         * Permet d'obtenir le niveau associe à l'enum.
+         * @return Le niveau de difficulte.
          */
         public int getLevel() {
             return level;
         }
+
+        @Override
         public String toString() {
             return this.description;
         }
 
-        // Méthode statique pour retrouver la difficulté depuis un niveau
+        /**
+         * Retourne la difficulte correspondant à un niveau specifique.
+         * @param level Le niveau de difficulte (1, 2, 3).
+         * @return La difficulte correspondant au niveau.
+         * @throws IllegalArgumentException Si le niveau est invalide.
+         */
         public static Difficulty fromLevel(int level) {
             for (Difficulty difficulty : Difficulty.values()) {
                 if (difficulty.getLevel() == level) {
@@ -109,58 +138,86 @@ public final class SudoTypes {
             throw new IllegalArgumentException("Niveau invalide : " + level);
         }
 
-        
-        // Méthode statique pour retrouver la difficulté depuis sa description
+        /**
+         * Retourne la difficulte correspondant à une description donnee.
+         * @param description La description de la difficulte.
+         * @return La difficulte correspondant à la description.
+         * @throws IllegalArgumentException Si la description est invalide.
+         */
         public static Difficulty fromDescription(String description) {
             for (Difficulty difficulty : Difficulty.values()) {
                 if (difficulty.getDescription().equals(description)) {
                     return difficulty;
                 }
             }
-            throw new IllegalArgumentException("description invalide : " +description);
+            throw new IllegalArgumentException("Description invalide : " + description);
         }
     }
 
     /**
-     * Enum pour les états du jeu
+     * Enum pour les etats du jeu.
      */
     public enum GameState {
         /**
-         * Enum pour l'etat du jeu non commencé ou en arrêt
+         * Enum pour l'etat du jeu non commence.
          */
-        NOT_STARTED("jeu est en arrêt"),
+        NOT_STARTED("Jeu est en arret"),
         /**
-         * Enum pour l'etat du jeu en cours
+         * Enum pour l'etat du jeu en cours.
          */
-         IN_PROGRESS("jeu encours"),
+        IN_PROGRESS("Jeu en cours"),
         /**
-         * Enum pour l'etat du jeu en pause
+         * Enum pour l'etat du jeu en pause.
          */
-          PAUSED("jeu en pause"), 
+        PAUSED("Jeu en pause"), 
         /**
-         * Enum pour l'etat du jeu terminé
-         * le jeu est terminé lorsque le joueur a rempli toutes les cellules du jeu
+         * Enum pour l'etat du jeu termine.
+         * Le jeu est termine lorsque le joueur a rempli toutes les cellules du jeu.
          */
-          FINISHED("jeu terminer");
+        FINISHED("Jeu termine");
 
+        /**
+         * Description textuelle de l'etat du jeu.
+         */
         private final String description;
+
         GameState(String description) {
             this.description = description;
         }
 
         @Override
         public String toString() {
-            // TODO Auto-generated method stub
             return this.description;
         }
+
         /**
-         * methode pour retourner la valeur de l'enum
-         * @return la valeur de l'enum
+         * Permet d'obtenir la description de l'etat du jeu.
+         * @return La description de l'etat du jeu.
          */
         public String getDescription() {
             return description;
         }
+
+        /**
+         * Permet d'obtenir le nom de l'etat du jeu sous forme de chaine de caracteres.
+         * @return Le nom de l'etat du jeu.
+         */
+        public String getName() {
+            switch (this) {
+                case NOT_STARTED:
+                    return "NOT_STARTED";
+                case IN_PROGRESS:
+                    return "IN_PROGRESS";
+                case PAUSED:
+                    return "PAUSED";
+                case FINISHED:
+                    return "FINISHED";
+                default:
+                    return "UNKNOWN";
+            }
+        }
     }
+
 
     public static void main(String[] args) {
         // Exemple d'utilisation

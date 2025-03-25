@@ -2,6 +2,7 @@ package grp6.intergraph;
 import grp6.sudocore.*;
 import grp6.sudocore.SudoTypes.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,27 +15,50 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+
+/**
+ * Classe SudokuMenu
+ * Cette classe represente le menu où l'utilisateur peut selectionner un Sudoku depuis la bibliotheque disponible.
+ * Elle gere l'affichage des Sudokus par page, ainsi que les interactions de navigation et les actions possibles sur
+ * chaque grille de Sudoku (reprendre ou recommencer un jeu en cours).
+ * 
+ * @author PERRON Nathan
+ * @author RASSON Emma
+ * @see StyledContent
+ * @see SudokuMenu
+ * @see DBManager
+ * @see Sudoku
+ * @see SudokuGame
+ */
 public class SudokuMenu {
+
+    /**
+     * Variable qui garde en memoire la page actuelle du menu de Sudokus.
+     */
     private static int currentPage = 0;
 
     /**
-     * Affiche la bibliothèque des grilles de Sudoku disponibles pour l'utilisateur.
-     *
-     * @param stage La fenêtre principale dans laquelle la bibliothèque est affichée.
+     * Affiche la bibliotheque des grilles de Sudoku disponibles pour l'utilisateur.
+     * 
+     * @param stage La fenetre principale dans laquelle la bibliotheque est affichee.
      */
     public static void showSudokuLibrary(Stage stage) {
-        List<Game> games = DBManager.getGamesForProfile(MainMenu.getProfileName());
         currentPage = 0;
 
-        // Création des boutons de navigation
+        // Creation des boutons de navigation
         Button leftArrow = new Button("<");
         leftArrow.setDisable(true);
         Button rightArrow = new Button(">");
 
-        // Label pour afficher la difficulté
+        StyledContent.applyArrowButtonStyle(leftArrow);
+        StyledContent.applyArrowButtonStyle(rightArrow);
+
+        // Label pour afficher la difficulte
         Label difficultyLabel = new Label();
         difficultyLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
@@ -47,10 +71,10 @@ public class SudokuMenu {
         sudokuContainer.setMinWidth(600);
         sudokuContainer.setMinHeight(400);
 
-        // Récupération et initialisation des grilles de Sudoku
-        List<Sudoku> sudokus = initializeSudokus(games);
+        // Recuperation et initialisation des grilles de Sudoku
+        List<Sudoku> sudokus = initializeSudokus();
 
-        // Actions des flèches de navigation
+        // Actions des fleches de navigation
         leftArrow.setOnAction(e -> {
             currentPage--;
             SudokuMenu.showSudokuList(sudokuContainer, stage, sudokus, difficultyLabel, leftArrow, rightArrow);
@@ -63,11 +87,12 @@ public class SudokuMenu {
 
         SudokuMenu.showSudokuList(sudokuContainer, stage, sudokus, difficultyLabel, leftArrow, rightArrow);
 
-        // Mise en page des éléments
+        // Mise en page des elements
         HBox navigation = new HBox(20, leftArrow, sudokuContainer, rightArrow);
         navigation.setAlignment(Pos.CENTER);
 
         Button backButton = new ProfileButton("Retour");
+        StyledContent.applyButtonStyle(backButton);
         backButton.setOnAction(e -> GameplayChoice.showGameplayChoice(stage));
 
         VBox layout = new VBox(15, difficultyLabel, navigation, backButton);
@@ -81,67 +106,87 @@ public class SudokuMenu {
     }
 
     /**
-     * Crée un conteneur affichant les informations d'un Sudoku spécifique.
+     * Cree un conteneur stylise affichant les informations d'un Sudoku specifique.
+     * 
+     * @param sudoku Le Sudoku a afficher.
+     * @return Un conteneur VBox contenant les informations du Sudoku.
      */
-    private static VBox createSudokuBox(Sudoku sudoku) {
-        VBox sudokuBox = new VBox(5);
+    public static VBox createSudokuBox(Sudoku sudoku) {
+        VBox sudokuBox = new VBox(8);
         sudokuBox.setAlignment(Pos.CENTER);
-        sudokuBox.setStyle("-fx-background-color: #939cb5; -fx-padding: 10; -fx-border-color: black; -fx-border-width: 1; -fx-border-radius: 5;");
+        sudokuBox.setPadding(new Insets(15));
+        sudokuBox.setMinSize(120, 120);
+        sudokuBox.setMaxSize(140, 140);
+
+        StyledContent.applySudokuBoxStyle(sudokuBox);
 
         Label nameLabel = new Label(sudoku.getName());
-        Label scoreLabel = new Label("Score : " + (sudoku.getScore() == 0 ? "-" : sudoku.getScore()));
-        Label bestTimeLabel = new Label("Temps : " + sudoku.getBestTime());
+        nameLabel.setMinWidth(200);
+        nameLabel.setAlignment(Pos.CENTER);
+        nameLabel.setWrapText(false);
+        nameLabel.setMaxWidth(Region.USE_COMPUTED_SIZE);
+        nameLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: white; -fx-font-weight: bold;");
+
+        Label scoreLabel;
+        if (sudoku.getGame() != null) {
+            if (sudoku.getGame().getGameState() == GameState.FINISHED) {
+                scoreLabel = new Label("Score : " + sudoku.getScore());
+            } else {
+                scoreLabel = new Label(sudoku.getGame().getProgressRate() + " %");
+            }
+        } else {
+            scoreLabel = new Label(" - % ");
+        }
+        scoreLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+
+        Label bestTimeLabel = new Label("Temps : " + formatTime(sudoku.getBestTime()));
+        bestTimeLabel.setAlignment(Pos.CENTER);
+        bestTimeLabel.setWrapText(false);
+        bestTimeLabel.setMaxWidth(Region.USE_COMPUTED_SIZE);
+        bestTimeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
 
         ImageView statusIcon = new ImageView();
-        statusIcon.setFitWidth(24);
-        statusIcon.setFitHeight(24);
+        statusIcon.setFitWidth(28);
+        statusIcon.setFitHeight(28);
 
         switch (sudoku.getStatus()) {
-            case FINISHED:
-                statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/star.png")));
-                break;
-            case IN_PROGRESS:
-                statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/pause.png")));
-                break;
-            default:
-                statusIcon.setVisible(false);
-                break;
+            case FINISHED -> statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/star.png")));
+            case IN_PROGRESS -> statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/pause.png")));
+            default -> statusIcon.setVisible(false);
         }
 
-        VBox contentBox = new VBox(3);
+        VBox contentBox = new VBox(5);
+        contentBox.setMinWidth(200);
+        contentBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
         contentBox.setAlignment(Pos.CENTER);
-
-        if (statusIcon != null) {
-            contentBox.getChildren().add(statusIcon);
-        }
-        contentBox.getChildren().addAll(scoreLabel, bestTimeLabel);
+        contentBox.getChildren().addAll(statusIcon, scoreLabel, bestTimeLabel);
 
         sudokuBox.getChildren().addAll(nameLabel, contentBox);
-        
+
         return sudokuBox;
     }
 
     /**
-     * Met à jour le label de difficulté en fonction du Sudoku affiché.
+     * Met a jour le label de difficulte en fonction du Sudoku affiche.
+     * 
+     * @param difficultyLabel Le label affichant la difficulte.
+     * @param sudoku Le Sudoku dont on veut mettre a jour la difficulte.
      */
     private static void updateDifficultyLabel(Label difficultyLabel, Sudoku sudoku) {
         switch (sudoku.getName().charAt(7)) {
-            case 'F':
-                difficultyLabel.setText("Facile");
-                break;
-            case 'M':
-                difficultyLabel.setText("Moyen");
-                break;
-            case 'D':
-                difficultyLabel.setText("Difficile");
-                break;
+            case 'F' -> difficultyLabel.setText("Facile");
+            case 'M' -> difficultyLabel.setText("Moyen");
+            case 'D' -> difficultyLabel.setText("Difficile");
         }
     }
 
     /**
-     * Initialise la liste des Sudokus disponibles.
+     * Initialise la liste des Sudokus disponibles a partir de la base de donnees.
+     * 
+     * @return Une liste de Sudokus recuperes et initialises.
      */
-    private static List<Sudoku> initializeSudokus(List<Game> games) {
+    private static List<Sudoku> initializeSudokus() {
+        List<Game> games = DBManager.getGamesForProfile(MainMenu.getProfileName());
         List<Sudoku> sudokus = new ArrayList<>();
 
         int sizeEasy = DBManager.getGridSizeWithDifficulty(Difficulty.EASY);
@@ -165,14 +210,21 @@ public class SudokuMenu {
         }
 
         games.stream().forEach(game-> {
-            sudokus.get(game.getGrid().getId()).modifyInfo(game.getElapsedTime(), game.getScore(), game.getGameState(), game);
+            sudokus.get(game.getGrid().getId()-1).modifyInfo(game.getElapsedTime(), game.getScore(), game.getGameState(), game);
         });
         return sudokus;
     }
 
 
     /**
-     * Affiche la liste des Sudokus par difficulté.
+     * Affiche la liste des Sudokus par difficulte, avec la possibilite de naviguer entre les pages.
+     * 
+     * @param sudokuContainer Le conteneur où les grilles seront affichees.
+     * @param stage La fenetre principale.
+     * @param sudokus La liste des Sudokus a afficher.
+     * @param difficultyLabel Le label de la difficulte actuelle.
+     * @param leftArrow Le bouton de navigation a gauche.
+     * @param rightArrow Le bouton de navigation a droite.
      */
     private static void showSudokuList(GridPane sudokuContainer, Stage stage, List<Sudoku> sudokus, Label difficultyLabel, Button leftArrow, Button rightArrow) {
         sudokuContainer.getChildren().clear();
@@ -190,12 +242,112 @@ public class SudokuMenu {
             sudokuContainer.add(sudokuBox, (i - startIndex) % columns, (i - startIndex) / columns);
 
             final int selectedSudokuId = i;
-            sudokuBox.setOnMouseClicked(e -> SudokuGame.showSudokuGame(stage, sudokus.get(selectedSudokuId)));
+            sudokuBox.setOnMouseClicked(e -> {
+                if(sudoku.getStatus() == GameState.IN_PROGRESS || sudoku.getStatus() == GameState.FINISHED) {
+                
+                    // Creer une nouvelle petite fenetre pop-up (fenetre modale)
+                    Stage popupStage = new Stage();
+                    popupStage.initModality(Modality.APPLICATION_MODAL); // Bloquer les interactions avec la fenetre principale
+                    popupStage.setTitle("Confirmation"); // Titre de la fenetre
+                
+                    // Composants de l'interface utilisateur
+                    Button restartButton = getNewRestartButton(stage, sudokus, selectedSudokuId, popupStage);
+                    
+                    VBox popupLayout;
+                    if(sudoku.getStatus() == GameState.IN_PROGRESS) {
+                        Label label = new Label("Voulez vous reprendre votre partie en cours ou recommencer de zéro ?");
+                        Button reloadButton = getNewReloadButton(stage, sudokus, selectedSudokuId, popupStage);
+                        popupLayout = new VBox(10, label, reloadButton, restartButton);
+                    }
+                    else {
+                        Label label = new Label("Voulez vous recommencer ?");
+                        popupLayout = new VBox(10, label, restartButton);
+                    }
+                    
+                    // Creer une mise en page verticale avec un espacement entre les elements
+                    popupLayout.setPadding(new Insets(10)); // Ajouter une marge pour une meilleure apparence
+                
+                    // Creer et appliquer la scene a la fenetre pop-up
+                    Scene scene = new Scene(popupLayout, 300, 150);
+                    popupStage.setScene(scene);
+                
+                    // Afficher la fenetre pop-up et attendre l'interaction de l'utilisateur
+                    popupStage.showAndWait();
+                }
+                else {
+                    Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
+                    SudokuGame.showSudokuGame(stage, selectedSudoku);
+                }
+            });
         }
 
         leftArrow.setDisable(currentPage == 0);
         rightArrow.setDisable(endIndex >= sudokus.size());
-        
-        
+    }
+
+    /**
+     * Formate le temps en secondes en une chaîne de caracteres au format HH:MM:SS.
+     * 
+     * @param seconds Le temps en secondes a formater.
+     * @return La chaîne de caracteres formatee sous la forme HH:MM:SS.
+     */
+    private static String formatTime(long seconds) {
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long secs = seconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, secs);
+    }
+
+    /**
+     * Cree un bouton pour recommencer un jeu a partir de la fenetre pop-up.
+     * 
+     * @param stage La fenetre principale.
+     * @param sudokus La liste des Sudokus disponibles.
+     * @param selectedSudokuId L'identifiant du Sudoku selectionne.
+     * @param popupStage La fenetre pop-up.
+     * @return Le bouton de recommencement.
+     */
+    private static Button getNewRestartButton(Stage stage, List<Sudoku> sudokus, int selectedSudokuId, Stage popupStage) {
+        Button restartButton = new Button("Recommencer"); // Bouton pour confirmer la creation du profil
+    
+        restartButton.setOnAction(event -> {
+            Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
+            try {
+                DBManager.deleteGame(selectedSudoku.getGame().getId());
+            } catch (SQLException e1) {
+                System.err.println("Error deleting game: " + e1.getMessage());
+            }
+            selectedSudoku.setStatus(GameState.NOT_STARTED);
+            selectedSudoku.getGame().setGameState(GameState.NOT_STARTED);
+            SudokuGame.showSudokuGame(stage, selectedSudoku);
+            popupStage.close();
+        });
+    
+        return restartButton;
+    }
+
+    /**
+     * Cree un bouton pour reprendre un jeu a partir de la fenetre pop-up.
+     * 
+     * @param stage La fenetre principale.
+     * @param sudokus La liste des Sudokus disponibles.
+     * @param selectedSudokuId L'identifiant du Sudoku selectionne.
+     * @param popupStage La fenetre pop-up.
+     * @return Le bouton de reprise.
+     */
+    private static Button getNewReloadButton(Stage stage, List<Sudoku> sudokus, int selectedSudokuId, Stage popupStage) {
+        Button reloadButton = new Button("Reprendre"); // Bouton pour confirmer la creation du profil
+
+        reloadButton.setOnAction(event -> {
+            Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
+            SudokuGame.showSudokuGame(stage, selectedSudoku);
+            popupStage.close();
+        });
+
+        return reloadButton;
     }
 }
+
+
+
+

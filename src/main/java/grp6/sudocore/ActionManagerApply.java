@@ -1,8 +1,11 @@
 package grp6.sudocore;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -13,18 +16,19 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * Cette classe permet de gerer la serialisation et la deserialisation d'une liste actions
+ * Cette classe permet de gerer la serialisation et la deserialisation d'une liste d'actions.
  * 
- * @author Taise de Thèse
- * @version 1.0 
+ * @author DE THESE Taise
+ * @see Action
+ * @see Game
  */
 public class ActionManagerApply {
-    
 
     /**
-     *  cette methode permet de serialiser une liste d'action
-     * @param actions
-     * @return une chaine sous forme de json obtenu contenant un ensemble d'actions en serialiser
+     * Cette methode permet de serialiser une liste d'actions.
+     * 
+     * @param actions La liste des actions à sérialiser.
+     * @return Une chaîne de caractères au format JSON contenant les actions sérialisées.
      */
     public static String serializeList(List<Action> actions) {
         return new GsonBuilder()
@@ -32,16 +36,16 @@ public class ActionManagerApply {
                .create()
                .toJson(actions);
     }
-   
-    /**
-     * cette methode permet de deserialiser une liste d'action
-     * @param json represente la chaine json contenant les actions serialiser
-     * @param game represente le jeu  sur lequel les actions seront appliquées
-     * @return une liste d'action deserialiser
-     */
-    public static List<Action> deserializeList(String json,Game game) {
-        Type listType = new TypeToken<List<Action>>() {}.getType();
 
+    /**
+     * Cette methode permet de deserialiser une liste d'actions à partir d'une chaîne JSON.
+     * 
+     * @param json La chaîne JSON contenant les actions serialisees.
+     * @param game Le jeu sur lequel les actions seront appliquees.
+     * @return Une liste d'actions deserialisee.
+     */
+    public static List<Action> deserializeList(String json, Game game) {
+        Type listType = new TypeToken<List<Action>>() {}.getType();
         return new GsonBuilder()
                .registerTypeAdapter(Action.class, new ActionManagerDeserialiser(game))
                .create()
@@ -49,66 +53,66 @@ public class ActionManagerApply {
     }
 
     /**
-    * Gestion  désérialisation des objets Action
-    */
+     * Gestion de la deserialisation des objets Action.
+     */
     private static class ActionManagerDeserialiser implements JsonDeserializer<Action> {
-        private Game game;
-        public ActionManagerDeserialiser(Game game){
-        this.game=game;
+        private final Game game;
+
+        public ActionManagerDeserialiser(Game game) {
+            this.game = game;
         }
-         @Override
+
+        @Override
         public Action deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-
-             try {
-                 Class <? extends Action> subAction=ActionFactory.getClassFromType(json.getAsJsonObject().get("type").getAsString());
-                 java.lang.reflect.Method method=subAction.getMethod("jsonDecode", String.class,Game.class);
-                 return (Action) method.invoke(subAction, json.toString(), game);
-                 } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new JsonParseException("echec lors de le deserialisation : ", e);
-                }   
-         }
+            try {
+                Class<? extends Action> subAction = ActionFactory.getClassFromType(json.getAsJsonObject().get("type").getAsString());
+                java.lang.reflect.Method method = subAction.getMethod("jsonDecode", String.class, Game.class);
+                return (Action) method.invoke(subAction, json.toString(), game);
+            } catch (JsonParseException | IllegalAccessException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+                System.err.println("Erreur lors de la désérialisation : " + e.getMessage());
+                throw new JsonParseException("Échec lors de la désérialisation.", e);
+            }
+        }
     }
-     private static  class ActionManagerserialiser implements JsonSerializer<Action> {
 
+    /**
+     * Serialisation des objets Action.
+     */
+    private static class ActionManagerserialiser implements JsonSerializer<Action> {
 
-    public  JsonElement serialize(Action action, Type vartype, JsonSerializationContext context){
-     return action.serialise();
+        @Override
+        public JsonElement serialize(Action action, Type vartype, JsonSerializationContext context) {
+            return action.serialise();
+        }
     }
-  }
-
 
     public static void main(String[] args) {
-
         try {
-            
-        // Création de quelques actions pour tester
-        Action action1 = new AnnotationCellAction(null, 1, 1, 5, 0);
-        Action action2 = new NumberCellAction(null, 2, 2, 8, 3);
+            // Création de quelques actions pour tester
+            Action action1 = new AnnotationCellAction(null, 1, 1, 5, 0);
+            Action action2 = new NumberCellAction(null, 2, 2, 8, 3);
 
-        // Ajout des actions à une liste
-        List<Action> actions = new ArrayList<>();
-        actions.add(action1);
-        actions.add(action2);
-        System.out.println(action1.actionType());
+            // Ajout des actions à une liste
+            List<Action> actions = new ArrayList<>();
+            actions.add(action1);
+            actions.add(action2);
+            System.out.println(action1.actionType());
 
-        // Sérialisation de la liste d'actions
-        String json = ActionManagerApply.serializeList(actions);
-        System.out.println("Liste d'actions sérialisée : " + json);
+            // Sérialisation de la liste d'actions
+            String json = ActionManagerApply.serializeList(actions);
+            System.out.println("Liste d'actions sérialisée : " + json);
 
-        // Désérialisation de la liste d'actions
-        List<Action> deserializedActions = ActionManagerApply.deserializeList(json, new Game(DBManager.getGrid(2), new Profile("jean")));
-        System.out.println("Liste d'actions désérialisée : " + deserializedActions);
+            // Désérialisation de la liste d'actions
+            List<Action> deserializedActions = ActionManagerApply.deserializeList(json, new Game(DBManager.getGrid(2), new Profile("jean")));
+            System.out.println("Liste d'actions désérialisée : " + deserializedActions);
 
-        /* / Exécution des actions désérialisées
-        for (Action action : deserializedActions) {
-            action.doAction();
-            System.out.println("Action exécutée : " + action);
-        }*/
-        } catch (Exception e) {
-            // TODO: handle exception
+            /* Exécution des actions désérialisées
+            for (Action action : deserializedActions) {
+                action.doAction();
+                System.out.println("Action exécutée : " + action);
+            }*/
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la désérialisation : " + e.getMessage());
         }
-
-        
     }
 }
