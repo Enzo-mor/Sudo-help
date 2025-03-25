@@ -136,7 +136,7 @@ public class PointingPairs implements InterfaceTech{
         grille.getCell(0, 2).addAnnotation(2);
         grille.getCell(0, 4).addAnnotation(2);
         grille.getCell(0, 7).addAnnotation(2);
-        grille.printAnnotationsGrid();;
+        grille.printAnnotationsGrid();
 
        
         System.out.println("\n");

@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -306,7 +305,7 @@ public final class DBManager {
     /**
      * Methode permettant de sauvegarder ou ajouter un profil dans la Base de Donnees.
      * Le nom du profil reste insensible a la casse.
-     * @param profile Représente le profil à sauvegarder.
+     * @param profile Represente le profil a sauvegarder.
      * @throws SQLException leve une exception de type SQLException en cas d'erreur de connexion.
      *  Il faut donc l'executer dans un bloc try/catch.
      */
@@ -408,8 +407,8 @@ public final class DBManager {
     /**
      * Retourne toutes les parties presentes dans la base de donnees appartenant a un profil.
      * 
-     * @param pseudo Le pseudo du profil pour lequel récupérer les parties.
-     * @return Une liste des parties appartenant au profil spécifié.
+     * @param pseudo Le pseudo du profil pour lequel recuperer les parties.
+     * @return Une liste des parties appartenant au profil specifie.
      */
     public static List<Game> getGamesForProfile(String pseudo) {
         try {
@@ -435,11 +434,12 @@ public final class DBManager {
      */
     public static Boolean deleteGame(long id) throws SQLException {
         String query = "DELETE FROM game WHERE id_game = ?";
-        try (Connection conn = getConnection();
+        try(Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setLong(1, id);
             return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
+        }
+        catch(SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -542,6 +542,7 @@ public final class DBManager {
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setLong(1, game.getId());
+            pstmt.setInt(2, game.getGrid().getId());
             pstmt.setString(3, game.getProfile().getPseudo());
             pstmt.setString(4, game.getCreatedDate());
             pstmt.setString(5, game.getLastModifDate());
@@ -729,7 +730,7 @@ public final class DBManager {
         }
 
         if (grids.isEmpty()) {
-            System.out.println("⚠️ Aucune grille trouvee pour la difficulte : " + difficulty);
+            System.out.println("Aucune grille trouvee pour la difficulte : " + difficulty);
         }
 
         return grids;
