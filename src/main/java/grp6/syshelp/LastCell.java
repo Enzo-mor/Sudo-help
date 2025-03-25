@@ -6,7 +6,14 @@ import java.util.List;
 
 import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
-
+/**
+ * Cette classe représente la technique LastCell.
+ * 
+ * Elle permet de trouver la dernière cellule vide d'une ligne, colonne ou carré.
+ * @author GRAMMONT Dylan
+ * @see InterfaceTech Contenant les méthodes des techniques
+ * 
+ */
 public class LastCell implements InterfaceTech {
 
     @Override
