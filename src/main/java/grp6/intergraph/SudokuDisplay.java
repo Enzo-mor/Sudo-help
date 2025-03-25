@@ -2,11 +2,10 @@ package grp6.intergraph;
 import grp6.sudocore.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -54,9 +53,9 @@ public class SudokuDisplay {
      * Surligne certaines cellules dans la grille, assombrissant toutes les autres.
      *
      * @param grid        La grille où les cellules doivent etre modifiees [ GridPane ]
-     * @param coordinates Coordonnees des cellules a surligner [ int[][] ]
+     * @param coordinates Coordonnees des cellules a surligner [ List<int[]> ]
      */
-    public static void highlightCells(GridPane grid, int[][] coordinates) {
+    public static void highlightCells(GridPane grid, List<int[]> coordinates) {
         // Reinitialiser la grille avant de surligner
         resetGrid(grid);
 

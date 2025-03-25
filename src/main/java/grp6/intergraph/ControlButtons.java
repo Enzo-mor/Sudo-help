@@ -22,6 +22,7 @@ import java.util.*;
  * @see Game
  * @see StyledContent
  * @see SudokuDisplay
+ * @see SudokuGame
  * @see Action  
  */
 public class ControlButtons {
@@ -40,6 +41,16 @@ public class ControlButtons {
      */
     private Game sudokuGame;
 
+    /** 
+     * Instance de Help pour afficher l'aide 
+     */
+    private static Help help;
+
+    /**
+     * Numéro de l'aide actuel
+     */
+    private static int currentHelp;
+
 
     /**
      * Constructeur de ControlButtons
@@ -50,6 +61,7 @@ public class ControlButtons {
     public ControlButtons(SudokuGrid grid, Game sudokuG) {
         this.sudokuGame = sudokuG;
         this.sudokuGrid = grid;
+        currentHelp = 0;
         
         controlButtons = new HBox(5);
         controlButtons.setAlignment(Pos.CENTER);
@@ -59,55 +71,14 @@ public class ControlButtons {
         Button helpButton = new Button("Aide");
         Button checkButton = new Button("Vérifier");
         Button restartButton = new Button("Recommencer");
-
-        //SYSHELP
-        Button autoAnnotButton = new Button("AA");
-
-        //SYSHELP
-        StyledContent.applyButtonStyle(autoAnnotButton);
-
-        //SYSHELP
-        helpButton.setOnAction(e -> {
-            Help help = SysHelp.generateHelp(sudokuGame.getGrid());
-            if(help != null){
-                System.out.println(help);
-            }else{
-                System.out.println("Aucune aide trouvée.");
-            }
-        });
-        //SYSHELP
-        autoAnnotButton.setOnAction(e -> {
-            for(int i = 0;i<9;i++){
-                for(int j = 0;j<9;j++){
-                    Cell c = sudokuGame.getGrid().getCell(i, j);
-                    if(c instanceof FlexCell){
-                        AutoAnnotation.generate(sudokuGame.getGrid(), c, i, j);
-                        for(int z = 0;z<9;z++){
-                            if(c.getAnnotationsBool()[z]){
-                                grid.addAnnotationToCell(i,j,""+(z+1));
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
+        
         // Appliquer le style aux boutons
         StyledContent.applyButtonStyle(undoButton);
         StyledContent.applyButtonStyle(redoButton);
         StyledContent.applyButtonStyle(helpButton);
         StyledContent.applyButtonStyle(checkButton);
         StyledContent.applyButtonStyle(restartButton);
-
-        // Ajoute l'action sur le bouton "Recommencer"
-        restartButton.setOnAction(e -> {
-            sudokuGrid.resetInterface();
-            sudokuGame.restartGame();
-
-            // Forcer la suppression des actions passees
-            sudokuGame.deleteActionsAfterCurrent();
-        });
-
+        
         // Ajoute l'action sur le bouton "Annuler"
         undoButton.setOnAction(e -> {
             SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
@@ -121,6 +92,18 @@ public class ControlButtons {
             redoAction();
         });
 
+        //SYSHELP
+        helpButton.setOnAction(e -> {
+            help = SysHelp.generateHelp(sudokuGame.getGrid());
+            currentHelp = 1;
+            if(help != null) {
+                SudokuGame.setHelpText(help.getMessage(currentHelp));
+                SudokuGame.setHelpOverlayTrue();
+            }else{
+                System.out.println("Aucune aide trouvée.");
+            }
+        });
+
         // Ajoute l'action sur le bouton "Verifier"
         checkButton.setOnAction(e -> {
             sudokuGame.decreaseScore("check");
@@ -128,6 +111,14 @@ public class ControlButtons {
             putErrorsRed();
         });
 
+        // Ajoute l'action sur le bouton "Recommencer"
+        restartButton.setOnAction(e -> {
+            sudokuGrid.resetInterface();
+            sudokuGame.restartGame();
+
+            // Forcer la suppression des actions passees
+            sudokuGame.deleteActionsAfterCurrent();
+        });
 
         controlButtons.getChildren().addAll(undoButton, redoButton, helpButton, checkButton, restartButton);
     }
@@ -293,5 +284,29 @@ public class ControlButtons {
     
         // Retourner la liste des coordonnees a colorier
         return errorCells;
+    }
+
+    /**
+     * Retourne le numéro de l'aide actuel
+     * @return le numéro de l'aide actuel [int]
+     */
+    public static int getCurrentHelp() {
+        return currentHelp;
+    }
+
+    /**
+     * Modifie le numéro de l'aide actuel
+     * @param currentHelp le nouveau numéro d'aide [int]
+     */
+    public static void setCurrentHelp(int ch) {
+        currentHelp = ch;
+    }
+
+    /**
+     * Retourne l'instance de l'aide actuel
+     * @return l'aide actuelle [Help]
+     */
+    public static Help getHelp() {
+        return help;
     }
 }

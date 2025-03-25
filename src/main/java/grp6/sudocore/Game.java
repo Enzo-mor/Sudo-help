@@ -593,7 +593,7 @@ public final class Game {
      * @return la même instance du jeu  après appliquation de  la modification
      * 
      * @throws IllegalStateException leve une exception si le jeu se trouve dans un eta incompatible à cette methode
-     *  @throws NoEditableCellExeception leve une exception si la cellule n'est pas editable
+     * @throws NoEditableCellExeception leve une exception si la cellule n'est pas editable
      */
     public  Game addAnnotation(int x,int y, int value) throws IllegalStateException,NoEditableCellExeception{
 

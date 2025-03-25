@@ -178,6 +178,7 @@ public class ProfileSelection {
      * @param rightArrow Bouton droit de navigation [Button]
      */
     private void showAddProfilePopup(Stage stage, HBox profileContainer, Button leftArrow, Button rightArrow) {
+        
         Stage popupStage = new Stage();
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.setTitle("Créer un profil");

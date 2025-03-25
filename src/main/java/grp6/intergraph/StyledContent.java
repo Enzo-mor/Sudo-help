@@ -1,8 +1,14 @@
 package grp6.intergraph;
+import grp6.syshelp.*;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 /**
  * Classe StyledContent
@@ -28,14 +34,39 @@ public class StyledContent {
         "-fx-cursor: hand;";                // Curseur de main
 
     /** 
+     * Style du bouton dangeureux 
+     */
+    private static final String WARNING_BUTTON_STYLE = 
+        "-fx-background-color: #6D8D9C; " + // Fond bleu pastel
+        "-fx-text-fill: red; " +           // Texte rouge
+        "-fx-font-size: 12px; " +
+        "-fx-font-weight: bold; " +
+        "-fx-padding: 6px 12px; " +
+        "-fx-background-radius: 5px; " +   // Coins legerement arrondis
+        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 2, 0, 2, 2); " + // Ombre subtile
+        "-fx-cursor: hand;";
+
+    /** 
      * Style du bouton au survol 
      */
     private static final String BUTTON_HOVER_STYLE =
         "-fx-background-color: #6D8D9C; " + // Fond bleu clair au survol
         "-fx-text-fill: white; " +           // Texte blanc
-        "-fx-font-size: 12px; " +           // Taille de la police reduite
-        "-fx-font-weight: bold; " +         // Texte en gras
-        "-fx-background-radius: 5px; " +    // Coins legerement arrondis
+        "-fx-font-size: 12px; " +
+        "-fx-font-weight: bold; " +
+        "-fx-background-radius: 5px; " +
+        "-fx-padding: 8px 16px; " +         // Augmentation du padding au survol
+        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 2, 2);";  // Ombre plus marquee
+
+    /** 
+     * Style du bouton dangeureux au survol 
+     */
+    private static final String WARNING_BUTTON_HOVER_STYLE =
+        "-fx-background-color: #6D8D9C; " + // Fond bleu clair au survol
+        "-fx-text-fill: red; " +            // Texte rouge
+        "-fx-font-size: 12px; " +
+        "-fx-font-weight: bold; " +
+        "-fx-background-radius: 5px; " +
         "-fx-padding: 8px 16px; " +         // Augmentation du padding au survol
         "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 2, 2);";  // Ombre plus marquee
 
@@ -76,6 +107,17 @@ public class StyledContent {
         button.setStyle(BUTTON_STYLE);
         button.setOnMouseEntered((MouseEvent e) -> button.setStyle(BUTTON_HOVER_STYLE));
         button.setOnMouseExited((MouseEvent e) -> button.setStyle(BUTTON_STYLE));
+    }
+
+    /**
+     * Applique le style et l'effet de survol a un bouton dangeureux.
+     * 
+     * @param button Bouton auquel appliquer le style [Button]
+     */
+    public static void applyButtonWarningStyle(Button button) {
+        button.setStyle(WARNING_BUTTON_STYLE);
+        button.setOnMouseEntered((MouseEvent e) -> button.setStyle(WARNING_BUTTON_HOVER_STYLE));
+        button.setOnMouseExited((MouseEvent e) -> button.setStyle(WARNING_BUTTON_STYLE));
     }
 
     /**
@@ -223,5 +265,125 @@ public class StyledContent {
             "-fx-padding: 10px 15px; " +
             "-fx-background-radius: 5px;"
         ));
-    }    
+    }
+
+    /**
+     * Applique un style au panneau d'aide
+     */
+    public static void setupHelpOverlay(VBox helpOverlay, Label helpText) {
+        // Style du cadre extérieur
+        helpOverlay.setStyle("-fx-background-color: #4A90E2; -fx-background-radius: 15; -fx-padding: 15px;");
+        helpOverlay.setAlignment(Pos.CENTER);
+        helpOverlay.setVisible(false); // Masqué par défaut
+
+        // Cadre blanc intérieur
+        StackPane innerPane = new StackPane();
+        innerPane.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+        innerPane.setPrefSize(300, 150);
+
+        // Style du texte
+        helpText.setStyle("-fx-text-fill: black; -fx-font-size: 14px;");
+        innerPane.getChildren().add(helpText);
+
+        // Bouton "Voir plus"
+        Button seeMoreButton = new Button("Voir plus");
+        StyledContent.applyButtonStyle(seeMoreButton);
+        seeMoreButton.setOnAction(e -> {
+            int indexHelp = ControlButtons.getCurrentHelp() + 1;
+            Help actualHelp = ControlButtons.getHelp();
+        
+            // Vérification avant d'afficher le prochain message
+            if (indexHelp <= 3) {
+                SudokuGame.setHelpText(actualHelp.getMessage(indexHelp));
+                ControlButtons.setCurrentHelp(indexHelp);
+            }
+
+            if (indexHelp == 3) {
+                SudokuDisplay.highlightCells(SudokuGrid.getGridPane(), actualHelp.getDisplay());
+            }
+        
+            // Désactiver le bouton si l'index dépasse 3
+            seeMoreButton.setDisable(indexHelp >= 3);
+        });
+
+        // Bouton de fermeture (croix)
+        Button closeHelpButton = new Button("✖");
+        closeHelpButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;");
+        closeHelpButton.setOnAction(e -> {
+            ControlButtons.setCurrentHelp(0);
+            SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
+            seeMoreButton.setDisable(false);
+            helpOverlay.setVisible(false);
+        });
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        // Ajouter la croix en haut à droite
+        HBox topBar = new HBox(spacer, closeHelpButton);
+        topBar.setAlignment(Pos.TOP_RIGHT);
+        topBar.setPrefWidth(400);
+
+        // Icône ampoule
+        ImageView lightBulb = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/lightBulb.png"))); // Ajoute cette icône dans tes ressources
+        lightBulb.setFitWidth(20);
+        lightBulb.setFitHeight(20);
+
+        HBox topContent = new HBox(10, lightBulb, topBar);
+        topContent.setAlignment(Pos.TOP_LEFT);
+        topContent.setPrefWidth(300);
+
+        // Organiser les éléments dans la VBox
+        VBox content = new VBox(10, topContent, innerPane, seeMoreButton);
+        content.setAlignment(Pos.CENTER);
+
+        helpOverlay.getChildren().add(content);
+    }
+
+    /**
+     * Applique un style a la zone de saisie passe en parametre
+     * @param textField TextField a stylise [TextField]
+     */
+    public static void styleTextField(TextField textField) {
+        textField.setStyle(
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-background-color: white; " +
+            "-fx-background-radius: 8px; " +
+            "-fx-background-insets: 0; " +
+            "-fx-border-color: #888888; " +
+            "-fx-border-radius: 8px; " +
+            "-fx-padding: 8px; " +
+            "-fx-border-width: 1.5px; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);"
+        );
+
+        // Effet au survol
+        textField.setOnMouseEntered(e -> textField.setStyle(
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-background-color: white; " +
+            "-fx-background-radius: 8px; " +
+            "-fx-background-insets: 0; " +
+            "-fx-border-color: #555555; " + // Bordure plus foncée au survol
+            "-fx-border-radius: 8px; " +
+            "-fx-padding: 8px; " +
+            "-fx-border-width: 2px; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);"
+        ));
+
+        // Effet à la sortie
+        textField.setOnMouseExited(e -> textField.setStyle(
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-background-color: white; " +
+            "-fx-background-radius: 8px; " +
+            "-fx-background-insets: 0; " +
+            "-fx-border-color: #888888; " +
+            "-fx-border-radius: 8px; " +
+            "-fx-padding: 8px; " +
+            "-fx-border-width: 1.5px; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);"
+        ));
+    }
 }
