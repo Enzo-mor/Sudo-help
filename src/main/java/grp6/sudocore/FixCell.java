@@ -18,8 +18,28 @@ public class FixCell implements Cell {
     /** Chiffre stocke dans la cellule */
     protected int number; 
 
+    /** Position de la cellule  */
+    private int[] position;
+
     /* ======= Methodes d'instance ======= */
 
+    /**
+     * Constructeur de la classe 'FixCell'.
+     * 
+     * @param number Chiffre qui sera stocke dans la cellule [int]
+     */
+    public FixCell(int number, int x, int y) {
+        this.position = new int[] {x, y};
+        // Le chiffre doit etre valide: number in [0, 9] // 0 == vide
+        if(Grid.isValidNumber(number) || number == 0){
+            this.number = number;
+        }
+        else {
+            System.err.println("Impossible d'initialiser cette cellule: " + number + " doit etre incluse dans [0, " + Grid.NB_NUM + "]");
+            this.number = 0;
+        }
+    }
+    
     /**
      * Constructeur de la classe 'FixCell'.
      * 
@@ -160,6 +180,32 @@ public class FixCell implements Cell {
     public Cell clone() {
         // Clonage superficiel, pas de besoin de cloner des objets internes.
         return new FixCell(this.number);
+    }
+    
+    /**
+     * Recuperer la position d'une cellule dans sa grille
+     * @return position d'une cellule
+     */
+    public int[] getPosition() {
+        return position;
+    }
+
+    /** 
+     * Recuperer les annotations de la cellule
+     * @return Liste des annotations 
+     */
+    @Override
+    public boolean[] getAnnotationsBool() {
+        return new boolean[Grid.NB_NUM];
+    }
+
+    /**
+     * Permet de decter si un tableau d'annotation ne contient qu'une entree
+     * @return un boolean qui est vrai quand il n'y a qu'une annotation
+     */
+    @Override
+    public boolean OnlyOneAnnotation() {
+        return false;
     }
 
 }

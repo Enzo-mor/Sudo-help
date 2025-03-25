@@ -91,6 +91,7 @@ public class SudokuGame {
             // Initialisation de la partie et du chronometre 
             actualGame.startGame();
         }
+
         
         // Creation du bouton "retour a la maison"
         Button homeButton = new Button();

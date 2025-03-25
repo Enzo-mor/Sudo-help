@@ -2,7 +2,14 @@ package grp6.syshelp;
 
 import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
-
+/**
+ * Cette classe représente la technique NakedSingleton.
+ * 
+ * Elle permet de trouver les singletons nus(1 chiffre apparaissant uniquement dans une case d'une unité(ligne colones carré)). 
+ * @author 
+ * @see InterfaceTech Contenant les méthodes des techniques
+ * 
+ */
 public class NakedSingleton implements InterfaceTech {
 
     @Override

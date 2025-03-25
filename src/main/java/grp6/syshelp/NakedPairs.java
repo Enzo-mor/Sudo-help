@@ -3,7 +3,14 @@ package grp6.syshelp;
 import grp6.sudocore.Cell;
 import grp6.sudocore.FlexCell;
 import grp6.sudocore.Grid;
-
+/**
+ * Cette classe représente la technique NakedPairs.
+ * 
+ * Elle permet de trouver les pairs nus(2 chiffres apparaissant uniquement dans deux cases d'une unité(ligne colones carré)). 
+ * @author GRAMMONT Dylan
+ * @see InterfaceTech Contenant les méthodes des techniques
+ * 
+ */
 public class NakedPairs implements InterfaceTech {
     
     Help aide = new Help(getClass().getSimpleName());
@@ -19,7 +26,12 @@ public class NakedPairs implements InterfaceTech {
         }
         return tab;
     }
-
+    /**
+     * Permet de détecter les pairs dans un carré
+     * @param num
+     * @param grille
+     * @return boolean si on a trouvé une paire dans un carré
+     */
     private boolean detectPairsCarre(int num,Grid grille) {
 
         //tableau de pairs
@@ -73,7 +85,12 @@ public class NakedPairs implements InterfaceTech {
         }
         return false;
     }
-
+    /**
+     * Permet de détecter les pairs dans une ligne ou une colonne
+     * @param num
+     * @param grille
+     * @return boolean si on a trouvé une paire dans une ligne ou une colonne
+     */
     private boolean detectPairs(int num,Grid grille){
 
 

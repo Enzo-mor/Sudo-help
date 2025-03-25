@@ -1,7 +1,5 @@
 package grp6.syshelp;
 
-import java.util.ArrayList;
-
 import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
 

@@ -40,7 +40,10 @@ public final class Grid implements Iterable<Cell> {
     private final Integer id;        
     
     /** Difficulte de la grille (facile, moyen, difficile, etc.) */
-    private final SudoTypes.Difficulty difficulty;       
+    private final SudoTypes.Difficulty difficulty;   
+
+    /** Type de forme qu'on peut avoir dans un grille */
+    public static enum Shape {LINE, COLUMN, SQUARE;}    
 
     /* ======= Methodes de Classe ======= */
 
@@ -96,7 +99,31 @@ public final class Grid implements Iterable<Cell> {
         this.solvedCells = new ArrayList<Cell>();
     }
 
-    /***
+    /**
+     * Constructeur de la classe 'Grid' pour les tests.
+     */
+    public Grid(int[] data) {
+        SudoLog.debug("Creation d'une grille");
+        this.id = 0;
+        this.cells = new ArrayList<>();
+
+        for(int i=0; i<data.length; i++) {
+            int num = data[i];
+            int x = i/Grid.NB_NUM;
+            int y = i%Grid.NB_NUM;
+            SudoLog.debug("Construction cellule de la grille ("+x+","+y+")");
+            Cell cell = new FlexCell(x, y);
+            cell.setNumber(num);
+            cells.add(cell);
+        } 
+        SudoLog.debug("Fin creation des cellules");
+        this.difficulty = SudoTypes.Difficulty.EASY;
+        SudoLog.debug("Resolution de la grille");
+        this.solvedCells = SudokuSolver.solveCells(this.cells);
+        SudoLog.debug("Fin creation de la grille");
+    }
+
+    /**
      * Permet de cloner une grille.
      * Cette operation cree une nouvelle instance de la grille, 
      * permettant d'obtenir une copie sans affecter la grille d'origine.
@@ -445,20 +472,119 @@ public final class Grid implements Iterable<Cell> {
         return cells.size();
     }
 
+    /**
+     * Recuperation d'une sous grille applati
+     * @param a Indice de la ligne de la cellule cible
+     * @param b Indice de la colonne de la cellule cible
+     * @return sous grille applati
+     */
+    public Cell[] getFlatSubGrid(int a, int b){
+        Cell[][] subGrid = this.getSubGrid(a,b);
+        Cell[] res = new Cell[NB_NUM];
+        int j = 0;
+        for(int i = 0;i < 3;i++){
+            for(int y = 0;y < 3;y++){
+                res[j++] = subGrid[i][y];
+            }
+        }
+        return res;
+    }
+    
+    public int[] numToPosForSubGrid(int num) {
+        if (num < 0 || num >= NB_NUM) {
+            throw new IllegalArgumentException("Numéro de sous-grille invalide: " + num);
+        }
+        
+        int row = (num / NB_SUBGRID) * NB_SUBGRID;
+        int col = (num % NB_SUBGRID) * NB_SUBGRID; 
 
-    public static void main(String[] args) {
-
-        try{
-            Grid g = DBManager.getGrid(1);
-            System.out.println(g);
-            System.out.println("\n\n\n\n\n");
-            System.out.println(g.clone());
-            
-        }catch (Exception e) {
-            // TODO: handle exception
-            System.err.println(e.getMessage());
-         }
+        return new int[]{row, col};
     }
 
+    public int numberOfFullCell(Shape shape,int num){
+        int res = 0;
+        switch(shape){
+            case LINE -> {
+                Cell [] line = this.getLine(num);
+                for(int i = 0; i < 9; i++){
+                    if(!line[i].isEmpty()){
+                        res++;
+                    }
+                }
+            }
+            case COLUMN -> {
+                Cell [] column = this.getColumn(num);
+                for(int i = 0; i < 9; i++){
+                    if(!column[i].isEmpty()){
+                        res++;
+                    }
+                }
+            }
+            case SQUARE -> {
+                int [] tabNum = numToPosForSubGrid(num);
+                Cell [][] square = this.getSubGrid(tabNum[0],tabNum[1]);
+                for(int i = 0; i < NB_SUBGRID; i++){
+                    for(int j = 0; j < NB_SUBGRID;j++){
+                        if(!square[i][j].isEmpty()){
+                            res++;
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    public void printAnnotationsGrid() {
+        // On fixe une largeur pour chaque cellule 
+        final int cellWidth = 9;
+        
+        for (int row = 0; row < NB_NUM; row++) {
+            for (int col = 0; col < NB_NUM; col++) {
+                Cell cell = getCell(row, col);
+                String annStr = "";
+                // Pour les cellules flexibles, on affiche les annotations
+                if (cell.isEditable()) {
+                    StringBuilder sb = new StringBuilder();
+                    for (int candidate = 1; candidate <= NB_NUM; candidate++) {
+                        if (cell.getAnnotationsBool()[candidate - 1]) {
+                            if (sb.length() > 0) {
+                                sb.append(" | ");
+                            }
+                            sb.append(candidate);
+                        }
+                    }
+                    annStr = sb.toString();
+                    // S'il n'y a aucune annotation, on affiche un espace vide
+                    if (annStr.isEmpty()) {
+                        annStr = " ";
+                    }
+                } else {
+                    // Pour une cellule fixe, on affiche rien (ou eventuellement "FIX")
+                    annStr = " ";
+                }
+                
+                // Affichage formate sur une largeur fixe
+                System.out.print(String.format("%-" + cellWidth + "s", annStr));
+                // Separateur vertical entre les blocs (3 colonnes par bloc)
+                if ((col + 1) % NB_SUBGRID == 0 && col < NB_NUM - 1) {
+                    System.out.print("| ");
+                }
+            }
+            System.out.println();
+            // Separateur horizontal entre les blocs (3 lignes par bloc)
+            if ((row + 1) % NB_SUBGRID == 0 && row < NB_NUM - 1) {
+                // Construction d'une ligne de separation adaptee a la largeur totale
+                String separator = "";
+                for (int i = 0; i < NB_NUM; i++) {
+                    separator += String.format("%" + cellWidth + "s", "").replace(" ", "-");
+                    if ((i + 1) % NB_SUBGRID == 0 && i < NB_NUM - 1) {
+                        separator += "+";
+                    }
+                }
+                System.out.println(separator);
+            }
+        }
+    }
 
 }

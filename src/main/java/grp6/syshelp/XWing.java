@@ -3,7 +3,14 @@ package grp6.syshelp;
 import java.util.ArrayList;
 import java.util.List;
 import grp6.sudocore.*;
-
+/**
+ * Cette classe représente la technique NakedSingleton.
+ * 
+ * Elle permet de trouver les singletons nus(1 chiffre apparaissant uniquement dans une case d'une unité(ligne colones carré)). 
+ * @author 
+ * @see InterfaceTech Contenant les méthodes des techniques
+ * 
+ */
 public class XWing implements InterfaceTech {
 
     @Override

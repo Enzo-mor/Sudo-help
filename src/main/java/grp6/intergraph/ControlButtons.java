@@ -1,5 +1,6 @@
 package grp6.intergraph;
 import grp6.sudocore.*;
+import grp6.syshelp.*;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -60,15 +61,13 @@ public class ControlButtons {
         Button restartButton = new Button("Recommencer");
 
         //SYSHELP
-        Button sysHelpButton = new Button("Sudo-Help");
         Button autoAnnotButton = new Button("AA");
 
         //SYSHELP
-        sysHelpButton.setStyle("-fx-background-color: purple; -fx-text-fill: white;");
-        autoAnnotButton.setStyle("-fx-background-color: purple; -fx-text-fill: white;");
+        StyledContent.applyButtonStyle(autoAnnotButton);
 
         //SYSHELP
-        sysHelpButton.setOnAction(e -> {
+        helpButton.setOnAction(e -> {
             Help help = SysHelp.generateHelp(sudokuGame.getGrid());
             if(help != null){
                 System.out.println(help);
@@ -92,8 +91,6 @@ public class ControlButtons {
                 }
             }
         });
-        Button checkButton = new Button("Verifier");
-        Button restartButton = new Button("Recommencer");
 
         // Appliquer le style aux boutons
         StyledContent.applyButtonStyle(undoButton);
