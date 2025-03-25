@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
 
+/**
+ * Cette classe represente la technique du singleton caché.
+ * Elle permet de savoir si dans une ligne, une colonne ou un carré on peut enlever des annotations.
+ * @author DUBOIS Gabriel
+ * @see InterfaceTech Contenant les méthodes des techniques
+ */
 public class HiddenSingle implements InterfaceTech {
 
     @Override
@@ -56,6 +62,11 @@ public class HiddenSingle implements InterfaceTech {
         return null;
     }
 
+    /**
+     * Permet de savoir combien d'occurence de chiffre il y a dans le tableau de cellul
+     * @param tab tableau de cellule
+     * @return un tableau du nombre d'occurence de chaque chiffre
+     */
     private int[] nb_Num_Annotations(Cell[] tab){
         int[] compteur;
         compteur=new int[Grid.NB_NUM+1];
