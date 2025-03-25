@@ -97,4 +97,16 @@ public interface Cell {
      * @return position d'une cellule
      */
     public int[] getPosition();
+
+    /** 
+     * Recuperer les annotations de la cellule
+     * @return Liste des annotations 
+     */
+    public boolean[] getAnnotationsBool();
+
+    /**
+     * Permet de decter si un tableau d'annotation ne contient qu'une entrée
+     * @return un boolean qui est vrai quand il n'y a qu'une annotation
+     */
+    public boolean OnlyOneAnnotation(); 
 }

@@ -28,9 +28,18 @@ public final class FlexCell extends FixCell {
     /**
      * Constructeur de la classe 'FlexCell'.
      */
-    public FlexCell() {
-        super(0);
+    public FlexCell(int y, int x) {
+        super(0, y, x);
         // Initialise le tableau des annotations à false
+        this.annotations = new boolean[Grid.NB_NUM];
+        this.annotationsList = new ArrayList<>();
+    }
+
+    /**
+     * Constructeur de la classe 'FlexCell'.
+     */
+    public FlexCell() {
+        super(0, 0, 0);
         this.annotations = new boolean[Grid.NB_NUM];
         this.annotationsList = new ArrayList<>();
     }
@@ -163,11 +172,25 @@ public final class FlexCell extends FixCell {
      */
     @Override
     public Cell clone() {
-        // Clone profond : création d'une nouvelle instance de FlexCell,
+        // Clone profond : creation d'une nouvelle instance de FlexCell,
         // et copie des annotations.
         FlexCell clonedCell = new FlexCell();
         clonedCell.number = this.number;
         clonedCell.annotations = this.annotations.clone(); // Clonage profond du tableau d'annotations.
         return clonedCell;
+    }
+
+    /**
+     * Permet de decter si un tableau d'annotation ne contient qu'une entree
+     * @return un boolean qui est vrai quand il n'y a qu'une annotation
+     */
+    public boolean OnlyOneAnnotation() {
+        int count =0;
+        for(int i = 0;i<annotations.length;i++){
+            if(annotations[i]){
+                count++;
+            }
+        }
+        return count == 1;
     }
 }
