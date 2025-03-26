@@ -26,14 +26,13 @@ public class HiddenSingle implements InterfaceTech {
             tab_square=nb_Num_Annotations(grille.getFlatSubGrid(tab[0], tab[1]));   
             
             for(int j=0; j<Grid.NB_NUM; j++){
-                System.out.println(tab_column[j]);
                 
                 if(tab_line[j]==1 ){
                     int pos[] = grille.getLine(i)[tab_line[Grid.NB_NUM]].getPosition();
                     aide.addPos(pos[0], pos[1]);
                     aide.addLine(i);
                     aide.setMessage(1,"Tu peux utiliser le singleton caché");
-                    aide.setMessage(2,"La technique est utilisable avec un"+j);
+                    aide.setMessage(2,"La technique est utilisable avec un "+(j+1));
                     aide.setMessage( 3,"Regarde ici");
                     return aide;
                 }if( tab_column[j]==1 ){
@@ -41,7 +40,7 @@ public class HiddenSingle implements InterfaceTech {
                     aide.addPos(pos[0], pos[1]);
                     aide.addColumn(i);
                     aide.setMessage(1,"Tu peux utiliser le singleton caché");
-                    aide.setMessage(2,"La technique est utilisable avec un"+j);
+                    aide.setMessage(2,"La technique est utilisable avec un "+(j+1));
                     aide.setMessage( 3,"Regarde ici");
                     return aide;
                 } if (tab_square[j]==1){
@@ -49,7 +48,7 @@ public class HiddenSingle implements InterfaceTech {
                     aide.addPos(pos[0], pos[1]);
                     aide.addSquare(i);
                     aide.setMessage(1,"Tu peux utiliser le singleton caché");
-                    aide.setMessage(2,"La technique est utilisable avec un"+j);
+                    aide.setMessage(2,"La technique est utilisable avec un "+(j+1));
                     aide.setMessage( 3,"Regarde ici");
                     return aide;
 
@@ -75,8 +74,10 @@ public class HiddenSingle implements InterfaceTech {
                     compteur[j]++;
                 }
             }
+           // System.out.println("compteur"+tab[i].getAnnotations());
             
         }
+
 
         for(int i=0;i<Grid.NB_NUM;i++){
             if(compteur[i]==1){
@@ -175,7 +176,6 @@ public class HiddenSingle implements InterfaceTech {
 
         
         AutoAnnotation.generate(grille);
-
         
         System.out.println();
 

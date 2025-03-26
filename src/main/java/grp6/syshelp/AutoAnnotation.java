@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import grp6.sudocore.Cell;
-import grp6.sudocore.FlexCell;
 import grp6.sudocore.Grid;
 
 /**
@@ -26,7 +25,7 @@ public class AutoAnnotation {
         for(int i = 0; i < Grid.NB_NUM; i++) {
             for(int j = 0; j < Grid.NB_NUM; j++) {
                 Cell cell = grid.getCell(i, j);
-                if(cell instanceof FlexCell)
+                if(cell.isEmpty() )
                     generate(grid, cell, i, j);
             }
         }
