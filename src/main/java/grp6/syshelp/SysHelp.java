@@ -42,8 +42,8 @@ public class SysHelp {
         //TECHNIQUES.add(new NakedPairs());       //  5-Paires nus
         //TECHNIQUES.add(new NakedTriples());     //  6-Triplets nus
         TECHNIQUES.add(new HiddenSingle());     //  7-Singletons cachés
-        //TECHNIQUES.add(new HiddenPairs());      //  8-Paires cachées 
-        //TECHNIQUES.add(new HiddenTriples());    //  9-Triplets cachés
+        TECHNIQUES.add(new HiddenPairs());      //  8-Paires cachées 
+        TECHNIQUES.add(new HiddenTriples());    //  9-Triplets cachés
         TECHNIQUES.add(new PointingPairs());    // 10-Paires pointantes
         TECHNIQUES.add(new PointingTriples());  // 11-Triplets pointants
         TECHNIQUES.add(new XWing());            // 12-XWing

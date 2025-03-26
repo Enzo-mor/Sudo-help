@@ -16,7 +16,7 @@ import grp6.sudocore.Grid;
  * @version 1.0     
  * @since 2025-03-25
  */
-public class HiddenTriple extends HiddenPairs {
+public class HiddenTriples extends HiddenPairs {
 
     protected int getHiddenLength() {
         return 3;
@@ -84,7 +84,7 @@ public class HiddenTriple extends HiddenPairs {
         System.out.println("\n");
 
         // Création d'une instance de la technique des paires pointantes
-        HiddenTriple triple = new HiddenTriple();
+        HiddenTriples triple = new HiddenTriples();
 
         // Détection
         System.out.println("triple pointantes  détectées ? " + triple.getHelp(grille));

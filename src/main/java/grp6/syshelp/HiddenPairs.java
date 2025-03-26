@@ -60,7 +60,7 @@ public class HiddenPairs implements InterfaceTech{
      * cette methode permet de retourner la cellule cachée.
      * @param cell : la cellule à partir de laquelle on cherche la cellule cachée
      * @param otherCells : les autres cellules de la ligne, colonne ou sous grille de la cellule
-     * @return la cellule cachée si elle existe, null sinon
+     * @return les cellules cachée si elles existent, null sinon
      */
     private ArrayList<Cell> getHiddenCell(Cell cell,Cell[] otherCells) {
         ArrayList<Integer> candidates = new ArrayList<>();
