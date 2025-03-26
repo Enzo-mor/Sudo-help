@@ -75,20 +75,22 @@ public class PointingPairs implements InterfaceTech{
 
                     int globalRow = startRow + row0;
                     help.addSquare(i, j);
-                    help.setMessage(1,"veuillez faire attention aux annotions  "+annotation+" dans la sous grille"); 
+                    help.setMessage(1,"veuillez faire attention aux annotations  "+annotation+" dans la sous grille"); 
 
                    // Cas 1 : les deux cellules sont sur la même ligne dans le bloc
                    if (row0 == row1) {
                     
                    help.addLine(globalRow);
-                   help.setMessage(2,"veuillez  appliquer la technique "+this.getName() +" sur la ligne "+globalRow+1);
+                   help.setMessage(2,"veuillez faire attention aux annotations "+annotation+" sur la ligne "+globalRow+1);
+                   help.setMessage(3,"veuillez  appliquer la technique "+this.getName() +" sur la ligne "+globalRow+1);
                    return help;
                 }
 
                 else{
                     int globalCol = startCol + col0;
                     help.addColumn(globalCol);
-                    help.setMessage(2,"veuillez  appliquer la technique "+this.getName()+" sur la colonne "+globalCol);
+                    help.setMessage(2,"veuillez faire attention aux annotations "+annotation+" sur la colonne "+globalCol+1);
+                    help.setMessage(2,"veuillez  appliquer la technique "+this.getName()+" sur la colonne "+globalCol+1);
                     return help;
 
 

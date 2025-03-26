@@ -122,33 +122,36 @@ public class HiddenPairs implements InterfaceTech{
 
                      if(SubgridCell!=null){
                         ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), SubgridCell.getLast())).boxed().toList());
-                        help.setMessage(1,"veuillez faire attention aux annotions  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")) +" dans la sous grille à laquelle se trouve la cellule à la ligne "+(i+1)+" et colonne "+(j+1));
-                        help.setMessage(2,"veuillez appliquer la technique de "+getName()+ " aux cellules dans la sous grille ("+grille.NB_SUBGRID+"*"+grille.NB_SUBGRID  +") ou se trouve la cellule situé à la ligne "+(i+1)+" et colonne "+(j+1));
+                        help.setMessage(1,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")) +"dans sous les grilles("+grille.NB_SUBGRID+"*"+grille.NB_SUBGRID  +")");
+                        help.setMessage(2,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")) +" dans la sous grille à laquelle se trouve la cellule à la ligne "+(i+1)+" et colonne "+(j+1));
+                        help.setMessage(3,"veuillez appliquer la technique de "+getName()+ " aux cellules dans la sous grille ("+grille.NB_SUBGRID+"*"+grille.NB_SUBGRID  +") ou se trouve la cellule situé à la ligne "+(i+1)+" et colonne "+(j+1));
                         help.addSquare(SubgridCell.getLast().getPosition()[0], SubgridCell.getLast().getPosition()[1]);
                         return help;
                     }
 
                     else if(LineCell!=null){
                         ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), LineCell.getLast())).boxed().toList());
-                        help.setMessage(1,"veuillez faire attention aux annotions  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")) +" sur la ligne "+(i+1));
+                        help.setMessage(1,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")));
+                        help.setMessage(2,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")) +" sur la ligne "+(i+1));
 
-                        String message="veuillez appliquer la technique de "+getName()+ " aux cellules suivante située  : \nla ligne "+(i+1)+"et colonnes "+(j+1)+"\n";
+                        String message="veuillez appliquer la technique de "+getName()+ " aux cellules suivante située  : \nla ligne "+(i+1)+"et colonne "+(j+1)+"\n";
                         for(Cell cell:LineCell){
                             message+="la ligne "+(i+1)+" et colonne "+(cell.getPosition()[1]+1)+"\n";
                             help.addPos(cell.getPosition()[0], cell.getPosition()[1]);
                         }
-                        help.setMessage(2,message);
+                        help.setMessage(3,message);
                        
                         return help;
                     }else if(ColumnCell!=null){
                         ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), ColumnCell.getLast())).boxed().toList());
-                        help.setMessage(1,"veuillez faire attention aux annotions  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", "))+" sur la colonne "+(j+1));
-                        String message="veuillez appliquer la technique de "+getName()+ " aux cellules suivante située  : \nla ligne "+(i+1)+"et colonnes "+(j+1)+"\n";
+                        help.setMessage(1,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")));
+                        help.setMessage(2,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", "))+" sur la colonne "+(j+1));
+                        String message="veuillez appliquer la technique de "+getName()+ " aux cellules suivantes situées  : \nla ligne "+(i+1)+"et colonne "+(j+1)+"\n";
                         for(Cell cell:ColumnCell){
                             message+="la ligne "+(cell.getPosition()[0]+1)+" et colonne "+(j+1)+"\n";
                             help.addPos(cell.getPosition()[0], cell.getPosition()[1]);
                         }
-                        help.setMessage(2,message);
+                        help.setMessage(3,message);
                         return help;
                     }
                     
