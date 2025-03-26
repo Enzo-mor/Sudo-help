@@ -107,16 +107,16 @@ public class ProfileSelection {
         navigation.setAlignment(Pos.CENTER);
         navigation.setStyle("-fx-background-color: #939cb5;");
         
-        Button guestButton = new ProfileButton("Continuer en tant qu'invité");
+        Button guestButton = new Button("Continuer en tant qu'invité");
         guestButton.setOnAction(e -> {
             instance = null;
             MainMenu.showMainMenu(stage, selectedProfile);
         });
         
-        Button quitButton = new ProfileButton("Quitter");
+        Button quitButton = new Button("Quitter");
         quitButton.setOnAction(e -> Platform.exit());
 
-        Button addProfileButton = new ProfileButton("Ajouter un profil");
+        Button addProfileButton = new Button("Ajouter un profil");
         addProfileButton.setOnAction(e -> showAddProfilePopup(stage, profileContainer, leftArrow, rightArrow));
         
         StyledContent.applyButtonBoxStyle(guestButton);

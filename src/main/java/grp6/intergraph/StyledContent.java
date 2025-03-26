@@ -296,10 +296,12 @@ public class StyledContent {
             if (indexHelp <= 3) {
                 SudokuGame.setHelpText(actualHelp.getMessage(indexHelp));
                 ControlButtons.setCurrentHelp(indexHelp);
-            }
-
-            if (indexHelp == 3) {
-                SudokuDisplay.highlightCells(SudokuGrid.getGridPane(), actualHelp.getDisplay());
+                if (indexHelp == 2) {
+                    MainMenu.getProfile().addTech(actualHelp.getName());
+                }
+                if (indexHelp == 3) {
+                    SudokuDisplay.highlightCells(SudokuGrid.getGridPane(), actualHelp.getDisplay());
+                }
             }
         
             // Désactiver le bouton si l'index dépasse 3

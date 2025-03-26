@@ -817,7 +817,6 @@ public final class Game {
         actions.clear();
     }
 
-
     public static void main(String[] args) {
 
         try{

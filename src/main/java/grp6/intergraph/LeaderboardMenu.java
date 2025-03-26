@@ -86,9 +86,9 @@ public class LeaderboardMenu {
         updateLeaderboard(leaderboardContainer);
 
         // Bouton retour
-        Button backButton = new ProfileButton("Retour");
+        Button backButton = new Button("Retour");
         StyledContent.applyButtonStyle(backButton);
-        backButton.setOnAction(e -> GameplayChoice.showGameplayChoice(stage));
+        backButton.setOnAction(e -> MainMenu.showMainMenu(stage, MainMenu.getProfile()));
 
         // Mise en page
         HBox navigation = new HBox(20, leftArrow, difficultyLabel, rightArrow);
@@ -148,7 +148,7 @@ public class LeaderboardMenu {
         leaderboardContainer.getChildren().clear();
 
         if (selectedGridId == -1) {
-            leaderboardContainer.getChildren().add(new Label("Aucune grille disponible."));
+            leaderboardContainer.getChildren().add(new Label("Aucun classement disponible."));
             return;
         }
 

@@ -1,8 +1,10 @@
 package grp6.intergraph;
 import grp6.sudocore.*;
 import grp6.sudocore.SudoTypes.GameState;
+import grp6.syshelp.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -76,6 +78,11 @@ public class SudokuGame {
      */
     private static Label helpText;
 
+    /** 
+     * Fenetre de technique pour le jeu 
+     */
+    private static VBox techniqueOverlay;
+
 
     /**
      * Affiche la fenetre du jeu Sudoku.
@@ -123,13 +130,8 @@ public class SudokuGame {
         Button bookButton = new Button();
         bookButton.setGraphic(bookIcon);
         bookButton.setStyle("-fx-background-color: transparent;");
-        
-        ImageView infoIcon = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/info.png")));
-        infoIcon.setFitWidth(30);
-        infoIcon.setFitHeight(30);
-        Button infoButton = new Button();
-        infoButton.setGraphic(infoIcon);
-        infoButton.setStyle("-fx-background-color: transparent;");
+
+        bookButton.setOnAction(e -> showTechniquesOverlay());
 
         // --- Barre de menu en haut ---
         HBox leftBox = new HBox(homeButton);
@@ -138,7 +140,7 @@ public class SudokuGame {
         HBox centerBox = new HBox(timerLabel);
         centerBox.setAlignment(Pos.CENTER);
 
-        HBox rightBox = new HBox(10, bookButton, infoButton);
+        HBox rightBox = new HBox(10, bookButton);
         rightBox.setAlignment(Pos.CENTER_RIGHT);
 
         BorderPane topBar = new BorderPane();
@@ -209,9 +211,18 @@ public class SudokuGame {
 
         VBox mainLayout = new VBox(10, topBar, layout);
 
+        // Création du panneau de techniques (au départ caché)
+        techniqueOverlay = new VBox();
+        techniqueOverlay.setAlignment(Pos.CENTER);
+        techniqueOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+        techniqueOverlay.setVisible(false);
+
+        // Empiler le panneau de techniques par-dessus le reste
+        StackPane rootStack = new StackPane(mainLayout, techniqueOverlay);
+        
         // --- BorderPane pour organiser la mise en page ---
         BorderPane root = new BorderPane();
-        root.setCenter(mainLayout); // Place le menu principal au centre
+        root.setCenter(rootStack);
 
         Scene scene = new Scene(root, 935, 570);
         primaryStage.setTitle(selectedSudoku.getName() + " - " + MainMenu.getProfileName());
@@ -220,7 +231,7 @@ public class SudokuGame {
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.show();
 
-        // Verification automatique de la fin du jeu
+        // --- Verification automatique de la fin du jeu
         gameStateChecker.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event -> {
             if (actualGame.getGameState() == GameState.FINISHED) {
                 
@@ -247,7 +258,7 @@ public class SudokuGame {
     }
 
     /**
-     * Affiche une boîte de dialogue de confirmation pour quitter le jeu.
+     * Affiche une boite de dialogue de confirmation pour quitter le jeu.
      * Cette methode permet a l'utilisateur de retourner au menu de selection ou au menu principal.
      * 
      * @param primaryStage La fenetre principale de l'application [Stage]
@@ -263,9 +274,13 @@ public class SudokuGame {
         alert.setTitle("Retour au menu");
         alert.setHeaderText("Voulez-vous retourner au menu de sélection ou au menu principal ?");
         
-        Button menuSelectButton = new ProfileButton("Menu Sélection");
-        Button menuButton = new ProfileButton("Menu Principal");
-        Button cancelButton = new ProfileButton("Annuler");
+        Button menuSelectButton = new Button("Menu Sélection");
+        Button menuButton = new Button("Menu Principal");
+        Button cancelButton = new Button("Annuler");
+
+        StyledContent.applyButtonStyle(menuSelectButton);
+        StyledContent.applyButtonStyle(menuButton);
+        StyledContent.applyButtonStyle(cancelButton);
         
         // Traitement de quand on clique sur le bouton de retour au choix du sudoku
         menuSelectButton.setOnAction(e -> {
@@ -329,4 +344,89 @@ public class SudokuGame {
     public static void setHelpText(String text) {
         helpText.setText(text);
     }
+
+    /**
+     * Methode pour afficher le panneau de technique
+     */
+    private static void showTechniquesOverlay() {
+        if (actualGame != null) {
+            actualGame.pauseGame();
+            gameStateChecker.stop();
+        }
+    
+        List<Technique> techniques = MainMenu.getProfile().getUnlockedTechniques();
+    
+        // Conteneur principal
+        VBox contentBox = new VBox(20);
+        contentBox.setMaxWidth(300);
+        contentBox.setAlignment(Pos.TOP_CENTER);
+        contentBox.setPadding(new Insets(10));
+        contentBox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
+    
+        Label title = new Label("Mes techniques");
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+    
+        VBox techniquesBox = new VBox(10);
+        techniquesBox.setPadding(new Insets(10));
+        techniquesBox.setAlignment(Pos.TOP_CENTER);
+    
+        ScrollPane scrollPane = new ScrollPane(techniquesBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(150);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+    
+        // Panneau de description (initialement invisible)
+        VBox descriptionBox = new VBox(10);
+        descriptionBox.setPadding(new Insets(10));
+        descriptionBox.setAlignment(Pos.TOP_CENTER);
+        descriptionBox.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
+        descriptionBox.setVisible(false);
+    
+        Label descriptionLabel = new Label();
+        descriptionLabel.setWrapText(true);
+        descriptionLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: normal;");
+    
+        // Bouton unique pour gérer "Fermer" et "Retour"
+        Button actionButton = new Button("Fermer");
+        StyledContent.applyButtonStyle(actionButton);
+    
+        actionButton.setOnAction(e -> {
+            if (descriptionBox.isVisible()) {
+                // Si on est sur la description -> Revenir à la liste
+                descriptionBox.setVisible(false);
+                scrollPane.setVisible(true);
+                actionButton.setText("Fermer");
+            } else {
+                // Sinon, fermer la fenêtre
+                techniqueOverlay.setVisible(false);
+                if (actualGame != null) {
+                    actualGame.resumeGame();
+                }
+                gameStateChecker.setCycleCount(Animation.INDEFINITE);
+                gameStateChecker.play();
+            }
+        });
+    
+        descriptionBox.getChildren().add(descriptionLabel);
+    
+        // Ajout des boutons de techniques
+        for (Technique technique : techniques) {
+            Button techButton = new Button(technique.getName());
+            StyledContent.applyButtonBoxStyle(techButton);
+            techButton.setOnAction(e -> {
+                descriptionLabel.setText(technique.getLongDesc());
+                scrollPane.setVisible(false);
+                descriptionBox.setVisible(true);
+                actionButton.setText("Retour");
+            });
+            techniquesBox.getChildren().add(techButton);
+        }
+    
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(scrollPane, descriptionBox);
+    
+        contentBox.getChildren().addAll(title, stackPane, actionButton);
+        techniqueOverlay.getChildren().setAll(contentBox);
+        techniqueOverlay.setVisible(true);
+    }    
 }

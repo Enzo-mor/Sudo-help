@@ -36,13 +36,13 @@ public class GameplayChoice {
         Label choiceLabel = new Label("Choix du mode");
         choiceLabel.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
-        // Choix du jeu sur une ligne horizontale
-        HBox gameMode = new HBox(20);
+        // Choix du jeu sur une ligne verticale
+        VBox gameMode = new VBox(20);
         gameMode.setAlignment(Pos.CENTER);
 
-        Button learningMode = new ProfileButton("Mode Apprentissage");
-        Button freeMode = new ProfileButton("Mode Libre");
-        Button exitButton = new ProfileButton("Retour");
+        Button learningMode = new Button("Mode Apprentissage");
+        Button freeMode = new Button("Mode Libre");
+        Button exitButton = new Button("Retour");
 
         // Appliquer le style SudokuBox sur les boutons learningMode et freeMode
         StyledContent.applyButtonBoxStyle(learningMode);
@@ -55,7 +55,7 @@ public class GameplayChoice {
         freeMode.setOnAction(e -> SudokuMenu.showSudokuLibrary(stage));
         exitButton.setOnAction(e -> MainMenu.showMainMenu(stage, MainMenu.getProfile()));
 
-        gameMode.getChildren().addAll(learningMode, freeMode);
+        gameMode.getChildren().addAll(freeMode, learningMode);
 
         layout.getChildren().addAll(choiceLabel, gameMode, exitButton);
 

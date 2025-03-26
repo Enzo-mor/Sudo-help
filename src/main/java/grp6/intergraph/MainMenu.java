@@ -65,17 +65,17 @@ public class MainMenu {
         welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         // Bouton pour demarrer une partie
-        Button startGameButton = new ProfileButton("Jouer");
+        Button startGameButton = new Button("Jouer");
         StyledContent.applyButtonBoxStyle(startGameButton);
         startGameButton.setOnAction(e -> GameplayChoice.showGameplayChoice(stage));
 
         // Bouton pour afficher le classement
-        Button classementButton = new ProfileButton("Classement");
+        Button classementButton = new Button("Classement");
         StyledContent.applyButtonBoxStyle(classementButton);
         classementButton.setOnAction(e -> LeaderboardMenu.showLeaderBoard(stage));
 
         // Bouton pour quitter l'application
-        Button exitButton = new ProfileButton("Quitter");
+        Button exitButton = new Button("Quitter");
         StyledContent.applyButtonBoxStyle(exitButton);
         exitButton.setOnAction(e -> {
             settingsWindow.close();

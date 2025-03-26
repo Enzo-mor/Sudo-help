@@ -1,9 +1,10 @@
 package grp6.syshelp;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import grp6.sudocore.Grid;
+import grp6.sudocore.*;
 
 /**
  * Cette classe représente une aide qui sera apportée par le Système d'aide.

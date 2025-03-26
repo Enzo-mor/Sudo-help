@@ -91,7 +91,7 @@ public class SudokuMenu {
         HBox navigation = new HBox(20, leftArrow, sudokuContainer, rightArrow);
         navigation.setAlignment(Pos.CENTER);
 
-        Button backButton = new ProfileButton("Retour");
+        Button backButton = new Button("Retour");
         StyledContent.applyButtonStyle(backButton);
         backButton.setOnAction(e -> GameplayChoice.showGameplayChoice(stage));
 

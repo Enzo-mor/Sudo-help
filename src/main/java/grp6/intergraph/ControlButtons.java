@@ -97,6 +97,7 @@ public class ControlButtons {
             help = SysHelp.generateHelp(sudokuGame.getGrid());
             currentHelp = 1;
             if(help != null) {
+                System.out.println(help);
                 SudokuGame.setHelpText(help.getMessage(currentHelp));
                 SudokuGame.setHelpOverlayTrue();
             }else{

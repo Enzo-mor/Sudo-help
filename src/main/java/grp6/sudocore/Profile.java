@@ -1,6 +1,9 @@
 package grp6.sudocore;
 
 import java.sql.SQLException;
+import grp6.syshelp.Technique;
+import java.util.*;
+import java.sql.*;
 
 /**
  * Classe representant les profils.
@@ -48,11 +51,125 @@ public class Profile {
     /***
      * Permet de sauvegarder un profil dans la base de donnees.
      * Avant d'appeler cette methode, la base de donnees doit d'abord etre initialise.
-     * @throws SQLException Lève une exception en cas d'erreur de connexion
+     * @throws SQLException Leve une exception en cas d'erreur de connexion
      * @see DBManager
      */
     public void save() throws SQLException{
         DBManager.saveProfile(this);
     }
+
+    /**
+     * Recuperation des techniques debloquees par un joueur
+     * 
+     * @return Liste des techniques debloquees par un joueur
+     */
+    public List<Technique> getUnlockedTechniques() {
+        List<Technique> tech = new ArrayList<>();
+
+        String query = "SELECT t.id_tech, t.name, t.short_desc, t.long_desc " +
+                   "FROM possedeTech p " +
+                   "JOIN tech t ON p.id_tech = t.id_tech " +
+                   "JOIN profile pr ON p.player = pr.id_profile " +
+                   "WHERE pr.pseudo = ?;";
+        try(Connection connexion = DBManager.getConnection();
+            PreparedStatement pstmt = connexion.prepareStatement(query)) {
+
+            pstmt.setString(1, this.pseudo); 
+            ResultSet rs = pstmt.executeQuery();
+
+            while(rs.next()) {
+                int id = rs.getInt("id_tech");
+                String name = rs.getString("name");
+                String shortDesc = rs.getString("short_desc");
+                String longDesc = rs.getString("long_desc");
+                String data = rs.getString("cells");
+
+                tech.add(new Technique(id, name, shortDesc, longDesc, data));
+            }
+        }
+        catch(Exception e) {
+            SudoLog.erreur(e.toString());
+        }
+
+        return tech;
+    }
+
+    /**
+     * Ajoute une technique au profil en mettant a jour la base de donnees.
+     * Si la technique existe deja, le compteur est incremente.
+     * Sinon, une nouvelle entree est creee.
+     * 
+     * @param name Nom de la technique a ajouter.
+     */
+    public void addTech(String name) {
+        String findQuery = "SELECT p.count FROM possedeTech p " +
+                        "JOIN tech t ON p.id_tech = t.id_tech " +
+                        "JOIN profile pr ON p.player = pr.id_profile " +
+                        "WHERE pr.pseudo = ? AND t.name = ?;";
+
+        String updateQuery = "UPDATE possedeTech SET count = count + 1 " +
+                            "WHERE player = (SELECT id_profile FROM profile WHERE pseudo = ?) " +
+                            "AND id_tech = (SELECT id_tech FROM tech WHERE name = ?);";
+
+        String insertQuery = "INSERT INTO possedeTech (player, id_tech, count) " +
+                            "VALUES ((SELECT id_profile FROM profile WHERE pseudo = ?), " +
+                            "(SELECT id_tech FROM tech WHERE name = ?), 1);";
+
+        try(Connection connexion = DBManager.getConnection();
+            PreparedStatement findStmt = connexion.prepareStatement(findQuery);
+            PreparedStatement updateStmt = connexion.prepareStatement(updateQuery);
+            PreparedStatement insertStmt = connexion.prepareStatement(insertQuery)) {
+
+            findStmt.setString(1, this.pseudo);
+            findStmt.setString(2, name);
+            ResultSet rs = findStmt.executeQuery();
+
+            if(rs.next()) {
+                // La technique existe deja = on met a jour 'count'
+                updateStmt.setString(1, this.pseudo);
+                updateStmt.setString(2, name);
+                updateStmt.executeUpdate();
+                SudoLog.debug("Ajout dans la bdd");
+            }
+            else {
+                // La technique n'existe pas encore = on l'insere
+                insertStmt.setString(1, this.pseudo);
+                insertStmt.setString(2, name);
+                insertStmt.executeUpdate();
+                SudoLog.debug("Creer dans la bdd");
+            }
+
+        }
+        catch(SQLException e) {
+            SudoLog.erreur("Erreur SQL : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Supprime toutes les techniques associees au profil dans la base de donnees.
+     */
+    public void removeAllTech() {
+        String deleteQuery = "DELETE FROM possedeTech " +
+                            "WHERE player = (SELECT id_profile FROM profile WHERE pseudo = ?);";
+
+        try(Connection connexion = DBManager.getConnection();
+            PreparedStatement pstmt = connexion.prepareStatement(deleteQuery)) {
+
+            pstmt.setString(1, this.pseudo);
+            int affectedRows = pstmt.executeUpdate();
+
+            if(affectedRows > 0) {
+                System.out.println("Toutes les techniques ont ete supprimees pour le profil: " + this.pseudo);
+            }
+            else {
+                System.out.println("Aucune technique trouvee pour le profil: " + this.pseudo);
+            }
+
+        }
+        catch(SQLException e) {
+            SudoLog.erreur("Erreur SQL lors de la suppression des techniques : " + e.getMessage());
+        }
+    }
+
 
 }

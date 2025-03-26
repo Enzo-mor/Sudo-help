@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import grp6.syshelp.*;
 
 import grp6.sudocore.SudoTypes.Difficulty;
 
@@ -52,16 +53,18 @@ public final class DBManager {
     public static void init() throws SQLException {
         File databaseFile = new File(DATABASE_PATH);
 
-        System.out.println("Base de donnees SQLite : " + DATABASE_PATH);
+        SudoLog.log("Base de donnees SQLite : " + DATABASE_PATH);
 
         if(databaseFile.exists()) {
-            System.out.println("La base de donnees existe deja, le script ne sera pas execute.");
+            SudoLog.log("La base de donnees existe deja, le script ne sera pas execute.");
         } else {
             try(Connection connection = DriverManager.getConnection(DATABASE_URL)) {
-                System.out.println("Connexion a la base de donnees SQLite reussie.");
+                SudoLog.log("Connexion a la base de donnees SQLite reussie.");
                 executeSqlScript(connection, "grid");
                 executeSqlScript(connection, "profile");
                 executeSqlScript(connection, "game");
+                executeSqlScript(connection, "tech");
+                executeSqlScript(connection, "possedeTech");
             }
         }
     }
@@ -71,7 +74,7 @@ public final class DBManager {
      * @return Connection SQLite
      * @throws SQLException en cas d'erreur de connexion
      */
-    private static Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException {
         conn = DriverManager.getConnection(DATABASE_URL);
         if(conn == null || conn.isClosed()) {
             throw new SQLException("Tentative d'acces a une base de donnees fermee.");
@@ -86,10 +89,10 @@ public final class DBManager {
         try {
             if(conn != null && !conn.isClosed()) {
                 conn.close();
-                System.out.println("Connexion SQLite fermee.");
+                SudoLog.log("Connexion SQLite fermee.");
             }
         } catch(SQLException e) {
-            System.err.println("Erreur lors de la fermeture de la connexion : " + e.getMessage());
+            SudoLog.erreur("Erreur lors de la fermeture de la connexion : " + e.getMessage());
         }
     }
 
@@ -102,7 +105,7 @@ public final class DBManager {
      * @throws SQLException leve une exception de type SQL en cas de probleme de connexion
      * @throws RuntimeException leve cette exception si le fichier du script SQL est introuvable
      */
-    private static void executeSqlScript(Connection connection, String scriptName) throws SQLException, RuntimeException {
+    public static void executeSqlScript(Connection connection, String scriptName) throws SQLException, RuntimeException {
         String scriptPath = "/bdd/" + scriptName + ".sql";
         try(InputStream inputStream = DBManager.class.getResourceAsStream(scriptPath);
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
@@ -131,10 +134,8 @@ public final class DBManager {
      * Verifie si une table existe dans la Base de donnees.
      * @param tableName Nom de la table dans la Base de donnees
      * @return vrai si la table existe, faux sinon
-     * 
-     * @throws SQLException leve une exception en cas d'erreur de connexion
      */
-    private static boolean tableExists(String tableName) throws SQLException {
+    public static boolean tableExists(String tableName) {
         String query = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
     
         try(Connection connection = getConnection();
@@ -312,7 +313,7 @@ public final class DBManager {
     public static void saveProfile(Profile profile) throws SQLException {
 
         if(!tableExists("profile")) {
-            System.err.println("La table 'profile' n'existe pas. Initialisation en cours...");
+            SudoLog.warning("La table 'profile' n'existe pas. Initialisation en cours...");
             executeSqlScript(getConnection(), "profile");
         }
 
@@ -351,8 +352,9 @@ public final class DBManager {
             if (rs.next()) {
                 return rs.getInt(1) > 0; // Retourne true si au moins un profil est trouve
             }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la verification de l'existence du profil : " + e.getMessage());
+        }
+        catch(SQLException e) {
+            SudoLog.erreur("Erreur lors de la verification de l'existence du profil : " + e.toString());
         }
         return false;
     }
@@ -396,8 +398,9 @@ public final class DBManager {
                     res.add(game);
                 }
             }
-        } catch(SQLException e) {
-            System.err.println("Erreur lors de la suppression des jeux pour le profil : " + e.getMessage());
+        }
+        catch(SQLException e) {
+            //System.err.println("Erreur lors de la suppression des jeux pour le profil : " + e.getMessage());
             throw new RuntimeException("Erreur lors de l'execution du script: " + e);
         }
 
@@ -419,7 +422,8 @@ public final class DBManager {
                         .toList();
             }
             return games;
-        } catch (SQLException e) {
+        }
+        catch(SQLException e) {
             System.err.println("Erreur lors de la suppression des jeux pour le profil : " + e.getMessage());
             return new ArrayList<>();
         }
@@ -440,7 +444,7 @@ public final class DBManager {
             return pstmt.executeUpdate() > 0;
         }
         catch(SQLException e) {
-            e.printStackTrace();
+            SudoLog.erreur(e.toString());
             return false;
         }
     }
@@ -458,8 +462,9 @@ public final class DBManager {
             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, pseudo);
             return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        catch (SQLException e) {
+            SudoLog.erreur(e.toString());
             return false;
         }
     }
@@ -474,8 +479,9 @@ public final class DBManager {
         try (Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        catch(SQLException e) {
+            SudoLog.erreur(e.toString());
         }
     }
 
@@ -489,8 +495,9 @@ public final class DBManager {
         try (Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        catch(SQLException e) {
+            SudoLog.erreur(e.toString());
         }
     }
 
@@ -503,14 +510,18 @@ public final class DBManager {
      */
     public static boolean deleteProfile(String pseudo) throws SQLException {
 
+        Profile pro = getProfile(pseudo);
+        pro.removeAllTech();
+
         deleteAllGamesForProfile(pseudo);
         String query = "DELETE FROM profile WHERE pseudo = ?";
-        try (Connection conn = getConnection();
+        try(Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, pseudo);
             return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        catch(SQLException e) {
+            SudoLog.erreur(e.toString());
             return false;
         }
     }
@@ -538,7 +549,7 @@ public final class DBManager {
                     "actions = excluded.actions, " +  
                     "elapsed_time = excluded.elapsed_time, " +  
                     "game_state = excluded.game_state";
-        try (Connection conn = getConnection();
+        try(Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setLong(1, game.getId());
@@ -554,8 +565,9 @@ public final class DBManager {
 
             pstmt.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        catch(SQLException e) {
+            SudoLog.erreur(e.toString());
         }
     }
 
@@ -584,7 +596,7 @@ public final class DBManager {
 
         SudoTypes.Difficulty diff;
 
-        if ("facile".equals(difficulty)) {
+        if("facile".equals(difficulty)) {
             diff = SudoTypes.Difficulty.EASY;
         }
         else if("difficile".equals(difficulty)) {
@@ -631,7 +643,8 @@ public final class DBManager {
             if(DBManager.profileExists(name)) {
                 return false;
             }
-        } catch(Exception e) {
+        }
+        catch(Exception e) {
             System.err.println("renameProfile: " + e);
             return false;
         }
@@ -654,8 +667,9 @@ public final class DBManager {
             }
             return false;
             
-        } catch(SQLException e) {
-            e.printStackTrace();
+        }
+        catch(SQLException e) {
+            SudoLog.erreur(e.toString());
             return false;
         }
     }
@@ -678,8 +692,9 @@ public final class DBManager {
             while (rs.next()) {
                 topPlayers.add(new Player(rs.getString("player"), rs.getInt("score")));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        catch(SQLException e) {
+            SudoLog.erreur(e.toString());
         }
 
         return topPlayers;
@@ -712,42 +727,64 @@ public final class DBManager {
         // Requete SQL pour recuperer les grilles triees par ID croissant
         String query = "SELECT id_grid FROM grid WHERE difficulty = ? ORDER BY id_grid ASC";
 
-        try (Connection conn = getConnection();
+        try(Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(query)) {
             
             pstmt.setString(1, difficulty);
             ResultSet rs = pstmt.executeQuery();
             
             int num = 1; 
-            while (rs.next()) {
+            while(rs.next()) {
                 int id = rs.getInt("id_grid");
                 String name = "Sudoku " + prefix + "-" + num; 
                 grids.put(id, name);
                 num++;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        catch(SQLException e) {
+            SudoLog.erreur(e.toString());
         }
 
-        if (grids.isEmpty()) {
+        if(grids.isEmpty()) {
             System.out.println("Aucune grille trouvee pour la difficulte : " + difficulty);
         }
 
         return grids;
     }
 
+    /**
+     * Recuperation des techniques
+     */
+    public List<Technique> getTechs() {
+        List<Technique> res = new ArrayList<>();
 
-    public static void main(String[] args) {
         try {
-            DBManager.init();
-        // DBManager.getGames();
-            DBManager.getGamesForProfile("jaques").forEach(t->System.out.println(t.getHistoActions()));;
-        // System.out.println(DBManager.getProfile("jea"));
-            //DBManager.saveGame(new Game(DBManager.getGrid(2),new Profile("pierre")));
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            // TODO: handle exception
+            if(!tableExists("tech")) {
+                System.err.println("La table 'tech' n'existe pas. Initialisation en cours...");
+                executeSqlScript(getConnection(), "tech");
+            }
 
+            String query = "SELECT * FROM tech";
+            try(Connection connexion = getConnection();
+                PreparedStatement pstmt = connexion.prepareStatement(query)) {
+
+                ResultSet rs = pstmt.executeQuery();
+
+                while(rs.next()) {
+                    int id = rs.getInt("id_tech");
+                    String name = rs.getString("name");
+                    String shortDesc = rs.getString("short_desc");
+                    String longDesc = rs.getString("long_desc");
+
+                    res.add(new Technique(id, name, shortDesc, longDesc));
+                }
+            }
         }
+        catch(SQLException e) {
+            throw new RuntimeException("Erreur lors du chargement des techniques: " + e);
+        }
+
+        return res;
     }
+
 }
