@@ -72,13 +72,6 @@ public class PointingPairs implements InterfaceTech{
                     int row0 = positions.get(0)[0];
                     int row1 = positions.get(1)[0];
                     int col0 = positions.get(0)[1];
-                    int col1 = positions.get(1)[1];
-
-
-                    int globalRow0 = startRow + row0;
-                    int globalCol0 = startCol + col0;
-                    int globalRow1 = startRow + row1;
-                    int globalCol1 = startCol + col1;
 
                     int globalRow = startRow + row0;
                     help.addSquare(i, j);
@@ -142,7 +135,7 @@ public class PointingPairs implements InterfaceTech{
         System.out.println("\n");
 
         // Création d'une instance de la technique des paires pointantes
-        PointingPairs pointingTriple = new PointingPairs();
+        PointingPairs pointingTriple = new PointingTriples();
 
         // Détection
         System.out.println("triple pointantes  détectées ? " + pointingTriple.getHelp(grille));
