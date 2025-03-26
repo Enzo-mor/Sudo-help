@@ -53,12 +53,14 @@ public class SudoLog {
      */
     private static void write(String title, String color, String msg) {
         // Récupérer la classe et la méthode appelante à l'aide de StackWalker
-        String target = StackWalker.getInstance()
+        String pckg = StackWalker.getInstance()
                 .walk(frames -> frames.skip(2).findFirst().get().getClassName());
+        String method = StackWalker.getInstance()
+                .walk(frames -> frames.skip(2).findFirst().get().getMethodName());
 
         // Afficher le log formaté
         System.out.println(COLOR_RESET + "[" + color + title + COLOR_RESET + "]" 
-                + "[" + COLOR_GRAY_LIGHT + target + COLOR_RESET + "]: " + msg);
+                + "[" + COLOR_GRAY_LIGHT + pckg + "." + method + COLOR_RESET + "]: " + msg);
     }
 
     /**
@@ -80,12 +82,12 @@ public class SudoLog {
     }
 
     /**
-     * Écrit un log dans le terminal avec le niveau "ERREUR".
+     * Écrit un log dans le terminal avec le niveau "ERROR".
      * 
      * @param msg Message du log.
      */
-    public static void erreur(String msg) {
-        write("ERREUR", COLOR_RED, msg);
+    public static void error(String msg) {
+        write("ERROR", COLOR_RED, msg);
     }
 
     /**

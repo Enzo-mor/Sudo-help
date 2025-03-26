@@ -92,7 +92,7 @@ public final class DBManager {
                 SudoLog.log("Connexion SQLite fermee.");
             }
         } catch(SQLException e) {
-            SudoLog.erreur("Erreur lors de la fermeture de la connexion : " + e.getMessage());
+            SudoLog.error("Erreur lors de la fermeture de la connexion : " + e.getMessage());
         }
     }
 
@@ -124,9 +124,9 @@ public final class DBManager {
                     sql.setLength(0); // Reinitialise le buffer
                 }
             }
-            System.out.println("Script SQL execute avec succes.");
+            SudoLog.log("Script SQL execute avec succes: '" + scriptName + "'");
         } catch(Exception e) {
-            System.err.println("Erreur lors de l'execution du script SQL : " + e.getMessage());
+            SudoLog.error("Erreur lors de l'execution du script SQL '" + scriptName + "' : " + e.getMessage());
         }
     }
 
@@ -354,7 +354,7 @@ public final class DBManager {
             }
         }
         catch(SQLException e) {
-            SudoLog.erreur("Erreur lors de la verification de l'existence du profil : " + e.toString());
+            SudoLog.error("Erreur lors de la verification de l'existence du profil : " + e.toString());
         }
         return false;
     }
@@ -444,7 +444,7 @@ public final class DBManager {
             return pstmt.executeUpdate() > 0;
         }
         catch(SQLException e) {
-            SudoLog.erreur(e.toString());
+            SudoLog.error(e.toString());
             return false;
         }
     }
@@ -464,7 +464,7 @@ public final class DBManager {
             return pstmt.executeUpdate() > 0;
         }
         catch (SQLException e) {
-            SudoLog.erreur(e.toString());
+            SudoLog.error(e.toString());
             return false;
         }
     }
@@ -481,7 +481,7 @@ public final class DBManager {
             pstmt.executeUpdate();
         }
         catch(SQLException e) {
-            SudoLog.erreur(e.toString());
+            SudoLog.error(e.toString());
         }
     }
 
@@ -497,7 +497,7 @@ public final class DBManager {
             pstmt.executeUpdate();
         }
         catch(SQLException e) {
-            SudoLog.erreur(e.toString());
+            SudoLog.error(e.toString());
         }
     }
 
@@ -521,7 +521,7 @@ public final class DBManager {
             return pstmt.executeUpdate() > 0;
         }
         catch(SQLException e) {
-            SudoLog.erreur(e.toString());
+            SudoLog.error(e.toString());
             return false;
         }
     }
@@ -567,7 +567,7 @@ public final class DBManager {
 
         }
         catch(SQLException e) {
-            SudoLog.erreur(e.toString());
+            SudoLog.error(e.toString());
         }
     }
 
@@ -669,7 +669,7 @@ public final class DBManager {
             
         }
         catch(SQLException e) {
-            SudoLog.erreur(e.toString());
+            SudoLog.error(e.toString());
             return false;
         }
     }
@@ -694,7 +694,7 @@ public final class DBManager {
             }
         }
         catch(SQLException e) {
-            SudoLog.erreur(e.toString());
+            SudoLog.error(e.toString());
         }
 
         return topPlayers;
@@ -742,7 +742,7 @@ public final class DBManager {
             }
         }
         catch(SQLException e) {
-            SudoLog.erreur(e.toString());
+            SudoLog.error(e.toString());
         }
 
         if(grids.isEmpty()) {
@@ -775,8 +775,9 @@ public final class DBManager {
                     String name = rs.getString("name");
                     String shortDesc = rs.getString("short_desc");
                     String longDesc = rs.getString("long_desc");
+                    String data = rs.getString("cells");
 
-                    res.add(new Technique(id, name, shortDesc, longDesc));
+                    res.add(new Technique(id, name, shortDesc, longDesc, data));
                 }
             }
         }
