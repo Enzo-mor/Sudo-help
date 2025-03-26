@@ -1,17 +1,12 @@
 package grp6.syshelp;
-import grp6.sudocore.Cell;
-import grp6.sudocore.Grid;
-
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.IntStream;
 
-/**
- * Cette classe représente la technique LastPossible.
- * @author 
- * @version 1.0     
- */
+import grp6.sudocore.Cell;
+import grp6.sudocore.Grid;
+
 public class LastPossible implements InterfaceTech{
     private static int SOLO = 1;
     
@@ -47,8 +42,8 @@ public class LastPossible implements InterfaceTech{
                     Help h =new Help(this.getClass().getSimpleName());
                     h.addSquare(j%3,j/3);
 
-                    aide.setMessage(1,"Fait attention au "+i);
-                    aide.setMessage(2,"Fait attention aux Carré (3*3) "+leCarre(j));
+                    aide.setMessage(1,"Fais attention aux "+i);
+                    aide.setMessage(2,"Fais attention au Carré (3*3) "+leCarre(j));
                     aide.setMessage(3,"Regarde dans cette zone");
                     return h;
                 }
@@ -89,7 +84,6 @@ public class LastPossible implements InterfaceTech{
                          9,1,0,0,0,0,0,0,0};
         Grid grilleCarre =new Grid(dataCarre);
         AutoAnnotation.generate(grilleCarre);
-        
         System.out.println(grilleCarre.toString());
 
         LastPossible v = new LastPossible();
