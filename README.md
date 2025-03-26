@@ -7,7 +7,7 @@ C'est un projet développé en **JAVA**. Sudo-help est une application qui a pou
 - **Documentaliste :** Rasson Emma - [Emma.Rasson.Etu@univ-lemans.fr](mailto:Emma.Rasson.Etu@univ-lemans.fr)
 - **Groupe :**
     - Perron Nathan - [Nathan.Perron.Etu@univ-lemans.fr](mailto:Nathan.Perron.Etu@univ-lemans.fr)
-    - Dubois Grabriel - [Grabriel.Dubois.Etu@univ-lemans.fr](mailto:Grabriel.Dubois.Etu@univ-lemans.fr)
+    - Dubois Gabriel - [Gabriel.Dubois.Etu@univ-lemans.fr](mailto:Gabriel.Dubois.Etu@univ-lemans.fr)
     - Pousse Kilian - [Kilian.Pousse.Etu@univ-lemans.fr](mailto:Kilian.Pousse.Etu@univ-lemans.fr)
     - Nganga Yabie Taïse de These - [Taise_de_These.Nganga_Yabie.Etu@univ-lemans.fr](mailto:Taise_de_These.Nganga_Yabie.Etu@univ-lemans.fr)
     - Grammont Dylan - [Dylan.Grammont.Etu@univ-lemans.fr](mailto:Dylan.Grammont.Etu@univ-lemans.fr)

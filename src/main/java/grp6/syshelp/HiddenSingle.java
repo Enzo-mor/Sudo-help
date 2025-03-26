@@ -61,7 +61,7 @@ public class HiddenSingle implements InterfaceTech {
     }
 
     /**
-     * Permet de savoir combien d'occurence de chiffre il y a dans le tableau de cellul
+     * Permet de savoir combien d'occurence de chiffre il y a dans le tableau de cellule
      * @param tab tableau de cellule
      * @return un tableau du nombre d'occurence de chaque chiffre
      */
@@ -173,9 +173,10 @@ public class HiddenSingle implements InterfaceTech {
         addAnnotations(grille.getCell(5, 3), new int[]{3, 4, 7, 8, 1});
         addAnnotations(grille.getCell(5, 4), new int[]{3, 4, 7, 8});*/
 
+        
         AutoAnnotation.generate(grille);
 
-      
+        
         System.out.println();
 
         

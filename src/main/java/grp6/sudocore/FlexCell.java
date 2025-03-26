@@ -193,4 +193,14 @@ public final class FlexCell extends FixCell {
         }
         return count == 1;
     }
+
+
+    /** 
+     * Recuperer les annotations de la cellule
+     * @return Liste des annotations 
+     */
+    @Override
+    public boolean[] getAnnotationsBool() {
+        return annotations;
+    }
 }
