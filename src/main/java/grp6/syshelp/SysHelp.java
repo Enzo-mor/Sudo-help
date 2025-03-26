@@ -76,7 +76,7 @@ public class SysHelp {
         Grid clone = g.clone();
         SudoLog.debug("Generation des annotations");
        // AutoAnnotation.generate(clone);
-       Optional<Help> help = TECHNIQUES.parallelStream()
+       Optional<Help> help = TECHNIQUES.stream()
                                         .filter(tech -> { 
                                             SudoLog.debug("Teste avec " + tech.getClass().getSimpleName());
                                             return tech.getHelp(clone) != null;
