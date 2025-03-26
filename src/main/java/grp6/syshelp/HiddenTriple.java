@@ -22,9 +22,14 @@ public class HiddenTriple extends HiddenPairs {
         return 3;
     }
 
+    /**
+     * Permet de récupérer le nom de la technique
+     * @return String le nom de la technique
+     */
     public String getName() {
         return "Triplets cachés";
     }
+
 
     protected int[] getCandidate(Cell cell1,Cell cell2){
            List<Integer>candidates= cell1.getAnnotations();
@@ -34,7 +39,11 @@ public class HiddenTriple extends HiddenPairs {
            }
            return null;
     }
-
+    /**
+     * Permet de savoir si une cellule a des annotations cachées
+     * @param cell la cellule à vérifier
+     * @return boolean true si la cellule a des annotations cachées, false sinon
+     */
     protected Boolean hasPossibleCellHidden(Cell cell){
         return cell.isEditable() && cell.getAnnotations().size() >= 3;
     }

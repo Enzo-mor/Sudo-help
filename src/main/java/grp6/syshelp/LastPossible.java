@@ -7,6 +7,11 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.IntStream;
 
+/**
+ * Cette classe représente la technique LastPossible.
+ * @author 
+ * @version 1.0     
+ */
 public class LastPossible implements InterfaceTech{
     private static int SOLO = 1;
     
@@ -84,6 +89,7 @@ public class LastPossible implements InterfaceTech{
                          9,1,0,0,0,0,0,0,0};
         Grid grilleCarre =new Grid(dataCarre);
         AutoAnnotation.generate(grilleCarre);
+        
         System.out.println(grilleCarre.toString());
 
         LastPossible v = new LastPossible();

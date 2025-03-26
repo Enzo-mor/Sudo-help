@@ -173,9 +173,10 @@ public class HiddenSingle implements InterfaceTech {
         addAnnotations(grille.getCell(5, 3), new int[]{3, 4, 7, 8, 1});
         addAnnotations(grille.getCell(5, 4), new int[]{3, 4, 7, 8});*/
 
+        
         AutoAnnotation.generate(grille);
 
-      
+        
         System.out.println();
 
         
