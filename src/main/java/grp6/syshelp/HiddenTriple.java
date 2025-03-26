@@ -62,7 +62,11 @@ public class HiddenTriple extends HiddenPairs {
         
         grille.getCell(0, 1).addAnnotation(4);
         grille.getCell(0, 1).addAnnotation(5);
-        grille.getCell(0, 2).addAnnotation(8);
+
+        grille.getCell(0, 2).addAnnotation(2);
+        grille.getCell(0, 2).addAnnotation(4);
+        grille.getCell(0, 2).addAnnotation(5);
+        grille.getCell(0, 3).addAnnotation(8);
         //grille.getCell(0, 2).addAnnotation(4);
 
        // grille.printAnnotationsGrid();
