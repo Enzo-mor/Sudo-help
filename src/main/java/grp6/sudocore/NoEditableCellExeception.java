@@ -5,7 +5,6 @@ package grp6.sudocore;
  * (non modifiable).
  * 
  * @author DE THESE Taise
- * @see ReadOnlyCell Classe représentant une cellule en lecture seule.
  * @see Cell Interface des cellules dans la grille.
  */
 public class NoEditableCellExeception extends RuntimeException {

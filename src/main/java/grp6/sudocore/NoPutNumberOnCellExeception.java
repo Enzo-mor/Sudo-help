@@ -4,7 +4,6 @@ package grp6.sudocore;
  * non modifiable.
  * 
  * @author DE THESE Taise
- * @see ReadOnlyCell Classe representant une cellule en lecture seule.
  * @see Cell Interface des cellules dans la grille.
  */
 public class NoPutNumberOnCellExeception extends RuntimeException {
