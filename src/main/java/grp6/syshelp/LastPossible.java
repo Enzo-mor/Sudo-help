@@ -34,8 +34,6 @@ public class LastPossible implements InterfaceTech{
             //on verifie si il y a qu'une annotation dans la region
             for (int j = 0; j < 9; j++){
                 if (tabCarre.get(j).size() == 1){
-                    int[] pos = mat[j/3][j%3].getPosition();
-                    aide.addPos(pos[0], pos[1]);
                     aide.addSquare(i);
                     aide.setMessage(1, "Fais attention aux "+tabCarre.get(j).get(0));
                     aide.setMessage(2, "Le chiffre "+tabCarre.get(j).get(0)+" est le seul possible dans la région");
