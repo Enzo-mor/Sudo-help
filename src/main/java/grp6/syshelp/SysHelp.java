@@ -79,7 +79,7 @@ public class SysHelp {
        Optional<Help> help = TECHNIQUES.parallelStream()
                                         .filter(tech -> { 
                                             SudoLog.debug("Teste avec " + tech.getClass().getSimpleName());
-                                            return tech.getHelp(clone.clone()) != null;
+                                            return tech.getHelp(clone) != null;
                                              })
                                          .reduce((a, b) -> Math.random() > 0.5 ? a : b)
                                          .map(tech -> tech.getHelp(clone)); 
