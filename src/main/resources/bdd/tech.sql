@@ -41,7 +41,7 @@ INSERT INTO tech (name, short_desc, long_desc, cells) VALUES
 (
     'LastNumber',
     'Description courte LastNumber',
-    'Description longue LastNumber, je suis et donc anticonstitutionnellement la te je mais ou et donc or ni car qui que quoi comment quand pourquoi ainsi coucou salut hello bonjour au revoir ici de nous vous ils enzo emma nathan kilian lina alban gabriel louison dylan victor vincent |||| Description longue LastNumber, je suis et donc la te je mais ou et donc or ni car qui que quoi comment quand pourquoi ainsi coucou salut hello bonjour au revoir ici de nous vous ils enzo emma nathan kilian lina alban gabriel louison dylan vict',
+    'Description longue LastNumber, je suis et donc anticonstitutionnellement la te je mais ou et donc or ni car qui que quoi comment quand pourquoi ainsi coucou salut hello bonjour au revoir ici de nous vous ils enzo emma nathan kilian lina alban gabriel louison dylan victor vincent |||| Description longue LastNumber, je suis et donc la te je mais ou et donc or ni car qui que quoi comment quand pourquoi ainsi coucou salut hello bonjour au revoir ici de nous vous ils enzo emma nathan kilian lina alban',
     '000000000000000000000000000000000000000000000000000000000000000000000000000000000'
 ),
 

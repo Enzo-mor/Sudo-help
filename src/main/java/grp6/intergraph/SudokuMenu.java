@@ -13,11 +13,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 
@@ -41,6 +43,11 @@ public class SudokuMenu {
      * Variable qui garde en memoire la page actuelle du menu de Sudokus.
      */
     private static int currentPage = 0;
+
+    /**
+     * Fenetre de confirmation pour reprendre ou recommencer une partie
+     */
+    private static VBox confirmationBox;
 
     /**
      * Affiche la bibliotheque des grilles de Sudoku disponibles pour l'utilisateur.
@@ -99,7 +106,18 @@ public class SudokuMenu {
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(10));
 
-        Scene scene = new Scene(layout, 900, 600);
+        confirmationBox = new VBox(10);
+        confirmationBox.setAlignment(Pos.CENTER);
+        confirmationBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+        confirmationBox.setVisible(false);
+
+        StackPane stackLayout = new StackPane(layout, confirmationBox);
+
+        // --- BorderPane pour organiser la mise en page ---
+        BorderPane root = new BorderPane();
+        root.setCenter(stackLayout);
+
+        Scene scene = new Scene(root, 900, 600);
         stage.setTitle("Mode Libre - " + MainMenu.getProfileName());
         stage.setScene(scene);
         stage.show();
@@ -244,35 +262,7 @@ public class SudokuMenu {
             final int selectedSudokuId = i;
             sudokuBox.setOnMouseClicked(e -> {
                 if(sudoku.getStatus() == GameState.IN_PROGRESS || sudoku.getStatus() == GameState.FINISHED) {
-                
-                    // Creer une nouvelle petite fenetre pop-up (fenetre modale)
-                    Stage popupStage = new Stage();
-                    popupStage.initModality(Modality.APPLICATION_MODAL); // Bloquer les interactions avec la fenetre principale
-                    popupStage.setTitle("Confirmation"); // Titre de la fenetre
-                
-                    // Composants de l'interface utilisateur
-                    Button restartButton = getNewRestartButton(stage, sudokus, selectedSudokuId, popupStage);
-                    
-                    VBox popupLayout;
-                    if(sudoku.getStatus() == GameState.IN_PROGRESS) {
-                        Label label = new Label("Voulez vous reprendre votre partie en cours ou recommencer de zéro ?");
-                        Button reloadButton = getNewReloadButton(stage, sudokus, selectedSudokuId, popupStage);
-                        popupLayout = new VBox(10, label, reloadButton, restartButton);
-                    }
-                    else {
-                        Label label = new Label("Voulez vous recommencer ?");
-                        popupLayout = new VBox(10, label, restartButton);
-                    }
-                    
-                    // Creer une mise en page verticale avec un espacement entre les elements
-                    popupLayout.setPadding(new Insets(10)); // Ajouter une marge pour une meilleure apparence
-                
-                    // Creer et appliquer la scene a la fenetre pop-up
-                    Scene scene = new Scene(popupLayout, 300, 150);
-                    popupStage.setScene(scene);
-                
-                    // Afficher la fenetre pop-up et attendre l'interaction de l'utilisateur
-                    popupStage.showAndWait();
+                    showConfirmationPopup(stage, sudoku, sudokus, selectedSudokuId);
                 }
                 else {
                     Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
@@ -299,16 +289,16 @@ public class SudokuMenu {
     }
 
     /**
-     * Cree un bouton pour recommencer un jeu a partir de la fenetre pop-up.
+     * Cree un bouton pour recommencer un jeu a partir de la boite de confirmation.
      * 
      * @param stage La fenetre principale.
      * @param sudokus La liste des Sudokus disponibles.
      * @param selectedSudokuId L'identifiant du Sudoku selectionne.
-     * @param popupStage La fenetre pop-up.
+     * @param confirmationBox La boite de confirmation a masquer apres action.
      * @return Le bouton de recommencement.
      */
-    private static Button getNewRestartButton(Stage stage, List<Sudoku> sudokus, int selectedSudokuId, Stage popupStage) {
-        Button restartButton = new Button("Recommencer"); // Bouton pour confirmer la creation du profil
+    private static Button getNewRestartButton(Stage stage, List<Sudoku> sudokus, int selectedSudokuId) {
+        Button restartButton = new Button("Recommencer");
     
         restartButton.setOnAction(event -> {
             Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
@@ -320,32 +310,85 @@ public class SudokuMenu {
             selectedSudoku.setStatus(GameState.NOT_STARTED);
             selectedSudoku.getGame().setGameState(GameState.NOT_STARTED);
             SudokuGame.showSudokuGame(stage, selectedSudoku);
-            popupStage.close();
+            confirmationBox.setVisible(false); // Masquer la confirmationBox
         });
     
         return restartButton;
     }
 
     /**
-     * Cree un bouton pour reprendre un jeu a partir de la fenetre pop-up.
+     * Cree un bouton pour reprendre un jeu a partir de la boite de confirmation.
      * 
      * @param stage La fenetre principale.
      * @param sudokus La liste des Sudokus disponibles.
      * @param selectedSudokuId L'identifiant du Sudoku selectionne.
-     * @param popupStage La fenetre pop-up.
+     * @param confirmationBox La boite de confirmation a masque apres action.
      * @return Le bouton de reprise.
      */
-    private static Button getNewReloadButton(Stage stage, List<Sudoku> sudokus, int selectedSudokuId, Stage popupStage) {
-        Button reloadButton = new Button("Reprendre"); // Bouton pour confirmer la creation du profil
-
+    private static Button getNewReloadButton(Stage stage, List<Sudoku> sudokus, int selectedSudokuId) {
+        Button reloadButton = new Button("Reprendre");
+    
         reloadButton.setOnAction(event -> {
             Sudoku selectedSudoku = sudokus.get(selectedSudokuId);
             SudokuGame.showSudokuGame(stage, selectedSudoku);
-            popupStage.close();
+            confirmationBox.setVisible(false); // Masquer la confirmationBox
         });
-
+    
         return reloadButton;
     }
+
+    /**
+     * Methode pour affircher le panneau de confirmation pour reprendre ou recommencer une partie
+     * @param parentStage La fenetre principale de l'application [Stage].
+     * @param sudoku Le Sudoku actuellement selectionne [Sudoku].
+     * @param sudokus La liste de tous les Sudokus disponibles [List<Sudoku>].
+     * @param selectedSudokuId  L'identifiant du Sudoku selectionne [int].
+     */
+    private static void showConfirmationPopup(Stage parentStage, Sudoku sudoku, List<Sudoku> sudokus, int selectedSudokuId) {
+
+        // Conteneur principal
+        VBox contentBox = new VBox(20);
+        StyledContent.applyContentBoxStyle(contentBox);
+        contentBox.setMaxWidth(400);
+        contentBox.setAlignment(Pos.TOP_CENTER);
+        contentBox.setPadding(new Insets(10));
+
+        // Création du message de confirmation
+        Label messageLabel = new Label(sudoku.getStatus() == GameState.IN_PROGRESS 
+            ? "Voulez-vous reprendre votre partie en cours ou recommencer de zéro ?" 
+            : "Voulez-vous recommencer ?");
+        messageLabel.setWrapText(true);
+        messageLabel.setTextAlignment(TextAlignment.CENTER);
+        messageLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #343a40;");
+    
+        // Boutons
+        Button restartButton = getNewRestartButton(parentStage, sudokus, selectedSudokuId);
+        StyledContent.applyButtonStyle(restartButton);
+        restartButton.setText("Recommencer");
+    
+        Button closeButton = new Button("Annuler");
+        StyledContent.applyButtonStyle(closeButton);
+        closeButton.setOnAction(e -> confirmationBox.setVisible(false));  // Ferme la confirmationBox
+    
+        HBox buttonBox;
+        if (sudoku.getStatus() == GameState.IN_PROGRESS) {
+            Button reloadButton = getNewReloadButton(parentStage, sudokus, selectedSudokuId);
+            StyledContent.applyButtonStyle(reloadButton);
+            reloadButton.setText("Reprendre");
+            
+            buttonBox = new HBox(10, reloadButton, restartButton, closeButton);
+        } else {
+            buttonBox = new HBox(10, restartButton, closeButton);
+        }
+    
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setPadding(new Insets(10));
+
+        contentBox.getChildren().addAll(messageLabel, buttonBox);
+    
+        confirmationBox.getChildren().addAll(contentBox);
+        confirmationBox.setVisible(true);
+    }    
 }
 
 

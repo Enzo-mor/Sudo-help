@@ -5,12 +5,10 @@ import java.sql.SQLException;
 import grp6.sudocore.DBManager;
 import javafx.animation.*;
 import javafx.application.Platform;
-import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -54,7 +52,6 @@ class Settings extends Stage {
      */
     private static Settings instance = null;
 
-
     /**
      * Constructeur prive de la fenetre des parametres.
      * 
@@ -87,17 +84,47 @@ class Settings extends Stage {
         });
 
         ToggleSwitch toggleFullscreen = new ToggleSwitch("Mode plein écran", stage.isFullScreen());
-        ToggleSwitch toggleHighlightRowCol = new ToggleSwitch("Marquage lignes/colonnes", highlightRowCol);
-        ToggleSwitch toggleHighlightNumbers = new ToggleSwitch("Marquage des chiffres", highlightNumbers);
-        Button changeProfileButton = new Button("Changer de profil");
-        Button deleteProfileButton = new Button("Supprimer profil");
-
-        StyledContent.applyButtonStyle(changeProfileButton);
-        StyledContent.applyButtonWarningStyle(deleteProfileButton);
-
         VBox.setVgrow(toggleFullscreen, Priority.ALWAYS);
+        // Gérer l'événement du mode plein écran
+        toggleFullscreen.setOnToggleChanged((obs, oldState, newState) -> 
+            Platform.runLater(() -> stage.setFullScreen(newState))
+        );
+
+        ToggleSwitch toggleHighlightRowCol = new ToggleSwitch("Marquage lignes/colonnes", highlightRowCol);
         VBox.setVgrow(toggleHighlightRowCol, Priority.ALWAYS);
+        // Gérer l'événement du marquage lignes/colonnes
+        toggleHighlightRowCol.setOnToggleChanged((obs, oldState, newState) -> {
+            highlightRowCol = newState;
+            if (!highlightRowCol) {
+                if (SudokuGrid.getGridPane() != null)
+                SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
+            }
+        });
+        
+        ToggleSwitch toggleHighlightNumbers = new ToggleSwitch("Marquage des chiffres", highlightNumbers);
         VBox.setVgrow(toggleHighlightNumbers, Priority.ALWAYS);
+        // Gérer l'événement du marquage des chiffres
+        toggleHighlightNumbers.setOnToggleChanged((obs, oldState, newState) -> {
+            highlightNumbers = newState;
+            if (!highlightNumbers) {
+                if (SudokuGrid.getGridPane() != null)
+                SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
+            }
+        });
+        
+        Button changeProfileButton = new Button("Changer de profil");
+        StyledContent.applyButtonStyle(changeProfileButton);
+        // Gérer l'événement du bouton de changer de profil
+        changeProfileButton.setOnAction(e -> {
+            instance = null;
+            ProfileSelection.getInstance().showProfileSelection(stage);
+            this.close();
+        });
+        
+        Button deleteProfileButton = new Button("Supprimer profil");
+        StyledContent.applyButtonWarningStyle(deleteProfileButton);
+        // Gérer l'événement du bouton de suppression de profil
+        deleteProfileButton.setOnAction(e -> deleteProfile(stage));
 
         // Ajout d'un espaceur pour équilibrer la mise en page
         Region spacer = new Region();
@@ -108,40 +135,6 @@ class Settings extends Stage {
         VBox settingsLayout = new VBox(10, usernameBox, spacer, toggleFullscreen, toggleHighlightRowCol, toggleHighlightNumbers, spacer2, changeProfileButton, deleteProfileButton);
         settingsLayout.setStyle("-fx-padding: 20px;");
         settingsLayout.setPrefHeight(300);
-        
-        // Gérer l'événement du mode plein écran
-        toggleFullscreen.setOnToggleChanged((obs, oldState, newState) -> 
-            Platform.runLater(() -> stage.setFullScreen(newState))
-        );
-
-        // Gérer l'événement du marquage lignes/colonnes
-        toggleHighlightRowCol.setOnToggleChanged((obs, oldState, newState) -> {
-            highlightRowCol = newState;
-            if (!highlightRowCol) {
-                if (SudokuGrid.getGridPane() != null)
-                SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
-            }
-        });
-
-        // Gérer l'événement du marquage des chiffres
-        toggleHighlightNumbers.setOnToggleChanged((obs, oldState, newState) -> {
-            highlightNumbers = newState;
-            if (!highlightNumbers) {
-                if (SudokuGrid.getGridPane() != null)
-                SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
-            }
-        });
-        
-        // Gérer l'événement du bouton de changer de profil
-        changeProfileButton.setOnAction(e -> {
-            instance = null;
-            ProfileSelection.getInstance().showProfileSelection(stage);
-            this.close();
-        });
-        
-        // Gérer l'événement du bouton de suppression de profil
-        deleteProfileButton.setOnAction(e -> deleteProfile(stage, deleteProfileButton));
-        
 
         setScene(new Scene(settingsLayout, 275, 300));
         setResizable(false);
@@ -186,36 +179,19 @@ class Settings extends Stage {
 
     /**
      * Supprime le profil actuel et affiche une confirmation.
-     * 
+     *
      * @param stage Fenetre principale [Stage]
-     * @param deleteProfileButton Bouton de suppression du profil [Button]
      */
-    private void deleteProfile(Stage stage, Button deleteProfileButton) {
+    private void deleteProfile(Stage stage) {
         try {
             String profileName = MainMenu.getProfileName();
             DBManager.deleteProfile(profileName);
-            Stage popupStage = new Stage();
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.setTitle("Suppression");
-
-            Label message = new Label("Le profil '" + profileName + "' a été supprimé !");
-            message.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
-            VBox layout = new VBox(10, message);
-            layout.setAlignment(Pos.CENTER);
-            layout.setPadding(new Insets(10));
-
-            Scene scene = new Scene(layout, 300, 100);
-            popupStage.setScene(scene);
-            popupStage.setX(deleteProfileButton.getScene().getWindow().getX() + 200);
-            popupStage.setY(deleteProfileButton.getScene().getWindow().getY() + 100);
-            popupStage.show();
-
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), evt -> popupStage.close()));
-            timeline.setCycleCount(1);
-            timeline.play();
 
             instance = null;
             ProfileSelection.getInstance().showProfileSelection(stage);
+            
+            ProfileSelection.profileDeleteMessage(profileName);
+
             this.close();
         } catch (SQLException e) {
             System.err.println("Error deleting profile: " + e.getMessage());

@@ -1,9 +1,10 @@
 package grp6.intergraph;
 import grp6.syshelp.*;
-
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -344,7 +345,7 @@ public class StyledContent {
 
     /**
      * Applique un style a la zone de saisie passe en parametre
-     * @param textField TextField a stylise [TextField]
+     * @param textField TextField a styliser [TextField]
      */
     public static void styleTextField(TextField textField) {
         textField.setStyle(
@@ -387,5 +388,78 @@ public class StyledContent {
             "-fx-border-width: 1.5px; " +
             "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);"
         ));
+    }
+
+    /**
+     * Applique un style a une VBox
+     * @param contentBox VBox a styliser [VBox]
+     */
+    public static void applyContentBoxStyle(VBox contentBox) {
+        contentBox.setMaxWidth(350);
+        contentBox.setAlignment(Pos.TOP_CENTER);
+        contentBox.setPadding(new Insets(15));
+        contentBox.setStyle(
+            "-fx-background-color: linear-gradient(to bottom, #f8f8f8, #e0e0e0);" +
+            "-fx-border-color: #444;" +
+            "-fx-border-width: 2px;" +
+            "-fx-border-radius: 10px;" +
+            "-fx-background-radius: 10px; " +
+            "-fx-background-insets: 0; " +
+            "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 5);"
+        );
+    }
+
+    /**
+     * Applique un style a une HBox
+     * @param contentBox HBox a styliser [HBox]
+     */
+    public static void applyContentBoxStyle(HBox contentBox) {
+        contentBox.setMaxWidth(350);
+        contentBox.setAlignment(Pos.TOP_CENTER);
+        contentBox.setPadding(new Insets(15));
+        contentBox.setStyle(
+            "-fx-background-color: linear-gradient(to bottom, #f8f8f8, #e0e0e0);" +
+            "-fx-border-color: #444;" +
+            "-fx-border-width: 2px;" +
+            "-fx-border-radius: 10px;" +
+            "-fx-background-radius: 10px; " +
+            "-fx-background-insets: 0; " +
+            "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 5);"
+        );
+    }
+
+    /**
+     * Applique un style a un ScrollPane
+     * @param scrollPane ScrollPane a styliser [ScrollPane]
+     */
+    public static void applyScrollPaneStyle(ScrollPane scrollPane) {
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(150);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setStyle(
+            "-fx-background: transparent;" +
+            "-fx-border-color: #444;" +
+            "-fx-border-radius: 8px;" +
+            "-fx-background-radius: 8px; " +
+            "-fx-background-insets: 0; "
+        );
+    }
+
+    /**
+     * Applique un style pour la description des techniques present dans une VBox
+     * @param descriptionBox VBox a styliser [VBox]
+     */
+    public static void applyDescriptionBoxStyle(VBox descriptionBox) {
+        descriptionBox.setPadding(new Insets(10));
+        descriptionBox.setAlignment(Pos.TOP_CENTER);
+        descriptionBox.setStyle(
+            "-fx-background-color: white;" +
+            "-fx-border-color: black;" +
+            "-fx-border-width: 2px;" +
+            "-fx-border-radius: 10px;" +
+            "-fx-background-radius: 10px; " +
+            "-fx-background-insets: 0; " +
+            "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 8, 0, 0, 3);"
+        );
     }
 }

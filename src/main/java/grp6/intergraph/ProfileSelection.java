@@ -5,6 +5,8 @@ import grp6.sudocore.*;
 import java.sql.SQLException;
 import java.util.List;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,8 +14,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.stage.Modality;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.image.Image;
 
 /**
@@ -51,6 +54,15 @@ public class ProfileSelection {
      */
     private static ProfileSelection instance = null;
 
+    /**
+     * Fenetre d'ajout d'un nouveau profil
+     */
+    private static VBox createBox;
+
+    /**
+     * Fenetre d'information de profile supprimer
+     */
+    private static VBox profileDeleteMessage;
 
     /**
      * Constructeur prive pour le singleton
@@ -75,56 +87,71 @@ public class ProfileSelection {
      * @param stage Fenetre principale de l'application [Stage]
      */
     public void showProfileSelection(Stage stage) {
-        StackPane root = new StackPane();
-        VBox layout = new VBox(20);
-        layout.setAlignment(Pos.CENTER);
         
         Label titleLabel = new Label("Choisissez votre profil");
         titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
         HBox profileContainer = new HBox(20);
         profileContainer.setAlignment(Pos.CENTER);
-
+        
         Button leftArrow = new Button("<");
         leftArrow.setDisable(true);
         Button rightArrow = new Button(">");
-
+        
         StyledContent.applyArrowButtonStyle(leftArrow);
         StyledContent.applyArrowButtonStyle(rightArrow);
-
+        
         leftArrow.setOnAction(e -> {
             currentPage--;
             updateProfiles(profileContainer, leftArrow, rightArrow, stage);
         });
-
+        
         rightArrow.setOnAction(e -> {
             currentPage++;
             updateProfiles(profileContainer, leftArrow, rightArrow, stage);
         });
-
+        
         updateProfiles(profileContainer, leftArrow, rightArrow, stage);
         
         HBox navigation = new HBox(10, leftArrow, profileContainer, rightArrow);
+        StyledContent.applyContentBoxStyle(navigation);
+        navigation.setMaxWidth(500);
         navigation.setAlignment(Pos.CENTER);
-        navigation.setStyle("-fx-background-color: #939cb5;");
+        navigation.setPadding(new Insets(10));
+        
+        Button addProfileButton = new Button("Ajouter un profil");
+        StyledContent.applyButtonBoxStyle(addProfileButton);
+        addProfileButton.setOnAction(e -> showAddProfilePopup(stage, profileContainer, leftArrow, rightArrow));
         
         Button guestButton = new Button("Continuer en tant qu'invité");
+        StyledContent.applyButtonBoxStyle(guestButton);
         guestButton.setOnAction(e -> {
             instance = null;
             MainMenu.showMainMenu(stage, selectedProfile);
         });
         
         Button quitButton = new Button("Quitter");
-        quitButton.setOnAction(e -> Platform.exit());
-
-        Button addProfileButton = new Button("Ajouter un profil");
-        addProfileButton.setOnAction(e -> showAddProfilePopup(stage, profileContainer, leftArrow, rightArrow));
-        
-        StyledContent.applyButtonBoxStyle(guestButton);
         StyledContent.applyButtonBoxStyle(quitButton);
-        StyledContent.applyButtonBoxStyle(addProfileButton);
+        quitButton.setOnAction(e -> Platform.exit());
         
-        layout.getChildren().addAll(titleLabel, navigation, addProfileButton, guestButton, quitButton);
-        root.getChildren().add(layout);
+        VBox layout = new VBox(20, titleLabel, navigation, addProfileButton, guestButton, quitButton);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(10));
+        
+        createBox = new VBox(10);
+        createBox.setAlignment(Pos.CENTER);
+        createBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+        createBox.setVisible(false);
+
+        profileDeleteMessage = new VBox(10);
+        profileDeleteMessage.setAlignment(Pos.CENTER);
+        profileDeleteMessage.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+        profileDeleteMessage.setVisible(false);
+        
+        StackPane stackLayout = new StackPane(layout, createBox, profileDeleteMessage);
+
+        // --- BorderPane pour organiser la mise en page ---
+        BorderPane root = new BorderPane();
+        root.setCenter(stackLayout);
 
         Scene scene = new Scene(root, 640, 480);
         stage.setTitle("Choix du Profil");
@@ -170,23 +197,44 @@ public class ProfileSelection {
     }
 
     /**
-     * Affiche une fenetre pop-up pour ajouter un nouveau profil.
+     * Affiche un panneau de creation de profil.
+     * Cette methode permet a l'utilisateur d'ajouter un nouveau profil en saisissant un nom.
      * 
-     * @param stage Fenetre principale [Stage]
-     * @param profileContainer Conteneur des profils [HBox]
-     * @param leftArrow Bouton gauche de navigation [Button]
-     * @param rightArrow Bouton droit de navigation [Button]
+     * @param parentStage Fenetre principale de l'application [Stage].
+     * @param profileContainer Conteneur des profils [HBox].
+     * @param leftArrow Bouton gauche de navigation [Button].
+     * @param rightArrow Bouton droit de navigation [Button].
      */
-    private void showAddProfilePopup(Stage stage, HBox profileContainer, Button leftArrow, Button rightArrow) {
-        
-        Stage popupStage = new Stage();
-        popupStage.initModality(Modality.APPLICATION_MODAL);
-        popupStage.setTitle("Créer un profil");
+    private void showAddProfilePopup(Stage parentStage, HBox profileContainer, Button leftArrow, Button rightArrow) {
 
-        Label label = new Label("Entrez le nom du profil :");
+        // Vider createBox avant d'ajouter du contenu
+        createBox.getChildren().clear(); 
+
+        // Conteneur principal
+        VBox contentBox = new VBox(20);
+        StyledContent.applyContentBoxStyle(contentBox);
+        contentBox.setMaxWidth(400);
+        contentBox.setAlignment(Pos.TOP_CENTER);
+        contentBox.setPadding(new Insets(10));
+
+        // Création du message d'invite
+        Label messageLabel = new Label("Entrez le nom du profil :");
+        messageLabel.setWrapText(true);
+        messageLabel.setTextAlignment(TextAlignment.CENTER);
+        messageLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #343a40;");
+
+        // Champ de saisie
         TextField nameField = new TextField();
-        nameField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() > 20 ? null : change));
+        nameField.setTextFormatter(new TextFormatter<>(change -> 
+            change.getControlNewText().length() > 20 ? null : change
+        ));
+        nameField.setPromptText("ex : David");
+        StyledContent.styleTextField(nameField);
+
+        // Bouton de confirmation
         Button confirmButton = new Button("Créer");
+        StyledContent.applyButtonStyle(confirmButton);
+
         confirmButton.setOnAction(e -> {
             String name = nameField.getText().trim();
             try {
@@ -194,18 +242,55 @@ public class ProfileSelection {
                     Profile newProfile = new Profile(name);
                     profiles.add(newProfile);
                     DBManager.saveProfile(newProfile);
-                    updateProfiles(profileContainer, leftArrow, rightArrow, stage);
+                    updateProfiles(profileContainer, leftArrow, rightArrow, parentStage);
                 }
             } catch (SQLException ex) {
                 System.err.println("Error: " + ex.getMessage());
             }
-            popupStage.close();
+            createBox.setVisible(false);
         });
 
+        // Permet d'appuyer sur Entrée pour valider
         nameField.setOnAction(e -> confirmButton.fire());
-        VBox popupLayout = new VBox(10, label, nameField, confirmButton);
-        popupLayout.setPadding(new Insets(10));
-        popupStage.setScene(new Scene(popupLayout, 300, 150));
-        popupStage.showAndWait();
+
+        // Bouton d'annulation
+        Button cancelButton = new Button("Annuler");
+        StyledContent.applyButtonStyle(cancelButton);
+        cancelButton.setOnAction(e -> createBox.setVisible(false));
+
+        // Conteneur pour les boutons
+        HBox buttonBox = new HBox(10, confirmButton, cancelButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setPadding(new Insets(10));
+
+        contentBox.getChildren().addAll(messageLabel, nameField, buttonBox);
+
+        createBox.getChildren().addAll(contentBox);
+        createBox.setVisible(true);
+    }
+
+    public static void profileDeleteMessage(String profileName) {
+        // Vider le message précédent avant d'ajouter un nouveau
+        profileDeleteMessage.getChildren().clear();
+
+        // Conteneur principal
+        VBox contentBox = new VBox(20);
+        StyledContent.applyContentBoxStyle(contentBox);
+        contentBox.setMaxWidth(400);
+        contentBox.setAlignment(Pos.TOP_CENTER);
+        contentBox.setPadding(new Insets(10));
+
+        Label message = new Label("Le profil '" + profileName + "' a été supprimé !");
+        message.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+
+        contentBox.getChildren().addAll(message);
+
+        profileDeleteMessage.getChildren().add(contentBox);
+        profileDeleteMessage.setVisible(true);
+
+        // Cacher le message après 1 seconde
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1.5), evt -> profileDeleteMessage.setVisible(false)));
+        timeline.setCycleCount(1);
+        timeline.play();
     }
 }
