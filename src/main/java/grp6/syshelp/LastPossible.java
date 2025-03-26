@@ -7,48 +7,47 @@ import java.util.stream.IntStream;
 import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
 
+
+/**
+ * Cette classe permet d'obtenir une aide sur la grille de sudoku en se basant de  la technique de LastPossible.
+ * @see InterfaceTech
+ * @author ROQUAIN Louison /GRAMMONT Dylan
+ */
 public class LastPossible implements InterfaceTech{
-    private static int SOLO = 1;
     
     
     public Help getHelp(Grid grille){
         Help aide = new Help(getClass().getSimpleName());
 
-        for(int j=0; j<Grid.NB_NUM; j++){
-            int[] num =grille.numToPosForSubGrid(j);
-            Cell[] car_cells=grille.getFlatSubGrid(num[0],num[1]);
-            List<Cell> cellules = new ArrayList<>();
-            
-            for(int i= 0;i<9;i++) cellules.add(car_cells[i]);
+        for (int i = 0; i < Grid.NB_NUM;i++){
+            int[] indiceCell = grille.numToPosForSubGrid(i);
+            Cell mat[][] = grille.getSubGrid(indiceCell[0], indiceCell[1]);
 
-            
-            //On récupère toute les annotations de chaque cellule
-            List<boolean[]> annoteSolo =
-                cellules.parallelStream()
-                    .map(Cell::getAnnotationsBool)
-                    .collect(toList());
-            
-            //On compte le nombre d'occurrences qu'une annotation est présente dans le subGrid
-            int[] occurrences= new int[9];
-
-            annoteSolo.stream()
-                .forEach(b -> IntStream.range(0, b.length)
-                    .filter(ind -> b[ind])
-                    .forEach(ind -> occurrences[ind]++)
-                );
-            
-            for(int i=0;i<Grid.NB_NUM;i++)
-                if(occurrences[i]==SOLO){
-                    Help h =new Help(this.getClass().getSimpleName());
-                    h.addSquare(j%3,j/3);
-
-                    aide.setMessage(1,"Fais attention aux "+i);
-                    aide.setMessage(2,"Fais attention au Carré (3*3) "+leCarre(j));
-                    aide.setMessage(3,"Regarde dans cette zone");
-                    return h;
+            //On récupère les annotations de la région
+            ArrayList<List<Integer>> tabCarre = new ArrayList<List<Integer>>();
+            for (int j = 0; j < 3; j++){
+                for (int k = 0; k < 3; k++){
+                    tabCarre.add(mat[j][k].getAnnotations());
                 }
+            }
+
+            //on verifie si il y a qu'une annotation dans la region
+            for (int j = 0; j < 9; j++){
+                if (tabCarre.get(j).size() == 1){
+                    int[] pos = mat[j/3][j%3].getPosition();
+                    aide.addPos(pos[0], pos[1]);
+                    aide.addSquare(i);
+                    aide.setMessage(1, "Le chiffre "+tabCarre.get(j).get(0)+" est le seul possible dans la région");
+                    aide.setMessage(2, "Fais attention aux carrés");
+                    aide.setMessage(3, "Regarde ici");
+                    return aide;
+                }
+            }
         }
-        return null;
+        return aide;
+            
+            
+           
     }
 
 
@@ -79,13 +78,14 @@ public class LastPossible implements InterfaceTech{
                          0,0,8,0,0,0,0,0,0,
                          0,0,0,0,0,0,0,0,0,
                          0,0,0,0,0,0,0,0,0,
-                         0,0,0,0,8,0,0,0,0,
-                         0,6,0,0,5,0,0,0,0,
-                         9,1,0,0,0,0,0,0,0};
+                         5,4,3,0,8,0,0,0,0,
+                         0,6,2,0,0,0,0,0,0,
+                         9,1,7,0,0,0,0,0,0};
         Grid grilleCarre =new Grid(dataCarre);
         AutoAnnotation.generate(grilleCarre);
         System.out.println(grilleCarre.toString());
 
+        System.out.println(grilleCarre.getCell(7,0).getAnnotations());
         LastPossible v = new LastPossible();
         System.out.println(v.getHelp(grilleCarre));
     }
