@@ -61,6 +61,11 @@ public class NakedSingleton implements InterfaceTech {
         return null; // Aucun singleton nu trouvé
     }
 
+    /**
+     * Permet de récupérer l'annotation de la cellule
+     * @param c
+     * @return
+     */
     private int takeTheAnnotation(Cell c){
         for(int i=0;i<9;i++)if(c.getAnnotationsBool()[i])return i+1;
         return 0;

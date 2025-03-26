@@ -72,30 +72,25 @@ public class PointingPairs implements InterfaceTech{
                     int row0 = positions.get(0)[0];
                     int row1 = positions.get(1)[0];
                     int col0 = positions.get(0)[1];
-                    int col1 = positions.get(1)[1];
-
-
-                    int globalRow0 = startRow + row0;
-                    int globalCol0 = startCol + col0;
-                    int globalRow1 = startRow + row1;
-                    int globalCol1 = startCol + col1;
 
                     int globalRow = startRow + row0;
                     help.addSquare(i, j);
-                    help.setMessage(1,"veuillez faire attention aux annotions  "+annotation+" dans la sous grille"); 
+                    help.setMessage(1,"veuillez faire attention aux annotations  "+annotation+" dans la sous grille"); 
 
                    // Cas 1 : les deux cellules sont sur la même ligne dans le bloc
                    if (row0 == row1) {
                     
                    help.addLine(globalRow);
-                   help.setMessage(2,"veuillez  appliquer la technique "+this.getName() +" sur la ligne "+globalRow+1);
+                   help.setMessage(2,"veuillez faire attention aux annotations "+annotation+" sur la ligne "+globalRow+1);
+                   help.setMessage(3,"veuillez  appliquer la technique "+this.getName() +" sur la ligne "+globalRow+1);
                    return help;
                 }
 
                 else{
                     int globalCol = startCol + col0;
                     help.addColumn(globalCol);
-                    help.setMessage(2,"veuillez  appliquer la technique "+this.getName()+" sur la colonne "+globalCol);
+                    help.setMessage(2,"veuillez faire attention aux annotations "+annotation+" sur la colonne "+globalCol+1);
+                    help.setMessage(2,"veuillez  appliquer la technique "+this.getName()+" sur la colonne "+globalCol+1);
                     return help;
 
 
@@ -142,7 +137,7 @@ public class PointingPairs implements InterfaceTech{
         System.out.println("\n");
 
         // Création d'une instance de la technique des paires pointantes
-        PointingPairs pointingTriple = new PointingPairs();
+        PointingPairs pointingTriple = new PointingTriples();
 
         // Détection
         System.out.println("triple pointantes  détectées ? " + pointingTriple.getHelp(grille));

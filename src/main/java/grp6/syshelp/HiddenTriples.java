@@ -16,15 +16,20 @@ import grp6.sudocore.Grid;
  * @version 1.0     
  * @since 2025-03-25
  */
-public class HiddenTriple extends HiddenPairs {
+public class HiddenTriples extends HiddenPairs {
 
     protected int getHiddenLength() {
         return 3;
     }
 
+    /**
+     * Permet de récupérer le nom de la technique
+     * @return String le nom de la technique
+     */
     public String getName() {
         return "Triplets cachés";
     }
+
 
     protected int[] getCandidate(Cell cell1,Cell cell2){
            List<Integer>candidates= cell1.getAnnotations();
@@ -34,7 +39,11 @@ public class HiddenTriple extends HiddenPairs {
            }
            return null;
     }
-
+    /**
+     * Permet de savoir si une cellule a des annotations cachées
+     * @param cell la cellule à vérifier
+     * @return boolean true si la cellule a des annotations cachées, false sinon
+     */
     protected Boolean hasPossibleCellHidden(Cell cell){
         return cell.isEditable() && cell.getAnnotations().size() >= 3;
     }
@@ -62,7 +71,11 @@ public class HiddenTriple extends HiddenPairs {
         
         grille.getCell(0, 1).addAnnotation(4);
         grille.getCell(0, 1).addAnnotation(5);
-        grille.getCell(0, 2).addAnnotation(8);
+
+        grille.getCell(0, 2).addAnnotation(2);
+        grille.getCell(0, 2).addAnnotation(4);
+        grille.getCell(0, 2).addAnnotation(5);
+        grille.getCell(0, 3).addAnnotation(8);
         //grille.getCell(0, 2).addAnnotation(4);
 
        // grille.printAnnotationsGrid();
@@ -71,7 +84,7 @@ public class HiddenTriple extends HiddenPairs {
         System.out.println("\n");
 
         // Création d'une instance de la technique des paires pointantes
-        HiddenTriple triple = new HiddenTriple();
+        HiddenTriples triple = new HiddenTriples();
 
         // Détection
         System.out.println("triple pointantes  détectées ? " + triple.getHelp(grille));

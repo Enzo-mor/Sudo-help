@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import grp6.sudocore.Cell;
-import grp6.sudocore.FlexCell;
 import grp6.sudocore.Grid;
 
 /**
