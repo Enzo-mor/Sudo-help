@@ -1,6 +1,7 @@
 package grp6.syshelp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import grp6.sudocore.Cell;
@@ -29,6 +30,12 @@ public class PointingPairs implements InterfaceTech{
     }
          return positions;
     }
+     
+    protected Boolean isValidNumberCandidate(int candidate,Cell[]LineCell){
+      return Arrays.asList(LineCell).stream().filter(cell->cell.isEditable()&&cell.getAnnotationsBool()[candidate-1]).count()>2;
+
+    }
+
 
     /**
      * cette methode permet de verifier si une sous grille contient un pointing pair par rappor à un candidat.
@@ -72,25 +79,26 @@ public class PointingPairs implements InterfaceTech{
                     int row0 = positions.get(0)[0];
                     int row1 = positions.get(1)[0];
                     int col0 = positions.get(0)[1];
+                    int col1 = positions.get(1)[1];
 
                     int globalRow = startRow + row0;
                     help.addSquare(i, j);
-                    help.setMessage(1,"veuillez faire attention aux annotations  "+annotation+" dans la sous grille"); 
+                    help.setMessage(1,"veuillez faire attention aux annotations  "+annotation+" \ndans la sous grille"); 
 
                    // Cas 1 : les deux cellules sont sur la même ligne dans le bloc
-                   if (row0 == row1) {
+                   if (row0 == row1&&isValidNumberCandidate(annotation, grille.getLine(globalRow))) {
+                       help.addLine(globalRow);
+                       help.setMessage(2,"veuillez faire attention aux annotations "+annotation+" \nsur la ligne "+globalRow+1);
+                       help.setMessage(3,"veuillez  appliquer la technique "+this.getName() +"\n sur la ligne "+globalRow+1);
+                       return help;
+                   } 
                     
-                   help.addLine(globalRow);
-                   help.setMessage(2,"veuillez faire attention aux annotations "+annotation+" sur la ligne "+globalRow+1);
-                   help.setMessage(3,"veuillez  appliquer la technique "+this.getName() +" sur la ligne "+globalRow+1);
-                   return help;
-                }
 
-                else{
+                else if(col0 == col1&&isValidNumberCandidate(annotation, grille.getColumn(startCol+col0))){
                     int globalCol = startCol + col0;
                     help.addColumn(globalCol);
-                    help.setMessage(2,"veuillez faire attention aux annotations "+annotation+" sur la colonne "+globalCol+1);
-                    help.setMessage(2,"veuillez  appliquer la technique "+this.getName()+" sur la colonne "+globalCol+1);
+                    help.setMessage(2,"veuillez faire attention aux annotations "+annotation+"\n sur la colonne "+(globalCol+1));
+                    help.setMessage(3,"veuillez  appliquer la technique "+this.getName()+" \nsur la colonne "+(globalCol+1));
                     return help;
 
 
@@ -98,17 +106,12 @@ public class PointingPairs implements InterfaceTech{
                 }
             }
             }
+            }
      
-
+            return null;
 
    
         }
-
-
-
-
-        return null;
-     }
 
      public static void main(String[] args) {
         int[] data = {
@@ -127,10 +130,10 @@ public class PointingPairs implements InterfaceTech{
         Grid grille = new Grid(data);
         System.out.println("Grille initiale :");
         grille.getCell(0, 0).addAnnotation(2);
-        grille.getCell(0, 1).addAnnotation(2);
-        grille.getCell(0, 2).addAnnotation(2);
-        grille.getCell(0, 4).addAnnotation(2);
-        grille.getCell(0, 7).addAnnotation(2);
+        grille.getCell(2, 0).addAnnotation(2);
+        grille.getCell(3, 0).addAnnotation(2);
+        grille.getCell(1, 0).addAnnotation(2);
+        grille.getCell(4, 0).addAnnotation(2);
         grille.printAnnotationsGrid();
 
        

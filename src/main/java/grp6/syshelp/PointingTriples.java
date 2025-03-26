@@ -1,5 +1,6 @@
 package grp6.syshelp;
 
+import java.util.Arrays;
 import java.util.List;
 
 import grp6.sudocore.Cell;
@@ -33,4 +34,10 @@ public class PointingTriples extends PointingPairs {
     public String getName(){
         return "Triples pointantes";
     }
+    @Override
+    protected Boolean isValidNumberCandidate(int candidate,Cell[]LineCell){
+      return Arrays.asList(LineCell).stream().filter(cell->cell.isEditable()&&cell.getAnnotationsBool()[candidate-1]).count()>3;
+
+    }
+
 }

@@ -2,6 +2,7 @@ package grp6.syshelp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
@@ -74,15 +75,19 @@ public class SysHelp {
         SudoLog.debug("Clone de la grille");
         Grid clone = g.clone();
         SudoLog.debug("Generation des annotations");
-        AutoAnnotation.generate(clone);
-    
-        for (InterfaceTech tech : TECHNIQUES) {
-            SudoLog.debug("Teste avec " + tech.getClass().getSimpleName());
-            Help help = tech.getHelp(clone);
-            if (help != null) {
-                return help; 
-            }
+       // AutoAnnotation.generate(clone);
+       Optional<Help> help = TECHNIQUES.parallelStream()
+                                        .filter(tech -> { 
+                                            SudoLog.debug("Teste avec " + tech.getClass().getSimpleName());
+                                            return tech.getHelp(clone.clone()) != null;
+                                             })
+                                         .reduce((a, b) -> Math.random() > 0.5 ? a : b)
+                                         .map(tech -> tech.getHelp(clone)); 
+
+        if (help.isPresent()) {
+        return  help.get();
         }
+        SudoLog.debug("Aucune aide n'a été trouvée");
     
         return new NoHelp(); 
     }
