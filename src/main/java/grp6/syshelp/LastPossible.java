@@ -38,7 +38,7 @@ public class LastPossible implements InterfaceTech{
                     aide.addPos(pos[0], pos[1]);
                     aide.addSquare(i);
                     aide.setMessage(1, "Fais attention aux "+tabCarre.get(j).get(0));
-                    aide.setMessage(1, "Le chiffre "+tabCarre.get(j).get(0)+" est le seul possible dans la région");
+                    aide.setMessage(2, "Le chiffre "+tabCarre.get(j).get(0)+" est le seul possible dans la région");
                     aide.setMessage(3, "Regarde ici");
                     return aide;
                 }
