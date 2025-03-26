@@ -302,7 +302,7 @@ public final class Game {
             if (timer != null && !timer.isShutdown()) {
                 timer.shutdown();
                 if (!timer.awaitTermination(3, TimeUnit.SECONDS)) {
-                    timer.shutdownNow(); // Force l'arret apres 4 secondes d'attente
+                    timer.shutdownNow(); // Force l'arret apres 3 secondes d'attente
                 }
             }
             gameState = GameState.PAUSED;
@@ -377,7 +377,7 @@ public final class Game {
 
     /**
      * Retourne une copie de la grille du jeu.
-     * Cela permet d'acceder a toutes les methodes en lecture seule de la grille.
+     * Cela permet d'acceder à la grille du jeu sans alterrer la partie en cours.
      * 
      * @return Une copie de la grille du jeu.
      */
@@ -617,7 +617,7 @@ public final class Game {
    * methode permettant de supprimer un nombre dans une cellule
    * @param x represente la position x de la case dans la grille
     * @param y represente la position Y de la case dans la grille
-    * @param value represente l'annoatation à ajouter
+    * @param value represente l'annotation à ajouter
      * 
      * @return la même instance du jeu  après appliquation de  la modification
      * 
