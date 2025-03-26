@@ -9,7 +9,7 @@ CREATE TABLE tech (
 
 
 -- Insérer des données dans la table tech
-INSERT INTO tech (name, short_desc, long_desc) VALUES
+INSERT INTO tech (name, short_desc, long_desc, cells) VALUES
 (
     'HiddenPairs',
     'Description courte HiddenPairs',

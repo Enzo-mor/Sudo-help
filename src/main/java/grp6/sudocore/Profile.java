@@ -66,7 +66,7 @@ public class Profile {
     public List<Technique> getUnlockedTechniques() {
         List<Technique> tech = new ArrayList<>();
 
-        String query = "SELECT t.id_tech, t.name, t.short_desc, t.long_desc " +
+        String query = "SELECT t.id_tech, t.name, t.short_desc, t.long_desc, t.cells " +
                    "FROM possedeTech p " +
                    "JOIN tech t ON p.id_tech = t.id_tech " +
                    "JOIN profile pr ON p.player = pr.id_profile " +
@@ -88,7 +88,7 @@ public class Profile {
             }
         }
         catch(Exception e) {
-            SudoLog.erreur(e.toString());
+            SudoLog.error(e.toString());
         }
 
         return tech;
@@ -141,7 +141,7 @@ public class Profile {
 
         }
         catch(SQLException e) {
-            SudoLog.erreur("Erreur SQL : " + e.getMessage());
+            SudoLog.error("Erreur SQL : " + e.getMessage());
         }
     }
 
@@ -167,7 +167,7 @@ public class Profile {
 
         }
         catch(SQLException e) {
-            SudoLog.erreur("Erreur SQL lors de la suppression des techniques : " + e.getMessage());
+            SudoLog.error("Erreur SQL lors de la suppression des techniques : " + e.getMessage());
         }
     }
 
