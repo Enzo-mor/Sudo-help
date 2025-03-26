@@ -62,18 +62,22 @@ class Settings extends Stage {
      * @param gearIcon Icône d'engrenage pour l'animation [ImageView]
      */
     private Settings(Stage stage, ImageView gearIcon) {
+
         setTitle("Paramètres");
 
         TextField usernameField = new TextField(MainMenu.getProfileName());
-        usernameField.setPromptText("ex: David");
-        usernameField.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-background-color: lightgray; -fx-border-color: darkgray; -fx-border-width: 2px;");
+        usernameField.setTextFormatter(new TextFormatter<>(change -> 
+            change.getControlNewText().length() > 20 ? null : change)
+        );
+        usernameField.setPromptText("ex : David");
+        StyledContent.styleTextField(usernameField);
 
         ImageView editIcon = new ImageView(new Image(getClass().getResourceAsStream("/pencil.png")));
-        editIcon.setFitWidth(16);
-        editIcon.setFitHeight(16);
+        editIcon.setFitWidth(20);
+        editIcon.setFitHeight(20);
 
         HBox usernameBox = new HBox(10, usernameField, editIcon);
-        usernameBox.setStyle("-fx-font-size: 12px; -fx-font-weight: bold;");
+        usernameBox.setStyle("-fx-padding: 5px; -fx-alignment: center-left;");
 
         usernameField.setOnAction(e -> {
             String newName = usernameField.getText();
@@ -82,37 +86,65 @@ class Settings extends Stage {
             }
         });
 
-        CheckBox fullscreenMode = new CheckBox("Mode plein écran");
-        CheckBox checkHighlightRowCol = new CheckBox("Marquage des lignes/colonnes");
-        CheckBox numberHighlight = new CheckBox("Marquage des chiffres");
+        ToggleSwitch toggleFullscreen = new ToggleSwitch("Mode plein écran", stage.isFullScreen());
+        ToggleSwitch toggleHighlightRowCol = new ToggleSwitch("Marquage lignes/colonnes", highlightRowCol);
+        ToggleSwitch toggleHighlightNumbers = new ToggleSwitch("Marquage des chiffres", highlightNumbers);
         Button changeProfileButton = new Button("Changer de profil");
         Button deleteProfileButton = new Button("Supprimer profil");
-        deleteProfileButton.setStyle("-fx-text-fill: red;");
 
-        VBox settingsLayout = new VBox(10, usernameBox, fullscreenMode, checkHighlightRowCol, numberHighlight, changeProfileButton, deleteProfileButton);
+        StyledContent.applyButtonStyle(changeProfileButton);
+        StyledContent.applyButtonWarningStyle(deleteProfileButton);
+
+        VBox.setVgrow(toggleFullscreen, Priority.ALWAYS);
+        VBox.setVgrow(toggleHighlightRowCol, Priority.ALWAYS);
+        VBox.setVgrow(toggleHighlightNumbers, Priority.ALWAYS);
+
+        // Ajout d'un espaceur pour équilibrer la mise en page
+        Region spacer = new Region();
+        Region spacer2 = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+        VBox.setVgrow(spacer2, Priority.ALWAYS);
+
+        VBox settingsLayout = new VBox(10, usernameBox, spacer, toggleFullscreen, toggleHighlightRowCol, toggleHighlightNumbers, spacer2, changeProfileButton, deleteProfileButton);
         settingsLayout.setStyle("-fx-padding: 20px;");
+        settingsLayout.setPrefHeight(300);
+        
+        // Gérer l'événement du mode plein écran
+        toggleFullscreen.setOnToggleChanged((obs, oldState, newState) -> 
+            Platform.runLater(() -> stage.setFullScreen(newState))
+        );
 
+        // Gérer l'événement du marquage lignes/colonnes
+        toggleHighlightRowCol.setOnToggleChanged((obs, oldState, newState) -> {
+            highlightRowCol = newState;
+            if (!highlightRowCol) {
+                if (SudokuGrid.getGridPane() != null)
+                SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
+            }
+        });
+
+        // Gérer l'événement du marquage des chiffres
+        toggleHighlightNumbers.setOnToggleChanged((obs, oldState, newState) -> {
+            highlightNumbers = newState;
+            if (!highlightNumbers) {
+                if (SudokuGrid.getGridPane() != null)
+                SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
+            }
+        });
+        
+        // Gérer l'événement du bouton de changer de profil
         changeProfileButton.setOnAction(e -> {
             instance = null;
             ProfileSelection.getInstance().showProfileSelection(stage);
             this.close();
         });
-
+        
+        // Gérer l'événement du bouton de suppression de profil
         deleteProfileButton.setOnAction(e -> deleteProfile(stage, deleteProfileButton));
+        
 
-        fullscreenMode.setOnAction(e -> Platform.runLater(() -> stage.setFullScreen(fullscreenMode.isSelected())));
-
-        checkHighlightRowCol.setOnAction(e -> {
-            highlightRowCol = !highlightRowCol;
-            if (!highlightRowCol) SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
-        });
-
-        numberHighlight.setOnAction(e -> {
-            highlightNumbers = !highlightNumbers;
-            if (!highlightNumbers) SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
-        });
-
-        setScene(new Scene(settingsLayout, 250, 300));
+        setScene(new Scene(settingsLayout, 275, 300));
+        setResizable(false);
 
         rotateAnimation = new RotateTransition(Duration.millis(500), gearIcon);
         rotateAnimation.setCycleCount(1);

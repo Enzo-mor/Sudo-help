@@ -66,6 +66,16 @@ public class SudokuGame {
      */
     private static RotateTransition rotateAnimation;
 
+    /** 
+     * Fenetre d'aide pour le jeu 
+     */
+    private static VBox helpOverlay;
+
+    /** 
+     * Texte d'aide pour la fenetre d'aide 
+     */
+    private static Label helpText;
+
 
     /**
      * Affiche la fenetre du jeu Sudoku.
@@ -160,29 +170,41 @@ public class SudokuGame {
         numberSelection.setSudokuGrid(grid);                                        // 4. Associer la grille a NumberSelection maintenant qu'elle existe
         grid.reload(gridSudokuBase);
         ControlButtons controlsButtons = new ControlButtons(grid, actualGame);
-
-        // --- Conteneur du panneau droit sans le bouton settings ---
-        VBox rightPanelContent = new VBox(20, numberSelection.getNumberSelection(), toolsPanel.getTools(), controlsButtons.getControlButtons());
-        rightPanelContent.setAlignment(Pos.CENTER);
-
+        
         // --- Conteneur principal du panneau droit ---
         VBox rightPanel = new VBox();
         rightPanel.setAlignment(Pos.CENTER);
-        rightPanel.getChildren().add(rightPanelContent);
-        VBox.setVgrow(rightPanelContent, Priority.ALWAYS); // Permet d'occuper tout l'espace disponible
 
-        // --- Conteneur pour le bouton settings, aligne en bas a droite ---
+        // --- Conteneur du panneau droit sans le bouton settings ---
+        VBox rightPanelContent = new VBox(20, numberSelection.getNumberSelection(), toolsPanel.getTools());
+        rightPanelContent.setAlignment(Pos.CENTER);
+
+        // --- Panneau d'aide ---
+        helpOverlay = new VBox(20);
+        helpText = new Label();
+        
+        StyledContent.setupHelpOverlay(helpOverlay, helpText);
+
+        // --- StackPane pour superposer helpOverlay sur rightPanelContent ---
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(rightPanelContent, helpOverlay);
+
+        // --- Conteneur principal du panneau droit avec StackPane en haut et les boutons en bas ---
+        VBox rightPanelWrapper = new VBox(20, stackPane, controlsButtons.getControlButtons());
+        rightPanelWrapper.setAlignment(Pos.CENTER);
+
+        // --- Conteneur pour le bouton settings, aligné en bas à droite ---
         HBox settingsContainer = new HBox(settingsButton);
         settingsContainer.setAlignment(Pos.BOTTOM_RIGHT);
         settingsContainer.setPadding(new Insets(10, 10, 10, 10)); // Ajoute un peu de marge
 
-        // --- Conteneur principal pour inclure tout ---
-        BorderPane rightPanelWrapper = new BorderPane();
-        rightPanelWrapper.setCenter(rightPanel);  // Centre le contenu principal verticalement
-        rightPanelWrapper.setBottom(settingsContainer); // Met le bouton settings en bas
+        // --- BorderPane pour organiser la mise en page ---
+        BorderPane rightPanelBorder = new BorderPane();
+        rightPanelBorder.setCenter(rightPanelWrapper);
+        rightPanelBorder.setBottom(settingsContainer);
 
         // --- Layout global avec la grille a gauche et le panneau droit a droite ---
-        HBox layout = new HBox(20, SudokuGrid.getGridPane(), rightPanelWrapper);
+        HBox layout = new HBox(20, SudokuGrid.getGridPane(), rightPanelBorder);
         layout.setAlignment(Pos.CENTER_LEFT); // Garde la grille bien alignee a gauche        
 
         VBox mainLayout = new VBox(10, topBar, layout);
@@ -291,5 +313,20 @@ public class SudokuGame {
         
         alert.getDialogPane().setContent(buttons);
         alert.showAndWait();
+    }
+
+    /**
+     * Affiche le panneau d'aide.
+     */
+    public static void setHelpOverlayTrue() {
+        helpOverlay.setVisible(true);
+    }
+
+    /**
+     * Modifie le texte de l'aide
+     * @param text
+     */
+    public static void setHelpText(String text) {
+        helpText.setText(text);
     }
 }
