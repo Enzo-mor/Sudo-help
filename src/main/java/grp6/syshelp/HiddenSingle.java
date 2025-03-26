@@ -61,7 +61,7 @@ public class HiddenSingle implements InterfaceTech {
     }
 
     /**
-     * Permet de savoir combien d'occurence de chiffre il y a dans le tableau de cellul
+     * Permet de savoir combien d'occurence de chiffre il y a dans le tableau de cellule
      * @param tab tableau de cellule
      * @return un tableau du nombre d'occurence de chaque chiffre
      */

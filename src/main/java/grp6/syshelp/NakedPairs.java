@@ -1,7 +1,6 @@
 package grp6.syshelp;
 
 import grp6.sudocore.Cell;
-import grp6.sudocore.FlexCell;
 import grp6.sudocore.Grid;
 /**
  * Cette classe représente la technique NakedPairs.
@@ -76,8 +75,8 @@ public class NakedPairs implements InterfaceTech {
 
                     System.out.println("true de région");
                     aide.addSquare(num);
-                    aide.setMessage(1, "Fait attention aux carrés");
-                    aide.setMessage(2, "Fait attention aux "+temp[0]+" "+temp[1]);
+                    aide.setMessage(1, "Fais attention aux carrés");
+                    aide.setMessage(2, "Fais attention aux "+temp[0]+" "+temp[1]);
                     aide.setMessage(3, "Regarde les annotations"+temp[0]+" "+temp[1]+"le carré : "+num);
                     return true;
                 }
