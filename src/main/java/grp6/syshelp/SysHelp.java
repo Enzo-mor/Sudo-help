@@ -73,16 +73,16 @@ public class SysHelp {
      */
     public static Help generateHelp(Grid g) {
         SudoLog.debug("Clone de la grille");
-        Grid clone = g.clone();
+       // Grid clone = g.clone();
         SudoLog.debug("Generation des annotations");
        // AutoAnnotation.generate(clone);
        Optional<Help> help = TECHNIQUES.stream()
                                         .filter(tech -> { 
                                             SudoLog.debug("Teste avec " + tech.getClass().getSimpleName());
-                                            return tech.getHelp(clone) != null;
+                                            return tech.getHelp(g.clone()) != null;
                                              })
                                          .reduce((a, b) -> Math.random() > 0.5 ? a : b)
-                                         .map(tech -> tech.getHelp(clone)); 
+                                         .map(tech -> tech.getHelp(g.clone())); 
 
         if (help.isPresent()) {
         return  help.get();
