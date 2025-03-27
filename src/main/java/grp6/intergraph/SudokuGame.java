@@ -14,6 +14,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -38,6 +39,21 @@ import javafx.animation.RotateTransition;
  * @see SudokuGrid
  */
 public class SudokuGame {
+
+    /*
+     * Affichage de la fenetre pop-up pour l'aide
+     */
+    private static boolean showPopup = true;
+
+    /*
+     * Affichage de la fenetre pop-up pour l'aide
+     */
+    private static boolean showHelpAnimation = true;
+
+    /*
+     * Timer d'inactivité
+     */
+    private static Timeline inactivityTimer = new Timeline();
 
     /** 
      * Largeur minimale de la fenetre du jeu 
@@ -88,6 +104,21 @@ public class SudokuGame {
      * Fenetre de technique pour le jeu 
      */
     private static VBox techniqueOverlay;
+
+    /*
+     * Bouton des controles (refaire, aide, ...)
+     */
+    private static ControlButtons controlsButtons = null;
+
+    /*
+     * Timer pour l'animation du bouton d'aide
+     */
+    private static Timeline blinkAnimation;
+
+    /*
+     * Timer pour la fin de l'anumation du bouton
+     */
+    private static Timeline resetTimer; 
 
 
     /**
@@ -177,7 +208,7 @@ public class SudokuGame {
         SudokuGrid grid = new SudokuGrid(toolsPanel, actualGame);                   // 3. Creer la grille de Sudoku
         numberSelection.setSudokuGrid(grid);                                        // 4. Associer la grille a NumberSelection maintenant qu'elle existe
         grid.reload(gridSudokuBase);
-        ControlButtons controlsButtons = new ControlButtons(grid, actualGame);
+        controlsButtons = new ControlButtons(grid, actualGame);
         
         // --- Conteneur principal du panneau droit ---
         VBox rightPanel = new VBox();
@@ -237,6 +268,8 @@ public class SudokuGame {
         root.setCenter(rootStack);
 
         Scene scene = new Scene(root, 935, 570);
+        setupInactivityTimer(scene);
+        
         primaryStage.setTitle(selectedSudoku.getName() + " - " + MainMenu.getProfileName());
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(MIN_WIDTH);
@@ -452,5 +485,105 @@ public class SudokuGame {
         contentBox.getChildren().addAll(title, stackPane, actionButton);
         techniqueOverlay.getChildren().setAll(contentBox);
         techniqueOverlay.setVisible(true);
+    }
+    
+    /*
+     * Gere le temps d'inactivite du joueur
+     * @param scene Scene affichee 
+     */
+    private static void setupInactivityTimer(Scene scene) {
+        inactivityTimer = new Timeline(new KeyFrame(Duration.seconds(7), event -> {
+            if(showPopup){
+                showPopup();
+            }else{
+                if(showHelpAnimation){
+                    if (controlsButtons.getHelpButton() != null) {
+                        toggleBlinkEffect(controlsButtons.getHelpButton(), true);
+                        startResetTimer(scene);
+                    }
+                }
+            }
+        
+        }));
+        inactivityTimer.setCycleCount(1);
+        if(showHelpAnimation){
+            inactivityTimer.play(); 
+        }
+
+        // Remet le temps d'inactivite a zero apres une action du joueur
+        scene.setOnKeyPressed(event -> resetTimer());
+        scene.setOnMouseClicked(event -> resetTimer());
+
+        // Remise a zero du timer
+        resetTimer();
+    }
+
+    /*
+     * Remise a zero du timer d'inactivite
+     */
+    private static void resetTimer() {
+        inactivityTimer.stop(); // Mets en pause le timer actuel
+        inactivityTimer.playFromStart(); // Remise a zero
+    }
+
+    /*
+     * Affiche la fenetre pour proposer de l'aide
+     */
+    private static void showPopup() {
+        showPopup = false;
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Avez vous besoin d'aide ?");
+        alert.setHeaderText(null);
+        alert.setContentText("Vous semblez être en difficulté, n'oubliez pas que l'aide existe !");
+        alert.show();
+        resetTimer();
+    }
+
+    /*
+     * Permet de changer l'etat de l'affichage de la fenetre d'aide via les Settings
+     */
+    public static void switchShowPopUp(){
+        if(showPopup!=false){
+            showPopup = !showPopup;
+        }
+    }
+
+    /*
+     * Permet de changer l'etat de l'affichage de l'animation du bouton d'aide via les Settings
+     */
+    public static void switchShowHelpAnimation(){
+        showHelpAnimation = !showHelpAnimation;
+    }
+
+    private static void toggleBlinkEffect(Button button, boolean start) {
+        if (start) {
+            blinkAnimation = new Timeline(
+                new KeyFrame(Duration.seconds(0.5), e -> StyledContent.applyBlinkingButtonStyle(button)),
+                new KeyFrame(Duration.seconds(1), e -> StyledContent.applyButtonStyle(button))
+            );
+            blinkAnimation.setCycleCount(Animation.INDEFINITE);
+            blinkAnimation.play();
+        } else {
+            if (blinkAnimation != null) {
+                blinkAnimation.stop();
+                StyledContent.applyButtonStyle(button);
+            }
+        }
+    }
+    
+    // Appelle cette méthode lorsqu'une interaction utilisateur est détectée :
+    private static void startResetTimer(Scene scene) {
+        if (resetTimer != null) {
+            resetTimer.stop();
+        }
+    
+        resetTimer = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            if (controlsButtons.getHelpButton() != null) {
+                toggleBlinkEffect(controlsButtons.getHelpButton(), false);
+            }
+            setupInactivityTimer(scene); // Relancer la détection d'inactivité
+        }));
+        resetTimer.setCycleCount(1);
+        resetTimer.play();
     }
 }

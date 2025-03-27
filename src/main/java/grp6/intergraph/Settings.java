@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -111,6 +112,14 @@ class Settings extends Stage {
                 SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
             }
         });
+
+        ToggleSwitch toggleHelp = new ToggleSwitch("Notifications d'aide", true);
+        VBox.setVgrow(toggleHelp, Priority.ALWAYS);
+        // Gérer l'événement du marquage des chiffres
+        toggleHelp.setOnToggleChanged((obs, oldState, newState) -> {
+            SudokuGame.switchShowPopUp();
+            SudokuGame.switchShowHelpAnimation();
+        });
         
         Button changeProfileButton = new Button("Changer de profil");
         StyledContent.applyButtonStyle(changeProfileButton);
@@ -132,7 +141,7 @@ class Settings extends Stage {
         VBox.setVgrow(spacer, Priority.ALWAYS);
         VBox.setVgrow(spacer2, Priority.ALWAYS);
 
-        VBox settingsLayout = new VBox(10, usernameBox, spacer, toggleFullscreen, toggleHighlightRowCol, toggleHighlightNumbers, spacer2, changeProfileButton, deleteProfileButton);
+        VBox settingsLayout = new VBox(10, usernameBox, spacer, toggleFullscreen, toggleHighlightRowCol, toggleHighlightNumbers, toggleHelp, spacer2, changeProfileButton, deleteProfileButton);
         settingsLayout.setStyle("-fx-padding: 20px;");
         settingsLayout.setPrefHeight(300);
 

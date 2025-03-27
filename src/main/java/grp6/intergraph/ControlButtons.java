@@ -51,6 +51,16 @@ public class ControlButtons {
      */
     private static int currentHelp;
 
+    /*
+     * Booleen pour l'animation
+     */
+    private static boolean isYellow;
+
+    /*
+     * Bouton d'aide
+     */
+    private Button helpButton ;
+
 
     /**
      * Constructeur de ControlButtons
@@ -68,7 +78,7 @@ public class ControlButtons {
 
         Button undoButton = new Button("Annuler");
         Button redoButton = new Button("Refaire");
-        Button helpButton = new Button("Aide");
+        helpButton = new Button("Aide");
         Button checkButton = new Button("Vérifier");
         Button restartButton = new Button("Recommencer");
         
@@ -131,6 +141,14 @@ public class ControlButtons {
      */
     public HBox getControlButtons() {
         return controlButtons;
+    }
+
+    /*
+     * Retourne le bouton d'aide
+     * @return bouton d'aide
+     */
+    public Button getHelpButton(){
+        return helpButton;
     }
 
     /**
@@ -309,5 +327,14 @@ public class ControlButtons {
      */
     public static Help getHelp() {
         return help;
+    }
+
+    private void toggleColor(Button button) {
+        if (isYellow) {
+            button.setStyle("-fx-background-color: #80A9C2;"); // Original color
+        } else {
+            button.setStyle("-fx-background-color: yellow;"); // Highlight color
+        }
+        isYellow = !isYellow; // Toggle state
     }
 }

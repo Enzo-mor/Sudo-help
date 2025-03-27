@@ -60,7 +60,7 @@ public class StyledContent {
         "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 2, 2);";  // Ombre plus marquee
 
     /** 
-     * Style du bouton dangeureux au survol 
+     * Style du bouton dangereux au survol 
      */
     private static final String WARNING_BUTTON_HOVER_STYLE =
         "-fx-background-color: #6D8D9C; " + // Fond bleu clair au survol
@@ -99,6 +99,19 @@ public class StyledContent {
         "-fx-background-radius: 10; " +
         "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 12, 0, 0, 6);";
 
+    /** 
+     * Style de base du bouton 
+     */
+    private static final String BUTTONBLINKING_STYLE = 
+        "-fx-background-color:rgb(181, 139, 14); " + // Fond jaune
+        "-fx-text-fill: white; " +           // Texte blanc
+        "-fx-font-size: 12px; " +           // Taille de la police reduite
+        "-fx-font-weight: bold; " +         // Texte en gras
+        "-fx-padding: 6px 12px; " +         // Espacement reduit autour du texte
+        "-fx-background-radius: 5px; " +   // Coins legerement arrondis
+        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 2, 0, 2, 2); " + // Ombre subtile
+        "-fx-cursor: hand;";                // Curseur de main
+
     /**
      * Applique le style de base et l'effet de survol a un bouton.
      * 
@@ -108,6 +121,15 @@ public class StyledContent {
         button.setStyle(BUTTON_STYLE);
         button.setOnMouseEntered((MouseEvent e) -> button.setStyle(BUTTON_HOVER_STYLE));
         button.setOnMouseExited((MouseEvent e) -> button.setStyle(BUTTON_STYLE));
+    }
+
+    /**
+     * Applique le style de clignotement a un bouton.
+     * 
+     * @param button Bouton auquel appliquer le style [Button]
+     */
+    public static void applyBlinkingButtonStyle(Button button){
+        button.setStyle(BUTTONBLINKING_STYLE);
     }
 
     /**
