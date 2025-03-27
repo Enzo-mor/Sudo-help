@@ -100,13 +100,16 @@ public class HiddenPairs implements InterfaceTech{
         return null;
     }
 
-     
+     /**
+      * cette methode permet de retourner le nom de la technique
+      * @return
+      */
     public String getName(){
         return "Paires cachées";
     }
 
 
-
+     @Override
       public Help getHelp(Grid grille){
       for(int i=0;i<Grid.NB_NUM;++i){
             for(int j=0;j<Grid.NB_NUM;++j){

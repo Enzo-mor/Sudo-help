@@ -39,24 +39,60 @@ public class LeaderboardMenu {
     public static void showLeaderBoard(Stage stage) {
         currentDifficultyIndex = 0;
 
+        // Label pour la difficulté
+        Label difficultyLabel = new Label("Classement " + DIFFICULTIES[currentDifficultyIndex]);
+        difficultyLabel.setStyle("-fx-font-size: 32px; -fx-font-weight: bold; -fx-padding: 20px;");
+
         // Boutons de navigation
         Button leftArrow = new Button("<");
         Button rightArrow = new Button(">");
-
         StyledContent.applyArrowButtonStyle(leftArrow);
         StyledContent.applyArrowButtonStyle(rightArrow);
 
-        // Label pour la difficulté
-        Label difficultyLabel = new Label(DIFFICULTIES[currentDifficultyIndex]);
-        difficultyLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
-
         // ComboBox pour choisir une grille spécifique
         ComboBox<String> gridSelector = new ComboBox<>();
-        gridSelector.setMinWidth(200);
+        gridSelector.setMinWidth(250);
+        gridSelector.setMinHeight(45);
+        gridSelector.setStyle(
+            "-fx-background-color: #4A90E2; " +
+            "-fx-font-size: 18px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-background-radius: 10px; " +
+            "-fx-background-insets: 0; " +
+            "-fx-border-color: #2C3E50; " +
+            "-fx-border-radius: 10px; " +
+            "-fx-border-width: 2px; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);");
+
+        gridSelector.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item);
+                    setStyle("-fx-text-fill: white; -fx-background-color: #4A90E2;");
+                }
+            }
+        });
+        gridSelector.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item);
+                    setStyle("-fx-text-fill: black;");
+                }
+            }
+        });
 
         // Conteneur pour afficher le classement
-        VBox leaderboardContainer = new VBox(10);
+        VBox leaderboardContainer = new VBox(20);
         leaderboardContainer.setAlignment(Pos.CENTER);
+        leaderboardContainer.setMinHeight(150);
 
         // Récupération des grilles disponibles
         Map<Integer, String> grids = DBManager.getGridsByDifficulty(DIFFICULTIES[currentDifficultyIndex]);
@@ -94,10 +130,10 @@ public class LeaderboardMenu {
         HBox navigation = new HBox(20, leftArrow, difficultyLabel, rightArrow);
         navigation.setAlignment(Pos.CENTER);
 
-        VBox layout = new VBox(15, navigation, gridSelector, leaderboardContainer, backButton);
-        layout.setSpacing(10);
-        layout.setAlignment(Pos.CENTER);
-        layout.setPadding(new Insets(10));
+        VBox layout = new VBox(20, navigation, gridSelector, leaderboardContainer, backButton);
+        layout.setSpacing(15);
+        layout.setAlignment(Pos.TOP_CENTER);
+        layout.setPadding(new Insets(20));
 
         Scene scene = new Scene(layout, 640, 480);
         stage.setTitle("Mode Libre - " + MainMenu.getProfileName());
@@ -115,7 +151,7 @@ public class LeaderboardMenu {
      */
     private static void changeDifficulty(int delta, Label difficultyLabel, ComboBox<String> gridSelector, VBox leaderboardContainer) {
         currentDifficultyIndex = (currentDifficultyIndex + delta + DIFFICULTIES.length) % DIFFICULTIES.length;
-        difficultyLabel.setText(DIFFICULTIES[currentDifficultyIndex]);
+        difficultyLabel.setText("Classement " + DIFFICULTIES[currentDifficultyIndex]);
 
         // Mise à jour des grilles disponibles
         gridSelector.getItems().clear();
@@ -145,6 +181,7 @@ public class LeaderboardMenu {
      * @param leaderboardContainer Conteneur affichant le classement [VBox]
      */
     private static void updateLeaderboard(VBox leaderboardContainer) {
+
         leaderboardContainer.getChildren().clear();
 
         if (selectedGridId == -1) {
@@ -176,6 +213,11 @@ public class LeaderboardMenu {
             rankingGrid.add(scoreLabel, 2, i);
         }
 
+        leaderboardContainer.setStyle(
+            "-fx-font-size: 18px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 10px;"
+        );
         leaderboardContainer.getChildren().add(rankingGrid);
     }
 }

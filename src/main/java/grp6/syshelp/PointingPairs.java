@@ -30,7 +30,12 @@ public class PointingPairs implements InterfaceTech{
     }
          return positions;
     }
-     
+     /**
+      * cette methode permet de verifier si la line ou colonne contient un nombre de candidat requis pour appliquer la technique
+      * @param candidate : le candidat qu'on cherche
+      * @param LineCell : la ligne ou colonne dans laquelle on cherche le candidat
+      * @return true si la ligne ou colonne contient le nombre de candidat requis, false sinon
+      */
     protected Boolean isValidNumberCandidate(int candidate,Cell[]LineCell){
       return Arrays.asList(LineCell).stream().filter(cell->cell.isEditable()&&cell.getAnnotationsBool()[candidate-1]).count()>2;
 
@@ -63,6 +68,7 @@ public class PointingPairs implements InterfaceTech{
         return "Pairs pointantes";
     }
     
+    @Override
     public Help getHelp(Grid grille){
         Help help = new Help(getClass().getSimpleName());
 

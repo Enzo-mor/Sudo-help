@@ -17,7 +17,7 @@ import grp6.sudocore.Grid;
  * @since 2025-03-25
  */
 public class HiddenTriples extends HiddenPairs {
-
+    @Override
     protected int getHiddenLength() {
         return 3;
     }
@@ -30,7 +30,7 @@ public class HiddenTriples extends HiddenPairs {
         return "Triplets cachés";
     }
 
-
+     @Override
     protected int[] getCandidate(Cell cell1,Cell cell2){
            List<Integer>candidates= cell1.getAnnotations();
            candidates.retainAll(cell2.getAnnotations());
@@ -44,6 +44,7 @@ public class HiddenTriples extends HiddenPairs {
      * @param cell la cellule à vérifier
      * @return boolean true si la cellule a des annotations cachées, false sinon
      */
+    @Override
     protected Boolean hasPossibleCellHidden(Cell cell){
         return cell.isEditable() && cell.getAnnotations().size() >= 3;
     }
