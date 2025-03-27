@@ -30,7 +30,7 @@ public class PointingTriples extends PointingPairs {
         }
         return false;
     }
-
+    @Override
     public String getName(){
         return "Triples pointantes";
     }
