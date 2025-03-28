@@ -33,7 +33,7 @@ public class LastPossible implements InterfaceTech{
             for (int j = 0; j < 9; j++){
                 if (tabCarre.get(j).size() == 1){
                     aide.addSquare(i);
-                    aide.setMessage(1, "Fais attention aux "+tabCarre.get(j).get(0));
+                    aide.setMessage(1, "Tu peux placer un "+tabCarre.get(j).get(0));
                     
                     aide.setMessage(3, "Regarde ici");
                     return aide;
