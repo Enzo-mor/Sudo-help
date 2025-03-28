@@ -97,20 +97,18 @@ public class PointingPairs implements InterfaceTech{
                        help.setMessage(2,"veuillez faire attention aux annotations "+annotation+" \nsur la ligne "+globalRow+1);
                        help.setMessage(3,"veuillez  appliquer la technique "+this.getName() +"\n sur la ligne "+globalRow+1);
                        return help;
-                   } 
-                    
-
-                else if(col0 == col1&&isValidNumberCandidate(annotation, grille.getColumn(startCol+col0))){
-                    int globalCol = startCol + col0;
-                    help.addColumn(globalCol);
-                    help.setMessage(2,"veuillez faire attention aux annotations "+annotation+"\n sur la colonne "+(globalCol+1));
-                    help.setMessage(3,"veuillez  appliquer la technique "+this.getName()+" \nsur la colonne "+(globalCol+1));
-                    return help;
+                   }
+                   else if(col0 == col1&&isValidNumberCandidate(annotation, grille.getColumn(startCol+col0))){
+                        int globalCol = startCol + col0;
+                        help.addColumn(globalCol);
+                        help.setMessage(2,"veuillez faire attention aux annotations "+annotation+"\n sur la colonne "+(globalCol+1));
+                        help.setMessage(3,"veuillez  appliquer la technique "+this.getName()+" \nsur la colonne "+(globalCol+1));
+                        return help;
 
 
 
+                    }
                 }
-            }
             }
             }
      

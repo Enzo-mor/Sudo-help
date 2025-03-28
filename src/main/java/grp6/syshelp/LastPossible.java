@@ -1,8 +1,6 @@
 package grp6.syshelp;
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.stream.Collectors.toList;
-import java.util.stream.IntStream;
 
 import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
@@ -54,7 +52,7 @@ public class LastPossible implements InterfaceTech{
      * @param indCarre la position du carré : [[1,2,3], [4,5,6], [7,8,9]]
      * @return La phrase correspondante de la zone 3×3.
      */
-    private String leCarre(int indCarre) {
+    /*private String leCarre(int indCarre) {
         switch (indCarre) {
             case 1: return " en haut à gauche";
             case 2: return " en haut au centre";
@@ -67,7 +65,7 @@ public class LastPossible implements InterfaceTech{
             case 9: return " en bas à droite";
             default: return "Indice invalide, doit être entre 1 et 9";
         }
-    }
+    }*/
 
     public static void main(String[] args) {
         int[] dataCarre={0,0,0,0,0,0,0,0,0,
