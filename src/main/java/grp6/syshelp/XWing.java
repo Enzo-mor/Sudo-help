@@ -45,10 +45,8 @@ public class XWing implements InterfaceTech {
                         aide.addColumn(colonnes1.get(0));
                         aide.addColumn(colonnes1.get(1));
 
-                        aide.setMessage(1, "La méthode du X-Wing peut être utilisée dans la grille.");
-                        aide.setMessage(2, "Le chiffre " + num + " forme un X-Wing dans les colonnes " 
-                                            + colonnes1.get(0) + " et " + colonnes1.get(1));
-                        aide.setMessage(3, "Éliminez " + num + " des autres cellules de ces colonnes.");
+                        aide.setMessage(1, "Regarde les annotation " + num + "de la grille");
+                        aide.setMessage(3, "Le chiffre " + num + " forme un X-Wing dans les colonnes "+ colonnes1.get(0) + " et " + colonnes1.get(1));
 
                         return aide; // On retourne dès qu'on trouve un X-Wing
                     }
