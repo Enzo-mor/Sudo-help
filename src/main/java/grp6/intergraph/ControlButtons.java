@@ -26,6 +26,7 @@ import java.util.*;
  * @see Action  
  */
 public class ControlButtons {
+
     /** 
      * Conteneur des boutons de contrôle 
      */
@@ -47,7 +48,7 @@ public class ControlButtons {
     private static Help help;
 
     /**
-     * Numéro de l'aide actuel
+     * Numero de l'aide actuel
      */
     private static int currentHelp;
 
@@ -59,7 +60,7 @@ public class ControlButtons {
     /*
      * Bouton d'aide
      */
-    private Button helpButton ;
+    private final Button helpButton ;
 
 
     /**
@@ -94,25 +95,38 @@ public class ControlButtons {
             SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
             Action currentAction = sudokuGame.getLastAction();
             undoAction(currentAction);
+
+            SudokuGame.resetTimer();
         });
 
         // Ajoute l'action sur le bouton "Refaire"
         redoButton.setOnAction(e -> {
             SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
             redoAction();
+
+            SudokuGame.resetTimer();
         });
 
         //SYSHELP
         helpButton.setOnAction(e -> {
             help = SysHelp.generateHelp(sudokuGame.getGrid());
             currentHelp = 1;
-            if(help != null) {
-                System.out.println(help);
-                SudokuGame.setHelpText(help.getMessage(currentHelp));
-                SudokuGame.setHelpOverlayTrue();
-            }else{
-                System.out.println("Aucune aide trouvée.");
+            if(evaluateWithUndoRedo().isEmpty()) {
+                if(help != null) {
+                    SudokuGame.setHelpText(help.getMessage(currentHelp));
+                    SudokuGame.setHelpOverlayTrue();
+                }else{
+                    System.out.println("Aucune aide trouvée.");
+                }
             }
+            else{
+                currentHelp = 3;
+                SudokuGame.setDisableSeeMoreButton(true);
+                SudokuGame.setHelpText("La grille n'est pas correcte.");
+                SudokuGame.setHelpOverlayTrue();
+            }
+
+            SudokuGame.resetTimer();
         });
 
         // Ajoute l'action sur le bouton "Verifier"
@@ -120,6 +134,8 @@ public class ControlButtons {
             sudokuGame.decreaseScore("check");
             SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
             putErrorsRed();
+
+            SudokuGame.resetTimer();
         });
 
         // Ajoute l'action sur le bouton "Recommencer"
@@ -129,6 +145,8 @@ public class ControlButtons {
 
             // Forcer la suppression des actions passees
             sudokuGame.deleteActionsAfterCurrent();
+
+            SudokuGame.resetTimer();
         });
 
         controlButtons.getChildren().addAll(undoButton, redoButton, helpButton, checkButton, restartButton);
@@ -145,7 +163,8 @@ public class ControlButtons {
 
     /*
      * Retourne le bouton d'aide
-     * @return bouton d'aide
+     * 
+     * @return Le bouton d'aide [Button]
      */
     public Button getHelpButton(){
         return helpButton;
@@ -307,6 +326,7 @@ public class ControlButtons {
 
     /**
      * Retourne le numéro de l'aide actuel
+     * 
      * @return le numéro de l'aide actuel [int]
      */
     public static int getCurrentHelp() {
@@ -315,6 +335,7 @@ public class ControlButtons {
 
     /**
      * Modifie le numéro de l'aide actuel
+     * 
      * @param currentHelp le nouveau numéro d'aide [int]
      */
     public static void setCurrentHelp(int ch) {
@@ -323,18 +344,10 @@ public class ControlButtons {
 
     /**
      * Retourne l'instance de l'aide actuel
+     * 
      * @return l'aide actuelle [Help]
      */
     public static Help getHelp() {
         return help;
-    }
-
-    private void toggleColor(Button button) {
-        if (isYellow) {
-            button.setStyle("-fx-background-color: #80A9C2;"); // Original color
-        } else {
-            button.setStyle("-fx-background-color: yellow;"); // Highlight color
-        }
-        isYellow = !isYellow; // Toggle state
     }
 }

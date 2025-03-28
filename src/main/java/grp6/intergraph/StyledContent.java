@@ -1,13 +1,10 @@
 package grp6.intergraph;
-import grp6.syshelp.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
@@ -291,81 +288,6 @@ public class StyledContent {
     }
 
     /**
-     * Applique un style au panneau d'aide
-     */
-    public static void setupHelpOverlay(VBox helpOverlay, Label helpText) {
-        // Style du cadre extérieur
-        helpOverlay.setStyle("-fx-background-color: #4A90E2; -fx-background-radius: 15; -fx-padding: 15px;");
-        helpOverlay.setAlignment(Pos.CENTER);
-        helpOverlay.setVisible(false); // Masqué par défaut
-
-        // Cadre blanc intérieur
-        StackPane innerPane = new StackPane();
-        innerPane.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
-        innerPane.setPrefSize(300, 150);
-
-        // Style du texte
-        helpText.setStyle("-fx-text-fill: black; -fx-font-size: 14px;");
-        innerPane.getChildren().add(helpText);
-
-        // Bouton "Voir plus"
-        Button seeMoreButton = new Button("Voir plus");
-        StyledContent.applyButtonStyle(seeMoreButton);
-        seeMoreButton.setOnAction(e -> {
-            int indexHelp = ControlButtons.getCurrentHelp() + 1;
-            Help actualHelp = ControlButtons.getHelp();
-        
-            // Vérification avant d'afficher le prochain message
-            if (indexHelp <= 3) {
-                SudokuGame.setHelpText(actualHelp.getMessage(indexHelp));
-                ControlButtons.setCurrentHelp(indexHelp);
-                if (indexHelp == 2) {
-                    MainMenu.getProfile().addTech(actualHelp.getName());
-                }
-                if (indexHelp == 3) {
-                    SudokuDisplay.highlightCells(SudokuGrid.getGridPane(), actualHelp.getDisplay());
-                }
-            }
-        
-            // Désactiver le bouton si l'index dépasse 3
-            seeMoreButton.setDisable(indexHelp >= 3);
-        });
-
-        // Bouton de fermeture (croix)
-        Button closeHelpButton = new Button("✖");
-        closeHelpButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;");
-        closeHelpButton.setOnAction(e -> {
-            ControlButtons.setCurrentHelp(0);
-            SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
-            seeMoreButton.setDisable(false);
-            helpOverlay.setVisible(false);
-        });
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        // Ajouter la croix en haut à droite
-        HBox topBar = new HBox(spacer, closeHelpButton);
-        topBar.setAlignment(Pos.TOP_RIGHT);
-        topBar.setPrefWidth(400);
-
-        // Icône ampoule
-        ImageView lightBulb = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/lightBulb.png"))); // Ajoute cette icône dans tes ressources
-        lightBulb.setFitWidth(20);
-        lightBulb.setFitHeight(20);
-
-        HBox topContent = new HBox(10, lightBulb, topBar);
-        topContent.setAlignment(Pos.TOP_LEFT);
-        topContent.setPrefWidth(300);
-
-        // Organiser les éléments dans la VBox
-        VBox content = new VBox(10, topContent, innerPane, seeMoreButton);
-        content.setAlignment(Pos.CENTER);
-
-        helpOverlay.getChildren().add(content);
-    }
-
-    /**
      * Applique un style a la zone de saisie passe en parametre
      * @param textField TextField a styliser [TextField]
      */
@@ -483,5 +405,14 @@ public class StyledContent {
             "-fx-background-insets: 0; " +
             "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 8, 0, 0, 3);"
         );
+    }
+
+    /**
+     * Methode pour desactiver un bouton
+     * 
+     * @param button Bouton a desactiver
+     */
+    public void setDesactivateButton(Button button) {
+        button.setDisable(true);
     }
 }

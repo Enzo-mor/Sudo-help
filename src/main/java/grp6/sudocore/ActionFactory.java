@@ -1,10 +1,11 @@
 package grp6.sudocore;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.JsonParseException;
 
-/***
+/**
  * Cette classe permet de stocker les classes qui implementent l'interface Action.
  * 
  * @author DE THESE Taise

@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 /**
  * Classe de test pour le timer du jeu.
  * Permet d'afficher le temps écoulé pendant une partie et de tester les fonctionnalités de minuterie du jeu.
@@ -28,6 +29,11 @@ public class GameTimerTestApp extends Application {
      */
     private Label timerLabel;
 
+    /**
+     * Lancement du jeu et affichage du temps écoulé dans une fenetre JavaFX.
+     * 
+     * @param args Arguments non utilisés
+     */
     @Override
     public void start(Stage primaryStage) {
         timerLabel = new Label("Temps : 00:00:00");
@@ -58,6 +64,11 @@ public class GameTimerTestApp extends Application {
         });
     }
 
+    /**
+     * Point d'entrée principal de l'application.
+     * 
+     * @param args Arguments non utilisés
+     */
     public static void main(String[] args) {
         launch(args);
     }

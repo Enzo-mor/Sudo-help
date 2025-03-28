@@ -1,7 +1,10 @@
 package grp6.sudocore;
+import grp6.syshelp.*;
+import grp6.sudocore.SudoTypes.Difficulty;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -16,9 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import grp6.syshelp.*;
-
-import grp6.sudocore.SudoTypes.Difficulty;
+import java.nio.file.*;
 
 /**
  * Classe: Permet l'initialisation et/ou la creation de la Base de donnees.
@@ -525,7 +526,8 @@ public final class DBManager {
             return false;
         }
     }
-    /* 
+    /*
+     * Sauvegarde un jeu dans la base de données. Si le jeu existe déjà, il est mis à jour.
      * 
      * @param game Le jeu a sauvegarder.
      * @throws SQLException Si une erreur survient lors de la connexion ou de l'execution de la requete.
@@ -755,7 +757,7 @@ public final class DBManager {
     /**
      * Recuperation des techniques
      */
-    public List<Technique> getTechs() {
+    public static List<Technique> getTechs() {
         List<Technique> res = new ArrayList<>();
 
         try {
@@ -776,8 +778,10 @@ public final class DBManager {
                     String shortDesc = rs.getString("short_desc");
                     String longDesc = rs.getString("long_desc");
                     String data = rs.getString("cells");
+                    String finalCells = rs.getString("long_desc");
+                    String annot = rs.getString("cells");
 
-                    res.add(new Technique(id, name, shortDesc, longDesc, data));
+                    res.add(new Technique(id, name, shortDesc, longDesc, data, finalCells, annot));
                 }
             }
         }
@@ -787,5 +791,21 @@ public final class DBManager {
 
         return res;
     }
+
+    /**
+     * Supprime la BDD.
+     * @throws IOException si la BDD n'existe pas ou ne peut pas etre supprime.
+     */
+    public static void delete() throws IOException {
+        Path path = Paths.get(DATABASE_PATH);
+
+        if (!Files.exists(path)) {
+            throw new NoSuchFileException("La base de données n'existe pas : " + DATABASE_PATH);
+        }
+
+        Files.delete(path);
+        System.out.println("Base de données supprimée avec succès ! (" + DATABASE_PATH + ")");
+    }
+
 
 }

@@ -94,6 +94,7 @@ public class NumberSelection {
             if (Settings.getHighlightNumbers()) {
                 SudokuDisplay.highlightSameNumbers(SudokuGrid.getGridPane(), SudokuGrid.getGrid(), Integer.parseInt(getSelectedNumber()));
             }
+            SudokuGame.resetTimer();
         });
     
         return button;

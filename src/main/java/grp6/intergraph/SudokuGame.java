@@ -110,6 +110,11 @@ public class SudokuGame {
      */
     private static ControlButtons controlsButtons = null;
 
+    /**
+     * Bouton pour voir plus quand on veut de l'aide
+     */
+    private static Button seeMoreButton;
+
     /*
      * Timer pour l'animation du bouton d'aide
      */
@@ -130,6 +135,7 @@ public class SudokuGame {
      */
     public static void showSudokuGame(Stage primaryStage, Sudoku selectedSudoku) {
         Grid gridSudokuBase = DBManager.getGrid(selectedSudoku.getId());
+        SudokuGame.resetTimer();
 
         // Initialisation du jeu en fonction de son etat
         if (selectedSudoku.getStatus() == GameState.IN_PROGRESS && selectedSudoku.getGame() != null) {
@@ -200,7 +206,10 @@ public class SudokuGame {
         rotateAnimation.setCycleCount(1);
 
         settingsWindow = Settings.getInstance(primaryStage, gearIcon);
-        settingsButton.setOnAction(e -> settingsWindow.toggleSettingsWindow());
+        settingsButton.setOnAction(e -> {
+            SudokuGame.resetTimer();
+            settingsWindow.toggleSettingsWindow();
+        });
 
         // --- Initialisation des composants ---
         ToolsPanel toolsPanel = new ToolsPanel();                                   // 1. Creer le panneau des outils
@@ -222,7 +231,7 @@ public class SudokuGame {
         helpOverlay = new VBox(20);
         helpText = new Label();
         
-        StyledContent.setupHelpOverlay(helpOverlay, helpText);
+        setupHelpOverlay(helpOverlay, helpText);
 
         // --- StackPane pour superposer helpOverlay sur rightPanelContent ---
         StackPane stackPane = new StackPane();
@@ -314,6 +323,7 @@ public class SudokuGame {
         if (actualGame != null) {
             actualGame.pauseGame();
             gameStateChecker.stop();
+            SudokuGame.stopTimer();
         }
 
         // Conteneur principal
@@ -374,6 +384,7 @@ public class SudokuGame {
             quitConfirmation.setVisible(false);
             gameStateChecker.setCycleCount(Animation.INDEFINITE);
             gameStateChecker.play();
+            SudokuGame.resetTimer();
         });
 
         // Conteneur pour les boutons
@@ -409,6 +420,7 @@ public class SudokuGame {
         if (actualGame != null) {
             actualGame.pauseGame();
             gameStateChecker.stop();
+            SudokuGame.stopTimer();
         }
     
         List<Technique> techniques = MainMenu.getProfile().getUnlockedTechniques();
@@ -459,6 +471,7 @@ public class SudokuGame {
                 techniqueOverlay.setVisible(false);
                 if (actualGame != null) {
                     actualGame.resumeGame();
+                    SudokuGame.resetTimer();
                 }
                 gameStateChecker.setCycleCount(Animation.INDEFINITE);
                 gameStateChecker.play();
@@ -486,13 +499,99 @@ public class SudokuGame {
         techniqueOverlay.getChildren().setAll(contentBox);
         techniqueOverlay.setVisible(true);
     }
+
+    /**
+     * Applique un style au panneau d'aide
+     */
+    public static void setupHelpOverlay(VBox helpOverlay, Label helpText) {
+
+        SudokuGame.stopTimer();
+
+        // Style du cadre extérieur
+        helpOverlay.setStyle("-fx-background-color: #4A90E2; -fx-background-radius: 15; -fx-padding: 15px;");
+        helpOverlay.setAlignment(Pos.CENTER);
+        helpOverlay.setVisible(false); // Masqué par défaut
+
+        // Cadre blanc intérieur
+        StackPane innerPane = new StackPane();
+        innerPane.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+        innerPane.setPrefSize(300, 150);
+
+        // Style du texte
+        helpText.setStyle("-fx-text-fill: black; -fx-font-size: 14px;");
+        innerPane.getChildren().add(helpText);
+        
+        // Bouton "Voir plus"
+        seeMoreButton = new Button("Voir plus");
+        StyledContent.applyButtonStyle(seeMoreButton);
+        seeMoreButton.setOnAction(e -> {
+            int indexHelp = ControlButtons.getCurrentHelp() + 1;
+            Help actualHelp = ControlButtons.getHelp();
+            
+            // Vérification avant d'afficher le prochain message
+            if (indexHelp <= 3) {
+                SudokuGame.setHelpText(actualHelp.getMessage(indexHelp));
+                ControlButtons.setCurrentHelp(indexHelp);
+                if (indexHelp == 2) {
+                    MainMenu.getProfile().addTech(actualHelp.getName());
+                }
+                if (indexHelp == 3) {
+                    SudokuDisplay.highlightCells(SudokuGrid.getGridPane(), actualHelp.getDisplay());
+                }
+            }
+            
+            // Désactiver le bouton si l'index dépasse 3
+            seeMoreButton.setDisable(indexHelp >= 3);
+        });
+
+        // Bouton de fermeture (croix)
+        Button closeHelpButton = new Button("✖");
+        closeHelpButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;");
+        closeHelpButton.setOnAction(e -> {
+            ControlButtons.setCurrentHelp(0);
+            SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
+            seeMoreButton.setDisable(false);
+            helpOverlay.setVisible(false);
+            SudokuGame.resetTimer();
+        });
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        // Ajouter la croix en haut à droite
+        HBox topBar = new HBox(spacer, closeHelpButton);
+        topBar.setAlignment(Pos.TOP_RIGHT);
+        topBar.setPrefWidth(400);
+
+        // Icône ampoule
+        ImageView lightBulb = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/lightBulb.png"))); // Ajoute cette icône dans tes ressources
+        lightBulb.setFitWidth(20);
+        lightBulb.setFitHeight(20);
+
+        HBox topContent = new HBox(10, lightBulb, topBar);
+        topContent.setAlignment(Pos.TOP_LEFT);
+        topContent.setPrefWidth(300);
+
+        // Organiser les éléments dans la VBox
+        VBox content = new VBox(10, topContent, innerPane, seeMoreButton);
+        content.setAlignment(Pos.CENTER);
+
+        helpOverlay.getChildren().add(content);
+    }
+
+    /**
+     * Methode pour changer l'etat du bouton afin d'en voir plus lors de la demande de l'aide
+     */
+    public static void setDisableSeeMoreButton(boolean state) {
+        seeMoreButton.setDisable(state);
+    }
     
     /*
      * Gere le temps d'inactivite du joueur
      * @param scene Scene affichee 
      */
     private static void setupInactivityTimer(Scene scene) {
-        inactivityTimer = new Timeline(new KeyFrame(Duration.seconds(7), event -> {
+        inactivityTimer = new Timeline(new KeyFrame(Duration.seconds(20), event -> {
             if(showPopup){
                 showPopup();
             }else{
@@ -521,9 +620,16 @@ public class SudokuGame {
     /*
      * Remise a zero du timer d'inactivite
      */
-    private static void resetTimer() {
+    public static void resetTimer() {
         inactivityTimer.stop(); // Mets en pause le timer actuel
         inactivityTimer.playFromStart(); // Remise a zero
+    }
+
+    /**
+     * Arrete le timer d'inactivite
+     */
+    public static void stopTimer() {
+        inactivityTimer.stop();
     }
 
     /*
@@ -555,6 +661,12 @@ public class SudokuGame {
         showHelpAnimation = !showHelpAnimation;
     }
 
+    /**
+     * Gere l'animation pour l'effet de clignotant du bouton d'aide
+     * 
+     * @param button Le bouton qui doit clignoter [Button]
+     * @param start Savoir si on doit faire l'animation [boolean]
+     */
     private static void toggleBlinkEffect(Button button, boolean start) {
         if (start) {
             blinkAnimation = new Timeline(
@@ -571,7 +683,11 @@ public class SudokuGame {
         }
     }
     
-    // Appelle cette méthode lorsqu'une interaction utilisateur est détectée :
+    /**
+     * Remet le timer de l'animation et de l'inactivite a zero
+     * 
+     * @param scene La scene actuelle [Scene]
+     */
     private static void startResetTimer(Scene scene) {
         if (resetTimer != null) {
             resetTimer.stop();

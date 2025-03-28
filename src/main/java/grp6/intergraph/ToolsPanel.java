@@ -70,6 +70,7 @@ public class ToolsPanel {
         StyledContent.styleButton(eraseButton);
         eraseButton.setOnAction(e -> {
             boolean newMode = !getEraseMode();
+            SudokuGame.resetTimer();
             
             if (newMode) {
                 setEraseButtonOn();
@@ -83,6 +84,7 @@ public class ToolsPanel {
         StyledContent.styleButton(pencilButton);
         pencilButton.setOnAction(e -> {
             boolean newMode = !getAnnotationMode();
+            SudokuGame.resetTimer();
 
             if (newMode) {
                 setPencilButtonOn();

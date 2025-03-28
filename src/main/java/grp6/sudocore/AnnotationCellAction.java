@@ -155,6 +155,9 @@ public class AnnotationCellAction extends ActionCell {
         }
     }
 
+    /**
+     * Adaptateur Gson pour serialiser l'action.
+     */
     private class AnnotationCellActionSerialiser implements JsonSerializer<AnnotationCellAction> {
 
         /**
@@ -171,6 +174,9 @@ public class AnnotationCellAction extends ActionCell {
         }
     }
 
+    /**
+     * Adaptateur Gson pour deserialiser l'action.
+     */
     private static class AnnotationCellActionDeserialiser implements JsonDeserializer<AnnotationCellAction> {
         private final Game game;
 

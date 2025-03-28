@@ -1,6 +1,5 @@
 package grp6.sudocore;
 
-/* ====== Importation des libreries java ====== */
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,27 +21,42 @@ import java.util.NoSuchElementException;
 public final class Grid implements Iterable<Cell> {
 
     /* ======= Constantes de Classes ======= */
-    /** Nombre de valeurs que peut prendre un chiffre [1, 9] */
+
+    /** 
+     * Nombre de valeurs que peut prendre un chiffre [1, 9] 
+     */
     public static final int NB_NUM = 9; 
     
-    /** Nombre de cellules sur une ligne/colonne d'une sous-grille */
+    /** 
+     * Nombre de cellules sur une ligne/colonne d'une sous-grille 
+     */
     public static final int NB_SUBGRID = 3;   
 
     /* ======= Variables d'instance ======= */
     
-    /** Liste des cellules de la grille */
+    /** 
+     * Liste des cellules de la grille 
+     */
     private final List<Cell> cells;
     
-    /** Liste des cellules de la grille resolue */
+    /** 
+     * Liste des cellules de la grille resolue 
+     */
     private List<Cell> solvedCells;
     
-    /** Identifiant unique de la grille */
+    /** 
+     * Identifiant unique de la grille 
+     */
     private final Integer id;        
     
-    /** Difficulte de la grille (facile, moyen, difficile, etc.) */
+    /** 
+     * Difficulte de la grille (facile, moyen, difficile, etc.) 
+     */
     private final SudoTypes.Difficulty difficulty;   
 
-    /** Type de forme qu'on peut avoir dans un grille */
+    /** 
+     * Type de forme qu'on peut avoir dans un grille 
+     */
     public static enum Shape {LINE, COLUMN, SQUARE;}    
 
     /* ======= Methodes de Classe ======= */
@@ -124,6 +138,16 @@ public final class Grid implements Iterable<Cell> {
     }
 
     /**
+     * Initialisation d'une grille avec une chaine de caracteres
+     * @param cells chaine de caracteres des cellules
+     */
+    public Grid(String cells) {
+        this.id = 0;
+        this.cells = parseCells(cells);
+        this.difficulty = SudoTypes.Difficulty.EASY;
+    }
+
+    /**
      * Permet de cloner une grille.
      * Cette operation cree une nouvelle instance de la grille, 
      * permettant d'obtenir une copie sans affecter la grille d'origine.
@@ -169,7 +193,6 @@ public final class Grid implements Iterable<Cell> {
             throw new IllegalArgumentException("Indice incorrect : " + e);
         }
     }
-
 
     /***
      * Permet de reinitialiser la grille.
@@ -332,7 +355,6 @@ public final class Grid implements Iterable<Cell> {
         return count;
     }
 
-
     /**
      * Transforme les cellules en chaîne de caractères.
      * @param grid Liste de cellules représentant une grille
@@ -490,6 +512,13 @@ public final class Grid implements Iterable<Cell> {
         return res;
     }
     
+    /**
+     * Convertit un numero de sous-grille en coordonnees de depart (ligne, colonne) dans la grille principale.
+     *
+     * @param num Le numero de la sous-grille (0 a NB_NUM - 1).
+     * @return Un tableau contenant la ligne et la colonne de depart de la sous-grille.
+     * @throws IllegalArgumentException Si le numero de sous-grille est invalide.
+     */
     public int[] numToPosForSubGrid(int num) {
         if (num < 0 || num >= NB_NUM) {
             throw new IllegalArgumentException("Numéro de sous-grille invalide: " + num);
@@ -501,6 +530,13 @@ public final class Grid implements Iterable<Cell> {
         return new int[]{row, col};
     }
 
+    /**
+     * Calcule le nombre de cellules remplies dans une ligne, une colonne ou une sous-grille.
+     *
+     * @param shape La forme (ligne, colonne ou carré) a analyser.
+     * @param num   L'index de la ligne, colonne ou sous-grille.
+     * @return Le nombre de cellules non vides dans la forme spécifiée.
+     */
     public int numberOfFullCell(Shape shape,int num){
         int res = 0;
         switch(shape){
@@ -535,6 +571,13 @@ public final class Grid implements Iterable<Cell> {
         return res;
     }
 
+    /**
+     * Affiche la grille des annotations avec un formatage structure.
+     * 
+     * - Les cellules editables affichent leurs annotations.
+     * - Les cellules fixes restent vides.
+     * - Des separateurs verticaux et horizontaux sont ajoutes pour delimiter les sous-grilles.
+     */
     public void printAnnotationsGrid() {
         // On fixe une largeur pour chaque cellule 
         final int cellWidth = 9;
@@ -586,5 +629,4 @@ public final class Grid implements Iterable<Cell> {
             }
         }
     }
-
 }

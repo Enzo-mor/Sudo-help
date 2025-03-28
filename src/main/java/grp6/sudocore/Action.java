@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
  * @see ActionManagerApply
  */
 public abstract class Action {
+    
     /**
      * Represente le jeu sur lequel les actions seront appliquees.
      */

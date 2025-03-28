@@ -18,9 +18,15 @@ import java.util.List;
 public final class FlexCell extends FixCell {
 
     /* ======= Variables d'instance ======= */
-    /** Tableau des annotations (si annotations[i]==true, i+1 est annotée dans la cellule) */
-    protected boolean[] annotations;  
-    /** Liste des annotations (si annotations[i]==true, i+1 est annotée dans la cellule) */
+
+    /** 
+     * Tableau des annotations (si annotations[i]==true, i+1 est annotée dans la cellule) 
+     */
+    protected boolean[] annotations;
+    
+    /** 
+     * Liste des annotations (si annotations[i]==true, i+1 est annotée dans la cellule) 
+     */
     protected List<Integer> annotationsList;  
 
     /* ======= Méthodes d'instance ======= */

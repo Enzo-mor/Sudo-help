@@ -58,10 +58,24 @@ public class ActionManagerApply {
     private static class ActionManagerDeserialiser implements JsonDeserializer<Action> {
         private final Game game;
 
+        /**
+         * Constructeur de la classe deserialiseur.
+         * 
+         * @param game Le jeu sur lequel les actions seront appliquees.
+         */
         public ActionManagerDeserialiser(Game game) {
             this.game = game;
         }
 
+        /**
+         * Deserialise un objet JSON en une instance de {@link Action}.
+         *
+         * @param json    L'element JSON à deserialiser.
+         * @param typeOfT Le type de l'objet attendu (ignore dans cette implementation).
+         * @param context Le contexte de deserialisation (non utilise ici).
+         * @return Une instance de {@link Action} correspondant aux donnees JSON.
+         * @throws JsonParseException Si une erreur survient lors de la deserialisation.
+         */
         @Override
         public Action deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             try {
@@ -86,6 +100,12 @@ public class ActionManagerApply {
         }
     }
 
+    /**
+     * Point d'entree du programme. Cette methode teste la serialisation et la deserialisation 
+     * d'actions en JSON, puis tente d'executer les actions deserialisees.
+     *
+     * @param args Arguments de la ligne de commande (non utilises).
+     */
     public static void main(String[] args) {
         try {
             // Création de quelques actions pour tester

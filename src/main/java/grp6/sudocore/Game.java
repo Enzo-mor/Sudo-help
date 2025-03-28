@@ -37,9 +37,10 @@ import javafx.application.Platform;
  * @see SudoTypes
  * @see GameState
  */
-public final class Game {
+public class Game {
 
     // ================== Variables d'instance =================
+
     /**
      * Profil du joueur
      */
@@ -81,6 +82,7 @@ public final class Game {
     private double progressRate;
 
     // ================== Variables pour le timer du jeu =================
+
     /**
      * Temps ecoule en secondes
      */
@@ -111,7 +113,7 @@ public final class Game {
      */
     private GameState gameState;
 
-// ================== Constructeurs ==================
+    // ================== Constructeurs ==================
 
     /**
      * Constructeur de la classe Game
@@ -122,6 +124,27 @@ public final class Game {
     public Game(Grid grid, Profile profile) throws SQLException {
         this.id = DBManager.getLastIdGame() + 1;
         this.grid = grid.clone();
+        this.profile = profile;
+        this.actions = new LinkedList<Action>();
+        this.createdDate = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.FRANCE).format(new Date());
+        this.lastModifDate = new String(this.createdDate);
+        calculateProgressRate();
+        this.elapsedTime = 0;
+        currentIndex = -1;
+        this.gameState = GameState.NOT_STARTED;
+        score = 1000;
+        this.timer = Executors.newScheduledThreadPool(1);
+    }
+
+    /**
+     * Constructeur alternatif de la classe Game. Initialise une nouvelle partie a partir d'une chaine de cellules.
+     * 
+     * @param cells   Chaine representant les cellules de la grille.
+     * @param profile Profil du joueur.
+     */
+    public Game(String cells, Profile profile) {
+        id = 0;
+        grid = new Grid(cells);
         this.profile = profile;
         this.actions = new LinkedList<Action>();
         this.createdDate = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.FRANCE).format(new Date());
@@ -246,7 +269,7 @@ public final class Game {
   
       
 
-        /**
+    /**
      * Retourne le temps ecoule au format HH:mm:ss.
      * 
      * @return Le temps ecoule sous forme de chaine de caracteres au format HH:mm:ss.
@@ -525,10 +548,9 @@ public final class Game {
         }
     }
 
-
-
      /**
-      * methode permettant de sauvegarder le jeu
+      * Methode permettant de sauvegarder le jeu
+      *
       * @throws SQLException leve une exception en cas d'erreur de connection à la base de donnée
       */
      private void saveGame() throws SQLException{
@@ -537,7 +559,8 @@ public final class Game {
      }
 
    /**
-    * 
+    * Renvoie le score de la partie.
+    *
     * @return le score de la partie
     */
     public int getScore() {
@@ -554,7 +577,7 @@ public final class Game {
     }
 
     /**
-     *  cette methode permet d'ajouter une valeur à une case du jeu 
+     * cette methode permet d'ajouter une valeur à une case du jeu 
      * 
      * @param x represente la position x de la case dans la grille
      * @param y represente la position Y de la case dans la grille
@@ -564,7 +587,6 @@ public final class Game {
      * @throws NoEditableCellExeception leve une exception si la cellule n'est pas editable
      *
      * @return la même instance du jeu  après appliquation de  la modification
-     * 
      */
     public Game addNumber(int x,int y,int value) throws IllegalStateException,NoEditableCellExeception{
 
@@ -613,17 +635,17 @@ public final class Game {
        
     }
 
-  /**
-   * methode permettant de supprimer un nombre dans une cellule
-   * @param x represente la position x de la case dans la grille
-    * @param y represente la position Y de la case dans la grille
-    * @param value represente l'annotation à ajouter
+    /**
+     * methode permettant de supprimer un nombre dans une cellule
+     * @param x represente la position x de la case dans la grille
+     * @param y represente la position Y de la case dans la grille
+     * @param value represente l'annotation à ajouter
      * 
      * @return la même instance du jeu  après appliquation de  la modification
      * 
      * @throws IllegalStateException leve une exception si le jeu se trouve dans un eta incompatible à cette methode
      * @throws NoEditableCellExeception leve une exception si la cellule n'est pas editable
-   */
+     */
     public Game removeNumber(int x, int y) throws IllegalStateException,NoEditableCellExeception{
 
           try {
@@ -635,6 +657,7 @@ public final class Game {
     }
     /**
      * cette methode permet de supprimer une annotation  à une case du jeu
+     * 
      * @param x represente la position x de la case dans la grille
      * @param y represente la position Y de la case dans la grille
      * @param value represente l'annoatation à supprimer
@@ -651,7 +674,7 @@ public final class Game {
         }
     }
 
-        /**
+    /**
      * Met a jour la date de modification du jeu.
      */
     private void updateDate() {
@@ -817,6 +840,13 @@ public final class Game {
         actions.clear();
     }
 
+    /**
+     * Point d'entree du programme. 
+     * Initialise une partie pour un profil donne, demarre le jeu, supprime toutes les parties associees 
+     * au profil, puis arrête le jeu.
+     *
+     * @param args Arguments de la ligne de commande (non utilises).
+     */
     public static void main(String[] args) {
 
         try{

@@ -2,6 +2,7 @@ package grp6.intergraph;
 
 import grp6.sudocore.*;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -133,7 +134,10 @@ public class ProfileSelection {
         StyledContent.applyButtonBoxStyle(quitButton);
         quitButton.setOnAction(e -> Platform.exit());
         
-        VBox layout = new VBox(20, titleLabel, navigation, addProfileButton, guestButton, quitButton);
+        Button deleteButton = new Button("Supprimer BDD");
+        StyledContent.applyButtonBoxStyle(deleteButton);
+        
+        VBox layout = new VBox(20, titleLabel, navigation, addProfileButton, guestButton, quitButton, deleteButton);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(10));
         
@@ -141,13 +145,55 @@ public class ProfileSelection {
         createBox.setAlignment(Pos.CENTER);
         createBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
         createBox.setVisible(false);
-
+        
         profileDeleteMessage = new VBox(10);
         profileDeleteMessage.setAlignment(Pos.CENTER);
         profileDeleteMessage.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
         profileDeleteMessage.setVisible(false);
         
-        StackPane stackLayout = new StackPane(layout, createBox, profileDeleteMessage);
+        VBox deleteBox = new VBox();
+        deleteBox.setAlignment(Pos.CENTER);
+        deleteBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+        deleteBox.setVisible(false);
+        
+        Label textErase = new Label("Vous vous apprêtez à supprimer vous base de données et allez quitter le jeu !\n Voulez vous continuez ?");
+        textErase.setWrapText(true);
+        textErase.setTextAlignment(TextAlignment.CENTER);
+        textErase.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #343a40;");
+
+        deleteButton.setOnAction(e -> {
+            deleteBox.setVisible(true);
+        });
+        
+        Button confirmDeleteButton = new Button("Continuer");
+        StyledContent.applyButtonWarningStyle(confirmDeleteButton);
+        confirmDeleteButton.setOnAction(e -> {
+            try {
+                DBManager.delete();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            Platform.exit();
+            System.exit(0);
+        });
+
+        Button cancelButton = new Button("Annuler");
+        StyledContent.applyButtonStyle(cancelButton);
+        cancelButton.setOnAction(e -> deleteBox.setVisible(false));
+        
+        HBox buttons = new HBox(10, confirmDeleteButton, cancelButton);
+        buttons.setAlignment(Pos.CENTER);
+
+        VBox contentBox = new VBox(10);
+        StyledContent.applyContentBoxStyle(contentBox);
+        contentBox.setMaxWidth(400);
+        contentBox.setAlignment(Pos.TOP_CENTER);
+        contentBox.setPadding(new Insets(30));
+        contentBox.getChildren().addAll(textErase, buttons);
+
+        deleteBox.getChildren().addAll(contentBox);
+        
+        StackPane stackLayout = new StackPane(layout, createBox, profileDeleteMessage, deleteBox);
 
         // --- BorderPane pour organiser la mise en page ---
         BorderPane root = new BorderPane();
@@ -269,6 +315,11 @@ public class ProfileSelection {
         createBox.setVisible(true);
     }
 
+    /**
+     * Affiche un panneau d'indication pour signifier que le profile passe en parametre a ete supprime
+     * 
+     * @param profileName Profile supprime [Profile]
+     */
     public static void profileDeleteMessage(String profileName) {
         // Vider le message précédent avant d'ajouter un nouveau
         profileDeleteMessage.getChildren().clear();

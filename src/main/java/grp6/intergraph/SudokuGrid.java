@@ -413,6 +413,9 @@ public class SudokuGrid {
      */
     private void setupCellInteraction(Button cellButton, final int r, final int c, Label mainNumber, Text annotationText) {
         cellButton.setOnAction(e -> {
+            
+            SudokuGame.resetTimer();
+
             if (toolsPanel.getAnnotationMode()) {
 
                 // Remettre le style de la cellule selectionne d'avant par default

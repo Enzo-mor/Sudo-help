@@ -15,6 +15,7 @@ import java.util.List;
 public class FixCell implements Cell {
 
     /* ======= Variables d'instance ======= */
+    
     /** Chiffre stocke dans la cellule */
     protected int number; 
 

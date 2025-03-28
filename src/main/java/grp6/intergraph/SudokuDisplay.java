@@ -22,7 +22,6 @@ import javafx.util.Duration;
  *
  * @author PERRON Nathan
  * @author RASSON Emma
- *
  */
 public class SudokuDisplay {
 

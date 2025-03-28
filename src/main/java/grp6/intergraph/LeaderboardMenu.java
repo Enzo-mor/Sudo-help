@@ -24,11 +24,20 @@ import java.util.*;
  * @see GameplayChoice
  */
 public class LeaderboardMenu {
-    /** Index de la difficulté sélectionnée */
+
+    /** 
+     * Index de la difficulté sélectionnée 
+     */
     private static int currentDifficultyIndex = 0;
-    /** Liste des niveaux de difficulté disponibles */
+    
+    /** 
+     * Liste des niveaux de difficulté disponibles 
+     */
     private static final String[] DIFFICULTIES = {"facile", "moyen", "difficile"};
-    /** ID de la grille sélectionnée */
+    
+    /** 
+     * ID de la grille sélectionnée 
+     */
     private static int selectedGridId = -1;
 
     /**

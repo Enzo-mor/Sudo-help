@@ -1,4 +1,3 @@
-
 package grp6.sudocore;
 
 /**

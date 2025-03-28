@@ -84,15 +84,15 @@ public class SudokuMenu {
         // Actions des fleches de navigation
         leftArrow.setOnAction(e -> {
             currentPage--;
-            SudokuMenu.showSudokuList(sudokuContainer, stage, sudokus, difficultyLabel, leftArrow, rightArrow);
+            showSudokuList(sudokuContainer, stage, sudokus, difficultyLabel, leftArrow, rightArrow);
         });
 
         rightArrow.setOnAction(e -> {
             currentPage++;
-            SudokuMenu.showSudokuList(sudokuContainer, stage, sudokus, difficultyLabel, leftArrow, rightArrow);    
+            showSudokuList(sudokuContainer, stage, sudokus, difficultyLabel, leftArrow, rightArrow);    
         });
 
-        SudokuMenu.showSudokuList(sudokuContainer, stage, sudokus, difficultyLabel, leftArrow, rightArrow);
+        showSudokuList(sudokuContainer, stage, sudokus, difficultyLabel, leftArrow, rightArrow);
 
         // Mise en page des elements
         HBox navigation = new HBox(20, leftArrow, sudokuContainer, rightArrow);
@@ -339,6 +339,7 @@ public class SudokuMenu {
 
     /**
      * Methode pour affircher le panneau de confirmation pour reprendre ou recommencer une partie
+     * 
      * @param parentStage La fenetre principale de l'application [Stage].
      * @param sudoku Le Sudoku actuellement selectionne [Sudoku].
      * @param sudokus La liste de tous les Sudokus disponibles [List<Sudoku>].
@@ -390,7 +391,3 @@ public class SudokuMenu {
         confirmationBox.setVisible(true);
     }    
 }
-
-
-
-

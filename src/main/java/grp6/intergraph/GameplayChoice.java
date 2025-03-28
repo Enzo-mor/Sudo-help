@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
@@ -51,7 +50,7 @@ public class GameplayChoice {
         // Appliquer le style classique sur le bouton exitButton
         StyledContent.applyButtonStyle(exitButton);
 
-        learningMode.setOnAction(e -> System.out.println("Parametres ouverts"));
+        learningMode.setOnAction(e -> LearningMenu.showLearningLibrairy(stage));
         freeMode.setOnAction(e -> SudokuMenu.showSudokuLibrary(stage));
         exitButton.setOnAction(e -> MainMenu.showMainMenu(stage, MainMenu.getProfile()));
 
