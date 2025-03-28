@@ -21,8 +21,8 @@ public class NakedSingleton implements InterfaceTech {
             for (Cell cell : grille.getColumn(i)) {
                 if (cell.isEmpty() && cell.OnlyOneAnnotation()) {
                     int[] pos = cell.getPosition();
-                    aide.addPos(pos[0], pos[1]);
-                    //aide.addColumn(i);
+                  //  aide.addPos(pos[0], pos[1]);
+                    aide.addColumn(i);
                     aide.setMessage(1, "Remplis tes annotations");
                     aide.setMessage(2, "C'est un singleton nu !");
                     aide.setMessage(3, "cherche les "+takeTheAnnotation(cell));
@@ -34,8 +34,8 @@ public class NakedSingleton implements InterfaceTech {
             for (Cell cell : grille.getLine(i)) {
                 if (cell.isEmpty() && cell.OnlyOneAnnotation()) {
                     int[] pos = cell.getPosition();
-                    aide.addPos(pos[0], pos[1]);
-                    //aide.addLine(i);
+                   // aide.addPos(pos[0], pos[1]);
+                    aide.addLine(i);
                     aide.setMessage(1, "Remplis tes annotations");
                     aide.setMessage(2, "C'est un singleton nu !");
                     aide.setMessage(3, "cherche les "+takeTheAnnotation(cell));
@@ -48,8 +48,8 @@ public class NakedSingleton implements InterfaceTech {
             for (Cell cell : grille.getFlatSubGrid(temp[0], temp[1])) {
                 if (cell.isEmpty() && cell.OnlyOneAnnotation()) {
                     int[] pos = cell.getPosition();
-                    aide.addPos(pos[0], pos[1]);
-                    //aide.addSquare(i);
+                    //aide.addPos(pos[0], pos[1]);
+                    aide.addSquare(i);
                     aide.setMessage(1, "Remplis tes annotations");
                     aide.setMessage(2, "C'est un singleton nu !");
                     aide.setMessage(3, "cherche les "+takeTheAnnotation(cell));

@@ -60,7 +60,6 @@ public class NakedTriples implements InterfaceTech{
         }
 
         for(int i = 0; i<tabTriple.size();i++){
-            System.out.println("tabTriple["+i+"] : "+tabTriple.get(i));
         }
 
         //traitement 2 : mettre dans un tableau les triplets
@@ -87,7 +86,6 @@ public class NakedTriples implements InterfaceTech{
                }
            }
    
-           System.out.println("ocurance : "+ocurance);
    
            if (ocurance.size() == 3){
                 aide.addSquare(num);
@@ -113,7 +111,6 @@ public class NakedTriples implements InterfaceTech{
         ArrayList<List<Integer>> tabCol = new ArrayList<List<Integer>>();
         ArrayList<List<Integer>> tabLine = new ArrayList<List<Integer>>();
 
-        System.out.println("test : "+tabLine);
 
         // On récupère les cellules dans les lignes et colonnes
         Cell line[] = grille.getLine(num);
@@ -134,7 +131,6 @@ public class NakedTriples implements InterfaceTech{
         for(int i=0;i<9;i++){
 
             if(tabCol.get(i) != null){
-                System.out.println("Taille du tableau col "+i+" : "+tabCol.get(i).size());
                 if(tabCol.get(i).size() > 0 && tabCol.get(i).size() <= 3){
                     tabTriple.add(tabCol.get(i));
                 }
@@ -151,7 +147,6 @@ public class NakedTriples implements InterfaceTech{
         //affichage des triplets
         //validé
         for(int i = 0; i<tabTriple.size();i++){
-            System.out.println("tabTriple["+i+"] : "+tabTriple.get(i));
         }
 
         //traitement 2 : mettre dans un tableau les triplets
@@ -167,7 +162,6 @@ public class NakedTriples implements InterfaceTech{
             }
         }
 
-        System.out.println("tabTriplets : "+tabTriplets);
 
 
         //conter le nombre de differente valeur dans le tableau
@@ -181,7 +175,6 @@ public class NakedTriples implements InterfaceTech{
             }
         }
 
-        System.out.println("ocurance : "+ocurance);
 
         if (ocurance.size() == 3){
             aide.addSquare(num);

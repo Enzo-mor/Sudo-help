@@ -66,14 +66,12 @@ public class NakedPairs implements InterfaceTech {
                     }
             }
         
-        //  System.out.println("verif tabPair");
         for(int i = 0; i<9;i++){
             int[] temp = tabPair[i];
             for(int j = 0; j<9;j++){
                 //if de la violence (désolée)
                 if(temp[0] == tabPair[j][0]  && temp[1] == tabPair[j][1] && temp[0] !=0 && i!=j){
 
-                    System.out.println("true de région");
                     aide.addSquare(num);
                     aide.setMessage(1, "Fais attention aux carrés");
                     aide.setMessage(2, "Fais attention aux "+temp[0]+" "+temp[1]);
@@ -147,12 +145,9 @@ public class NakedPairs implements InterfaceTech {
         // On vérifie si on a trouvé une paire
         for(int i = 0; i<9;i++){
             int[] temp = tabPair[i];
-            System.out.println("tabTemp["+i+"] : "+temp[0]+" "+temp[1]);
-            System.out.println("tabPair["+i+"] : "+tabPair[i][0]+" "+tabPair[i][1]);
             for(int j = 0; j<9;j++){
                 //if de la violence (désolée)
                 if(temp[0] == tabPair[j][0]  && temp[1] == tabPair[j][1] && temp[0] !=0 && i!=j){
-                    System.out.println("true de ligne et colonne");
                     aide.addSquare(num);
                     aide.setMessage(1, "Fait attention aux ligne/colone");
                     aide.setMessage(2, "Fait attention aux "+temp[0]+" "+temp[1]);
@@ -166,7 +161,6 @@ public class NakedPairs implements InterfaceTech {
         
     @Override
     public Help getHelp(Grid grille) {
-        System.out.println("detect");
         for(int i = 0; i<9;i++){
             if(detectPairsCarre(i,grille) || detectPairs(i,grille)){
                 return  aide;
