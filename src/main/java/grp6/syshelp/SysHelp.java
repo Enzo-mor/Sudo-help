@@ -1,5 +1,6 @@
 package grp6.syshelp;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -73,7 +74,36 @@ public class SysHelp {
      */
     public static Help generateHelp(Grid g) {
         SudoLog.debug("Clone de la grille");
-       // Grid clone = g.clone();
+        Grid clone = g.clone();
+        Help aide = new Help("Eurreur anotation");
+
+        // On remplit les annotations
+        AutoAnnotation.generate(clone);
+        
+        
+
+        for(int i = 0; i < Grid.NB_NUM; i++) {
+            for(int j = 0; j < Grid.NB_NUM; j++) {
+
+                if(g.getCell(i, j).getAnnotations().size() == 1 && clone.getCell(i, j).getAnnotations().size() >1  ) {
+                    System.out.println("La casse : "+i+" "+j+"");
+                    System.out.println(" Grille joueur : "+g.getCell(i, j).getAnnotations().size()+"");
+                    System.out.println(" Grille clone : "+clone.getCell(i, j).getAnnotations().size()+"\n");
+                    aide.setMessage(1, "Tu peux rajouter des annotation");
+                    SudoLog.debug("Tu peux rajouter des annotation");    
+                }
+                
+                if(!(clone.getCell(i, j).getAnnotations().containsAll(g.getCell(i,j).getAnnotations()))){
+
+                    aide.addPos(i, j);
+                    aide.setMessage(3, "Il y a des erreur dans les annotations");
+
+                }
+            }
+        }
+
+
+
         SudoLog.debug("Generation des annotations");
        // AutoAnnotation.generate(clone);
        Optional<Help> help = TECHNIQUES.stream()
