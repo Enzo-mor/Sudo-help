@@ -20,7 +20,7 @@ public class NakedSingleton implements InterfaceTech {
             // Vérifie les colonnes
             for (Cell cell : grille.getColumn(i)) {
                 if (cell.isEmpty() && cell.OnlyOneAnnotation()) {
-                    int[] pos = cell.getPosition();
+                    //int[] pos = cell.getPosition();
                   //  aide.addPos(pos[0], pos[1]);
                     aide.addColumn(i);
                     aide.setMessage(1, "Remplis tes annotations");
@@ -33,7 +33,7 @@ public class NakedSingleton implements InterfaceTech {
             // Vérifie les lignes
             for (Cell cell : grille.getLine(i)) {
                 if (cell.isEmpty() && cell.OnlyOneAnnotation()) {
-                    int[] pos = cell.getPosition();
+                    //int[] pos = cell.getPosition();
                    // aide.addPos(pos[0], pos[1]);
                     aide.addLine(i);
                     aide.setMessage(1, "Remplis tes annotations");
@@ -47,7 +47,7 @@ public class NakedSingleton implements InterfaceTech {
             int[] temp = grille.numToPosForSubGrid(i);
             for (Cell cell : grille.getFlatSubGrid(temp[0], temp[1])) {
                 if (cell.isEmpty() && cell.OnlyOneAnnotation()) {
-                    int[] pos = cell.getPosition();
+                   // int[] pos = cell.getPosition();
                     //aide.addPos(pos[0], pos[1]);
                     aide.addSquare(i);
                     aide.setMessage(1, "Remplis tes annotations");

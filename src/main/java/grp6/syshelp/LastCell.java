@@ -25,7 +25,7 @@ public class LastCell implements InterfaceTech {
             if (grille.numberOfFullCell(Grid.Shape.COLUMN, i) == 8) {
                 Cell emptyCell = findEmptyCell(grille.getColumn(i));
                 if (emptyCell != null) {
-                    int pos[] = emptyCell.getPosition();
+                    //int pos[] = emptyCell.getPosition();
                     //aide.addPos(pos[0], pos[1]);
                     aide.addColumn(i);
                     aide.setMessage(1, "Fais attention aux "+findLastNumber(grille.getColumn(i)));
@@ -38,7 +38,7 @@ public class LastCell implements InterfaceTech {
             else if (grille.numberOfFullCell(Grid.Shape.LINE, i) == 8) {
                 Cell emptyCell = findEmptyCell(grille.getLine(i));
                 if (emptyCell != null) {
-                    int pos[] = emptyCell.getPosition();
+                    //int pos[] = emptyCell.getPosition();
                     //Message d'aide
                     //aide.addPos(pos[0], pos[1]);
                     aide.addLine(i);
@@ -53,7 +53,7 @@ public class LastCell implements InterfaceTech {
                 int[] temp = grille.numToPosForSubGrid(i);
                 Cell emptyCell = findEmptyCell(grille.getFlatSubGrid(temp[0],temp[1]));
                 if (emptyCell != null) {
-                    int pos[] = emptyCell.getPosition();
+                    //int pos[] = emptyCell.getPosition();
                     //aide.addPos(pos[0], pos[1]);
                     aide.addSquare(i);
                     aide.setMessage(1, "Fais attention aux "+findLastNumber(grille.getFlatSubGrid(temp[0], temp[1])));
