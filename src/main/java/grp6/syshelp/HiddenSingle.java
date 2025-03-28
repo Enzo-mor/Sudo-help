@@ -29,21 +29,21 @@ public class HiddenSingle implements InterfaceTech {
                 
                 if(tab_line[j]==1 ){
                     aide.addLine(i);
-                    aide.setMessage(1,"Tu peux utiliser le singleton caché");
-                    aide.setMessage(2,"La technique est utilisable avec un "+(j+1));
-                    aide.setMessage( 3,"Regarde ici");
+                    aide.setMessage(1,"Regarde dans tes annotations tu peux en enlever");
+                    
+                    aide.setMessage( 3,"Applique le sur cette ligne");
                     return aide;
                 }if( tab_column[j]==1 ){
                     aide.addColumn(i);
-                    aide.setMessage(1,"Tu peux utiliser le singleton caché");
-                    aide.setMessage(2,"La technique est utilisable avec un "+(j+1));
-                    aide.setMessage( 3,"Regarde ici");
+                    aide.setMessage(1,"Regarde dans tes annotations tu peux en enlever");
+                    
+                    aide.setMessage( 3,"Applique le sur cette colonne");
                     return aide;
                 } if (tab_square[j]==1){
                     aide.addSquare(i);
-                    aide.setMessage(1,"Tu peux utiliser le singleton caché");
-                    aide.setMessage(2,"La technique est utilisable avec un "+(j+1));
-                    aide.setMessage( 3,"Regarde ici");
+                    aide.setMessage(1,"Regarde dans tes annotations tu peux en enlever");
+                    
+                    aide.setMessage( 3,"Applique le sur ce carré");
                     return aide;
 
                 }

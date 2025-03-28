@@ -74,7 +74,7 @@ public class NakedPairs implements InterfaceTech {
 
                     aide.addSquare(num);
                     aide.setMessage(1, "Fais attention aux carrés");
-                    aide.setMessage(2, "Fais attention aux "+temp[0]+" "+temp[1]);
+                    
                     aide.setMessage(3, "Regarde les annotations"+temp[0]+" "+temp[1]+"le carré : "+num);
                     return true;
                 }

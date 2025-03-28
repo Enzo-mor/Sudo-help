@@ -23,10 +23,12 @@ public class LastNumber implements InterfaceTech {
                 if(grille.getCell(i,j).getAnnotations().size()==1){
                     aide.addPos(i,j);
                     aide.addLine(i);
+                    aide.addColumn(j);
+                    aide.addSquare(j/3);
 
-                    aide.setMessage(1,"Fais attention aux "+grille.getCell(i,j).getAnnotations().get(0));
-                    aide.setMessage(2,"Fais attention à la ligne : "+ (i+1));
-                    aide.setMessage(3,"Regarde la cellule colonne : "+ (j+1));
+                    aide.setMessage(1,"Tu peux placer un "+grille.getCell(i,j).getAnnotations().get(0));
+                    
+                    aide.setMessage(3,"regarde ici ");
                     return aide;
                 }
             }

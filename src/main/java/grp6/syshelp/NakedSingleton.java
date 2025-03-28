@@ -24,7 +24,7 @@ public class NakedSingleton implements InterfaceTech {
                   //  aide.addPos(pos[0], pos[1]);
                     aide.addColumn(i);
                     aide.setMessage(1, "Remplis tes annotations");
-                    aide.setMessage(2, "C'est un singleton nu !");
+                    
                     aide.setMessage(3, "cherche les "+takeTheAnnotation(cell));
                     return aide;
                 }
@@ -37,7 +37,7 @@ public class NakedSingleton implements InterfaceTech {
                    // aide.addPos(pos[0], pos[1]);
                     aide.addLine(i);
                     aide.setMessage(1, "Remplis tes annotations");
-                    aide.setMessage(2, "C'est un singleton nu !");
+                    
                     aide.setMessage(3, "cherche les "+takeTheAnnotation(cell));
                     return aide;
                 }
@@ -51,7 +51,7 @@ public class NakedSingleton implements InterfaceTech {
                     //aide.addPos(pos[0], pos[1]);
                     aide.addSquare(i);
                     aide.setMessage(1, "Remplis tes annotations");
-                    aide.setMessage(2, "C'est un singleton nu !");
+                    
                     aide.setMessage(3, "cherche les "+takeTheAnnotation(cell));
                     return aide;
                 }

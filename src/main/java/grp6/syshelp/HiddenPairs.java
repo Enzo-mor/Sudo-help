@@ -126,7 +126,7 @@ public class HiddenPairs implements InterfaceTech{
                      if(SubgridCell!=null){
                         ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), SubgridCell.getLast())).boxed().toList());
                         help.setMessage(1,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")) +"\ndans sous les grilles("+grille.NB_SUBGRID+"*"+grille.NB_SUBGRID  +")");
-                        help.setMessage(2,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")) +" dans la sous grille à laquelle se trouve la cellule à la ligne "+(i+1)+" et colonne "+(j+1));
+                        
                         help.setMessage(3,"veuillez appliquer la technique de "+getName()+ "\n aux cellules dans la sous grille ("+grille.NB_SUBGRID+"*"+grille.NB_SUBGRID  +") \nou se trouve la cellule situé à la ligne "+(i+1)+" et colonne "+(j+1));
                         help.addSquare(SubgridCell.getLast().getPosition()[0]/Grid.NB_SUBGRID, SubgridCell.getLast().getPosition()[1]/Grid.NB_SUBGRID);
                         return help;
@@ -135,7 +135,7 @@ public class HiddenPairs implements InterfaceTech{
                     else if(LineCell!=null){
                         ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), LineCell.getLast())).boxed().toList());
                         help.setMessage(1,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")));
-                        help.setMessage(2,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")) +" sur la ligne "+(i+1));
+                        
 
                         String message="veuillez appliquer la technique de "+getName()+ "\n aux cellules suivante située  : \nla ligne "+(i+1)+"et colonne "+(j+1)+"\n";
                         for(Cell cell:LineCell){
@@ -148,7 +148,7 @@ public class HiddenPairs implements InterfaceTech{
                     }else if(ColumnCell!=null){
                         ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), ColumnCell.getLast())).boxed().toList());
                         help.setMessage(1,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")));
-                        help.setMessage(2,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", "))+" sur la colonne "+(j+1));
+                        
                         String message="veuillez appliquer la technique de "+getName()+ " aux cellules suivantes situées  : \nla ligne "+(i+1)+"et colonne "+(j+1)+"\n";
                         for(Cell cell:ColumnCell){
                             message+="la ligne "+(cell.getPosition()[0]+1)+" et colonne "+(j+1)+"\n";
