@@ -29,7 +29,7 @@ public class LastCell implements InterfaceTech {
                     //aide.addPos(pos[0], pos[1]);
                     aide.addColumn(i);
                     aide.setMessage(1, "Tu peux placer un "+findLastNumber(grille.getColumn(i)));
-                    aide.setMessage(2, "Fais attention aux colonnes");
+                    
                     aide.setMessage(3, "Regarde ici");
                     return aide;
                 }
@@ -43,7 +43,7 @@ public class LastCell implements InterfaceTech {
                     //aide.addPos(pos[0], pos[1]);
                     aide.addLine(i);
                     aide.setMessage(1, "Tu peux placer un  "+findLastNumber(grille.getLine(i)));
-                    aide.setMessage(2, "Fais attention aux lignes");
+                    
                     aide.setMessage(3, "Regarde ici");
                     return aide;
                 }
@@ -57,7 +57,7 @@ public class LastCell implements InterfaceTech {
                     //aide.addPos(pos[0], pos[1]);
                     aide.addSquare(i);
                     aide.setMessage(1, "Tu peux placer un "+findLastNumber(grille.getFlatSubGrid(temp[0], temp[1])));
-                    aide.setMessage(2, "Fais attention aux carrés");
+                    
                     aide.setMessage(3, "Regarde ici");
                     return aide;
                 }

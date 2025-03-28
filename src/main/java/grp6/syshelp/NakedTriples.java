@@ -90,7 +90,7 @@ public class NakedTriples implements InterfaceTech{
            if (ocurance.size() == 3){
                 aide.addSquare(num);
                 aide.setMessage(1, "Fait attention aux carrés");
-                aide.setMessage(2, "Fait attention aux "+ocurance.get(0)+" "+ocurance.get(1)+" "+ocurance.get(2));
+                
                 aide.setMessage(3, "Regarde les annotations"+ocurance.get(0)+" "+ocurance.get(1)+" "+ocurance.get(2)+"le carré : "+num);
                return true;
                
@@ -179,7 +179,7 @@ public class NakedTriples implements InterfaceTech{
         if (ocurance.size() == 3){
             aide.addSquare(num);
                 aide.setMessage(1, "Fait attention aux lignes et colonnes");
-                aide.setMessage(2, "Fait attention aux "+ocurance.get(0)+" "+ocurance.get(1)+" "+ocurance.get(2));
+                
                 aide.setMessage(3, "Regarde les annotations"+ocurance.get(0)+" "+ocurance.get(1)+" "+ocurance.get(2)+" et la ligne/colone : "+num);
             return true;
             
