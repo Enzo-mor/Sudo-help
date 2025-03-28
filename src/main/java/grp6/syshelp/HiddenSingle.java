@@ -28,24 +28,18 @@ public class HiddenSingle implements InterfaceTech {
             for(int j=0; j<Grid.NB_NUM; j++){
                 
                 if(tab_line[j]==1 ){
-                    int pos[] = grille.getLine(i)[tab_line[Grid.NB_NUM]].getPosition();
-                    aide.addPos(pos[0], pos[1]);
                     aide.addLine(i);
                     aide.setMessage(1,"Tu peux utiliser le singleton caché");
                     aide.setMessage(2,"La technique est utilisable avec un "+(j+1));
                     aide.setMessage( 3,"Regarde ici");
                     return aide;
                 }if( tab_column[j]==1 ){
-                    int pos[] = grille.getColumn(i)[tab_column[Grid.NB_NUM]].getPosition();
-                    aide.addPos(pos[0], pos[1]);
                     aide.addColumn(i);
                     aide.setMessage(1,"Tu peux utiliser le singleton caché");
                     aide.setMessage(2,"La technique est utilisable avec un "+(j+1));
                     aide.setMessage( 3,"Regarde ici");
                     return aide;
                 } if (tab_square[j]==1){
-                    int pos[] = grille.getSubGrid(tab[0], tab[1])[tab_square[Grid.NB_NUM]/3][tab_square[Grid.NB_NUM]%3].getPosition();
-                    aide.addPos(pos[0], pos[1]);
                     aide.addSquare(i);
                     aide.setMessage(1,"Tu peux utiliser le singleton caché");
                     aide.setMessage(2,"La technique est utilisable avec un "+(j+1));
