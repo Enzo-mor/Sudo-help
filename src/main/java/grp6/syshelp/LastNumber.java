@@ -1,10 +1,6 @@
 package grp6.syshelp;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
 
 
@@ -47,7 +43,7 @@ public class LastNumber implements InterfaceTech {
      * @param cells listeColl des cellules (ligne, colonne ou carré)
      * @return Le number qui doit aller dans la cellule vide.
      */
-    private int findLastNumber(Cell[] cells){
+    /*private int findLastNumber(Cell[] cells){
         List<Integer> list = new ArrayList<>(Collections.nCopies(10, 0));
         for (Cell cell : cells){
             int c = cell.getNumber();
@@ -57,7 +53,7 @@ public class LastNumber implements InterfaceTech {
             if(list.get(i) == 0)return i;
         }
         return 0;
-    }
+    }*/
 
     int[] data = {
         2,4,6,0,0,0,0,0,0,
