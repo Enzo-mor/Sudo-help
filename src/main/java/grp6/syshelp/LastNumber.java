@@ -20,7 +20,7 @@ public class LastNumber implements InterfaceTech {
         AutoAnnotation.generate(grille);
         for(int i=0; i<Grid.NB_NUM; i++){
             for(int j=0; j<Grid.NB_NUM; j++){      
-                if(grille.getCell(i,j).getAnnotations().size()==1){
+                if(grille.getCell(i,j).OnlyOneAnnotation()){
                     aide.addPos(i,j);
                     //aide.addLine(i);
                     //aide.addColumn(j);

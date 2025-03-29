@@ -41,21 +41,6 @@ public class FixCell implements Cell {
         }
     }
     
-    /**
-     * Constructeur de la classe 'FixCell'.
-     * 
-     * @param number Chiffre qui sera stocke dans la cellule [int]
-     */
-    public FixCell(int number) {
-        // Le chiffre doit etre valide: number in [0, 9] // 0 == vide
-        if(Grid.isValidNumber(number) || number == 0){
-            this.number = number;
-        }
-        else {
-            System.err.println("Impossible d'initialiser cette cellule: " + number + " doit etre incluse dans [0, " + Grid.NB_NUM + "]");
-            this.number = 0;
-        }
-    }
 
     /**
      * Recuperer le chiffre de la cellule.
@@ -180,7 +165,7 @@ public class FixCell implements Cell {
     @Override
     public Cell clone() {
         // Clonage superficiel, pas de besoin de cloner des objets internes.
-        return new FixCell(this.number);
+        return new FixCell(this.number,this.getPosition()[0],getPosition()[1]);
     }
     
     /**

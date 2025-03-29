@@ -52,17 +52,23 @@ public class LastPossible implements InterfaceTech{
         
 
         for (Cell c:grille){
-            if (c.isEmpty()) {
+            System.out.println("number : "+c.getNumber());
+            if (c.isEmpty() && c.isEditable() && c.getNumber()==0) {
                 int[] cells = Stream.of(
-                        Arrays.stream(grille.getColumn(c.getPosition()[0])),
-                        Arrays.stream(grille.getLine(c.getPosition()[1])),
-                        Arrays.stream(grille.getFlatSubGrid(c.getPosition()[0], c.getPosition()[1]))
+                        Arrays.stream(grille.getColumn(c.getPosition()[1])),
+                        Arrays.stream(grille.getLine(c.getPosition()[0])),
+                        Arrays.stream(grille.getFlatSubGrid(c.getPosition()[1], c.getPosition()[0]))
                     ).flatMap(s -> s)
                     .mapToInt(Cell::getNumber)
                     .filter(num -> num != 0)
                     .distinct()
                     .toArray();
 
+                for(int i :cells){
+                    System.out.println(i);
+                }
+                System.out.println("");
+                
                 if (cells.length == 8) {
                     int m = IntStream.rangeClosed(1, 9)
                                      .filter(n -> Arrays.stream(cells).noneMatch(x -> x == n))
@@ -71,6 +77,7 @@ public class LastPossible implements InterfaceTech{
                     aide.addPos(c.getPosition()[0], c.getPosition()[1]);
                     aide.setMessage(1, "Tu peux placer un " + m);
                     aide.setMessage(3, "Regarde ici");
+                    System.out.println("coo : "+c.getPosition()[0]+" "+ c.getPosition()[1]);
                     return aide;
                 }
             }

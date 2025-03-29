@@ -126,8 +126,14 @@ public final class Grid implements Iterable<Cell> {
             int x = i/Grid.NB_NUM;
             int y = i%Grid.NB_NUM;
             SudoLog.debug("Construction cellule de la grille ("+x+","+y+")");
-            Cell cell = new FlexCell(x, y);
-            cell.setNumber(num);
+            Cell cell;
+            System.out.println("num"+num);
+            if(num==0){
+                cell = new FlexCell(x, y);
+            }else{
+                cell = new FixCell(num,x, y);
+            }
+            //cell.setNumber(num);
             cells.add(cell);
         } 
         SudoLog.debug("Fin creation des cellules");
@@ -171,9 +177,9 @@ public final class Grid implements Iterable<Cell> {
         List<Cell> cells = new ArrayList<>();
         for (int i = 0; i < data.length(); i++) {
             if (data.charAt(i) == '0') {
-                cells.add(new FlexCell());
+                cells.add(new FlexCell(i/9,i%9));
             } else {
-                cells.add(new FixCell((int) data.charAt(i) - '0'));
+                cells.add(new FixCell((int) data.charAt(i) - '0',i/9,i%9));
             }
         }
         return cells;
@@ -287,6 +293,13 @@ public final class Grid implements Iterable<Cell> {
                 subGrid[di][dj] = this.getCell(n_line + di, n_column + dj);
             }
         }
+        System.out.println("==================================================");
+        for(int di = 0; di < NB_SUBGRID; di++) {
+            for(int dj = 0; dj < NB_SUBGRID; dj++) {
+                System.out.println(subGrid[di][dj]);
+            }
+        }
+        System.out.println("==================================================");
         return subGrid;
     }
 
