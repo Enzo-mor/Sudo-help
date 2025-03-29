@@ -10,9 +10,11 @@ import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
 
 /**
- * Classe permettant la generation automatique des annotations
- * d'une grille
+ * Classe permettant la generation automatique des annotations d'une grille
+ * 
  * @author Kilian POUSSE
+ * @see Grid
+ * @see Cell
  */
 
 public class AutoAnnotation {
@@ -113,6 +115,10 @@ public class AutoAnnotation {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Main pour tester la génération des annotations automatique
+     * @param args
+     */
     public static void main(String[] args) {
         int[] data = {
             0, 0, 0,  0, 8, 7,  3, 0, 9,

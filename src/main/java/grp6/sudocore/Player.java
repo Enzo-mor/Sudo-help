@@ -6,8 +6,16 @@ package grp6.sudocore;
  * @author RASSON Emma
  */
 public class Player {
-    private String name;
-    private int score;
+
+    /**
+     * Le nom du joueur.
+     */
+    private final String name;
+
+    /**
+     * Le score du joueur.
+     */
+    private final int score;
 
     /**
      * Constructeur permettant de creer un joueur avec un nom et un score.

@@ -21,10 +21,6 @@ import grp6.sudocore.Grid;
  */
 public class HiddenPairs implements InterfaceTech{
 
-    
-
-   
-
     /**
      * cette methode permet de verifier si une cellule peut contiennir des  candidats caché.
      * @param cell
@@ -100,30 +96,34 @@ public class HiddenPairs implements InterfaceTech{
         return null;
     }
 
-     /**
-      * cette methode permet de retourner le nom de la technique
-      * @return
-      */
+    /**
+     * cette methode permet de retourner le nom de la technique
+     * @return
+     */
     public String getName(){
         return "Paires cachées";
     }
 
-
-     @Override
-      public Help getHelp(Grid grille){
-      for(int i=0;i<Grid.NB_NUM;++i){
+    /**
+     * Classe implementant la technique des paires cachees dans une grille Sudoku.
+     * Cette technique permet d'identifier des annotations cachees dans une ligne, 
+     * une colonne ou une sous-grille.
+     */
+    @Override
+    public Help getHelp(Grid grille){
+        for(int i=0;i<Grid.NB_NUM;++i){
             for(int j=0;j<Grid.NB_NUM;++j){
                 if(this.hasPossibleCellHidden(grille.getCell(i, j))){
 
-                  ArrayList<Cell> LineCell = getHiddenCell(grille.getCell(i, j), grille.getLine(i));
-                  ArrayList<Cell>  ColumnCell = getHiddenCell(grille.getCell(i, j), grille.getColumn(j));
-                  ArrayList<Cell>  SubgridCell = getHiddenCell(grille.getCell(i, j), grille.getFlatSubGrid(i, j));
+                    ArrayList<Cell> LineCell = getHiddenCell(grille.getCell(i, j), grille.getLine(i));
+                    ArrayList<Cell>  ColumnCell = getHiddenCell(grille.getCell(i, j), grille.getColumn(j));
+                    ArrayList<Cell>  SubgridCell = getHiddenCell(grille.getCell(i, j), grille.getFlatSubGrid(i, j));
 
-                  if (Arrays.asList(LineCell, ColumnCell).stream().filter(cell -> cell != null).count() == 1||SubgridCell!=null) {
+                    if (Arrays.asList(LineCell, ColumnCell).stream().filter(cell -> cell != null).count() == 1||SubgridCell!=null) {
                     Help help = new Help(getName());
                     help.addPos(i, j);
 
-                     if(SubgridCell!=null){
+                        if(SubgridCell!=null){
                         ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), SubgridCell.getLast())).boxed().toList());
                         help.setMessage(1,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")) +"\ndans sous les grilles("+grille.NB_SUBGRID+"*"+grille.NB_SUBGRID  +")");
                         
@@ -143,7 +143,7 @@ public class HiddenPairs implements InterfaceTech{
                             help.addPos(cell.getPosition()[0], cell.getPosition()[1]);
                         }
                         help.setMessage(3,message);
-                       
+                        
                         return help;
                     }else if(ColumnCell!=null){
                         ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), ColumnCell.getLast())).boxed().toList());
@@ -158,16 +158,20 @@ public class HiddenPairs implements InterfaceTech{
                         return help;
                     }
                     
-                  }
+                    }
                 }
             }
-      } 
-
+        }
         return null;
       }
 
-
-      public static void main(String[] args) {
+    /**
+     * Methode principale pour tester la detection des paires cachees dans une grille Sudoku.
+     * Cette methode cree une grille, y ajoute des annotations, puis teste la detection.
+     * 
+     * @param args Arguments de ligne de commande (non utilises).
+     */
+    public static void main(String[] args) {
         int[] data = {
             0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -179,7 +183,6 @@ public class HiddenPairs implements InterfaceTech{
             0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0
         };
-        
 
         Grid grille = new Grid(data);
         System.out.println("Grille initiale :");
@@ -192,9 +195,9 @@ public class HiddenPairs implements InterfaceTech{
         //grille.getCell(0, 2).addAnnotation(2);
         //grille.getCell(0, 2).addAnnotation(4);
 
-       // grille.printAnnotationsGrid();
+        // grille.printAnnotationsGrid();
 
-       
+        
         System.out.println("\n");
 
         // Création d'une instance de la technique des paires pointantes
@@ -202,8 +205,7 @@ public class HiddenPairs implements InterfaceTech{
 
         // Détection
         System.out.println("triple pointantes  détectées ? " + pairs.getHelp(grille));
-      }
-
+    }
 }
 
 

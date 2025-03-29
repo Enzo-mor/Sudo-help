@@ -4,14 +4,42 @@ import grp6.syshelp.Technique;
 import java.util.*;
 import java.sql.SQLException;
 
+/**
+ * Classe LearningGame
+ * Cette classe gere la logique d'un mode d'apprentissage pour le Sudoku, ou le joueur peut
+ * appliquer des techniques de resolution pour completer une grille.
+ * Elle permet de sauvegarder et d'evaluer les actions du joueur.
+ * 
+ * @author POUSSE Kilian
+ * @see Game
+ * @see Grid
+ * @see Profile
+ * @see Technique
+ */
 public class LearningGame {
 
-    private Game game;
+    /**
+     * Instance du jeu associee a cette session d'apprentissage
+     */
+    private final Game game;
 
-    private Grid solvedGrid;
+    /**
+     * Grille solution du Sudoku pour comparaison
+     */
+    private final Grid solvedGrid;
 
-    private  Technique tech;
+    /**
+     * Technique appliquee pour l'apprentissage
+     */
+    private final Technique tech;
 
+    /**
+     * Constructeur de la classe LearningGame.
+     * 
+     * @param profile Profil du joueur
+     * @param tech Technique utilisee pour resoudre la grille
+     * @throws SQLException En cas d'erreur lors de la recuperation de la grille solution
+     */
     public LearningGame(Profile profile, Technique tech) throws  SQLException {
         this.solvedGrid = tech.getSolvedGrid();
         game = new Game(tech.getGrid(), profile);
@@ -19,7 +47,7 @@ public class LearningGame {
     }
 
     /**
-     * 
+     * Retourne le profil du joueur actuel.
      * @return
      */
     public Profile getProfile() {
@@ -28,6 +56,7 @@ public class LearningGame {
 
     /**
      * Retourne l'identifiant du jeu
+     * 
      * @return Identifiant du jeu
      */
     public long getId() {
@@ -43,6 +72,7 @@ public class LearningGame {
 
     /**
      * Applique les actions a la partie du jeu associee
+     * 
      * @param actions Liste des actions a appliquer
      * @throws NoCompatibleActionGameException Si l'action n'est pas compatible avec le jeu
      * @throws NoPutNumberOnCellExeception Si l'action doit etre appliquee sur une cellule non modifiable
@@ -54,6 +84,7 @@ public class LearningGame {
 
     /**
      * Demarre le jeu
+     * 
      * @throws Exception Si une erreur se produit
      */
     public void startGame() {
@@ -71,6 +102,7 @@ public class LearningGame {
 
     /**
      * Retourne le temps ecoule.
+     * 
      * @return Le temps ecoule en secondes.
      */
     public synchronized long getElapsedTime() {
@@ -79,6 +111,7 @@ public class LearningGame {
 
     /**
      * Met en pause le jeu.
+     * 
      * @throws IllegalStateException Si le jeu n'est pas encore demarre ou deja termine.
      */
     public void pauseGame() throws IllegalStateException {
@@ -87,6 +120,7 @@ public class LearningGame {
 
     /**
      * Reprend le jeu apres une pause.
+     * 
      * @throws IllegalStateException Si le jeu n'est pas encore demarre ou deja termine.
      */
     public void resumeGame() throws IllegalStateException {
@@ -105,6 +139,7 @@ public class LearningGame {
 
     /**
      * Met a jour le listener du temps. Cette operation doit etre effectuee avant de demarrer le timer.
+     * 
      * @param listener L'interface d'ecoute du temps.
      */
     public void setGameTimeListener(GameTimeListener listener) {
@@ -136,6 +171,7 @@ public class LearningGame {
 
     /**
      * Verifie si une action peut etre annulee.
+     * 
      * @return true si undo est possible, sinon false.
      */
     public boolean canUndo() {
@@ -144,6 +180,7 @@ public class LearningGame {
 
     /**
      * Verifie si une action annulee peut etre refaite.
+     * 
      * @return true si redo est possible, sinon false.
      */
     public boolean canRedo() {
@@ -180,7 +217,7 @@ public class LearningGame {
     }
 
     /**
-     *  cette methode permet d'ajouter une annotation  & une case du jeu 
+     * cette methode permet d'ajouter une annotation  & une case du jeu 
      * 
      * @param x represente la position x de la case dans la grille
      * @param y represente la position Y de la case dans la grille
@@ -197,6 +234,7 @@ public class LearningGame {
 
     /**
     * methode permettant de supprimer un nombre dans une cellule
+
     * @param x represente la position x de la case dans la grille
     * @param y represente la position Y de la case dans la grille
     * @param value represente l'annotation & ajouter
@@ -212,6 +250,7 @@ public class LearningGame {
 
     /**
      * cette methode permet de supprimer une annotation  & une case du jeu
+     * 
      * @param x represente la position x de la case dans la grille
      * @param y represente la position Y de la case dans la grille
      * @param value represente l'annoatation & supprimer
@@ -274,6 +313,7 @@ public class LearningGame {
 
     /**
      * Supprime toutes les actions effectuees sur une cellule specifique.
+     * 
      * @param x La ligne de la cellule.
      * @param y La colonne de la cellule.
      */
@@ -283,6 +323,7 @@ public class LearningGame {
 
     /**
      * Retourne l'index actuel de l'action.
+     * 
      * @return L'index de l'action courante.
      */
     public int getCurrentIndex() {
@@ -291,6 +332,7 @@ public class LearningGame {
 
     /**
      * Retourne l'action a l'index specifie.
+     * 
      * @param index L'index de l'action.
      * @return L'action a l'index specifie.
      */

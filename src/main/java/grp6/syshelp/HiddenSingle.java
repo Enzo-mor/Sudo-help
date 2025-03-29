@@ -4,10 +4,13 @@ import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
 
 /**
- * Cette classe represente la technique du singleton caché.
- * Elle permet de savoir si dans une ligne, une colonne ou un carré on peut enlever des annotations.
+ * Cette classe represente la technique du singleton cache.
+ * Elle permet de savoir si dans une ligne, une colonne ou un carre on peut enlever des annotations.
+ * 
  * @author DUBOIS Gabriel
- * @see InterfaceTech Contenant les méthodes des techniques
+ * @see InterfaceTech Contenant les methodes des techniques
+ * @see Help
+ * @see Grid
  */
 public class HiddenSingle implements InterfaceTech {
 
@@ -69,9 +72,7 @@ public class HiddenSingle implements InterfaceTech {
                 }
             }
            // System.out.println("compteur"+tab[i].getAnnotations());
-            
         }
-
 
         for(int i=0;i<Grid.NB_NUM;i++){
             if(compteur[i]==1){
@@ -85,7 +86,6 @@ public class HiddenSingle implements InterfaceTech {
             }
             
         }
-
         return compteur;
     }
 

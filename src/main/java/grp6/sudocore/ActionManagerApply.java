@@ -18,7 +18,7 @@ import com.google.gson.reflect.TypeToken;
 /**
  * Cette classe permet de gerer la serialisation et la deserialisation d'une liste d'actions.
  * 
- * @author DE THESE Taise
+ * @author NGANGA YABIE Taïse de These
  * @see Action
  * @see Game
  */

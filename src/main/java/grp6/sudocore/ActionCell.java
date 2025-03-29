@@ -5,7 +5,7 @@ package grp6.sudocore;
  * Elle permet de faire l'action et de l'annuler.
  * Elle permet aussi de serialiser et deserialiser les actions.
  * 
- * @author DE THESE Taise
+ * @author NGANGA YABIE Taïse de These
  * @see NoEditableCellExeception
  * @see NoCompatibleActionGameException
  * @see Game

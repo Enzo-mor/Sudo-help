@@ -49,7 +49,7 @@ public class ToggleSwitch extends HBox {
         labelText = new Text(label);
         labelText.setStyle("-fx-font-size: 14px;");
         
-        background = new Rectangle(40, 20, Color.LIGHTGRAY);
+        background = new Rectangle(40, 20, initialState ? Color.LIMEGREEN : Color.LIGHTGRAY);
         background.setArcWidth(20);
         background.setArcHeight(20);
         

@@ -24,7 +24,7 @@ import java.nio.file.*;
 /**
  * Classe: Permet l'initialisation et/ou la creation de la Base de donnees.
  * @author Kilian POUSSE 
- * @author Taise de these
+ * @author NGANGA YABIE Taïse de These
  * 
  * <p>Exemple d'utilisation :</p>
  * <pre>{@code

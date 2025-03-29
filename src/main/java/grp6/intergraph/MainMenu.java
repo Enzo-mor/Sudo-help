@@ -60,6 +60,11 @@ public class MainMenu {
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
 
+        // Ajout du logo
+        ImageView logo = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/logo_long.png")));
+        logo.setFitWidth(400);
+        logo.setFitHeight(100);
+
         // Message de bienvenue
         Label welcomeLabel = new Label("Bienvenue, " + pseudo);
         welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
@@ -82,7 +87,7 @@ public class MainMenu {
             stage.close();
         });
 
-        layout.getChildren().addAll(welcomeLabel, startGameButton, classementButton, exitButton);
+        layout.getChildren().addAll(logo, welcomeLabel, startGameButton, classementButton, exitButton);
 
         // Bouton des parametres avec icône animee
         Button settingsButton = new Button();

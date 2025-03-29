@@ -8,13 +8,15 @@ import java.sql.*;
 /**
  * Classe representant les profils.
  * @author POUSSE Kilian
- * @author DE THESE Taise
+ * @author NGANGA YABIE Taïse de These
  */
 public class Profile {
     
     /* ====== Variables d'instance ====== */
 
-    /** Pseudonyme du profil */
+    /** 
+     * Pseudonyme du profil 
+     */
     private String pseudo;
 
     /* ====== Constructeur d'instances ======= */
@@ -37,12 +39,20 @@ public class Profile {
         return pseudo;
     }
 
+    /**
+     * Setter: Modification du pseudonyme
+     * @param pseudo Nouveau pseudonyme du profil
+     */
     public void setPseudo(String pseudo) {
         this.pseudo = pseudo;
     }
 
     /* ====== Methodes d'instance ====== */
 
+    /**
+     * Permet de generer une chaine de caracteres representant le profil courant
+     * @return Chaine de caracteres representant le profil courant
+     */
     @Override
     public String toString() {
         return "<Profile: " + getPseudo() + ">";

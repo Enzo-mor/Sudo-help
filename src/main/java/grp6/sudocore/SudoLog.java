@@ -8,40 +8,64 @@ package grp6.sudocore;
  */
 public class SudoLog {
 
-    /** Réinitialise la couleur du texte au style par défaut. */
+    /** 
+     * Réinitialise la couleur du texte au style par défaut. 
+     */
     protected static final String COLOR_RESET = "\u001B[0m";
 
-    /** Texte en noir. */
+    /** 
+     * Texte en noir. 
+     */
     protected static final String COLOR_BLACK = "\u001B[30m";
 
-    /** Texte en rouge. */
+    /** 
+     * Texte en rouge. 
+     */
     protected static final String COLOR_RED = "\u001B[31m";
 
-    /** Texte en vert. */
+    /** 
+     * Texte en vert. 
+     */
     protected static final String COLOR_GREEN = "\u001B[32m";
 
-    /** Texte en jaune. */
+    /** 
+     * Texte en jaune. 
+     */
     protected static final String COLOR_YELLOW = "\u001B[33m";
 
-    /** Texte en bleu. */
+    /** 
+     * Texte en bleu. 
+     */
     protected static final String COLOR_BLUE = "\u001B[34m";
 
-    /** Texte en violet. */
+    /** 
+     * Texte en violet. 
+     */
     protected static final String COLOR_PURPLE = "\u001B[35m";
 
-    /** Texte en cyan. */
+    /** 
+     * Texte en cyan. 
+     */
     protected static final String COLOR_CYAN = "\u001B[36m";
 
-    /** Texte en blanc. */
+    /** 
+     * Texte en blanc. 
+     */
     protected static final String COLOR_WHITE = "\u001B[37m";
 
-    /** Texte en gris clair. */
+    /** 
+     * Texte en gris clair. 
+     */
     protected static final String COLOR_GRAY_LIGHT = "\u001B[90m"; 
 
-    /** Texte en gris moyen (identique à blanc standard). */
+    /** 
+     * Texte en gris moyen (identique à blanc standard). 
+     */
     protected static final String COLOR_GRAY_MEDIUM = "\u001B[37m";
 
-    /** Permet de savoir si il faut affichier les messages de debug */
+    /** 
+     * Permet de savoir si il faut affichier les messages de debug 
+     */
     private static boolean debug = false;
     
     /**

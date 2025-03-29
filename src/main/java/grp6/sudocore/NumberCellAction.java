@@ -18,7 +18,7 @@ import grp6.sudocore.SudoTypes.ActionType;
  * Cette classe permet de gerer les actions de modification d'une cellule
  * dans un jeu de Sudoku. Elle permet de modifier la valeur d'une cellule.
  * 
- * @author DE THESE Taise
+ * @author NGANGA YABIE Taïse de These
  * @see Game
  * @see ActionManagerApply
  * @see Action
@@ -35,12 +35,12 @@ public final class NumberCellAction extends ActionCell {
     /**
      * L'ancienne valeur de la cellule avant modification.
      */
-    private int old_number;
+    private final int old_number;
 
     /**
      * La valeur de la cellule pour la fonction de redo.
      */
-    private int redo_number;
+    private final int redo_number;
 
     /**
      * Constructeur permettant de creer une action pour modifier la valeur d'une cellule

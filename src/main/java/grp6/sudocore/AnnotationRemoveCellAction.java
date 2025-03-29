@@ -6,7 +6,7 @@ import grp6.sudocore.SudoTypes.ActionType;
  * Cette classe permet de gerer les actions d'annotation dans un jeu de sudoku.
  * Elle permet de supprimer une annotation d'une cellule flexible.
  * 
- * @author DE THESE Taise
+ * @author NGANGA YABIE Taïse de These
  * @see Game
  * @see ActionManagerApply
  * @see Action

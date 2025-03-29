@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
  * Les cellules ne pourront etre modifiees que par le biais d'une action dans un Jeu.
  * 
  * @author POUSSE Kilian
- * @author DE THESE Taise
+ * @author NGANGA YABIE Taïse de These
  * 
  * @see Cell   Interface des cellules contenant toutes les methodes en ecriture.
  * @see Action Interface permettant de modifier les cellules d'un jeu.

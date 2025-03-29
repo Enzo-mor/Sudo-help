@@ -156,7 +156,7 @@ public class ProfileSelection {
         deleteBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
         deleteBox.setVisible(false);
         
-        Label textErase = new Label("Vous vous apprêtez à supprimer vous base de données et allez quitter le jeu !\n Voulez vous continuez ?");
+        Label textErase = new Label("Vous vous apprêtez à supprimer votre base de données et allez quitter le jeu !\n Voulez vous continuez ?");
         textErase.setWrapText(true);
         textErase.setTextAlignment(TextAlignment.CENTER);
         textErase.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #343a40;");

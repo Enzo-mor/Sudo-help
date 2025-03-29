@@ -23,7 +23,7 @@ import javafx.application.Platform;
  * une partie, il faut appeler pauseGame. Pour reprendre une partie, il faut appeler 
  * resumeGame, et pour terminer une partie, il faut appeler stopGame.
  * 
- * @author DE THESE Taise
+ * @author NGANGA YABIE Taïse de These
  * 
  * @see Grid
  * @see Profile

@@ -11,7 +11,7 @@ import javafx.stage.Stage;
  * Classe de test pour le timer du jeu.
  * Permet d'afficher le temps écoulé pendant une partie et de tester les fonctionnalités de minuterie du jeu.
  * 
- * @author DE THESE Taise
+ * @author NGANGA YABIE Taïse de These
  * @see Game
  * @see GameTimeListener
  * @see DBManager

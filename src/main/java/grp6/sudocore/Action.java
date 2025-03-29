@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
  * Toutes les actions du jeu heritent de cette classe et les actions appliquees sur les cellules du jeu ne concerneront que les cellules flexibles ou editables.
  * Elle permet de faire l'action et de l'annuler ainsi que de serialiser et deserialiser les actions pour le stockage dans la base de donnees.
  * 
- * @author DE THESE Taise
+ * @author NGANGA YABIE Taïse de These
  * @author POUSSE Kilian
  * @see Game
  * @see ActionManagerApply

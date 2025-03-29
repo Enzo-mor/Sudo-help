@@ -8,7 +8,7 @@ import com.google.gson.JsonParseException;
 /**
  * Cette classe permet de stocker les classes qui implementent l'interface Action.
  * 
- * @author DE THESE Taise
+ * @author NGANGA YABIE Taïse de These
  * @see Action
  * @see AnnotationCellAction
  * @see NumberCellAction

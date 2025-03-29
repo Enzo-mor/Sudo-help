@@ -10,24 +10,33 @@ import grp6.sudocore.*;
  * Elle contient des messages d'aide et les cellules concernées par cette aide.
  * 
  * @author Kilian POUSSE
+ * @see Grid
  */
 public class Help {
 
     /* ===== Constantes de classe ===== */
     
-    /** Nombre de niveaux d'aide disponibles */
+    /** 
+     * Nombre de niveaux d'aide disponibles 
+     */
     public static final int NB_LVL = 3;
 
     /* ===== Variables d'instances ===== */
 
-    /** Liste des positions des cellules à mettre en valeur */
-    private boolean[][] grid;
+    /** 
+     * Liste des positions des cellules à mettre en valeur 
+     */
+    private final boolean[][] grid;
 
-    /** Liste des messages d'aide */
-    private String[] messages;
+    /** 
+     * Liste des messages d'aide 
+     */
+    private final String[] messages;
 
-    /** Nom de la technique */
-    private String name;
+    /** 
+     * Nom de la technique 
+     */
+    private final String name;
 
     /* ====== Constructeurs ====== */
 
@@ -165,6 +174,10 @@ public class Help {
         addSquare(i / 3, i % 3);
     }
 
+    /**
+     * Affichage de l'aide sous forme de texte.
+     * @return Chaine de caracteres contenant l'aide.
+     */
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder("HELP("+getName()+"):\n");
@@ -195,6 +208,13 @@ public class Help {
         return res.toString();
     }
 
+    /**
+     * Methode principale pour tester l'affichage des aides en fonction des lignes, colonnes et sous-grilles.
+     * Cette methode cree des instances de la classe {@code Help} et y ajoute des indices de lignes, colonnes 
+     * et sous-grilles, puis affiche le resultat.
+     * 
+     * @param args Arguments de la ligne de commande (non utilises).
+     */
     public static void main(String[] args) {
         // Test affichage ligne par ligne
         for(int i = 0; i < 9; i++) {

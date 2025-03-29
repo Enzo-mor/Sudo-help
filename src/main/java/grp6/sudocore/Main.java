@@ -3,7 +3,20 @@ package grp6.sudocore;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Classe principale contenant le point d'entree de l'application.
+ * Elle initialise la base de donnees et effectue quelques tests
+ * sur la recuperation d'une grille et l'affichage des erreurs.
+ * 
+ * @author NGANGA YABIE Taïse de These 
+ */
 public class Main {
+
+    /**
+     * Methode principale qui initialise la base de donnees et teste la recuperation d'une grille.
+     * 
+     * @param args Arguments de ligne de commande (non utilises).
+     */
     public static void main(String[] args) {
         try {
             DBManager.init();

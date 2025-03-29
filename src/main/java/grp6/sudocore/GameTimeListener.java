@@ -3,7 +3,7 @@ package grp6.sudocore;
 /**
  * Interface permettant d'ecouter les mises a jour du temps passé dans le jeu.
  * 
- * @author DE THESE Taise
+ * @author NGANGA YABIE Taïse de These
  * @see Game
  */
 public interface GameTimeListener {

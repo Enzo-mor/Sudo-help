@@ -4,7 +4,7 @@ package grp6.sudocore;
  * Cette classe permet de definir les types de donnees utilises dans le jeu de sudoku.
  * Elle permet de definir les types d'actions, les types de cellules, les niveaux de difficulte, les etats du jeu, etc.
  * 
- * @author DE THESE Taise
+ * @author NGANGA YABIE Taïse de These
  * @author POUSSE Kilian
  */
 public final class SudoTypes {
@@ -13,33 +13,51 @@ public final class SudoTypes {
      * Enum pour les types d'actions
      */
     public enum ActionType {
+
         /**
          * Enum pour les actions sur les cellules de type nombre
          */
         NUMBER_CELL_ACTION("Action pour nombre"), 
+
         /**
          * Enum pour les actions d'ajout d'annotation sur les cellules
          */
         ANNOTATION_CELL_ACTION("Action pour les annotations"), 
+
         /**
          * Enum pour les actions sur le jeu de type bonus
          */
         BONUS_ACTION("bonusCell"),
+
         /**
          * Enum pour les actions de suppression d'annotation sur les cellules
          */
         ANNOTATION_REMOVE_CELL_ACTION("Action de suppression de l'annotation"),
+
         /**
          * Enum pour les actions d'effacement de la cellule
          */
         ERASE_ACTION("Action d'effacement de la cellule");
 
+        /**
+         * Description textuelle de l'action.
+         */
         private final String description;
         
+        /**
+         * Constructeur de l'enumeration.
+         * 
+         * @param value La description associee à l'action.
+         */
         ActionType(String value) {
             this.description = value;
         }
 
+        /**
+         * Retourne une représentation textuelle de l'action.
+         *
+         * @return La description de l'action.
+         */
         @Override
         public String toString() {
             return this.description;
@@ -97,6 +115,12 @@ public final class SudoTypes {
          */
         private final String description;
 
+        /**
+         * Constructeur de l'enumeration.
+         * 
+         * @param level Le niveau de difficulte.
+         * @param description La description associée à l'enum.
+         */
         Difficulty(int level, String description) {
             this.level = level;
             this.description = description;
@@ -118,6 +142,11 @@ public final class SudoTypes {
             return level;
         }
 
+        /**
+         * Retourne une représentation textuelle de l'enum.
+         *
+         * @return La description de l'enum.
+         */
         @Override
         public String toString() {
             return this.description;
@@ -181,10 +210,20 @@ public final class SudoTypes {
          */
         private final String description;
 
+        /**
+         * Constructeur de l'enumeration.
+         * 
+         * @param description La description associée à l'etat du jeu.
+         */
         GameState(String description) {
             this.description = description;
         }
 
+        /**
+         * Retourne une représentation textuelle de l'etat du jeu.
+         *
+         * @return La description de l'etat du jeu.
+         */
         @Override
         public String toString() {
             return this.description;
@@ -218,7 +257,13 @@ public final class SudoTypes {
         }
     }
 
-
+    /**
+     * Méthode principale illustrant l'utilisation des énumérations du jeu.
+     * Cette méthode sélectionne différents types d'actions, cellules, niveaux de difficulté 
+     * et états du jeu, puis les affiche dans la console.
+     * 
+     * @param args Arguments de la ligne de commande (non utilisés).
+     */
     public static void main(String[] args) {
         // Exemple d'utilisation
         ActionType action = SudoTypes.ActionType.NUMBER_CELL_ACTION;
