@@ -50,7 +50,7 @@ public class GameplayChoice {
         // Appliquer le style classique sur le bouton exitButton
         StyledContent.applyButtonStyle(exitButton);
 
-        learningMode.setOnAction(e -> LearningMenu.showLearningLibrairy(stage));
+        learningMode.setOnAction(e -> LearningMenu.showLearningLibrary(stage));
         freeMode.setOnAction(e -> SudokuMenu.showSudokuLibrary(stage));
         exitButton.setOnAction(e -> MainMenu.showMainMenu(stage, MainMenu.getProfile()));
 

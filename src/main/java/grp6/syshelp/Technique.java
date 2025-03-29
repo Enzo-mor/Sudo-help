@@ -12,24 +12,27 @@ public class Technique {
     /** 
      * Identifiant de la technique 
      */
-    private int id;
+    private final int id;
 
     /** 
      * Nom de la technique 
      */
-    private String name;
+    private final String name;
 
     /** 
      * Description courte de la technique 
      */
-    private String shortDesc;
+    private final String shortDesc;
 
     /** 
      * Description longue de la technique 
      */
-    private String longDesc;
+    private final String longDesc;
 
-    private Grid solvedGrid;
+    /**
+     * Grille resolue de la technique
+     */
+    private final Grid solvedGrid;
 
     /**
      * Grille exemple de la technique
@@ -100,6 +103,16 @@ public class Technique {
         
         // Diviser la chaine en sous-chaines basees sur ':'
         String[] parts = solvedAnnot.split(":");
+
+        // Vérifier si le nombre de parties est inférieur à 9, et compléter avec des chaînes vides si nécessaire
+        if (parts.length < 9) {
+            String[] newParts = new String[9];
+            System.arraycopy(parts, 0, newParts, 0, parts.length);
+            for (int i = parts.length; i < 9; i++) {
+                newParts[i] = ""; // Remplir les cases manquantes avec des chaînes vides
+            }
+            parts = newParts;
+        }
         
         for(int idx=0; idx<9; idx++) {
 

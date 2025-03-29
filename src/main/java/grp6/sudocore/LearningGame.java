@@ -156,6 +156,10 @@ public class LearningGame {
         return game.getGrid();
     }
 
+    public Game getGame() {
+        return game;
+    }
+
     /**
      * Execute une action dans le jeu. L'action est unique pour chaque instance de jeu.
      * L'action sera automatiquement sauvegardee et appliquee.

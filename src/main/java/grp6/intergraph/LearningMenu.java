@@ -1,5 +1,6 @@
 package grp6.intergraph;
 import grp6.sudocore.*;
+import grp6.sudocore.SudoTypes.GameState;
 import grp6.syshelp.*;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class LearningMenu {
      * 
      * @param stage La fenetre principale de l'application ou s'affiche le menu d'apprentissage.
      */
-    public static void showLearningLibrairy(Stage stage) {
+    public static void showLearningLibrary(Stage stage) {
         
         // Label pour afficher le mode de jeu actuel
         Label learningLabel = new Label("Apprentissage");
@@ -91,6 +92,12 @@ public class LearningMenu {
 
             VBox sudokuBox = createLearningSudokuBox(learningSudoku);
             techniquesContainer.add(sudokuBox, (i - startIndex) % columns, (i - startIndex) / columns);
+
+            final int selectedSudokuId = i;
+            sudokuBox.setOnMouseClicked(e -> {
+                Technique selectedTechnique = learningSudokus.get(selectedSudokuId);
+                LearningGameDisplay.showLearningGame(stage, selectedTechnique);
+            });
         }
     }
 

@@ -347,6 +347,8 @@ public class SudokuMenu {
      */
     private static void showConfirmationPopup(Stage parentStage, Sudoku sudoku, List<Sudoku> sudokus, int selectedSudokuId) {
 
+        confirmationBox.getChildren().clear();
+        
         // Conteneur principal
         VBox contentBox = new VBox(20);
         StyledContent.applyContentBoxStyle(contentBox);

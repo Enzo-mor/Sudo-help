@@ -1,6 +1,6 @@
 package grp6.intergraph;
 import grp6.sudocore.*;
-
+import grp6.syshelp.Technique;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -78,6 +78,16 @@ public class SudokuGrid {
      * Colonne de la cellule actuellement selectionnee.
      */
     private static int selectedCol = -1;
+
+    /**
+     * Booleen pour savoir si c'est le mode apprentissage qui appel les methodes
+     */
+    private static boolean isLearningMode = false;
+
+    /**
+     * Technique de recherche pour trouver les solutions.
+     */
+    private static Technique technique;
 
     /**
      * Constructeur de la classe SudokuGrid.
@@ -545,7 +555,12 @@ public class SudokuGrid {
      * Parcourt toutes les cellules et les met a jour avec les nouvelles donnees.
      */
     public void setGrid() {
-        Grid newGrid = DBManager.getGrid(actualGame.getGrid().getId());
+        Grid newGrid;
+        if (!isLearningMode)
+            newGrid = DBManager.getGrid(actualGame.getGrid().getId());
+        else
+            newGrid = DBManager.getTech(technique.getId()).getGrid();
+
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 Cell cell = newGrid.getCell(row, col);
@@ -610,9 +625,12 @@ public class SudokuGrid {
      * Reinitialise l'ensemble de l'interface utilisateur, y compris la grille, les outils et l'affichage.
      */
     public void resetInterface() {
-        resetGrid();
-        resetButton();
-        SudokuDisplay.resetGrid(getGridPane());
+        if(!isLearningMode) {
+            resetGrid();
+            resetButton();
+            SudokuDisplay.resetGrid(getGridPane());
+        } else
+            setGrid();
     }
 
     // ------------ Getters ------------ //
@@ -767,5 +785,23 @@ public class SudokuGrid {
      */
     public static void setSelectedCol(int col) {
         selectedCol = col;
+    }
+
+    /**
+     * Changement d'etat du booleen pour le mode apprentissage ou non
+     * 
+     * @param bool Nouvelle etat du booleen
+     */
+    public void setLearningMode(boolean bool) {
+        isLearningMode = bool;
+    }
+
+    /**
+     * Changement de la technique de jeu utilisee
+     * 
+     * @param tech Nouvelle technique de jeu
+     */
+    public void setTechnique(Technique tech) {
+        technique = tech;
     }
 }

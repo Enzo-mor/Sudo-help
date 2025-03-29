@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.nio.file.*;
 
+import grp6.sudocore.SudoTypes.Difficulty;
+
 /**
  * Classe: Permet l'initialisation et/ou la creation de la Base de donnees.
  * @author Kilian POUSSE 
@@ -778,8 +780,8 @@ public final class DBManager {
                     String shortDesc = rs.getString("short_desc");
                     String longDesc = rs.getString("long_desc");
                     String data = rs.getString("cells");
-                    String finalCells = rs.getString("long_desc");
-                    String annot = rs.getString("cells");
+                    String finalCells = rs.getString("cells_final");
+                    String annot = rs.getString("annot_final");
 
                     res.add(new Technique(id, name, shortDesc, longDesc, data, finalCells, annot));
                 }
@@ -790,6 +792,43 @@ public final class DBManager {
         }
 
         return res;
+    }
+
+    /**  
+     * Récupération d'une technique par son ID  
+     */  
+    public static Technique getTech(int id) {  
+        Technique technique = null;  
+
+        try {  
+            if (!tableExists("tech")) {  
+                System.err.println("La table 'tech' n'existe pas. Initialisation en cours...");  
+                executeSqlScript(getConnection(), "tech");  
+            }  
+
+            String query = "SELECT * FROM tech WHERE id_tech = ?";  
+            try (Connection connexion = getConnection();  
+                PreparedStatement pstmt = connexion.prepareStatement(query)) {  
+
+                pstmt.setInt(1, id);  
+                ResultSet rs = pstmt.executeQuery();  
+
+                if (rs.next()) {  
+                    String name = rs.getString("name");  
+                    String shortDesc = rs.getString("short_desc");  
+                    String longDesc = rs.getString("long_desc");  
+                    String data = rs.getString("cells");  
+                    String finalCells = rs.getString("cells_final");  
+                    String annot = rs.getString("annot_final");  
+
+                    technique = new Technique(id, name, shortDesc, longDesc, data, finalCells, annot);  
+                }  
+            }  
+        } catch (SQLException e) {  
+            throw new RuntimeException("Erreur lors du chargement de la technique avec ID " + id + ": " + e);  
+        }  
+
+        return technique;  
     }
 
     /**

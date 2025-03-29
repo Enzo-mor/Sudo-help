@@ -313,11 +313,13 @@ public class SudokuGame {
 
     /**
      * Affiche un panneau de confirmation pour quitter le jeu.
-     * Cette méthode permet à l'utilisateur de retourner au menu de sélection ou au menu principal.
+     * Cette methode permet à l'utilisateur de retourner au menu de selection ou au menu principal.
      * 
-     * @param parentStage La fenêtre principale de l'application [Stage].
+     * @param parentStage La fenetre principale de l'application [Stage].
      */
     private static void showExitDialog(Stage parentStage) {
+
+        quitConfirmation.getChildren().clear();
 
         // Mise en pause du jeu si une partie est en cours
         if (actualGame != null) {
