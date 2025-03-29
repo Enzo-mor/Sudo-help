@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import grp6.sudocore.Cell;
+import grp6.sudocore.DBManager;
 import grp6.sudocore.Grid;
+import grp6.sudocore.Profile;
 import grp6.sudocore.SudoLog;
 
 /**
@@ -13,7 +15,8 @@ import grp6.sudocore.SudoLog;
  * Il implémente plusieurs techniques pour identifier les valeurs possibles des cases.
  * Ces techniques sont ajoutées dynamiquement à une liste et appliquées pour résoudre le Sudoku.
  * 
- * @author Kilian POUSSE
+ * @author POUSSE Kilian 
+ * @author MOREAU Enzo
  * 
  * <ul style="list-style-type:none;">
  *   <li><b>LastCell:</b> Dernière case libre d'un bloc, ligne ou colonne.</li>
@@ -69,17 +72,16 @@ public class SysHelp {
     /**
      * Generation d'une aide a partir d'une grille donnee
      * @param g Grille du joueur
+     * @param profile Profil du joueur
      * @return L'aide qui peut etre apporte par le Systeme d'aide
      */
-    public static Help generateHelp(Grid g) {
+    public static Help generateHelp(Grid g, Profile profile) {
         SudoLog.debug("Clone de la grille");
         Grid clone = g.clone();
         Help aide = new Help("Erreur anotation");
 
         // On remplit les annotations
         AutoAnnotation.generate(clone);
-        
-        
 
         for(int i = 0; i < Grid.NB_NUM; i++) {
             for(int j = 0; j < Grid.NB_NUM; j++) {
@@ -116,16 +118,45 @@ public class SysHelp {
         System.err.println(help);
 
         if (help.isPresent()) {
-            return  help.get();
+            initTechMessage(help, profile);
+            return help.get();
         }
         SudoLog.debug("Aucune aide n'a été trouvée");
     
         return new NoHelp(); 
     }
+
+    /**
+     * Permet d'initialiser le message de la technique selon
+     * si elle a été apprise ou non par le joueur
+     * 
+     * @param help Aide a initialiser 
+     * @param profile Profil du joueur
+     */
+    private static void initTechMessage(Optional<Help> help, Profile profile) {
+        String name = help.get().getName();
+        Technique tech = DBManager.getTechs().stream()
+            .filter(t -> t.getName().equals(name))
+            .findFirst()
+            .orElse(null);
+
+        if(tech != null) {
+            if(profile.getAlreadyLearn(tech)) {
+                help.get().setMessage(2, tech.getShortDesc());
+            }
+            else {
+                help.get().setMessage(2, tech.getLongDesc());
+            }
+        }
+        else {
+            SudoLog.error("La technique n'existe pas dans la base de données.");
+            help.get().setMessage(2, "Aucune technique trouvée.");
+        }   
+    }
     
 
     public static void main(String[] args) {
-        SudoLog.setDebug(true);
+        /*SudoLog.setDebug(true);
 
         int[] data = {
             6,1,0, 9,0,8, 4,0,7,
@@ -145,6 +176,6 @@ public class SysHelp {
         // Demande d'aide au système
         Help help = SysHelp.generateHelp(grille);
 
-        System.out.println(help);
+        System.out.println(help);*/
     }
 }

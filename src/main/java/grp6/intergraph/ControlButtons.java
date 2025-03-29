@@ -127,7 +127,7 @@ public class ControlButtons {
 
         //SYSHELP
         helpButton.setOnAction(e -> {
-            help = SysHelp.generateHelp(sudokuGame.getGrid());
+            help = SysHelp.generateHelp(sudokuGame.getGrid(), sudokuGame.getProfile());
             currentHelp = 1;
             if(evaluateWithUndoRedo().isEmpty()) {
                 if(help != null) {
