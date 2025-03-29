@@ -8,6 +8,7 @@ import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -174,6 +175,7 @@ public class LearningGameDisplay {
         grid.setTechnique(actualTechnique);
         grid.reload(actualLearningGame.getGrid());
         controlsButtons = new ControlButtons(grid, actualLearningGame.getGame());
+        controlsButtons.disableHelpButton(); // Desactive le bouton d'aide
         
         // --- Conteneur principal du panneau droit ---
         VBox rightPanel = new VBox();
@@ -455,5 +457,14 @@ public class LearningGameDisplay {
         content.setAlignment(Pos.CENTER);
 
         helpOverlay.getChildren().add(content);
+    }
+
+    /**
+     * Renvoie la technique utilisee pour cette grille
+     * 
+     * @return La technique de la grille
+     */
+    public static Technique getActualTechnique() {
+        return actualTechnique;
     }
 }

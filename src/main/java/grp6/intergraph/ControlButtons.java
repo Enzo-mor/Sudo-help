@@ -363,4 +363,11 @@ public class ControlButtons {
     public static Help getHelp() {
         return help;
     }
+
+    /**
+     * Methode pour desactiver le bouton de l'aide
+     */
+    public void disableHelpButton() {
+        helpButton.setDisable(true);
+    }
 }

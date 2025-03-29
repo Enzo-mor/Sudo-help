@@ -536,6 +536,10 @@ public final class DBManager {
      */
     protected static void saveGame(Game game) throws SQLException {
 
+        if(game.getGrid().getId() == 0) {
+            return;
+        }
+        
         if(!tableExists("game")) {
             System.err.println("La table 'profile' n'existe pas. Initialisation en cours...");
             executeSqlScript(getConnection(), "game");

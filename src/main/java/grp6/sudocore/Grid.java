@@ -109,8 +109,8 @@ public final class Grid implements Iterable<Cell> {
     private Grid(int id, SudoTypes.Difficulty difficulty) {
         this.id = id;
         this.difficulty = difficulty;
-        this.cells = new ArrayList<Cell>();
-        this.solvedCells = new ArrayList<Cell>();
+        this.cells = new ArrayList<>();
+        this.solvedCells = new ArrayList<>();
     }
 
     /**

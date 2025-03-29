@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 /**
  * Classe SudokuGrid
@@ -37,7 +38,7 @@ public class SudokuGrid {
     /**
      * Panneau des outils permettant d'interagir avec la grille (par exemple, pour ajouter des annotations).
      */
-    private final ToolsPanel toolsPanel;
+    private static ToolsPanel toolsPanel;
 
     /**
      * Tableau de boutons representant les cellules de la grille de Sudoku.
@@ -99,7 +100,7 @@ public class SudokuGrid {
      */
     public SudokuGrid(ToolsPanel toolsP, Game actualGameParam) {
         grid = new GridPane();
-        this.toolsPanel = toolsP;
+        toolsPanel = toolsP;
         actualGame = actualGameParam;
         gridSudoku = actualGameParam.getGrid();
         for (int i = 0; i < 9; i++) {
@@ -630,8 +631,11 @@ public class SudokuGrid {
             resetGrid();
             resetButton();
             SudokuDisplay.resetGrid(getGridPane());
-        } else
-            setGrid();
+        } else {
+            Stage stage = (Stage) getGridPane().getScene().getWindow();
+            LearningGameDisplay.showLearningGame(stage, LearningGameDisplay.getActualTechnique());
+        }
+        
     }
 
     // ------------ Getters ------------ //
