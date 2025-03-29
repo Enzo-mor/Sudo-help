@@ -1,6 +1,5 @@
 package grp6.syshelp;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,18 +36,18 @@ public class SysHelp {
     /** Liste des technique applicable sur une grille */
     public static final List<InterfaceTech> TECHNIQUES = new ArrayList<>();
     static {
-        TECHNIQUES.add(new LastCell());         //  1-Derniere case lible
-        TECHNIQUES.add(new LastPossible());     //  2-Derniere case restante
-        TECHNIQUES.add(new LastNumber());       //  3-Dernier chiffre possible
+        //TECHNIQUES.add(new LastCell());         //  1-Derniere case lible
+        //TECHNIQUES.add(new LastPossible());     //  2-Derniere case restante
+        //TECHNIQUES.add(new LastNumber());       //  3-Dernier chiffre possible
         TECHNIQUES.add(new NakedSingleton());   //  4-Singletons nus
-        TECHNIQUES.add(new NakedPairs());       //  5-Paires nus
+        //TECHNIQUES.add(new NakedPairs());       //  5-Paires nus
         //TECHNIQUES.add(new NakedTriples());     //  6-Triplets nus
-        TECHNIQUES.add(new HiddenSingle());     //  7-Singletons cachés
-        TECHNIQUES.add(new HiddenPairs());      //  8-Paires cachées 
-        TECHNIQUES.add(new HiddenTriples());    //  9-Triplets cachés
-        TECHNIQUES.add(new PointingPairs());    // 10-Paires pointantes
-        TECHNIQUES.add(new PointingTriples());  // 11-Triplets pointants
-        TECHNIQUES.add(new XWing());            // 12-XWing
+        //TECHNIQUES.add(new HiddenSingle());     //  7-Singletons cachés
+        //TECHNIQUES.add(new HiddenPairs());      //  8-Paires cachées 
+        //TECHNIQUES.add(new HiddenTriples());    //  9-Triplets cachés
+        //TECHNIQUES.add(new PointingPairs());    // 10-Paires pointantes
+        //TECHNIQUES.add(new PointingTriples());  // 11-Triplets pointants
+        //TECHNIQUES.add(new XWing());            // 12-XWing
         //TECHNIQUES.add(new YWing());            // 13-YWing
         //TECHNIQUES.add(new Swordfish());        // 14-Swordfish
     }
@@ -75,7 +74,7 @@ public class SysHelp {
     public static Help generateHelp(Grid g) {
         SudoLog.debug("Clone de la grille");
         Grid clone = g.clone();
-        Help aide = new Help("Eurreur anotation");
+        Help aide = new Help("Erreur anotation");
 
         // On remplit les annotations
         AutoAnnotation.generate(clone);
@@ -107,15 +106,17 @@ public class SysHelp {
         SudoLog.debug("Generation des annotations");
        // AutoAnnotation.generate(clone);
        Optional<Help> help = TECHNIQUES.stream()
-                                        .filter(tech -> { 
-                                            SudoLog.debug("Teste avec " + tech.getClass().getSimpleName());
-                                            return tech.getHelp(g.clone()) != null;
-                                             })
-                                         .reduce((a, b) -> Math.random() > 0.5 ? a : b)
-                                         .map(tech -> tech.getHelp(g.clone())); 
+       .map(tech -> {
+           SudoLog.debug("Teste avec " + tech.getClass().getSimpleName());
+           return tech.getHelp(g.clone());
+       })
+       .filter(h -> h != null)
+       .findFirst();
+   
+        System.err.println(help);
 
         if (help.isPresent()) {
-        return  help.get();
+            return  help.get();
         }
         SudoLog.debug("Aucune aide n'a été trouvée");
     
@@ -127,9 +128,9 @@ public class SysHelp {
         SudoLog.setDebug(true);
 
         int[] data = {
-            6,1,0, 9,0,8, 4,0,0,
-            9,8,0, 5,0,0, 0,0,0,
-            5,0,3, 0,0,6, 0,1,9,
+            6,1,0, 9,0,8, 4,0,7,
+            9,8,7, 5,0,0, 0,0,0,
+            5,2,3, 0,0,6, 0,1,9,
 
             0,0,0, 6,0,0, 5,0,4,
             0,0,2, 0,9,0, 3,8,6,
@@ -140,9 +141,6 @@ public class SysHelp {
             7,0,8, 0,0,0, 2,9,5
         };
         Grid grille = new Grid(data); 
-
-        System.out.println("🔹 Grille de départ :");
-        System.out.println(grille);
 
         // Demande d'aide au système
         Help help = SysHelp.generateHelp(grille);

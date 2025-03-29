@@ -22,9 +22,9 @@ public class LastNumber implements InterfaceTech {
             for(int j=0; j<Grid.NB_NUM; j++){      
                 if(grille.getCell(i,j).getAnnotations().size()==1){
                     aide.addPos(i,j);
-                    aide.addLine(i);
-                    aide.addColumn(j);
-                    aide.addSquare(j/3);
+                    //aide.addLine(i);
+                    //aide.addColumn(j);
+                    //aide.addSquare(j/3);
 
                     aide.setMessage(1,"Tu peux placer un "+grille.getCell(i,j).getAnnotations().get(0));
                     

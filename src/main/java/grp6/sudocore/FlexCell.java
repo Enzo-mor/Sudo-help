@@ -180,9 +180,9 @@ public final class FlexCell extends FixCell {
     public Cell clone() {
         // Clone profond : creation d'une nouvelle instance de FlexCell,
         // et copie des annotations.
-        FlexCell clonedCell = new FlexCell();
+        FlexCell clonedCell = new FlexCell(this.getPosition()[0],this.getPosition()[1]);
         clonedCell.number = this.number;
-        clonedCell.annotations = this.annotations.clone(); // Clonage profond du tableau d'annotations.
+        clonedCell.annotations = this.annotations; // Clonage profond du tableau d'annotations.
         return clonedCell;
     }
 
@@ -195,6 +195,7 @@ public final class FlexCell extends FixCell {
         for(int i = 0;i<annotations.length;i++){
             if(annotations[i]){
                 count++;
+                System.out.println(count);
             }
         }
         return count == 1;
