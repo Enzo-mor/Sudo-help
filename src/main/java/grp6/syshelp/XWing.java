@@ -3,11 +3,12 @@ package grp6.syshelp;
 import java.util.ArrayList;
 import java.util.List;
 import grp6.sudocore.*;
+
 /**
  * Cette classe représente la technique NakedSingleton.
  * 
  * Elle permet de trouver les singletons nus(1 chiffre apparaissant uniquement dans une case d'une unité(ligne colones carré)). 
- * @author 
+ * @author POUSSE K
  * @see InterfaceTech Contenant les méthodes des techniques
  * 
  */
@@ -45,10 +46,19 @@ public class XWing implements InterfaceTech {
                         aide.addColumn(colonnes1.get(0));
                         aide.addColumn(colonnes1.get(1));
 
-                        aide.setMessage(1, "Regarde les annotation " + num + "de la grille");
-                        aide.setMessage(3, "Le chiffre " + num + " forme un X-Wing dans les colonnes "+ colonnes1.get(0) + " et " + colonnes1.get(1));
+                        aide.setMessage(1, "Pense à utiliser les annotations. Une technique est faisable avec les " + num + ".");
+                        aide.setMessage(3, "Le chiffre " + num + " forme un X-Wing dans cette zone, fait attention à bien retirer tes annotations !");
 
-                        return aide; // On retourne dès qu'on trouve un X-Wing
+                        removeAnnotations(grille, ligne1, ligne2, colonnes1, num);
+
+                        for(Cell c: grille) {
+                            if(c.OnlyOneAnnotation()) {
+                                aide.setMessage(3, "Le chiffre " + num + " forme un X-Wing dans cette zone, fait attention à bien retirer tes annotations ! Cela pourrait te mener à un coups avec un " + c.getLastAnnotation() + ".");
+                            }
+                        }
+
+
+                        return aide; 
                     }
                 }
             }
@@ -76,30 +86,48 @@ public class XWing implements InterfaceTech {
         return colonnes;
     }
 
+    private void removeAnnotations(Grid grille, int ligne1, int ligne2, List<Integer> colonnes, int num) {
+        for (int i = 0; i < 9; i++) {
+            if (i != ligne1 && i != ligne2) {
+                for (int col : colonnes) {
+                    grille.getCell(i, col).removeAnnotation(num);
+                }
+            }
+        }
+
+        for (int col : colonnes) {
+            for (int i : List.of(ligne1, ligne2)) {
+                for (int j = 0; j < 9; j++) {
+                    if (!colonnes.contains(j)) {
+                        grille.getCell(i, j).removeAnnotation(num);
+                    }
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         XWing tech = new XWing();
 
         int[] data = {
-            0,0,0, 0,0,0, 0,0,0,
-            0,0,0, 0,0,0, 0,0,0,
-            0,0,0, 0,0,0, 0,0,0,
-            
-            0,0,0, 0,0,0, 0,0,0,
-            0,0,0, 0,0,0, 0,0,0,
-            0,0,0, 0,0,0, 0,0,0,
-            
-            0,0,0, 0,0,0, 0,0,0,
-            0,0,0, 0,0,0, 0,0,0,
-            0,0,0, 0,0,0, 0,0,0
+            5,3,2, 1,4,6, 7,9,8,
+            4,6,9, 0,0,7, 1,3,5,
+            0,0,7, 5,3,9, 4,6,2,
+
+            9,0,6, 0,0,0, 0,7,0,
+            0,0,0, 7,6,8, 0,0,0,
+            0,7,0, 0,9,0, 0,0,6,
+
+            0,0,1, 0,7,0, 6,0,0,
+            6,0,0, 9,0,0, 0,1,7,
+            7,0,5, 6,1,4, 0,2,0
         };
 
         Grid grid = new Grid(data);
-        grid.getCell(1, 2).addAnnotation(3);
-        grid.getCell(1, 7).addAnnotation(3);
-        grid.getCell(5, 2).addAnnotation(3);
-        grid.getCell(5, 7).addAnnotation(3);
+        AutoAnnotation.generate(grid);
 
         Help help = tech.getHelp(grid);
+
         if (help == null) {
             System.out.println("Pas de X-Wing trouvé");
         } else {
