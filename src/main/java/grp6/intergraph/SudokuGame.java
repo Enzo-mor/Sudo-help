@@ -230,6 +230,8 @@ public class SudokuGame {
         // --- Panneau d'aide ---
         helpOverlay = new VBox(20);
         helpText = new Label();
+        helpText.setAlignment(Pos.CENTER);
+        helpText.setWrapText(true);
         
         setupHelpOverlay(helpOverlay, helpText);
 

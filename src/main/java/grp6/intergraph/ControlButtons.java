@@ -58,11 +58,6 @@ public class ControlButtons {
     private static int currentHelp;
 
     /*
-     * Booleen pour l'animation
-     */
-    private static boolean isYellow;
-
-    /*
      * Bouton d'aide
      */
     private final Button helpButton ;
