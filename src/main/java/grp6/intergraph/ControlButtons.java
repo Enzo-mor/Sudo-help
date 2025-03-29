@@ -1,15 +1,20 @@
 package grp6.intergraph;
-import grp6.sudocore.*;
-import grp6.syshelp.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import grp6.sudocore.Action;
+import grp6.sudocore.Game;
+import grp6.sudocore.Grid;
+import grp6.sudocore.NumberCellAction;
+import grp6.syshelp.AutoAnnotation;
+import grp6.syshelp.Help;
+import grp6.syshelp.SysHelp;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.util.Duration;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
-
-import java.util.*;
+import javafx.util.Duration;
 
 /**
  * Classe ControlButtons
@@ -82,6 +87,7 @@ public class ControlButtons {
         helpButton = new Button("Aide");
         Button checkButton = new Button("Vérifier");
         Button restartButton = new Button("Recommencer");
+        Button annotation = new Button("Auto");
         
         // Appliquer le style aux boutons
         StyledContent.applyButtonStyle(undoButton);
@@ -89,6 +95,18 @@ public class ControlButtons {
         StyledContent.applyButtonStyle(helpButton);
         StyledContent.applyButtonStyle(checkButton);
         StyledContent.applyButtonStyle(restartButton);
+
+        annotation.setOnAction(e -> {
+            Grid g =sudokuGrid.getGame().getGrid();
+            for (int i=0 ;i <9;i++){
+                for(int y=0;y<9;y++){
+                    AutoAnnotation.generate(g, g.getCell(i, y), i, y);
+                    for (Integer f : g.getCell(i, y).getAnnotations()){
+                        sudokuGrid.addAnnotationToCell(i,y,String.valueOf(f));
+                    }
+                }
+            }
+        });
         
         // Ajoute l'action sur le bouton "Annuler"
         undoButton.setOnAction(e -> {
@@ -109,7 +127,7 @@ public class ControlButtons {
 
         //SYSHELP
         helpButton.setOnAction(e -> {
-            help = SysHelp.generateHelp(sudokuGame.getGrid());
+            help = SysHelp.generateHelp(sudokuGame.getGrid(), sudokuGame.getProfile());
             currentHelp = 1;
             if(evaluateWithUndoRedo().isEmpty()) {
                 if(help != null) {
@@ -149,7 +167,7 @@ public class ControlButtons {
             SudokuGame.resetTimer();
         });
 
-        controlButtons.getChildren().addAll(undoButton, redoButton, helpButton, checkButton, restartButton);
+        controlButtons.getChildren().addAll(undoButton, redoButton, helpButton, checkButton, restartButton,annotation);
     }
 
     /**

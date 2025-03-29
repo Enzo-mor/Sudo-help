@@ -1,6 +1,7 @@
 package grp6.syshelp;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
@@ -14,7 +15,7 @@ import grp6.sudocore.Grid;
 public class LastPossible implements InterfaceTech{
     
     
-    public Help getHelp(Grid grille){
+    /*public Help getHelp(Grid grille){
         Help aide = new Help(getClass().getSimpleName());
 
         for (int i = 0; i < Grid.NB_NUM;i++){
@@ -44,6 +45,39 @@ public class LastPossible implements InterfaceTech{
             
             
            
+    }*/
+
+    public Help getHelp(Grid grille){
+        Help aide = new Help(getClass().getSimpleName());
+        
+
+        for (Cell c:grille){
+            if (c.isEmpty()) {
+                int[] cells = Stream.of(
+                        Arrays.stream(grille.getColumn(c.getPosition()[0])),
+                        Arrays.stream(grille.getLine(c.getPosition()[1])),
+                        Arrays.stream(grille.getFlatSubGrid(c.getPosition()[0], c.getPosition()[1]))
+                    ).flatMap(s -> s)
+                    .mapToInt(Cell::getNumber)
+                    .filter(num -> num != 0)
+                    .distinct()
+                    .toArray();
+
+                if (cells.length == 8) {
+                    int m = IntStream.rangeClosed(1, 9)
+                                     .filter(n -> Arrays.stream(cells).noneMatch(x -> x == n))
+                                     .findFirst()
+                                     .orElse(-1);
+                    aide.addPos(c.getPosition()[0], c.getPosition()[1]);
+                    aide.setMessage(1, "Tu peux placer un " + m);
+                    aide.setMessage(3, "Regarde ici");
+                    return aide;
+                }
+            }
+            
+             
+        }
+        return null;
     }
 
 
