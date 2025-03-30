@@ -123,7 +123,12 @@ public class SudokuGame {
     /*
      * Timer pour la fin de l'anumation du bouton
      */
-    private static Timeline resetTimer; 
+    private static Timeline resetTimer;
+
+    /**
+     * Fenetre de fin
+     */
+    private static VBox endOverlay;
 
 
     /**
@@ -271,8 +276,13 @@ public class SudokuGame {
         techniqueOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
         techniqueOverlay.setVisible(false);
 
+        endOverlay = new VBox();
+        endOverlay.setAlignment(Pos.CENTER);
+        endOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+        endOverlay.setVisible(false);
+
         // Empiler le panneau de techniques par-dessus le reste
-        StackPane rootStack = new StackPane(mainLayout, quitConfirmation, techniqueOverlay);
+        StackPane rootStack = new StackPane(mainLayout, quitConfirmation, endOverlay, techniqueOverlay);
         
         // --- BorderPane pour organiser la mise en page ---
         BorderPane root = new BorderPane();
@@ -581,6 +591,39 @@ public class SudokuGame {
         content.setAlignment(Pos.CENTER);
 
         helpOverlay.getChildren().add(content);
+    }
+
+    /**
+     * Affiche une superposition avec un titre et un message, remplaçant une alerte.
+     * 
+     * @param primaryStage La scene principale a changer apres la fin du jeu [ Stage ]
+     */
+    public static void showEndOverlay(Stage primaryStage) {
+
+        // Conteneur principal
+        VBox contentBox = new VBox(20);
+        StyledContent.applyContentBoxStyle(contentBox);
+        contentBox.setMaxWidth(400);
+        contentBox.setAlignment(Pos.TOP_CENTER);
+        contentBox.setPadding(new Insets(10));
+
+        Label title = new Label("Grille terminé");
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+
+        Label messageLabel = new Label("Félicitations ! Vous avez terminé le Sudoku !");
+        messageLabel.setWrapText(true);
+        messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: black;");
+
+        Button closeButton = new Button("Quitter");
+        StyledContent.applyButtonStyle(closeButton);
+        closeButton.setOnAction(e -> {
+            endOverlay.setVisible(false);
+            SudokuMenu.showSudokuLibrary(primaryStage);
+        });
+
+        contentBox.getChildren().addAll(title, messageLabel, closeButton);
+        endOverlay.getChildren().setAll(contentBox);
+        endOverlay.setVisible(true);
     }
 
     /**

@@ -11,6 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import grp6.intergraph.ControlButtons;
+import grp6.intergraph.SudokuDisplay;
 import grp6.intergraph.SudokuGame;
 import grp6.intergraph.SudokuGrid;
 import grp6.sudocore.SudoTypes.GameState;
@@ -439,6 +440,9 @@ public class Game {
             if (SudokuGrid.getLearningMode()) {
                 if (!LearningGame.evaluateLastAction()) {
                     ControlButtons.putErrorRed(action);
+                }
+                if (LearningGame.evaluate()) {
+                    gameState = GameState.FINISHED;
                 }
             }
 

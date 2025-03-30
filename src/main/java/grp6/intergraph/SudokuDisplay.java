@@ -329,14 +329,11 @@ public class SudokuDisplay {
     
                                     // Afficher un message de fin
                                     Platform.runLater(() -> {
-                                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                        alert.setTitle("Jeu terminé");
-                                        alert.setHeaderText("Félicitations !");
-                                        alert.setContentText("Vous avez terminé le Sudoku !");
-                                        alert.showAndWait();
-
-                                        // Changer de scene apres l'animation
-                                        SudokuMenu.showSudokuLibrary(primaryStage); // Ou MainMenu.showMainMenu si necessaire
+                                        if (SudokuGrid.getLearningMode()) {
+                                            LearningGameDisplay.showEndOverlay(primaryStage);
+                                        } else {
+                                            SudokuGame.showEndOverlay(primaryStage);
+                                        }
                                     });
                                 }
                             });

@@ -93,8 +93,10 @@ public class LearningMenu {
             VBox sudokuBox = createLearningSudokuBox(learningSudoku);
             techniquesContainer.add(sudokuBox, (i - startIndex) % columns, (i - startIndex) / columns);
 
+            final int selectedSudokuId = i;
             sudokuBox.setOnMouseClicked(e -> {
-                LearningGameDisplay.showLearningGame(stage, learningSudoku);
+                Technique actualLearning = learningSudokus.get(selectedSudokuId);
+                LearningGameDisplay.showLearningGame(stage, actualLearning);
             });
         }
     }
@@ -126,7 +128,9 @@ public class LearningMenu {
         statusIcon.setFitHeight(28);
 
         if (MainMenu.getProfile().getAlreadyLearn(learningSudoku)) {
-            statusIcon.setImage(new Image(SudokuMenu.class.getResourceAsStream("/star.png")));
+            statusIcon.setImage(new Image(LearningMenu.class.getResourceAsStream("/checkmark.png")));
+        } else {
+            statusIcon.setImage(new Image(LearningMenu.class.getResourceAsStream("/questionmark.png")));
         }
             
         VBox contentBox = new VBox(5);

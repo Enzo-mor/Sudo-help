@@ -406,10 +406,15 @@ public class SudokuGrid {
 
                 // Recuperer le texte du Label
                 String numberStr = mainNumber.getText();
-                if (!numberStr.equals(""))
+                
+                // Verifier si le graphique est un nombre ou une annotation
+                if (numberStr != null && !numberStr.isEmpty()) {
+                    // Si c'est un nombre, mettre a jour l'affichage avec le nombre
                     updateCellDisplay(cellButton, mainNumber, annotationText, numberStr);
-                else
+                } else {
+                    // Si c'est une annotation, mettre a jour l'affichage avec les annotations
                     setAnnotationDisplay(cellButton, row, col, annotationText);
+                }
             }
         }
     }
@@ -475,7 +480,6 @@ public class SudokuGrid {
                     modifyStateEraser(r, c, true);
                     resetCellDisplay(cellButton, mainNumber, annotationText);
                 }
-
                 
                 // Appeler la methode pour surligner la ligne et la colonne, si le parametre est active
                 if(Settings.getHighlightRowCol())
@@ -517,17 +521,14 @@ public class SudokuGrid {
                                 addAnnotationToCell(i, j, annotation.toString());
                             }
                         }
-                        
                     } else {
                         if (cellGame.getNumber() == 0) {
                             mainNumber.setText("");
                         } else {
                             mainNumber.setText(String.valueOf(cellGame.getNumber()));
-                            
                         }
                         annotationText.setText("");                    
                         cellButton.setGraphic(mainNumber);
-                        
                     }
                 } else {
                     setNumberDisplay(cellButton, String.valueOf(cellGame.getNumber()), mainNumber, annotationText);
@@ -535,6 +536,7 @@ public class SudokuGrid {
             }
         }
     }
+    
     /**
      * Recharge une grille de Sudoku deja demarree, en executant toutes les actions enregistrees precedemment.
      * Cette methode reinitialise les actions, les execute a nouveau, puis recharge la grille originale.

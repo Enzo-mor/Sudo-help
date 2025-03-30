@@ -5,6 +5,8 @@ import grp6.syshelp.Technique;
 import java.util.*;
 import java.sql.SQLException;
 
+import grp6.intergraph.SudokuGrid;
+
 /**
  * Classe LearningGame
  * Cette classe gere la logique d'un mode d'apprentissage pour le Sudoku, ou le joueur peut
@@ -32,7 +34,7 @@ public class LearningGame {
     /**
      * Technique appliquee pour l'apprentissage
      */
-    private final Technique tech;
+    private static Technique tech;
 
     /**
      * Constructeur de la classe LearningGame.
@@ -41,10 +43,10 @@ public class LearningGame {
      * @param tech Technique utilisee pour resoudre la grille
      * @throws SQLException En cas d'erreur lors de la recuperation de la grille solution
      */
-    public LearningGame(Profile profile, Technique tech) throws  SQLException {
-        solvedGrid = tech.getSolvedGrid();
-        game = new Game(tech.getGrid(), profile);
-        this.tech = tech;
+    public LearningGame(Profile profile, Technique techni) throws  SQLException {
+        solvedGrid = techni.getSolvedGrid();
+        game = new Game(techni.getGrid(), profile);
+        tech = techni;
     }
 
     /**
@@ -153,7 +155,7 @@ public class LearningGame {
      * 
      * @return Une copie de la grille du jeu.
      */
-    public Grid getGrid() {
+    public static Grid getGrid() {
         return game.getGrid();
     }
 
@@ -357,7 +359,7 @@ public class LearningGame {
      *
      * @return {@code true} si tous les nombres sont corrects, {@code false} sinon.
      */
-    private  boolean evaluateNum() {
+    private static boolean evaluateNum() {
         for(int i=0; i<9; i++) {
             for(int j=0; j<9; j++) {
                 if(game.getGrid().getCell(i, j).getNumber() != solvedGrid.getCell(i, j).getNumber()) {
@@ -369,14 +371,23 @@ public class LearningGame {
     }
 
     /**
-     * Evalue si toutes les annotations de la grille actuelle correspondent a celles de la grille solution.
+     * Evalue si toutes les annotations de la grille actuelle correspondent à celles de la grille solution,
+     * en ignorant l'ordre des annotations.
      *
      * @return {@code true} si toutes les annotations sont correctes, {@code false} sinon.
      */
-    private boolean evaluateAnnot() {
-        for(int i=0; i<9; i++) {
-            for(int j=0; j<9; j++) {
-                if(!game.getGrid().getCell(i, j).getAnnotations().equals(solvedGrid.getCell(i, j).getAnnotations())) {
+    private static boolean evaluateAnnot() {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                Set<Integer> currentAnnotations = new HashSet<>();
+                for (String annotation : SudokuGrid.getAnnotations(i, j)) {
+                    currentAnnotations.add(Integer.valueOf(annotation));
+                }
+                Set<Integer> correctAnnotations = new HashSet<>(solvedGrid.getCell(i, j).getAnnotations());
+
+                if (!currentAnnotations.equals(correctAnnotations)) {
+                    System.out.println("grid : " + currentAnnotations);
+                    System.out.println("solved : " + correctAnnotations);
                     return false;
                 }
             }
@@ -393,7 +404,7 @@ public class LearningGame {
      *
      * @return {@code true} si la grille est correcte selon la technique appliquee, {@code false} sinon.
      */
-    public boolean evaluate() {
+    public static boolean evaluate() {
         if(
             tech.getName().equals("HiddenSingle") ||
             tech.getName().equals("LastCell") ||
