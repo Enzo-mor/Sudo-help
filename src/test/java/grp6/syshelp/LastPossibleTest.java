@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class LastPossibleTest {
     /** Technique utilisee pour le teste */
-    private InterfaceTech tech = new LastNumber();
+    private InterfaceTech tech = new LastPossible();
 
     /** Nom de la technique */
     private String techName = tech.getClass().getSimpleName();
@@ -36,7 +36,7 @@ public class LastPossibleTest {
             0,0,0, 0,0,0, 0,0,0,
 
             0,0,0, 0,8,0, 0,0,0,
-            0,6,0, 0,5,0, 0,0,0,
+            0,6,0, 0,0,0, 0,0,0,
             9,1,0, 0,0,0, 0,0,0
         };
 

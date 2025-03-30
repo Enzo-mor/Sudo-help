@@ -19,28 +19,28 @@ public class XWing implements InterfaceTech {
         Help aide = new Help(getClass().getSimpleName());
 
         // Parcourir chaque chiffre possible (1 à 9)
-        for (int num = 1; num <= 9; num++) {
+        for(int num = 1; num <= 9; num++) {
             List<Integer> lignesCandidates = new ArrayList<>();
 
             // Étape 1: Trouver les lignes avec exactement 2 occurrences du candidat
-            for (int i = 0; i < 9; i++) {
+            for(int i = 0; i < 9; i++) {
                 Cell[] ligne = grille.getLine(i);
-                if (nbAnnotation(ligne, num) == 2) {
+                if(nbAnnotation(ligne, num) == 2) {
                     lignesCandidates.add(i);
                 }
             }
 
             // Étape 2: Rechercher une paire de lignes ayant les mêmes colonnes candidates
-            for (int i = 0; i < lignesCandidates.size(); i++) {
+            for(int i = 0; i < lignesCandidates.size(); i++) {
                 int ligne1 = lignesCandidates.get(i);
                 List<Integer> colonnes1 = getColonnesAvecAnnotation(grille.getLine(ligne1), num);
 
-                for (int j = i + 1; j < lignesCandidates.size(); j++) {
+                for(int j = i + 1; j < lignesCandidates.size(); j++) {
                     int ligne2 = lignesCandidates.get(j);
                     List<Integer> colonnes2 = getColonnesAvecAnnotation(grille.getLine(ligne2), num);
 
                     // Vérifier si les deux lignes ont exactement les mêmes colonnes candidates
-                    if (colonnes1.equals(colonnes2) && colonnes1.size() == 2) {
+                    if(colonnes1.equals(colonnes2) && colonnes1.size() == 2) {
                         aide.addLine(ligne1);
                         aide.addLine(ligne2);
                         aide.addColumn(colonnes1.get(0));
@@ -68,8 +68,8 @@ public class XWing implements InterfaceTech {
 
     private int nbAnnotation(Cell[] data, int num) {
         int res = 0;
-        for (Cell c : data) {
-            if (c.getAnnotationsBool()[num - 1]) {
+        for(Cell c : data) {
+            if(c.getAnnotationsBool()[num - 1]) {
                 res++;
             }
         }
@@ -78,8 +78,8 @@ public class XWing implements InterfaceTech {
 
     private List<Integer> getColonnesAvecAnnotation(Cell[] ligne, int num) {
         List<Integer> colonnes = new ArrayList<>();
-        for (int c = 0; c < 9; c++) {
-            if (ligne[c].getAnnotationsBool()[num - 1]) {
+        for(int c = 0; c < 9; c++) {
+            if(ligne[c].getAnnotationsBool()[num - 1]) {
                 colonnes.add(c);
             }
         }
@@ -87,18 +87,18 @@ public class XWing implements InterfaceTech {
     }
 
     private void removeAnnotations(Grid grille, int ligne1, int ligne2, List<Integer> colonnes, int num) {
-        for (int i = 0; i < 9; i++) {
-            if (i != ligne1 && i != ligne2) {
-                for (int col : colonnes) {
+        for(int i = 0; i < 9; i++) {
+            if(i != ligne1 && i != ligne2) {
+                for(int col : colonnes) {
                     grille.getCell(i, col).removeAnnotation(num);
                 }
             }
         }
 
-        for (int col : colonnes) {
-            for (int i : List.of(ligne1, ligne2)) {
-                for (int j = 0; j < 9; j++) {
-                    if (!colonnes.contains(j)) {
+        for(int col: colonnes) {
+            for(int i: List.of(ligne1, ligne2)) {
+                for(int j = 0; j < 9; j++) {
+                    if(!colonnes.contains(j)) {
                         grille.getCell(i, j).removeAnnotation(num);
                     }
                 }
@@ -128,7 +128,7 @@ public class XWing implements InterfaceTech {
 
         Help help = tech.getHelp(grid);
 
-        if (help == null) {
+        if(help == null) {
             System.out.println("Pas de X-Wing trouvé");
         } else {
             System.out.println("X-Wing trouvé !!");
