@@ -52,7 +52,7 @@ public class Technique {
         this.shortDesc = shortDesc;
         this.longDesc = longDesc;
         this.grid = new Grid(0, SudoTypes.Difficulty.EASY, data);
-        this.solvedGrid = initSolvedGrid(finalCells, data);
+        this.solvedGrid = initSolvedGrid(finalCells, annotFinal);
         AutoAnnotation.generate(grid);
     }
 

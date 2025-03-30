@@ -68,6 +68,11 @@ public class LearningGameDisplay {
     private static SudokuGrid grid;
 
     /**
+     * Message d'introduction de la technique
+     */
+    private static VBox techniqueIntro;
+
+    /**
      * Bouton pour voir plus quand on veut de l'aide
      */
     private static Button seeMoreButton;
@@ -215,6 +220,12 @@ public class LearningGameDisplay {
 
         VBox mainLayout = new VBox(10, topBar, layout);
 
+        // Création du panneau d'introduction à la technique
+        techniqueIntro = new VBox();
+        techniqueIntro.setAlignment(Pos.CENTER);
+        techniqueIntro.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+        showIntroLearning();
+
         // Création du panneau de confirmation pour cacher la partie (au départ caché)
         quitConfirmation = new VBox();
         quitConfirmation.setAlignment(Pos.CENTER);
@@ -228,7 +239,7 @@ public class LearningGameDisplay {
         infoOverlay.setVisible(false);
 
         // Empiler le panneau de techniques par-dessus le reste
-        StackPane rootStack = new StackPane(mainLayout, quitConfirmation, infoOverlay);
+        StackPane rootStack = new StackPane(mainLayout, quitConfirmation, infoOverlay, techniqueIntro);
         
         // --- BorderPane pour organiser la mise en page ---
         BorderPane root = new BorderPane();
@@ -345,7 +356,7 @@ public class LearningGameDisplay {
         contentBox.setAlignment(Pos.TOP_CENTER);
         contentBox.setPadding(new Insets(10));
     
-        Label title = new Label("Mes techniques");
+        Label title = new Label(actualTechnique.getName());
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
     
         Label descriptionLabel = new Label();
@@ -378,6 +389,58 @@ public class LearningGameDisplay {
         contentBox.getChildren().addAll(title, stackPane, actionButton);
         infoOverlay.getChildren().setAll(contentBox);
         infoOverlay.setVisible(true);
+    }
+
+    /**
+     * 
+     */
+    private static void showIntroLearning() {
+
+        if (actualLearningGame != null) {
+            actualLearningGame.pauseGame();
+            SudokuGame.stopTimer();
+        }
+    
+        // Conteneur principal
+        VBox contentBox = new VBox(20);
+        StyledContent.applyContentBoxStyle(contentBox);
+        contentBox.setMaxWidth(400);
+        contentBox.setAlignment(Pos.TOP_CENTER);
+        contentBox.setPadding(new Insets(10));
+    
+        Label title = new Label(actualTechnique.getName());
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+    
+        Label introLabel = new Label();
+        introLabel.setWrapText(true);
+        introLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: normal; -fx-text-fill: black; -fx-line-spacing: 5px;");
+    
+        ScrollPane introScrollPane = new ScrollPane(introLabel);
+        StyledContent.applyScrollPaneStyle(introScrollPane);
+        introScrollPane.setFitToWidth(true);
+        introScrollPane.setPrefHeight(250);
+        introScrollPane.setPadding(new Insets(10));
+        introScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        introScrollPane.setVisible(false);
+    
+        // Bouton unique pour gérer "Fermer" et "Retour"
+        Button learnButton = new Button("Apprendre");
+        StyledContent.applyButtonStyle(learnButton);
+        learnButton.setOnAction(e -> {
+            actualLearningGame.resumeGame();
+            techniqueIntro.setVisible(false);
+        });
+    
+        introLabel.setText(actualTechnique.getLongDesc());
+        introScrollPane.setVisible(true);
+        introScrollPane.toFront();
+    
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(introScrollPane);
+    
+        contentBox.getChildren().addAll(title, stackPane, learnButton);
+        techniqueIntro.getChildren().setAll(contentBox);
+        techniqueIntro.setVisible(true);
     }
 
     /**

@@ -1,4 +1,5 @@
 package grp6.sudocore;
+import grp6.sudocore.SudoTypes.ActionType;
 import grp6.syshelp.Technique;
 
 import java.util.*;
@@ -21,12 +22,12 @@ public class LearningGame {
     /**
      * Instance du jeu associee a cette session d'apprentissage
      */
-    private final Game game;
+    private static Game game;
 
     /**
      * Grille solution du Sudoku pour comparaison
      */
-    private final Grid solvedGrid;
+    private static Grid solvedGrid;
 
     /**
      * Technique appliquee pour l'apprentissage
@@ -41,7 +42,7 @@ public class LearningGame {
      * @throws SQLException En cas d'erreur lors de la recuperation de la grille solution
      */
     public LearningGame(Profile profile, Technique tech) throws  SQLException {
-        this.solvedGrid = tech.getSolvedGrid();
+        solvedGrid = tech.getSolvedGrid();
         game = new Game(tech.getGrid(), profile);
         this.tech = tech;
     }
@@ -403,5 +404,41 @@ public class LearningGame {
             return evaluateNum();
         }
         return evaluateAnnot();
+    }
+
+    /**
+     * Evalue la derniere action effectuee dans la grille de Sudoku.
+     * Cette methode verifie si la derniere modification (ajout de nombre ou annotation) est correcte.
+     * 
+     * @return true si l'action est correcte, false sinon.
+     */
+    public static boolean evaluateLastAction() {
+        Action action = game.getLastAction();
+        if (action == null) {
+            return false;
+        }
+        
+        boolean isCorrect = false;
+        
+        if (action instanceof NumberCellAction cellAction) {
+            int x = cellAction.getRow();
+            int y = cellAction.getColumn();
+            
+            if (cellAction.actionType() == ActionType.NUMBER_CELL_ACTION) {
+                isCorrect = (game.getGrid().getCell(x, y).getNumber() == solvedGrid.getCell(x, y).getNumber());
+            } else {
+                isCorrect = false; // Retirer un nombre est toujours incorrect dans le mode apprentissage
+            }
+        } else if (action instanceof AnnotationCellAction annotAction) {
+            int x = annotAction.getRow();
+            int y = annotAction.getColumn();
+            
+            if (annotAction.actionType() == ActionType.ANNOTATION_CELL_ACTION) {
+                isCorrect = solvedGrid.getCell(x, y).getAnnotations().contains(annotAction.getAnnotation());
+            } else if (annotAction.actionType() == ActionType.ANNOTATION_REMOVE_CELL_ACTION) {
+                isCorrect = !solvedGrid.getCell(x, y).getAnnotations().contains(annotAction.getAnnotation());
+            }
+        }
+        return isCorrect;
     }
 }

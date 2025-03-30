@@ -55,7 +55,7 @@ public class LearningMenu {
         List<Technique> techs = DBManager.getTechs();
         
         // Affichage des grilles de Sudoku à apprendres
-        showLearningSudokuList(techniquesContainer, stage, techs, techniquesLabel);
+        showLearningSudokuList(techniquesContainer, stage, techs);
         
         // Bouton pour retourner au menu principal
         Button backButton = new Button("Retour");
@@ -80,7 +80,7 @@ public class LearningMenu {
      * @param learningSudokus La liste des techniques de Sudoku a afficher.
      * @param techniquesLabel Label affichant le titre de la technique en cours.
      */
-    private static void showLearningSudokuList(GridPane techniquesContainer, Stage stage, List<Technique> learningSudokus, Label techniquesLabel) {
+    private static void showLearningSudokuList(GridPane techniquesContainer, Stage stage, List<Technique> learningSudokus) {
         techniquesContainer.getChildren().clear();
         int sudokusPerPage = 12;
         int startIndex = 0;
@@ -93,10 +93,8 @@ public class LearningMenu {
             VBox sudokuBox = createLearningSudokuBox(learningSudoku);
             techniquesContainer.add(sudokuBox, (i - startIndex) % columns, (i - startIndex) / columns);
 
-            final int selectedSudokuId = i;
             sudokuBox.setOnMouseClicked(e -> {
-                Technique selectedTechnique = learningSudokus.get(selectedSudokuId);
-                LearningGameDisplay.showLearningGame(stage, selectedTechnique);
+                LearningGameDisplay.showLearningGame(stage, learningSudoku);
             });
         }
     }

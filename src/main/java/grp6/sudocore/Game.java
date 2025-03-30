@@ -10,6 +10,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import grp6.intergraph.ControlButtons;
+import grp6.intergraph.SudokuGame;
+import grp6.intergraph.SudokuGrid;
 import grp6.sudocore.SudoTypes.GameState;
 import javafx.application.Platform;
 
@@ -432,6 +435,12 @@ public class Game {
             actions.add(action);
             histoActions += "Action " + (currentIndex + 2) + " : " + action.toString() + "\n";
             currentIndex++;
+
+            if (SudokuGrid.getLearningMode()) {
+                if (!LearningGame.evaluateLastAction()) {
+                    ControlButtons.putErrorRed(action);
+                }
+            }
 
             updateGame();
 

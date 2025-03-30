@@ -49,12 +49,12 @@ public class SudokuGrid {
      * Tableau d'annotations où chaque cellule contient une liste d'annotations (par exemple, des numeros possibles).
      */
     @SuppressWarnings("unchecked")
-    private final List<String>[][] annotations = new ArrayList[9][9];
+    private static final List<String>[][] annotations = new ArrayList[9][9];
 
     /**
      * Tableau indiquant si une cellule a ete effacee (utilise pour gerer les actions de l'effaceur).
      */
-    private final boolean[][] actionEraser = new boolean[9][9];
+    private static final boolean[][] actionEraser = new boolean[9][9];
 
     /**
      * La grille de Sudoku contenant les valeurs actuelles du jeu.
@@ -190,7 +190,7 @@ public class SudokuGrid {
      * @param col La colonne de la cellule.
      * @param oldNumber Le numero a afficher.
      */
-    public void setCellDisplay(int row, int col, int oldNumber) {
+    public static void setCellDisplay(int row, int col, int oldNumber) {
         if (row >= 0 && col >= 0 && oldNumber >= 0) {
             Button cellButton = cells[row][col];
 
@@ -237,7 +237,7 @@ public class SudokuGrid {
      * @param col La colonne de la cellule.
      * @param annotation L'annotation a ajouter.
      */
-    public void addAnnotationToCell(int row, int col, String annotation) {
+    public static void addAnnotationToCell(int row, int col, String annotation) {
         if (!annotations[row][col].contains(annotation)) {
             annotations[row][col].add(annotation);
 
@@ -257,7 +257,7 @@ public class SudokuGrid {
      * @param col La colonne de la cellule.
      * @param annotation L'annotation a retirer.
      */
-    public void removeAnnotationFromCell(int row, int col, String annotation) {
+    public static void removeAnnotationFromCell(int row, int col, String annotation) {
         annotations[row][col].remove(annotation);
 
         Button actualButton = getButton(row, col);
@@ -277,7 +277,7 @@ public class SudokuGrid {
      * @param col La colonne de la cellule.
      * @param annotationText Le texte des annotations.
      */
-    public void setAnnotationDisplay(Button cellButton, int row, int col, Text annotationText) {
+    public static void setAnnotationDisplay(Button cellButton, int row, int col, Text annotationText) {
 
         if (annotationText == null) {
             annotationText = new Text();  // Toujours verifier ou creer un nouveau Text
@@ -316,7 +316,7 @@ public class SudokuGrid {
      * 
      * @param eval Liste des positions des cellules erronees, chaque position etant un tableau de deux entiers representant la ligne et la colonne.
      */
-    public void setCellsColorError(List<int[]> eval) {
+    public static void setCellsColorError(List<int[]> eval) {
         for (int[] position : eval) {
             int row = position[0];
             int col = position[1];
@@ -406,8 +406,10 @@ public class SudokuGrid {
 
                 // Recuperer le texte du Label
                 String numberStr = mainNumber.getText();
-
-                updateCellDisplay(cellButton, mainNumber, annotationText, numberStr);
+                if (!numberStr.equals(""))
+                    updateCellDisplay(cellButton, mainNumber, annotationText, numberStr);
+                else
+                    setAnnotationDisplay(cellButton, row, col, annotationText);
             }
         }
     }
@@ -716,7 +718,7 @@ public class SudokuGrid {
      * @param annotation L'annotation a verifier.
      * @return true si l'annotation est presente, false sinon.
      */
-    public boolean hasAnnotation(int row, int col, String annotation) {
+    public static boolean hasAnnotation(int row, int col, String annotation) {
         return annotations[row][col].contains(annotation);
     }
 
@@ -727,8 +729,12 @@ public class SudokuGrid {
      * @param col La colonne de la cellule.
      * @return true si la cellule contient des annotations, false sinon.
      */
-    public boolean hasAnnotations(int row, int col) {
+    public static boolean hasAnnotations(int row, int col) {
         return !annotations[row][col].isEmpty();
+    }
+
+    public static List<String> getAnnotations(int row, int col) {
+        return annotations[row][col];
     }
 
     /**
@@ -738,8 +744,8 @@ public class SudokuGrid {
      * @param c La colonne de la cellule.
      * @return true si la derniere action etait un effacement, false sinon.
      */
-    public boolean isLastActionEraser(int r, int c){
-        return this.actionEraser[r][c];
+    public static boolean isLastActionEraser(int r, int c){
+        return actionEraser[r][c];
     }
 
 
@@ -752,8 +758,8 @@ public class SudokuGrid {
      * @param c La colonne de la cellule.
      * @param state L'etat de l'action d'effacement a definir (true ou false).
      */
-    public void modifyStateEraser(int r, int c, boolean state){
-        this.actionEraser[r][c] = state;
+    public static void modifyStateEraser(int r, int c, boolean state){
+        actionEraser[r][c] = state;
     }
 
     /**
@@ -799,6 +805,15 @@ public class SudokuGrid {
      */
     public void setLearningMode(boolean bool) {
         isLearningMode = bool;
+    }
+
+    /**
+     * Retourne l'etat du mode apprentissage
+     * 
+     * @return Vrai si le mode est apprentissage, faux sinon
+     */
+    public static boolean getLearningMode() {
+        return isLearningMode;
     }
 
     /**
