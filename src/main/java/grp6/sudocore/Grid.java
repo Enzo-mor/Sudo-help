@@ -126,7 +126,13 @@ public final class Grid implements Iterable<Cell> {
             int x = i/Grid.NB_NUM;
             int y = i%Grid.NB_NUM;
             SudoLog.debug("Construction cellule de la grille ("+x+","+y+")");
-            Cell cell = new FlexCell(x, y);
+            Cell cell=null;
+            if(num!=0){
+                cell = new FixCell(num,x, y);
+
+            }else{
+                cell = new FlexCell(x, y);
+            }
             cell.setNumber(num);
             cells.add(cell);
         } 

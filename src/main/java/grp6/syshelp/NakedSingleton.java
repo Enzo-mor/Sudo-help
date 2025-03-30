@@ -16,6 +16,7 @@ public class NakedSingleton implements InterfaceTech {
     public Help getHelp(Grid grille) {
         Help aide = new Help(getClass().getSimpleName());
         for (Cell cell:grille) {
+            System.out.println("Coo : "+cell.getPosition()[0]+" "+cell.getPosition()[1]);
             // Vérifie les colonnes
             if (cell.isEmpty() && cell.OnlyOneAnnotation()) {
                         System.out.println("test");
@@ -23,20 +24,22 @@ public class NakedSingleton implements InterfaceTech {
                 //int[] pos = cell.getPosition();
                 //  aide.addPos(pos[0], pos[1]);
                 int rand = (int) (3*Math.random());
-                int x =cell.getPosition()[0]/grille.NB_NUM;
-                int y = cell.getPosition()[1]/grille.NB_NUM;
+                int x =cell.getPosition()[0];
+                int y = cell.getPosition()[1];
                 switch (rand) {
                     case 0 ->{
-                        aide.addColumn(x);
+                        //aide.addColumn(x);
                     }
                     case 1 ->{
-                        aide.addLine(y);
+                        //aide.addLine(y);
                     }
                     default->{
-                        aide.addSquare(x+grille.NB_NUM*y);
+                        //aide.addSquare(x+grille.NB_NUM*y);
                     }
                         
                 }
+                System.out.println("x : "+x+" y "+y );
+                aide.addPos(x, y);
                 aide.setMessage(1, "Remplis tes annotations");
                 
                 aide.setMessage(3, "cherche les "+takeTheAnnotation(cell));

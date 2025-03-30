@@ -1,6 +1,9 @@
 package grp6.syshelp;
 
-import grp6.sudocore.*;
+import java.util.ArrayList;
+
+import grp6.sudocore.Cell;
+import grp6.sudocore.Grid;
 
 /**
  * Cette classe permet d'obtenir une aide sur la grille de sudoku en se basant de  la technique de LastPossible.
@@ -16,51 +19,55 @@ public class LastPossible implements InterfaceTech {
      */
     public Help getHelp(Grid grid) {
         Help help = new Help(getClass().getSimpleName());
-
+        int compteur=0;
         // Vérifier les blocs 3x3
         for(int i = 0; i < 9; i += 3) {
             for(int j = 0; j < 9; j += 3) {
-                boolean[] present = new boolean[10];
+                                        System.out.println("TEST");
+
+                ArrayList<Integer> present = new ArrayList<>();
 
                 // Marquer les chiffres présents
                 for(int r = i; r < i + 3; r++) {
                     for(int c = j; c < j + 3; c++) {
                         if(!grid.getCell(r, c).isEmpty()) {
-                            present[grid.getCell(r, c).getNumber()] = true;
+                            present.add(grid.getCell(r, c).getNumber());
                         }
                     }
                 }
-
+                Cell[] ligne=grid.getLine(i);
+                Cell[] col=grid.getColumn(j);
+                for(int y = 0;y<grid.NB_NUM;y++){
+                    if(!present.contains(ligne[y].getNumber())){
+                        present.add(ligne[y].getNumber());
+                    }
+                    if(!present.contains(col[y].getNumber())){
+                        present.add(col[y].getNumber());
+                    }                
+                }
+                for (Integer it : present){
+                    System.out.println("test : "+ it);
+                }
+                int count = 0;
+                int numManquant=0;
                 // Trouver les chiffres manquants et vérifier où ils peuvent aller
                 for(int num = 1; num <= 9; num++) {
-                    if(!present[num]) {
-                        int possibleRow = -1;
-                        int possibleCol = -1;
-                        int count = 0;
-
-                        for(int r = i; r < i + 3; r++) {
-                            for(int c = j; c < j + 3; c++) {
-                                if(grid.getCell(r, c).isEmpty() && isValid(grid, r, c, num)) {
-                                    count++;
-                                    possibleRow = r;
-                                    possibleCol = c;
-                                }
-                            }
-                        }
-
-                        // Si une seule case est possible, on retourne le coup
-                        if(count == 1) {
-                            int idx = (i / 3) * 3 + (j / 3);
-                            help.addSquare(idx);
-                            help.addLine(possibleRow);
-                            help.addColumn(possibleCol);
-
-                            help.setMessage(1, "Tu peux placer un " + num + ". Regarde bien tes lignes et colonnes !");
-                            help.setMessage(3, "LastPossible peut être utilisé ici.");
-
-                            return help;
-                        }
+                    if(!present.contains(num)) {
+                        count++;
+                        numManquant=num;
                     }
+                }
+                // Si une seule case est possible, on retourne le coup
+                if(count == 1) {
+                    int idx = (i / 3) * 3 + (j / 3);
+                    help.addSquare(idx);
+                    //help.addLine(possibleRow);
+                    //help.addColumn(possibleCol);
+
+                    help.setMessage(1, "Tu peux placer un " + numManquant + ". Regarde bien tes lignes et colonnes !");
+                    help.setMessage(3, "LastPossible peut être utilisé ici.");
+
+                    return help;
                 }
             }
         }

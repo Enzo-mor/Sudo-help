@@ -71,12 +71,15 @@ public class NakedPairs implements InterfaceTech {
             for(int j = 0; j<9;j++){
                 //if de la violence (désolée)
                 if(temp[0] == tabPair[j][0]  && temp[1] == tabPair[j][1] && temp[0] !=0 && i!=j){
-
-                    aide.addSquare(num);
-                    aide.setMessage(1, "Fais attention aux carrés");
-                    
-                    aide.setMessage(3, "Regarde les annotations"+temp[0]+" "+temp[1]+"le carré : "+num);
-                    return true;
+                    int[] tabTemp = grille.numToPosForSubGrid(num);
+                    Cell solution=removePair(grille.getFlatSubGrid(tabTemp[0], tabTemp[1]),tabPair[j]);
+                    if(solution!=null){
+                        int number = solution.getLastAnnotation();
+                        aide.addSquare(num);
+                        aide.setMessage(1, "Fait attention aux "+(number+1));
+                        aide.setMessage(3, "Regarde les annotations"+" "+(temp[0]+1)+" "+(temp[1]+1));
+                        return true;
+                    }
                 }
             }
         }
@@ -92,7 +95,9 @@ public class NakedPairs implements InterfaceTech {
 
 
         //tableau de pairs
-        int [][] tabPair = new int[9][2];
+        int [][] tabPairLine = new int[9][2];
+        int [][] tabPairCol = new int[9][2];
+
         int cptPair = 0;
 
         int cptAnnotation;
@@ -110,32 +115,31 @@ public class NakedPairs implements InterfaceTech {
 
             cptAnnotation = 0;
           
-            //vétification des annotations dans les lignes
+            //vérification du nombre d'annotations dans la ligne
             for (int k = 0; k<9;k++){
                 if(line[i].getAnnotationsBool()[k]){
                     cptAnnotation++;
                 }
             }
+            //On a une paire
             if (cptAnnotation == 2) {
-                aide.addLine(num);
                 tabBool = line[i].getAnnotationsBool();
-                tabPair[cptPair] = donnerPair(tabBool);
+                tabPairLine[cptPair] = donnerPair(tabBool);
                 cptPair++;                      
                 
             }
 
 
             cptAnnotation = 0;
-            //vérfication des annotations dans les colonnes
+            //vérification des annotations dans la colonne
             for (int k = 0; k<9;k++){
                 if(col[i].getAnnotationsBool()[k]){
                     cptAnnotation++;
                 }
             }
             if (cptAnnotation == 2) {
-                aide.addColumn(num);
                 tabBool = col[i].getAnnotationsBool();
-                tabPair[cptPair] = donnerPair(tabBool);
+                tabPairCol[cptPair] = donnerPair(tabBool);
                 cptPair++;                      
                 
             }
@@ -143,20 +147,52 @@ public class NakedPairs implements InterfaceTech {
             
         }
         // On vérifie si on a trouvé une paire
-        for(int i = 0; i<9;i++){
-            int[] temp = tabPair[i];
-            for(int j = 0; j<9;j++){
-                //if de la violence (désolée)
-                if(temp[0] == tabPair[j][0]  && temp[1] == tabPair[j][1] && temp[0] !=0 && i!=j){
-                    aide.addSquare(num);
-                    aide.setMessage(1, "Fait attention aux ligne/colone");
-                    aide.setMessage(2, "Fait attention aux "+temp[0]+" "+temp[1]);
-                    aide.setMessage(3, "Regarde les annotations"+temp[0]+" "+temp[1]+"la ligne/colone  : "+num);
-                    return true;
+        for(int i = 0; i<grille.NB_NUM;i++){
+            int[] temp = tabPairLine[i];
+            int[] temp2 = tabPairCol[i];
+
+            for(int j = 0; j<grille.NB_NUM;j++){
+                //regarde dans la ligne si il y a des paires
+                if(temp[0] == tabPairLine[j][0]  && temp[1] == tabPairLine[j][1] && temp[0] !=0 && i!=j){
+                    Cell solution=removePair(grille.getLine(num),tabPairLine[j]);
+                    if(solution!=null){
+                        int number = solution.getLastAnnotation();
+                        aide.addLine(num);
+                        aide.setMessage(1, "Fait attention aux "+(number+1));
+                        aide.setMessage(3, "Regarde les annotations "+(temp[0]+1)+" "+(temp[1]+1));
+                        return true;
+                    }
+                }
+                //regarde dans la colonne si il y a des paires
+                if(temp2[0] == tabPairCol[j][0]  && temp2[1] == tabPairCol[j][1] && temp2[0] !=0 && i!=j){
+                    Cell solution=removePair(grille.getColumn(num),tabPairCol[j]);
+                    if(solution!=null){
+                        int number=solution.getLastAnnotation();
+                        aide.addColumn(num);
+                        aide.setMessage(1, "Fait attention aux "+(number+1));
+                        aide.setMessage(3, "Regarde les annotations "+(temp2[0]+1)+" "+(temp2[1]+1));
+                        return true;
+                    }
                 }
             }
         }
         return false;
+    }
+
+    private Cell removePair(Cell[] tab,int[] pair){
+        for (Cell cell : tab){
+            if(cell.getAnnotations().size()>2){
+                cell.removeAnnotation(pair[0]);
+                cell.removeAnnotation(pair[1]);
+            }
+        }
+
+        for (Cell cell:tab){
+            if(cell.OnlyOneAnnotation()){
+                return cell;
+            }
+        }
+        return null;
     }
         
     @Override
