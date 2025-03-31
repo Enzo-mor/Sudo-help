@@ -647,7 +647,7 @@ public class SudokuGame {
      */
     private static void setupInactivityTimer(Scene scene) {
 
-        inactivityTimer = new Timeline(new KeyFrame(Duration.seconds(20), event -> {
+        inactivityTimer = new Timeline(new KeyFrame(Duration.seconds(90), event -> {
             if(showPopup){
                 showPopup();
             } else {
