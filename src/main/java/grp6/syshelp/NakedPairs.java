@@ -179,6 +179,7 @@ public class NakedPairs implements InterfaceTech {
         return false;
     }
 
+    //Cherche un singleton nus dans une table de cell (region,ligne,colonne)
     private Cell removePair(Cell[] tab,int[] pair){
         for (Cell cell : tab){
             if(cell.getAnnotations().size()>2){
