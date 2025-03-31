@@ -109,6 +109,7 @@ public class ControlButtons {
             currentHelp = 1;
             if(evaluateWithUndoRedo().isEmpty()) {
                 if(help != null) {
+                    sudokuGame.decreaseScore("help");
                     SudokuGame.setHelpText(help.getMessage(currentHelp));
                     SudokuGame.setHelpOverlayTrue();
                 }else{
@@ -121,7 +122,6 @@ public class ControlButtons {
                 SudokuGame.setHelpText("La grille n'est pas correcte.");
                 SudokuGame.setHelpOverlayTrue();
             }
-
             SudokuGame.resetTimer();
         });
 
