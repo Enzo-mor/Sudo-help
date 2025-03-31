@@ -185,14 +185,12 @@ public class NakedPairs implements InterfaceTech {
             if(cell.getAnnotations().size()>2){
                 cell.removeAnnotation(pair[0]);
                 cell.removeAnnotation(pair[1]);
+                if(cell.OnlyOneAnnotation()){
+                    return cell;
+                }
             }
         }
 
-        for (Cell cell:tab){
-            if(cell.OnlyOneAnnotation()){
-                return cell;
-            }
-        }
         return null;
     }
         
