@@ -18,11 +18,11 @@ public class NakedSingleton implements InterfaceTech {
         for (Cell cell:grille) {
             System.out.println("Coo : "+cell.getPosition()[0]+" "+cell.getPosition()[1]);
             // Vérifie les colonnes
-            if (cell.isEmpty() && cell.OnlyOneAnnotation()) {
-                        System.out.println("test");
+            if (cell.isEmpty() && cell.OnlyOneAnnotation() && cell.isEditable()) {
 
-                //int[] pos = cell.getPosition();
-                //  aide.addPos(pos[0], pos[1]);
+                int[] pos = cell.getPosition();
+                System.out.println(pos[0]+" "+pos[1]);
+                aide.addPos(pos[0], pos[1]);
                 int rand = (int) (3*Math.random());
                 int x =cell.getPosition()[0];
                 int y = cell.getPosition()[1];

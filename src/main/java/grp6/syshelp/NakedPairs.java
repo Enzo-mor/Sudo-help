@@ -153,7 +153,7 @@ public class NakedPairs implements InterfaceTech {
 
             for(int j = 0; j<grille.NB_NUM;j++){
                 //regarde dans la ligne si il y a des paires
-                if(temp[0] == tabPairLine[j][0]  && temp[1] == tabPairLine[j][1] && temp[0] !=0 && i!=j){
+                if(temp[0] == tabPairLine[j][0]  && temp[1] == tabPairLine[j][1] && temp[0] !=0 && i!=j ){
                     Cell solution=removePair(grille.getLine(num),tabPairLine[j]);
                     if(solution!=null){
                         int number = solution.getLastAnnotation();

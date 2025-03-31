@@ -112,7 +112,7 @@ public final class SudokuSolver {
             for(int j = 0; j < Grid.NB_NUM; j++) {
                 int num = grid.getCell(i, j).getNumber();
                 // Utilisation de FlexCell au lieu de FixCell pour les cellules modifiables
-                Cell cell = new FlexCell();
+                Cell cell = new FlexCell(i,j);
                 cell.setNumber(num);
                 cells.add(cell); // Notez que vous devez creer des FlexCell ici
             }

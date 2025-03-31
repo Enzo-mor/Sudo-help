@@ -39,11 +39,11 @@ public class SysHelp {
     /** Liste des technique applicable sur une grille */
     public static final List<InterfaceTech> TECHNIQUES = new ArrayList<>();
     static {
-        TECHNIQUES.add(new LastCell());         //  1-Derniere case lible
-        TECHNIQUES.add(new LastPossible());     //  2-Derniere case restante
-        TECHNIQUES.add(new NakedSingleton());   //  3-Singletons nus
+        //TECHNIQUES.add(new LastCell());         //  1-Derniere case lible
+        //TECHNIQUES.add(new LastPossible());     //  2-Derniere case restante
+        //TECHNIQUES.add(new NakedSingleton());   //  3-Singletons nus
         TECHNIQUES.add(new NakedPairs());       //  4-Paires nus
-        TECHNIQUES.add(new LastNumber());       //  5-Dernier chiffre possible
+        //TECHNIQUES.add(new LastNumber());       //  5-Dernier chiffre possible
         //TECHNIQUES.add(new NakedTriples());     //  6-Triplets nus
         //TECHNIQUES.add(new HiddenSingle());     //  7-Singletons cachés
         //TECHNIQUES.add(new HiddenPairs());      //  8-Paires cachées 
@@ -155,8 +155,8 @@ public class SysHelp {
     }
     
 
-    public static void main(String[] args) {
-        /*SudoLog.setDebug(true);
+    /*public static void main(String[] args) {
+        SudoLog.setDebug(true);
 
         int[] data = {
             6,1,0, 9,0,8, 4,0,7,
@@ -174,8 +174,8 @@ public class SysHelp {
         Grid grille = new Grid(data); 
 
         // Demande d'aide au système
-        Help help = SysHelp.generateHelp(grille);
+        Help help = SysHelp.generateHelp(grille,null);
 
-        System.out.println(help);*/
-    }
+        System.out.println(help);
+    }*/
 }

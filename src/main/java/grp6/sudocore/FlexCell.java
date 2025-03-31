@@ -34,21 +34,13 @@ public final class FlexCell extends FixCell {
     /**
      * Constructeur de la classe 'FlexCell'.
      */
-    public FlexCell(int y, int x) {
-        super(0, y, x);
+    public FlexCell(int x, int y) {
+        super(0, x ,y);
         // Initialise le tableau des annotations à false
         this.annotations = new boolean[Grid.NB_NUM];
         this.annotationsList = new ArrayList<>();
     }
 
-    /**
-     * Constructeur de la classe 'FlexCell'.
-     */
-    public FlexCell() {
-        super(0, 0, 0);
-        this.annotations = new boolean[Grid.NB_NUM];
-        this.annotationsList = new ArrayList<>();
-    }
 
     /**
      * Mettre un chiffre dans une cellule.
@@ -195,7 +187,6 @@ public final class FlexCell extends FixCell {
         for(int i = 0;i<annotations.length;i++){
             if(annotations[i]){
                 count++;
-                System.out.println(count);
             }
         }
         return count == 1;
