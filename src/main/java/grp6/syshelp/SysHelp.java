@@ -76,13 +76,16 @@ public class SysHelp {
      * @return L'aide qui peut etre apporte par le Systeme d'aide
      */
     public static Help generateHelp(Grid g, Profile profile) {
+        System.out.println(g);
+        System.out.println("-----------------------------------------------------------------------------------------");
+        System.out.println(g.getCell(4, 4).getAnnotations());
         SudoLog.debug("Clone de la grille");
         Grid clone = g.clone();
         Help aide = new Help("Erreur anotation");
 
         // On remplit les annotations
         AutoAnnotation.generate(clone);
-
+        /*
         for(int i = 0; i < Grid.NB_NUM; i++) {
             for(int j = 0; j < Grid.NB_NUM; j++) {
 
@@ -101,7 +104,7 @@ public class SysHelp {
 
                 }
             }
-        }
+        }*/
 
 
 
@@ -110,7 +113,7 @@ public class SysHelp {
        Optional<Help> help = TECHNIQUES.stream()
        .map(tech -> {
            SudoLog.debug("Teste avec " + tech.getClass().getSimpleName());
-           return tech.getHelp(g.clone());
+           return tech.getHelp(clone);
        })
        .filter(h -> h != null)
        .findFirst();
