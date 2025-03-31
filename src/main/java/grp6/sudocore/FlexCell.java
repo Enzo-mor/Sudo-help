@@ -201,4 +201,13 @@ public final class FlexCell extends FixCell {
     public boolean[] getAnnotationsBool() {
         return annotations;
     }
+
+    /**
+     * Nettoyer les annotations de la cellule.
+     */
+    @Override
+    public void clearAnnotations() {
+        annotations = new boolean[Grid.NB_NUM];
+        annotationsList.clear();
+    }
 }

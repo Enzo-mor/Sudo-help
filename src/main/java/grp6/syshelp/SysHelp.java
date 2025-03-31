@@ -42,7 +42,7 @@ public class SysHelp {
         TECHNIQUES.add(new LastCell());         //  1-Derniere case lible
         TECHNIQUES.add(new LastPossible());     //  2-Derniere case restante
         TECHNIQUES.add(new NakedSingleton());   //  3-Singletons nus
-        //TECHNIQUES.add(new NakedPairs());       //  4-Paires nus
+        TECHNIQUES.add(new NakedPairs());       //  4-Paires nus
         TECHNIQUES.add(new LastNumber());       //  5-Dernier chiffre possible
         //TECHNIQUES.add(new NakedTriples());     //  6-Triplets nus
         //TECHNIQUES.add(new HiddenSingle());     //  7-Singletons cachés
@@ -85,6 +85,12 @@ public class SysHelp {
 
         // On remplit les annotations
         AutoAnnotation.generate(clone);
+        for(int i=0; i < Grid.NB_NUM; i++) {
+            for(int j=0; j < Grid.NB_NUM; j++) {
+                Cell cell = clone.getCell(i, j);
+            }
+        }
+
         /*
         for(int i = 0; i < Grid.NB_NUM; i++) {
             for(int j = 0; j < Grid.NB_NUM; j++) {

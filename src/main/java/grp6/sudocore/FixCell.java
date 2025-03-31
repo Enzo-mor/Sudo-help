@@ -194,4 +194,12 @@ public class FixCell implements Cell {
         return false;
     }
 
+    /**
+     * Nettoyer les annotations de la cellule.
+     */
+    @Override
+    public void clearAnnotations() {
+        /* fait rien pour une fix */
+    }
+
 }

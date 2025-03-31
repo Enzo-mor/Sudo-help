@@ -637,4 +637,13 @@ public final class Grid implements Iterable<Cell> {
             }
         }
     }
+
+    /**
+     * Nettoie les annotations de toutes les cellules de la grille.
+     */
+    public void clearAnnotations() {
+        for(Cell cell: cells) {
+            cell.clearAnnotations();
+        }
+    }
 }

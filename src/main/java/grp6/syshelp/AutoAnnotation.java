@@ -24,6 +24,8 @@ public class AutoAnnotation {
      * @param grid Grille a modifier
      */
     public static void generate(Grid grid) {
+        grid.clearAnnotations();
+        System.out.println(grid);
         for(int i = 0; i < Grid.NB_NUM; i++) {
             for(int j = 0; j < Grid.NB_NUM; j++) {
                 Cell cell = grid.getCell(i, j);

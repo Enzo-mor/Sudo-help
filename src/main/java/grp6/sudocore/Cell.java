@@ -109,4 +109,9 @@ public interface Cell {
      * @return un boolean qui est vrai quand il n'y a qu'une annotation
      */
     public boolean OnlyOneAnnotation(); 
+
+    /**
+     * Permet de clear les annotations d'une cellule
+     */
+    public void clearAnnotations();
 }
