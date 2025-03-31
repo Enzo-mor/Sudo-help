@@ -1,50 +1,60 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  
+
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>grp6</groupId>
   <artifactId>Groupe6</artifactId>
-  <version>1.0</version>
+  <version>1.0-macos</version>
   <packaging>jar</packaging>
 
-  <name>grp6</name>
+  <name>grp6-macos</name>
   <url>http://maven.apache.org</url>
 
   <properties>
       <maven.compiler.source>17</maven.compiler.source>
       <maven.compiler.target>17</maven.compiler.target>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <javafx.version>16</javafx.version>
-      <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
+      <javafx.version>21</javafx.version>
   </properties>
 
+  <repositories>
+    <repository>
+        <id>gluon-repository</id>
+        <url>https://nexus.gluonhq.com/nexus/content/repositories/releases/</url>
+    </repository>
+  </repositories>
+
+
   <dependencies>
-    
-    <!-- JavaFX Modules -->
+    <!-- JavaFX Modules pour macOS ARM64 -->
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-controls</artifactId>
         <version>${javafx.version}</version>
+        <classifier>mac-aarch64</classifier>
     </dependency>
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-fxml</artifactId>
         <version>${javafx.version}</version>
+        <classifier>mac-aarch64</classifier>
     </dependency>
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-base</artifactId>
         <version>${javafx.version}</version>
+        <classifier>mac-aarch64</classifier>
     </dependency>
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-graphics</artifactId>
         <version>${javafx.version}</version>
+        <classifier>mac-aarch64</classifier>
     </dependency>
 
-    <!-- Gson pour la sérialisation JSON -->
+    <!-- Gson pour JSON -->
     <dependency>
         <groupId>com.google.code.gson</groupId>
         <artifactId>gson</artifactId>
@@ -87,47 +97,7 @@
             </configuration>
         </plugin>
 
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>3.4.0</version>
-            <configuration>
-                <archive>
-                    <manifest>
-                        <mainClass>grp6.intergraph.MainWrapper</mainClass>
-                    </manifest>
-                </archive>
-                <descriptorRefs>
-                    <descriptorRef>jar-with-dependencies</descriptorRef>
-                </descriptorRefs>
-            </configuration>
-            <executions>
-                <execution>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>single</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-
-        <!-- Ajoute ce plugin pour gérer JavaFX modularité -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>3.2.2</version>
-            <configuration>
-                <archive>
-                    <manifest>
-                        <addClasspath>true</addClasspath>
-                        <mainClass>grp6.intergraph.MainWrapper</mainClass>
-                    </manifest>
-                </archive>
-            </configuration>
-        </plugin>
-
-
-        <!-- Plugin pour créer un uber-jar -->
+        <!-- Plugin Shade pour créer un Uber-JAR -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
@@ -141,34 +111,19 @@
                     <configuration>
                         <transformers>
                             <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                <mainClass>grp6.intergraph.Main</mainClass>
-                            </transformer>
-                            <!-- Important pour SQLite -->
-                            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                <mainClass>grp6.intergraph.Main</mainClass>
+                                <mainClass>grp6.intergraph.MainWrapper</mainClass>
                             </transformer>
                         </transformers>
-                        <filters>
-                            <filter>
-                                <artifact>*:*</artifact>
-                                <excludes>
-                                    <exclude>META-INF/*.SF</exclude>
-                                    <exclude>META-INF/*.DSA</exclude>
-                                    <exclude>META-INF/*.RSA</exclude>
-                                </excludes>
-                            </filter>
-                        </filters>
                     </configuration>
                 </execution>
             </executions>
         </plugin>
 
-        <!-- Plugin JavaFX -->
+        <!-- Plugin JavaFX pour macOS -->
         <plugin>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-maven-plugin</artifactId>
-            <version>${javafx.maven.plugin.version}</version>
+            <version>0.0.8</version>
             <executions>
                 <execution>
                     <goals>
@@ -181,6 +136,7 @@
             </configuration>
         </plugin>
 
+        <!-- Plugin pour copier les dépendances JavaFX -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
@@ -199,7 +155,8 @@
                 </execution>
             </executions>
         </plugin>
-
       </plugins>
   </build>
+
 </project>
+
