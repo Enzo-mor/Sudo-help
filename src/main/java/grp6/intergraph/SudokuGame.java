@@ -121,7 +121,7 @@ public class SudokuGame {
     private static Timeline blinkAnimation;
 
     /*
-     * Timer pour la fin de l'anumation du bouton
+     * Timer pour la fin de l'animation du bouton
      */
     private static Timeline resetTimer;
 
@@ -129,6 +129,11 @@ public class SudokuGame {
      * Fenetre de fin
      */
     private static VBox endOverlay;
+
+    /*
+     * Booleen pour savoir si le timer est arrete
+     */
+    private static boolean isTimerStopped = false;
 
 
     /**
@@ -292,9 +297,11 @@ public class SudokuGame {
         setupInactivityTimer(scene);
         
         primaryStage.setTitle(selectedSudoku.getName() + " - " + MainMenu.getProfileName());
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(MIN_WIDTH);
         primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.centerOnScreen();
         primaryStage.show();
 
         // --- Verification automatique de la fin du jeu
@@ -539,6 +546,7 @@ public class SudokuGame {
         seeMoreButton = new Button("Voir plus");
         StyledContent.applyButtonStyle(seeMoreButton);
         seeMoreButton.setOnAction(e -> {
+            SudokuGame.stopTimer();
             int indexHelp = ControlButtons.getCurrentHelp() + 1;
             Help actualHelp = ControlButtons.getHelp();
             
@@ -577,8 +585,8 @@ public class SudokuGame {
         topBar.setAlignment(Pos.TOP_RIGHT);
         topBar.setPrefWidth(400);
 
-        // Icône ampoule
-        ImageView lightBulb = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/lightBulb.png"))); // Ajoute cette icône dans tes ressources
+        // Icone ampoule
+        ImageView lightBulb = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/lightBulb.png")));
         lightBulb.setFitWidth(20);
         lightBulb.setFitHeight(20);
 
@@ -586,7 +594,7 @@ public class SudokuGame {
         topContent.setAlignment(Pos.TOP_LEFT);
         topContent.setPrefWidth(300);
 
-        // Organiser les éléments dans la VBox
+        // Organiser les elements dans la VBox
         VBox content = new VBox(10, topContent, innerPane, seeMoreButton);
         content.setAlignment(Pos.CENTER);
 
@@ -638,18 +646,18 @@ public class SudokuGame {
      * @param scene Scene affichee 
      */
     private static void setupInactivityTimer(Scene scene) {
+
         inactivityTimer = new Timeline(new KeyFrame(Duration.seconds(20), event -> {
             if(showPopup){
                 showPopup();
-            }else{
-                if(showHelpAnimation){
+            } else {
+                if(showHelpAnimation  && controlsButtons.getHelpButton() != null) {
                     if (controlsButtons.getHelpButton() != null) {
                         toggleBlinkEffect(controlsButtons.getHelpButton(), true);
                         startResetTimer(scene);
                     }
                 }
             }
-        
         }));
         inactivityTimer.setCycleCount(1);
         if(showHelpAnimation){
@@ -677,6 +685,8 @@ public class SudokuGame {
      */
     public static void stopTimer() {
         inactivityTimer.stop();
+        if (resetTimer != null)
+            resetTimer.stop();
     }
 
     /*

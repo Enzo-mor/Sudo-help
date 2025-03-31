@@ -145,11 +145,11 @@ public class NumberSelection {
             int row = SudokuGrid.getSelectedRow();
             int col = SudokuGrid.getSelectedCol();
     
-            if (!sudokuGrid.hasAnnotation(row, col, numberStr)) {
-                sudokuGrid.addAnnotationToCell(row, col, numberStr);
+            if (!SudokuGrid.hasAnnotation(row, col, numberStr)) {
+                SudokuGrid.addAnnotationToCell(row, col, numberStr);
                 sudokuGrid.getGame().addAnnotation(row, col, number);
             } else {
-                sudokuGrid.removeAnnotationFromCell(row, col, numberStr);
+                SudokuGrid.removeAnnotationFromCell(row, col, numberStr);
                 sudokuGrid.getGame().removeAnnotation(row, col, number);
             }
         }

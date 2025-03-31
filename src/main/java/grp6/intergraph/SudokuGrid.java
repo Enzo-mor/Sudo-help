@@ -105,7 +105,7 @@ public class SudokuGrid {
         gridSudoku = actualGameParam.getGrid();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                this.actionEraser[i][j] = false;
+                actionEraser[i][j] = false;
             }
         }
 
@@ -619,7 +619,7 @@ public class SudokuGrid {
     /**
      * Reinitialise l'interface utilisateur de la grille de Sudoku, en effaçant les selections de numero et en desactivant les outils.
      */
-    private void resetButton() {
+    public static void resetButton() {
         NumberSelection.resetSelectedNumber();
         NumberSelection.clearSelection();
         

@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.scene.image.Image;
 
@@ -120,22 +121,23 @@ public class ProfileSelection {
         navigation.setPadding(new Insets(10));
         
         Button addProfileButton = new Button("Ajouter un profil");
-        StyledContent.applyButtonBoxStyle(addProfileButton);
-        addProfileButton.setOnAction(e -> showAddProfilePopup(stage, profileContainer, leftArrow, rightArrow));
-        
         Button guestButton = new Button("Continuer en tant qu'invité");
-        StyledContent.applyButtonBoxStyle(guestButton);
-        guestButton.setOnAction(e -> {
-            instance = null;
-            MainMenu.showMainMenu(stage, selectedProfile);
-        });
-        
         Button quitButton = new Button("Quitter");
-        StyledContent.applyButtonBoxStyle(quitButton);
-        quitButton.setOnAction(e -> Platform.exit());
-        
         Button deleteButton = new Button("Supprimer BDD");
+
+        StyledContent.applyButtonBoxStyle(addProfileButton);
+        StyledContent.applyButtonBoxStyle(guestButton);
+        StyledContent.applyButtonBoxStyle(quitButton);
         StyledContent.applyButtonBoxStyle(deleteButton);
+
+        addProfileButton.setWrapText(true);
+        guestButton.setWrapText(true);
+        quitButton.setWrapText(true);
+        deleteButton.setWrapText(true);
+
+        addProfileButton.setOnAction(e -> showAddProfilePopup(stage, profileContainer, leftArrow, rightArrow));
+        guestButton.setOnAction(e -> { instance = null; MainMenu.showMainMenu(stage, selectedProfile); });
+        quitButton.setOnAction(e -> Platform.exit());
         
         VBox layout = new VBox(20, titleLabel, navigation, addProfileButton, guestButton, quitButton, deleteButton);
         layout.setAlignment(Pos.CENTER);
@@ -203,6 +205,8 @@ public class ProfileSelection {
         stage.setTitle("Choix du Profil");
         stage.setScene(scene);
         stage.show();
+
+        Platform.runLater(() -> stage.centerOnScreen());      
     }
 
     /**

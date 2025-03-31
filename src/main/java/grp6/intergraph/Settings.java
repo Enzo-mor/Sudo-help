@@ -83,13 +83,6 @@ class Settings extends Stage {
             }
         });
 
-        ToggleSwitch toggleFullscreen = new ToggleSwitch("Mode plein écran", stage.isFullScreen());
-        VBox.setVgrow(toggleFullscreen, Priority.ALWAYS);
-        // Gérer l'événement du mode plein écran
-        toggleFullscreen.setOnToggleChanged((obs, oldState, newState) -> 
-            Platform.runLater(() -> stage.setFullScreen(newState))
-        );
-
         ToggleSwitch toggleHighlightRowCol = new ToggleSwitch("Marquage lignes/colonnes", highlightRowCol);
         VBox.setVgrow(toggleHighlightRowCol, Priority.ALWAYS);
         // Gérer l'événement du marquage lignes/colonnes
@@ -140,11 +133,11 @@ class Settings extends Stage {
         VBox.setVgrow(spacer, Priority.ALWAYS);
         VBox.setVgrow(spacer2, Priority.ALWAYS);
 
-        VBox settingsLayout = new VBox(10, usernameBox, spacer, toggleFullscreen, toggleHighlightRowCol, toggleHighlightNumbers, toggleHelp, spacer2, changeProfileButton, deleteProfileButton);
+        VBox settingsLayout = new VBox(10, usernameBox, spacer, toggleHighlightRowCol, toggleHighlightNumbers, toggleHelp, spacer2, changeProfileButton, deleteProfileButton);
         settingsLayout.setStyle("-fx-padding: 20px;");
         settingsLayout.setPrefHeight(300);
 
-        setScene(new Scene(settingsLayout, 275, 300));
+        setScene(new Scene(settingsLayout, 275, 325));
         setResizable(false);
 
         rotateAnimation = new RotateTransition(Duration.millis(500), gearIcon);

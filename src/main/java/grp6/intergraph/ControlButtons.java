@@ -78,7 +78,6 @@ public class ControlButtons {
         helpButton = new Button("Aide");
         Button checkButton = new Button("Vérifier");
         Button restartButton = new Button("Recommencer");
-        Button annotation = new Button("Auto");
         
         // Appliquer le style aux boutons
         StyledContent.applyButtonStyle(undoButton);
@@ -86,18 +85,6 @@ public class ControlButtons {
         StyledContent.applyButtonStyle(helpButton);
         StyledContent.applyButtonStyle(checkButton);
         StyledContent.applyButtonStyle(restartButton);
-
-        annotation.setOnAction(e -> {
-            Grid g =sudokuGrid.getGame().getGrid();
-            for (int i=0 ;i <9;i++){
-                for(int y=0;y<9;y++){
-                    AutoAnnotation.generate(g, g.getCell(i, y), i, y);
-                    for (Integer f : g.getCell(i, y).getAnnotations()){
-                        SudokuGrid.addAnnotationToCell(i,y,String.valueOf(f));
-                    }
-                }
-            }
-        });
         
         // Ajoute l'action sur le bouton "Annuler"
         undoButton.setOnAction(e -> {
@@ -142,6 +129,7 @@ public class ControlButtons {
         checkButton.setOnAction(e -> {
             sudokuGame.decreaseScore("check");
             SudokuDisplay.resetGrid(SudokuGrid.getGridPane());
+            SudokuGrid.resetButton();
             putErrorsRed();
 
             SudokuGame.resetTimer();
@@ -158,7 +146,7 @@ public class ControlButtons {
             SudokuGame.resetTimer();
         });
 
-        controlButtons.getChildren().addAll(undoButton, redoButton, helpButton, checkButton, restartButton,annotation);
+        controlButtons.getChildren().addAll(undoButton, redoButton, helpButton, checkButton, restartButton);
     }
 
     /**
@@ -304,6 +292,8 @@ public class ControlButtons {
 
             // Remettre la couleur par defaut apres avoir annule les erreurs
             SudokuGrid.setCellsColorDefault(eval);
+
+            SudokuGrid.resetButton();
 
             // Supprimer les actions passees apres l'etat actuel
             sudokuGame.deleteActionsAfterCurrent();

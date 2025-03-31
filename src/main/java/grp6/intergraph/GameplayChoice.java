@@ -60,7 +60,9 @@ public class GameplayChoice {
 
         Scene scene = new Scene(layout, 640, 480);
         stage.setTitle("Choix Mode - " + MainMenu.getProfileName());
+        stage.setResizable(false);
         stage.setScene(scene);
+        stage.centerOnScreen();
         stage.show();
     }
 }

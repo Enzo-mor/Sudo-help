@@ -266,8 +266,10 @@ public class LearningGameDisplay {
         
         primaryStage.setTitle(selectedTechnique.getName() + " - " + MainMenu.getProfileName());
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.setMinWidth(MIN_WIDTH);
         primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.centerOnScreen();
         primaryStage.show();
 
         // --- Verification automatique de la fin du jeu

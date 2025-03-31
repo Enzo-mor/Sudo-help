@@ -1,6 +1,5 @@
 package grp6.intergraph;
 import grp6.sudocore.*;
-import grp6.sudocore.SudoTypes.GameState;
 import grp6.syshelp.*;
 
 import java.util.List;
@@ -68,7 +67,9 @@ public class LearningMenu {
 
         Scene scene = new Scene(layout, 900, 600);
         stage.setTitle("Mode Apprentissage - " + MainMenu.getProfileName());
+        stage.setResizable(false);
         stage.setScene(scene);
+        stage.centerOnScreen();
         stage.show();
     }
 

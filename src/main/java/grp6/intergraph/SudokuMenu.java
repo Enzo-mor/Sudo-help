@@ -119,7 +119,9 @@ public class SudokuMenu {
 
         Scene scene = new Scene(root, 900, 600);
         stage.setTitle("Mode Libre - " + MainMenu.getProfileName());
+        stage.setResizable(false);
         stage.setScene(scene);
+        stage.centerOnScreen();
         stage.show();
     }
 

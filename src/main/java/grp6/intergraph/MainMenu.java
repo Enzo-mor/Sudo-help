@@ -124,7 +124,9 @@ public class MainMenu {
         // Creation et affichage de la scene
         Scene scene = new Scene(root, 640, 480);
         stage.setTitle("Menu Principal - " + MainMenu.getProfileName());
+        stage.setResizable(false);
         stage.setScene(scene);
+        stage.centerOnScreen();
         stage.show();
     }
 
