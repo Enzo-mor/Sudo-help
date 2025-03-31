@@ -3,7 +3,7 @@ package grp6.syshelp;
 import java.util.ArrayList;
 import java.util.List;
 
-import grp6.sudocore.*;
+import grp6.sudocore.Grid;
 
 /**
  * Cette classe représente une aide qui sera apportée par le Système d'aide.
@@ -172,6 +172,14 @@ public class Help {
      */
     public void addSquare(int i) {
         addSquare(i / 3, i % 3);
+    }
+
+    public void resetPositions(){
+        for (int i = 0;i<9;i++){
+            for(int y = 0;y<9;y++){
+                grid[i][y] = false;
+            }
+        }
     }
 
     /**
