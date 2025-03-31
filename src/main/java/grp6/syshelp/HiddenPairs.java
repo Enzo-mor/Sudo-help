@@ -129,16 +129,16 @@ public class HiddenPairs implements InterfaceTech{
                     help.addPos(i, j);
 
                         if(SubgridCell!=null){
-                        ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), SubgridCell.getLast())).boxed().toList());
+                        ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), SubgridCell.get(SubgridCell.size() - 1))).boxed().toList());
                         help.setMessage(1,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")) +"\ndans sous les grilles("+grille.NB_SUBGRID+"*"+grille.NB_SUBGRID  +")");
                         
                         help.setMessage(3,"veuillez appliquer la technique de "+getName()+ "\n aux cellules dans la sous grille ("+grille.NB_SUBGRID+"*"+grille.NB_SUBGRID  +") \nou se trouve la cellule situé à la ligne "+(i+1)+" et colonne "+(j+1));
-                        help.addSquare(SubgridCell.getLast().getPosition()[0]/Grid.NB_SUBGRID, SubgridCell.getLast().getPosition()[1]/Grid.NB_SUBGRID);
+                        help.addSquare(SubgridCell.get(SubgridCell.size() - 1).getPosition()[0]/Grid.NB_SUBGRID, SubgridCell.get(SubgridCell.size() - 1).getPosition()[1]/Grid.NB_SUBGRID);
                         return help;
                     }
 
                     else if(LineCell!=null){
-                        ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), LineCell.getLast())).boxed().toList());
+                        ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), LineCell.get(SubgridCell.size() - 1))).boxed().toList());
                         help.setMessage(1,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")));
                         
 
@@ -151,7 +151,7 @@ public class HiddenPairs implements InterfaceTech{
                         
                         return help;
                     }else if(ColumnCell!=null){
-                        ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), ColumnCell.getLast())).boxed().toList());
+                        ArrayList<Integer> candidates = new ArrayList<>(Arrays.stream(getCandidate(grille.getCell(i, j), ColumnCell.get(SubgridCell.size() - 1))).boxed().toList());
                         help.setMessage(1,"veuillez faire attention aux annotations  "+candidates.stream().map(String::valueOf).collect(Collectors.joining(", ")));
                         
                         String message="veuillez appliquer la technique de "+getName()+ " aux cellules suivantes situées  : \nla ligne "+(i+1)+"et colonne "+(j+1)+"\n";

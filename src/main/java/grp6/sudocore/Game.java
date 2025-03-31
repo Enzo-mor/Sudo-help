@@ -794,8 +794,8 @@ public class Game {
      */
     public void deleteActionsAfterCurrent() {
         while (actions.size() > currentIndex + 1) {
-            histoActions += "Suppression de l'action " + (currentIndex + (actions.size() - currentIndex) + 1) + " : " + actions.getLast() + "\n";
-            actions.removeLast();
+            histoActions += "Suppression de l'action " + (currentIndex + (actions.size() - currentIndex) + 1) + " : " + actions.get(actions.size() - 1) + "\n";
+            actions.remove(actions.size() - 1);
         }
     }
 
