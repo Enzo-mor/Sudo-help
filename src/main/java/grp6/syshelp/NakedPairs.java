@@ -213,6 +213,7 @@ public class NakedPairs implements InterfaceTech {
     @Override
     public Help getHelp(Grid grille) {
         for(int i = 0; i<9;i++){
+            aide.resetPositions();
             if(detectPairsCarre(i,grille) || detectPairs(i,grille)){
                 return  aide;
             }
