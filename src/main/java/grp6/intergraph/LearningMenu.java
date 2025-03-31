@@ -18,13 +18,24 @@ import javafx.stage.Stage;
 
 /**
  * Classe LearningMenu
- * Cette classe represente le menu o l'utilisateur peut selectionner un Sudoku depuis la bibliotheque pour apprendre une technique.
+ * Cette classe represente le menu ou l'utilisateur peut selectionner un Sudoku depuis la bibliotheque pour apprendre une technique.
  * Elle gere l'affichage des grilles, ainsi que les interactions de navigation et les actions possibles sur chaque grille de Sudoku.
  * 
  * @author PERRON Nathan
  * @author RASSON Emma
+ * @see DBManager
+ * @see GameplayChoice
+ * @see LearningGameDisplay
+ * @see MainMenu
+ * @see StyledContent
+ * @see Technique
  */
 public class LearningMenu {
+
+    /**
+     * Constructeur de la classe LearningMenu.
+     */
+    public LearningMenu() {}
     
     /**
      * Affiche la bibliotheque d'apprentissage contenant les grilles de Sudoku pour apprendre differentes techniques.

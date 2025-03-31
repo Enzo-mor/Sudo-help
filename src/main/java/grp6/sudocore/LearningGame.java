@@ -386,8 +386,6 @@ public class LearningGame {
                 Set<Integer> correctAnnotations = new HashSet<>(solvedGrid.getCell(i, j).getAnnotations());
 
                 if (!currentAnnotations.equals(correctAnnotations)) {
-                    System.out.println("grid : " + currentAnnotations);
-                    System.out.println("solved : " + correctAnnotations);
                     return false;
                 }
             }

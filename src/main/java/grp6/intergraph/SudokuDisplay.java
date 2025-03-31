@@ -21,8 +21,17 @@ import javafx.util.Duration;
  *
  * @author PERRON Nathan
  * @author RASSON Emma
+ * @see Cell
+ * @see Grid
+ * @see LearningGameDisplay
+ * @see SudokuGame
  */
 public class SudokuDisplay {
+
+    /**
+     * Constructeur de la classe SudokuDisplay
+     */
+    public SudokuDisplay() {}
 
     /**
      * Reinitialise toutes les cellules de la grille a une couleur par defaut, 
@@ -50,7 +59,7 @@ public class SudokuDisplay {
     /**
      * Surligne certaines cellules dans la grille, assombrissant toutes les autres.
      *
-     * @param grid        La grille où les cellules doivent etre modifiees [ GridPane ]
+     * @param grid        La grille ou les cellules doivent etre modifiees [ GridPane ]
      * @param coordinates Coordonnees des cellules a surligner [ List<int[]> ]
      */
     public static void highlightCells(GridPane grid, List<int[]> coordinates) {
@@ -85,7 +94,7 @@ public class SudokuDisplay {
     /**
      * Surligne toutes les cellules contenant un nombre specifique.
      *
-     * @param gridPane  Le panneau de grille où les boutons sont presents [ GridPane ]
+     * @param gridPane  Le panneau de grille ou les boutons sont presents [ GridPane ]
      * @param grid      La grille contenant les donnees du jeu [ Grid ]
      * @param number    Le nombre a surligner [ int ]
      */
@@ -177,7 +186,7 @@ public class SudokuDisplay {
     }
 
     /**
-     * Convertit une couleur en chaîne de caracteres au format RGB.
+     * Convertit une couleur en chaine de caracteres au format RGB.
      *
      * @param color La couleur a convertir [ Color ]
      * @return La chaîne de caracteres representant la couleur au format RGB [ String ]

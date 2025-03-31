@@ -17,7 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.scene.image.Image;
 
@@ -29,10 +28,10 @@ import javafx.scene.image.Image;
  * 
  * @author PERRON Nathan
  * @author RASSON Emma
- * @see Profile
  * @see DBManager
- * @see StyledContent
  * @see MainMenu
+ * @see Profile
+ * @see StyledContent
  */
 public class ProfileSelection {
 
@@ -226,9 +225,11 @@ public class ProfileSelection {
         for (int i = startIndex; i < endIndex; i++) {
             VBox profileBox = new VBox(10);
             profileBox.setAlignment(Pos.CENTER);
+
             ImageView profileImage = new ImageView(new Image(getClass().getResource("/profil.png").toExternalForm()));
             profileImage.setFitWidth(100);
             profileImage.setFitHeight(100);
+
             Label profileName = new Label(profiles.get(i).getPseudo());
             profileName.setStyle("-fx-font-size: 16px;");
             profileBox.getChildren().addAll(profileImage, profileName);

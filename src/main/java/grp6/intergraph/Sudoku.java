@@ -10,8 +10,8 @@ import grp6.sudocore.SudoTypes.GameState;
  * 
  * @author PERRON Nathan
  * @author RASSON Emma
- * @see Game Classe representant une instance de jeu de Sudoku.
- * @see GameState Enumeration des etats possibles d'un jeu de Sudoku.
+ * @see Game
+ * @see GameState
  */
 public class Sudoku {
 

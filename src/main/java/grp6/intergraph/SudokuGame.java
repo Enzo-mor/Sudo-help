@@ -6,9 +6,7 @@ import grp6.syshelp.*;
 import java.sql.SQLException;
 import java.util.List;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,7 +19,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.animation.RotateTransition;
 
 /**
  * Classe SudokuGame
@@ -30,13 +27,22 @@ import javafx.animation.RotateTransition;
  * 
  * @author PERRON Nathan
  * @author RASSON Emma
- * @see Game
- * @see Sudoku
+ * @see ControlButtons
  * @see DBManager
- * @see Settings
+ * @see Game
+ * @see GameState
+ * @see Grid
+ * @see Help
  * @see MainMenu
- * @see SudokuGame
+ * @see NumberSelection
+ * @see Settings
+ * @see StyledContent
+ * @see Sudoku
  * @see SudokuGrid
+ * @see SudokuDisplay
+ * @see SudokuMenu
+ * @see Technique
+ * @see ToolsPanel
  */
 public class SudokuGame {
 
@@ -51,7 +57,7 @@ public class SudokuGame {
     private static boolean showHelpAnimation = true;
 
     /*
-     * Timer d'inactivité
+     * Timer d'inactivite
      */
     private static Timeline inactivityTimer = new Timeline();
 
@@ -130,10 +136,10 @@ public class SudokuGame {
      */
     private static VBox endOverlay;
 
-    /*
-     * Booleen pour savoir si le timer est arrete
+    /**
+     * Constructeur de la classe SudokuGame
      */
-    private static boolean isTimerStopped = false;
+    public SudokuGame() {}
 
 
     /**
@@ -161,7 +167,6 @@ public class SudokuGame {
             // Initialisation de la partie et du chronometre 
             actualGame.startGame();
         }
-
         
         // Creation du bouton "retour a la maison"
         Button homeButton = new Button();
@@ -253,7 +258,7 @@ public class SudokuGame {
         VBox rightPanelWrapper = new VBox(20, stackPane, controlsButtons.getControlButtons());
         rightPanelWrapper.setAlignment(Pos.CENTER);
 
-        // --- Conteneur pour le bouton settings, aligné en bas à droite ---
+        // --- Conteneur pour le bouton settings, aligne en bas à droite ---
         HBox settingsContainer = new HBox(settingsButton);
         settingsContainer.setAlignment(Pos.BOTTOM_RIGHT);
         settingsContainer.setPadding(new Insets(10, 10, 10, 10)); // Ajoute un peu de marge
@@ -269,7 +274,7 @@ public class SudokuGame {
 
         VBox mainLayout = new VBox(10, topBar, layout);
 
-        // Création du panneau de confirmation pour cacher la partie (au départ caché)
+        // Creation du panneau de confirmation pour cacher la partie (au départ caché)
         quitConfirmation = new VBox();
         quitConfirmation.setAlignment(Pos.CENTER);
         quitConfirmation.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
@@ -332,7 +337,7 @@ public class SudokuGame {
 
     /**
      * Affiche un panneau de confirmation pour quitter le jeu.
-     * Cette methode permet à l'utilisateur de retourner au menu de selection ou au menu principal.
+     * Cette methode permet a l'utilisateur de retourner au menu de selection ou au menu principal.
      * 
      * @param parentStage La fenetre principale de l'application [Stage].
      */
@@ -526,7 +531,7 @@ public class SudokuGame {
      */
     public static void setupHelpOverlay(VBox helpOverlay, Label helpText) {
 
-        SudokuGame.stopTimer();
+        stopTimer();
 
         // Style du cadre extérieur
         helpOverlay.setStyle("-fx-background-color: #4A90E2; -fx-background-radius: 15; -fx-padding: 15px;");
@@ -602,7 +607,7 @@ public class SudokuGame {
     }
 
     /**
-     * Affiche une superposition avec un titre et un message, remplaçant une alerte.
+     * Affiche une superposition avec un titre et un message.
      * 
      * @param primaryStage La scene principale a changer apres la fin du jeu [ Stage ]
      */
@@ -642,7 +647,8 @@ public class SudokuGame {
     }
     
     /*
-     * Gere le temps d'inactivite du joueur
+     * Gere le temps d'inactivite du joueur.
+     * 
      * @param scene Scene affichee 
      */
     private static void setupInactivityTimer(Scene scene) {

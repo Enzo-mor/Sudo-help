@@ -1,4 +1,5 @@
 package grp6.intergraph;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +22,18 @@ import javafx.stage.Stage;
  * 
  * @author PERRON Nathan
  * @author RASSON Emma
- * @see ToolsPanel
+ * @see Cell
+ * @see DBManager
+ * @see FlexCell
  * @see Game
+ * @see Grid
+ * @see LearningGameDisplay
+ * @see NumberSelection
  * @see Settings
  * @see SudokuDisplay
- * @see NumberSelection
- * @see DBManager
+ * @see SudokuGame
+ * @see Technique
+ * @see ToolsPanel
  */
 public class SudokuGrid {
 
@@ -150,7 +157,7 @@ public class SudokuGrid {
      * @param cellButton Le bouton representant la cellule.
      * @param mainNumber L'etiquette pour afficher le nombre.
      * @param annotationText Le texte des annotations.
-     * @param numberStr Le nombre a afficher sous forme de chaîne de caracteres.
+     * @param numberStr Le nombre a afficher sous forme de chaine de caracteres.
      */
     private static void updateCellDisplay(Button cellButton, Label mainNumber, Text annotationText, String numberStr) {
         if (numberStr != null) {
@@ -158,12 +165,12 @@ public class SudokuGrid {
             mainNumber.setStyle("-fx-text-fill: blue;");
 
             if (annotationText != null) {
-                annotationText.setText("");  // Effacer les annotations
+                annotationText.setText("");
             }
 
-            cellButton.setGraphic(mainNumber);  // Afficher le nombre principal
+            cellButton.setGraphic(mainNumber);
         } else {
-            resetCellDisplay(cellButton, mainNumber, annotationText); // Si pas de nombre, reinitialiser
+            resetCellDisplay(cellButton, mainNumber, annotationText);
         }
     }    
 
@@ -177,10 +184,10 @@ public class SudokuGrid {
     private static void resetCellDisplay(Button cellButton, Label mainNumber, Text annotationText) {
         mainNumber.setText("");
         if (annotationText == null) {
-            annotationText = new Text();  // Creer un nouveau Text si necessaire
+            annotationText = new Text();
         }
         annotationText.setText("");
-        cellButton.setGraphic(mainNumber);  // Revenir au mode principal (sans annotations)
+        cellButton.setGraphic(mainNumber);
     }
 
     /**
@@ -280,7 +287,7 @@ public class SudokuGrid {
     public static void setAnnotationDisplay(Button cellButton, int row, int col, Text annotationText) {
 
         if (annotationText == null) {
-            annotationText = new Text();  // Toujours verifier ou creer un nouveau Text
+            annotationText = new Text();
             annotationText.setFont(new Font(10));
         }
 
@@ -645,7 +652,7 @@ public class SudokuGrid {
     // ------------ Getters ------------ //
 
     /**
-     * Retourne le panneau de la grille de Sudoku (GridPane).
+     * Retourne le panneau de la grille de Sudoku.
      * 
      * @return Le GridPane representant la grille de Sudoku.
      */
@@ -680,9 +687,9 @@ public class SudokuGrid {
      */
     public static Button getButton(int r, int c) {
         if (r >= 0 && r < 9 && c >= 0 && c < 9) {
-            return cells[r][c]; // Retourne le bouton correspondant
+            return cells[r][c];
         }
-        return null; // Retourne null si les coordonnees sont invalides
+        return null;
     }
 
     /**
@@ -735,6 +742,13 @@ public class SudokuGrid {
         return !annotations[row][col].isEmpty();
     }
 
+    /**
+     * Retourne les annotations presentes dans la cellule specifiee.
+     * 
+     * @param row La ligne de la cellule.
+     * @param col La colonne de la cellule.
+     * @return Une liste des annotations presentes dans la cellule.
+     */
     public static List<String> getAnnotations(int row, int col) {
         return annotations[row][col];
     }

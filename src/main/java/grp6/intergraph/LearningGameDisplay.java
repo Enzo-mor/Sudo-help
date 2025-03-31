@@ -4,29 +4,40 @@ import java.sql.SQLException;
 import grp6.sudocore.*;
 import grp6.sudocore.SudoTypes.GameState;
 import grp6.syshelp.*;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.RotateTransition;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
+import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
+/**
+ * Classe LearningGameDisplay
+ * Cette classe represente la fenetre de jeu pour le mode apprentissage.
+ * Elle affiche la grille du jeu, les controles, et les informations de progression.
+ * 
+ * @author PERRON Nathan
+ * @see DBManager
+ * @see ControlButtons
+ * @see Help
+ * @see LearningGame
+ * @see LearningMenu
+ * @see MainMenu
+ * @see NumberSelection
+ * @see SudokuDisplay
+ * @see StyledContent
+ * @see SudokuGame
+ * @see SudokuGrid
+ * @see Settings
+ * @see Technique
+ * @see ToolsPanel
+ */
 public class LearningGameDisplay {
 
     /** 
@@ -108,11 +119,17 @@ public class LearningGameDisplay {
      * Timeline pour verifier l'etat du jeu a chaque seconde 
      */
     private static final Timeline gameStateChecker = new Timeline();
+
+    /**
+     * Constructeur de la classe LearningGameDisplay.
+     */
+    public LearningGameDisplay() {}
     
     /**
+     * Affiche l'interface du mode d'apprentissage du jeu.
      * 
-     * @param primaryStage
-     * @param selectedTechnique
+     * @param primaryStage La fenetre principale de l'application.
+     * @param selectedTechnique La technique de Sudoku selectionnee pour l'apprentissage.
      */
     public static void showLearningGame(Stage primaryStage, Technique selectedTechnique) {
 
@@ -190,7 +207,7 @@ public class LearningGameDisplay {
         numberSelection.setSudokuGrid(grid);
         grid.setLearningMode(true);
         grid.setTechnique(actualTechnique);
-        grid.reload(actualLearningGame.getGrid());
+        grid.reload(LearningGame.getGrid());
         controlsButtons = new ControlButtons(grid, actualLearningGame.getGame());
         controlsButtons.disableHelpButton(); // Desactive le bouton d'aide
         
@@ -284,15 +301,20 @@ public class LearningGameDisplay {
                 /* Methode d'effet */
                 SudokuDisplay.showEndGameEffect(SudokuGrid.getGridPane(), primaryStage);
 
-                if (actualLearningGame != null) {
-                    try {
-                        actualLearningGame.stopGame();
-                    } catch (SQLException | InterruptedException e1) {
-                        System.err.println("Error stopping the game: " + e1.getMessage());
+                Platform.runLater(() -> {        
+                    if (actualLearningGame != null) {
+                        try {
+                            actualLearningGame.stopGame();
+                            MainMenu.getProfile().addTech(actualTechnique.getName());
+        
+                            // Déplacement ici pour éviter le problème
+                            actualLearningGame = null;
+        
+                        } catch (SQLException | InterruptedException e1) {
+                            System.err.println("Error stopping the game: " + e1.getMessage());
+                        }
                     }
-                    actualLearningGame = null;
-                    MainMenu.getProfile().addTech(actualTechnique.getName());
-                }
+                });
             }
         }));
         gameStateChecker.setCycleCount(Animation.INDEFINITE);
@@ -301,9 +323,9 @@ public class LearningGameDisplay {
 
     /**
      * Affiche un panneau de confirmation pour quitter le jeu.
-     * Cette méthode permet à l'utilisateur de retourner au menu de technique ou au menu principal.
+     * Cette methode permet a l'utilisateur de retourner au menu de technique ou au menu principal.
      * 
-     * @param parentStage La fenêtre principale de l'application [Stage].
+     * @param parentStage La fenetre principale de l'application [Stage].
      */
     private static void showExitDialog(Stage parentStage) {
 
@@ -444,7 +466,7 @@ public class LearningGameDisplay {
     }
 
     /**
-     * Methode pour afficher le panneau d'introduction à une technique
+     * Methode pour afficher le panneau d'introduction a une technique
      */
     private static void showIntroLearning() {
 
@@ -507,7 +529,7 @@ public class LearningGameDisplay {
         // Style du cadre extérieur
         helpOverlay.setStyle("-fx-background-color: #4A90E2; -fx-background-radius: 15; -fx-padding: 15px;");
         helpOverlay.setAlignment(Pos.CENTER);
-        helpOverlay.setVisible(false); // Masqué par défaut
+        helpOverlay.setVisible(false);
 
         // Cadre blanc intérieur
         StackPane innerPane = new StackPane();
@@ -577,7 +599,7 @@ public class LearningGameDisplay {
     }
 
     /**
-     * Affiche une superposition avec un titre et un message, remplaçant une alerte.
+     * Affiche une superposition avec un titre et un message.
      * 
      * @param primaryStage La scene principale a changer apres la fin du jeu [ Stage ]
      */
@@ -600,6 +622,7 @@ public class LearningGameDisplay {
         Button closeButton = new Button("Quitter");
         StyledContent.applyButtonStyle(closeButton);
         closeButton.setOnAction(e -> {
+            grid.setLearningMode(false);
             endOverlay.setVisible(false);
             LearningMenu.showLearningLibrary(primaryStage);
         });

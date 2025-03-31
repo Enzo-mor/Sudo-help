@@ -13,8 +13,10 @@ import javafx.scene.control.Button;
  * 
  * @author PERRON Nathan
  * @author RASSON Emma
+ * @see NumberSelection
  * @see StyledContent
  * @see SudokuDisplay
+ * @see SudokuGame
  * @see SudokuGrid
  */
 public class ToolsPanel {
@@ -47,7 +49,7 @@ public class ToolsPanel {
 
     /**
      * Constructeur qui initialise le panneau d'outils avec les boutons gomme et annotation.
-     * Il ajoute les icônes et definit les actions des boutons pour activer/desactiver les modes.
+     * Il ajoute les icones et definit les actions des boutons pour activer/desactiver les modes.
      */
     public ToolsPanel() {
         this.tools = new VBox(15);
@@ -107,7 +109,7 @@ public class ToolsPanel {
     }
 
     /**
-     * Retourne le bouton correspondant a l'effaceur (gomme).
+     * Retourne le bouton correspondant a l'effaceur.
      * 
      * @return Le bouton pour activer le mode gomme.
      */
@@ -116,7 +118,7 @@ public class ToolsPanel {
     }
 
     /**
-     * Retourne le bouton correspondant au crayon (mode annotation).
+     * Retourne le bouton correspondant au crayon.
      * 
      * @return Le bouton pour activer le mode annotation.
      */

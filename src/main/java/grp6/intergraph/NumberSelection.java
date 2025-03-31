@@ -14,11 +14,11 @@ import javafx.scene.control.Label;
  * 
  * @author PERRON Nathan
  * @author RASSON Emma
+ * @see Settings
+ * @see StyledContent
+ * @see SudokuDisplay
  * @see SudokuGrid
  * @see ToolsPanel
- * @see StyledContent
- * @see Settings
- * @see SudokuDisplay
  */
 public class NumberSelection {
 
@@ -91,8 +91,15 @@ public class NumberSelection {
     
         button.setOnAction(e -> {
             selectNumber(button);
-            if (Settings.getHighlightNumbers()) {
-                SudokuDisplay.highlightSameNumbers(SudokuGrid.getGridPane(), SudokuGrid.getGrid(), Integer.parseInt(getSelectedNumber()));
+            String currentlySelectedNumber = getSelectedNumber();
+
+            if (Settings.getHighlightNumbers() && selectedNumber != null && !selectedNumber.isEmpty()) {
+                try {
+                    int parsedNumber = Integer.parseInt(currentlySelectedNumber);
+                    SudokuDisplay.highlightSameNumbers(SudokuGrid.getGridPane(), SudokuGrid.getGrid(), parsedNumber);
+                } catch (NumberFormatException ex) {
+                    System.err.println("Erreur : Impossible de convertir '" + currentlySelectedNumber + "' en nombre.");
+                }
             }
             SudokuGame.resetTimer();
         });
@@ -176,10 +183,10 @@ public class NumberSelection {
     /**
      * Definit le nombre actuellement selectionne.
      * 
-     * @param selectedNumber Nombre selectionne [String]
+     * @param sn Nombre selectionne [String]
      */
-    public void setSelectedNumber(String selectedNumber) {
-        NumberSelection.selectedNumber = selectedNumber;
+    public void setSelectedNumber(String sn) {
+        selectedNumber = sn;
     }
 
     /**

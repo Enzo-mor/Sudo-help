@@ -18,13 +18,17 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     /**
+     * Constructeur de la classe Main.
+     */
+    public Main() {}
+
+    /**
      * Lance l'application en affichant le menu principal.
      * 
      * @param primaryStage Fenetre principale de l'application [Stage]
      */
     @Override
     public void start(Stage primaryStage) {
-        
         MenusController.launcher(primaryStage);
     }
 

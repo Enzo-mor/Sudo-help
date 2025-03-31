@@ -13,6 +13,11 @@ import javafx.stage.Stage;
 public class MenusController {
 
     /**
+     * Constructeur de la classe MenusController.
+     */
+    public MenusController() {}
+
+    /**
      * Lance l'interface de selection de profil.
      * 
      * @param primaryStage Fenetre principale de l'application [Stage]

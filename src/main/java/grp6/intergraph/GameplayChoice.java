@@ -14,12 +14,17 @@ import javafx.stage.Stage;
  * 
  * @author PERRON Nathan
  * @author RASSON Emma
- * @see ProfileButton
+ * @see LearningMenu
+ * @see MainMenu
  * @see StyledContent
  * @see SudokuMenu
- * @see MainMenu
  */
 public class GameplayChoice {
+
+    /**
+     * Constructeur de la classe GameplayChoice.
+     */
+    public GameplayChoice() {}
     
     /**
      * Affiche la fenetre de selection du mode de jeu.

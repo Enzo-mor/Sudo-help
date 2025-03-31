@@ -110,6 +110,11 @@ public class StyledContent {
         "-fx-cursor: hand;";                // Curseur de main
 
     /**
+     * Constructeur de la classe StyledContent
+     */
+    public StyledContent() {}
+
+    /**
      * Applique le style de base et l'effet de survol a un bouton.
      * 
      * @param button Bouton auquel appliquer le style [Button]
@@ -153,7 +158,8 @@ public class StyledContent {
 
     /**
      * Applique un style pour un bouton
-     * @param button
+     * 
+     * @param button Bouton auquel appliquer le style
      */
     public static void styleButton(Button button) {
         // Style par defaut : Blanc avec bordure grise
@@ -289,6 +295,7 @@ public class StyledContent {
 
     /**
      * Applique un style a la zone de saisie passe en parametre
+     * 
      * @param textField TextField a styliser [TextField]
      */
     public static void styleTextField(TextField textField) {
@@ -336,6 +343,7 @@ public class StyledContent {
 
     /**
      * Applique un style a une VBox
+     * 
      * @param contentBox VBox a styliser [VBox]
      */
     public static void applyContentBoxStyle(VBox contentBox) {
@@ -355,6 +363,7 @@ public class StyledContent {
 
     /**
      * Applique un style a une HBox
+     * 
      * @param contentBox HBox a styliser [HBox]
      */
     public static void applyContentBoxStyle(HBox contentBox) {
@@ -374,6 +383,7 @@ public class StyledContent {
 
     /**
      * Applique un style a un ScrollPane
+     * 
      * @param scrollPane ScrollPane a styliser [ScrollPane]
      */
     public static void applyScrollPaneStyle(ScrollPane scrollPane) {
@@ -391,6 +401,7 @@ public class StyledContent {
 
     /**
      * Applique un style pour la description des techniques present dans une VBox
+     * 
      * @param descriptionBox VBox a styliser [VBox]
      */
     public static void applyDescriptionBoxStyle(VBox descriptionBox) {

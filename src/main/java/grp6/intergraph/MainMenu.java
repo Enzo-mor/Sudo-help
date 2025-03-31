@@ -18,9 +18,10 @@ import javafx.util.Duration;
  * 
  * @author PERRON Nathan
  * @author RASSON Emma
+ * @see GameplayChoice
+ * @see LeaderboardMenu
  * @see Profile
  * @see Settings
- * @see GameplayChoice
  * @see StyledContent
  */
 public class MainMenu {
@@ -45,6 +46,11 @@ public class MainMenu {
      */
     private static RotateTransition rotateAnimation;
 
+    /**
+     * Constructeur de la classe MainMenu.
+     */
+    public MainMenu() {}
+
 
     /**
      * Affiche le menu principal de l'application.
@@ -61,7 +67,7 @@ public class MainMenu {
         layout.setAlignment(Pos.CENTER);
 
         // Ajout du logo
-        ImageView logo = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/logo_long.png")));
+        ImageView logo = new ImageView(new Image(MainMenu.class.getResourceAsStream("/logo_long.png")));
         logo.setFitWidth(400);
         logo.setFitHeight(100);
 
@@ -91,7 +97,7 @@ public class MainMenu {
 
         // Bouton des parametres avec icône animee
         Button settingsButton = new Button();
-        ImageView gearIcon = new ImageView(new Image(SudokuGame.class.getResourceAsStream("/gear.png")));
+        ImageView gearIcon = new ImageView(new Image(MainMenu.class.getResourceAsStream("/gear.png")));
         gearIcon.setFitWidth(30);
         gearIcon.setFitHeight(30);
         settingsButton.setGraphic(gearIcon);

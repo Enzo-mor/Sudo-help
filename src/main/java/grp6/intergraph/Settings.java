@@ -4,7 +4,6 @@ import java.sql.SQLException;
 
 import grp6.sudocore.DBManager;
 import javafx.animation.*;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
@@ -21,9 +20,13 @@ import javafx.util.Duration;
  * @author PERRON Nathan
  * @author RASSON Emma
  * @see DBManager
- * @see SudokuGrid
- * @see SudokuDisplay
+ * @see MainMenu
  * @see ProfileSelection
+ * @see StyledContent
+ * @see SudokuDisplay
+ * @see SudokuGame
+ * @see SudokuGrid
+ * @see ToggleSwitch
  */
 class Settings extends Stage {
 
@@ -168,7 +171,7 @@ class Settings extends Stage {
      * Retourne l'instance unique de Settings.
      * 
      * @param stage Fenetre principale [Stage]
-     * @param gearIcon Icône d'engrenage pour l'animation [ImageView]
+     * @param gearIcon Icone d'engrenage pour l'animation [ImageView]
      * @return Instance unique de Settings [Settings]
      */
     public static Settings getInstance(Stage stage, ImageView gearIcon){

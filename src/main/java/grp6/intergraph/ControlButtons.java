@@ -14,17 +14,20 @@ import javafx.util.Duration;
 
 /**
  * Classe ControlButtons
- * Cette classe represente un ensemble de boutons de contrôle pour interagir avec une grille de Sudoku.
+ * Cette classe represente un ensemble de boutons de controle pour interagir avec une grille de Sudoku.
  * Elle permet d'annuler, refaire, verifier et recommencer le jeu.
  * 
  * @author PERRON Nathan
  * @author RASSON Emma
- * @see SudokuGrid
+ * @see Action
  * @see Game
+ * @see Help
+ * @see NumberCellAction
  * @see StyledContent
  * @see SudokuDisplay
  * @see SudokuGame
- * @see Action  
+ * @see SudokuGrid
+ * @see SysHelp
  */
 public class ControlButtons {
 
@@ -150,7 +153,7 @@ public class ControlButtons {
     }
 
     /**
-     * Retourne l'ensemble des boutons de contrôle.
+     * Retourne l'ensemble des boutons de controle.
      * 
      * @return Conteneur HBox contenant les boutons [HBox]
      */
@@ -159,7 +162,7 @@ public class ControlButtons {
     }
 
     /*
-     * Retourne le bouton d'aide
+     * Retourne le bouton d'aide.
      * 
      * @return Le bouton d'aide [Button]
      */
@@ -241,7 +244,7 @@ public class ControlButtons {
      * Met en evidence les erreurs detectees dans la grille de Sudoku.
      */
     private void putErrorsRed() {
-        // etape 1 : Identifier les erreurs sans effectuer d'undo / redo
+        // Identifier les erreurs sans effectuer d'undo / redo
         List<int[]> eval = evaluateWithUndoRedo();
     
         // Si des erreurs ont ete detectees
@@ -330,7 +333,7 @@ public class ControlButtons {
         // Initialiser les listes pour stocker les coordonnees des erreurs
         List<int[]> errorCells = new ArrayList<>();
         
-        // etape 1 : Annuler les actions jusqu'a ce que `evaluate()` retourne une liste vide
+        // Annuler les actions jusqu'a ce que `evaluate()` retourne une liste vide
         List<int[]> currentEvaluation = sudokuGame.evaluate();
         int undoCount = 0;  // Compter le nombre d'actions undo
     
@@ -349,7 +352,7 @@ public class ControlButtons {
             currentEvaluation = sudokuGame.evaluate();
         }
     
-        // etape 2 : Refaites exactement `undoCount` actions annulees avec redoAction()
+        // Refaire exactement `undoCount` actions annulees avec redoAction()
         for (int i = 0; i < undoCount; i++) {
             redoAction();  // Reapplique chaque action annulee
         }
@@ -359,18 +362,18 @@ public class ControlButtons {
     }
 
     /**
-     * Retourne le numéro de l'aide actuel
+     * Retourne le numero de l'aide actuel
      * 
-     * @return le numéro de l'aide actuel [int]
+     * @return le numero de l'aide actuel [int]
      */
     public static int getCurrentHelp() {
         return currentHelp;
     }
 
     /**
-     * Modifie le numéro de l'aide actuel
+     * Modifie le numero de l'aide actuel
      * 
-     * @param currentHelp le nouveau numéro d'aide [int]
+     * @param currentHelp le nouveau numero d'aide [int]
      */
     public static void setCurrentHelp(int ch) {
         currentHelp = ch;

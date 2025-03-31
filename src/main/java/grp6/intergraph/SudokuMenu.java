@@ -22,20 +22,23 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-
 /**
  * Classe SudokuMenu
- * Cette classe represente le menu où l'utilisateur peut selectionner un Sudoku depuis la bibliotheque disponible.
+ * Cette classe represente le menu ou l'utilisateur peut selectionner un Sudoku depuis la bibliotheque disponible.
  * Elle gere l'affichage des Sudokus par page, ainsi que les interactions de navigation et les actions possibles sur
  * chaque grille de Sudoku (reprendre ou recommencer un jeu en cours).
  * 
  * @author PERRON Nathan
  * @author RASSON Emma
- * @see StyledContent
- * @see SudokuMenu
  * @see DBManager
+ * @see Game
+ * @see GameplayChoice
+ * @see GameState
+ * @see MainMenu
+ * @see StyledContent
  * @see Sudoku
  * @see SudokuGame
+ * @see SudokuMenu
  */
 public class SudokuMenu {
 
@@ -48,6 +51,11 @@ public class SudokuMenu {
      * Fenetre de confirmation pour reprendre ou recommencer une partie
      */
     private static VBox confirmationBox;
+
+    /**
+     * Constructeur de la classe SudokuMenu
+     */
+    public SudokuMenu() {}
 
     /**
      * Affiche la bibliotheque des grilles de Sudoku disponibles pour l'utilisateur.
@@ -239,7 +247,7 @@ public class SudokuMenu {
     /**
      * Affiche la liste des Sudokus par difficulte, avec la possibilite de naviguer entre les pages.
      * 
-     * @param sudokuContainer Le conteneur où les grilles seront affichees.
+     * @param sudokuContainer Le conteneur ou les grilles seront affichees.
      * @param stage La fenetre principale.
      * @param sudokus La liste des Sudokus a afficher.
      * @param difficultyLabel Le label de la difficulte actuelle.
@@ -278,7 +286,7 @@ public class SudokuMenu {
     }
 
     /**
-     * Formate le temps en secondes en une chaîne de caracteres au format HH:MM:SS.
+     * Formate le temps en secondes en une chaine de caracteres au format HH:MM:SS.
      * 
      * @param seconds Le temps en secondes a formater.
      * @return La chaîne de caracteres formatee sous la forme HH:MM:SS.

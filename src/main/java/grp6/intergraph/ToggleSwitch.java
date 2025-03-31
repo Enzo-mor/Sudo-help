@@ -42,7 +42,7 @@ public class ToggleSwitch extends HBox {
     /**
      * Constructeur de la classe ToggleSwitch.
      * 
-     * @param label Texte affiche a côte du switch [String]
+     * @param label Texte affiche a cote du switch [String]
      * @param initialState Etat initial du switch (true = active, false = desactive) [boolean]
      */
     public ToggleSwitch(String label, boolean initialState) {
