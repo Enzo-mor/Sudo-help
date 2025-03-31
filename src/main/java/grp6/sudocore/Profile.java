@@ -123,9 +123,9 @@ public class Profile {
                             "WHERE player = (SELECT id_profile FROM profile WHERE pseudo = ?) " +
                             "AND id_tech = (SELECT id_tech FROM tech WHERE name = ?);";
 
-        String insertQuery = "INSERT INTO possedeTech (player, id_tech, count) " +
+        String insertQuery = "INSERT INTO possedeTech (player, id_tech, count, already) " +
                             "VALUES ((SELECT id_profile FROM profile WHERE pseudo = ?), " +
-                            "(SELECT id_tech FROM tech WHERE name = ?), 1);";
+                            "(SELECT id_tech FROM tech WHERE name = ?), 1, true);";
 
         try(Connection connexion = DBManager.getConnection();
             PreparedStatement findStmt = connexion.prepareStatement(findQuery);
@@ -213,6 +213,4 @@ public class Profile {
 
         return false;
     }
-
-
 }

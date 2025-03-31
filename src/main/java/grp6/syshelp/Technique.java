@@ -42,13 +42,13 @@ public class Technique {
     /**
      * Constructeur
      * @param id
-     * @param name
+     * @param nameTech
      * @param shortDesc
      * @param longDesc
      */
-    public Technique(int id, String name, String shortDesc, String longDesc, String data, String finalCells, String annotFinal) { 
+    public Technique(int id, String nameTech, String shortDesc, String longDesc, String data, String finalCells, String annotFinal) { 
         this.id = id;
-        this.name = name;
+        this.name = nameTech;
         this.shortDesc = shortDesc;
         this.longDesc = longDesc;
         this.grid = new Grid(0, SudoTypes.Difficulty.EASY, data);
@@ -114,16 +114,21 @@ public class Technique {
             parts = newParts;
         }
         
-        for(int idx=0; idx<9; idx++) {
-
-            String part = parts[idx];
-            int i = idx / 9;
-            int j = idx % 9;
-            
-            // Ajouter chaque caractere de la sous-chaine comme un entiera la liste
-            for(char c: part.toCharArray()) {
-                if(c != '0')
-                    grid.getCell(i, j).addAnnotation(Character.getNumericValue(c));
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                int idx = i * 9 + j;
+                if (idx >= parts.length) continue;
+        
+                String part = parts[idx]; 
+                for (char c : part.toCharArray()) {
+                    if (Character.isDigit(c) && c != '0') {
+                        if (grid.getCell(i, j) == null) {
+                            System.err.println("Erreur: La cellule (" + i + "," + j + ") est null !");
+                            continue;
+                        }
+                        grid.getCell(i, j).addAnnotation(Character.getNumericValue(c));
+                    }
+                }
             }
         }
         return grid;

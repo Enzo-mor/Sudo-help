@@ -1,14 +1,16 @@
 package grp6.intergraph;
 import java.sql.SQLException;
-import java.util.List;
 
 import grp6.sudocore.*;
+import grp6.sudocore.SudoTypes.GameState;
 import grp6.syshelp.*;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
 import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -96,6 +98,16 @@ public class LearningGameDisplay {
      * Fenetre de technique pour le jeu 
      */
     private static VBox infoOverlay;
+
+    /**
+     * Fenetre de fin
+     */
+    private static VBox endOverlay;
+
+    /** 
+     * Timeline pour verifier l'etat du jeu a chaque seconde 
+     */
+    private static final Timeline gameStateChecker = new Timeline();
     
     /**
      * 
@@ -103,7 +115,7 @@ public class LearningGameDisplay {
      * @param selectedTechnique
      */
     public static void showLearningGame(Stage primaryStage, Technique selectedTechnique) {
-        
+
         actualTechnique = DBManager.getTech(selectedTechnique.getId());
 
         try {
@@ -232,14 +244,19 @@ public class LearningGameDisplay {
         quitConfirmation.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
         quitConfirmation.setVisible(false);
 
-        // Création du panneau de techniques (au départ caché)
+        // Création du panneau d'information (au départ caché)
         infoOverlay = new VBox();
         infoOverlay.setAlignment(Pos.CENTER);
         infoOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
         infoOverlay.setVisible(false);
 
+        endOverlay = new VBox();
+        endOverlay.setAlignment(Pos.CENTER);
+        endOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+        endOverlay.setVisible(false);
+
         // Empiler le panneau de techniques par-dessus le reste
-        StackPane rootStack = new StackPane(mainLayout, quitConfirmation, infoOverlay, techniqueIntro);
+        StackPane rootStack = new StackPane(mainLayout, quitConfirmation, infoOverlay, endOverlay, techniqueIntro);
         
         // --- BorderPane pour organiser la mise en page ---
         BorderPane root = new BorderPane();
@@ -252,6 +269,32 @@ public class LearningGameDisplay {
         primaryStage.setMinWidth(MIN_WIDTH);
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.show();
+
+        // --- Verification automatique de la fin du jeu
+        gameStateChecker.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event -> {
+            if (actualLearningGame.getGameState() == GameState.FINISHED) {
+                
+                gameStateChecker.stop();
+                if (actualLearningGame != null) {
+                    actualLearningGame.pauseGame();
+                }
+                
+                /* Methode d'effet */
+                SudokuDisplay.showEndGameEffect(SudokuGrid.getGridPane(), primaryStage);
+
+                if (actualLearningGame != null) {
+                    try {
+                        actualLearningGame.stopGame();
+                    } catch (SQLException | InterruptedException e1) {
+                        System.err.println("Error stopping the game: " + e1.getMessage());
+                    }
+                    actualLearningGame = null;
+                    MainMenu.getProfile().addTech(actualTechnique.getName());
+                }
+            }
+        }));
+        gameStateChecker.setCycleCount(Animation.INDEFINITE);
+        gameStateChecker.play();
     }
 
     /**
@@ -267,6 +310,8 @@ public class LearningGameDisplay {
         // Mise en pause du jeu si une partie est en cours
         if (actualLearningGame != null) {
             actualLearningGame.pauseGame();
+            gameStateChecker.stop();
+
         }
 
         // Conteneur principal
@@ -327,6 +372,8 @@ public class LearningGameDisplay {
                 actualLearningGame.resumeGame();
             }
             quitConfirmation.setVisible(false);
+            gameStateChecker.setCycleCount(Animation.INDEFINITE);
+            gameStateChecker.play();
         });
 
         // Conteneur pour les boutons
@@ -346,6 +393,7 @@ public class LearningGameDisplay {
     private static void showInfoOverlay() {
         if (actualLearningGame != null) {
             actualLearningGame.pauseGame();
+            gameStateChecker.stop();
             SudokuGame.stopTimer();
         }
     
@@ -377,6 +425,8 @@ public class LearningGameDisplay {
         actionButton.setOnAction(e -> {
             actualLearningGame.resumeGame();
             infoOverlay.setVisible(false);
+            gameStateChecker.setCycleCount(Animation.INDEFINITE);
+            gameStateChecker.play();
         });
     
         descriptionLabel.setText(actualTechnique.getLongDesc());
@@ -392,12 +442,13 @@ public class LearningGameDisplay {
     }
 
     /**
-     * 
+     * Methode pour afficher le panneau d'introduction à une technique
      */
     private static void showIntroLearning() {
 
         if (actualLearningGame != null) {
             actualLearningGame.pauseGame();
+            gameStateChecker.stop();
             SudokuGame.stopTimer();
         }
     
@@ -423,12 +474,13 @@ public class LearningGameDisplay {
         introScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         introScrollPane.setVisible(false);
     
-        // Bouton unique pour gérer "Fermer" et "Retour"
         Button learnButton = new Button("Apprendre");
         StyledContent.applyButtonStyle(learnButton);
         learnButton.setOnAction(e -> {
             actualLearningGame.resumeGame();
             techniqueIntro.setVisible(false);
+            gameStateChecker.setCycleCount(Animation.INDEFINITE);
+            gameStateChecker.play();
         });
     
         introLabel.setText(actualTechnique.getLongDesc());
@@ -520,6 +572,39 @@ public class LearningGameDisplay {
         content.setAlignment(Pos.CENTER);
 
         helpOverlay.getChildren().add(content);
+    }
+
+    /**
+     * Affiche une superposition avec un titre et un message, remplaçant une alerte.
+     * 
+     * @param primaryStage La scene principale a changer apres la fin du jeu [ Stage ]
+     */
+    public static void showEndOverlay(Stage primaryStage) {
+
+        // Conteneur principal
+        VBox contentBox = new VBox(20);
+        StyledContent.applyContentBoxStyle(contentBox);
+        contentBox.setMaxWidth(400);
+        contentBox.setAlignment(Pos.TOP_CENTER);
+        contentBox.setPadding(new Insets(10));
+
+        Label title = new Label("Apprentissage terminé");
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+
+        Label messageLabel = new Label("Félicitations ! Vous avez appris une nouvelle technique !");
+        messageLabel.setWrapText(true);
+        messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: black;");
+
+        Button closeButton = new Button("Quitter");
+        StyledContent.applyButtonStyle(closeButton);
+        closeButton.setOnAction(e -> {
+            endOverlay.setVisible(false);
+            LearningMenu.showLearningLibrary(primaryStage);
+        });
+
+        contentBox.getChildren().addAll(title, messageLabel, closeButton);
+        endOverlay.getChildren().setAll(contentBox);
+        endOverlay.setVisible(true);
     }
 
     /**
