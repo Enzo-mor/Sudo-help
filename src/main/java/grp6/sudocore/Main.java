@@ -8,9 +8,14 @@ import java.util.List;
  * Elle initialise la base de donnees et effectue quelques tests
  * sur la recuperation d'une grille et l'affichage des erreurs.
  * 
- * @author NGANGA YABIE Taïse de These 
+ * @author NGANGA YABIE Taise de These 
  */
 public class Main {
+
+    /**
+     * Constructeur de la classe Main
+     */
+    public Main(){}
 
     /**
      * Methode principale qui initialise la base de donnees et teste la recuperation d'une grille.

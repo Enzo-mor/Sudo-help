@@ -21,12 +21,11 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.nio.file.*;
 
-import grp6.sudocore.SudoTypes.Difficulty;
 
 /**
  * Classe: Permet l'initialisation et/ou la creation de la Base de donnees.
- * @author Kilian POUSSE 
- * @author NGANGA YABIE Taïse de These
+ * @author POUSSE Kilian
+ * @author NGANGA YABIE Taise de These
  * 
  * <p>Exemple d'utilisation :</p>
  * <pre>{@code
@@ -45,9 +44,26 @@ import grp6.sudocore.SudoTypes.Difficulty;
  */
 public final class DBManager {
 
-    private static final String DATABASE_PATH = System.getProperty("user.home") + "/db_sudohelp.db"; // Stocke dans le dossier Home
+    /**
+     * Constructeur de la classe DBManager
+     */
+    public DBManager(){}
+
+    /**
+     * Chemin d'accès à la base de données SQLite, stockée dans le dossier Home de l'utilisateur.
+     */
+    private static final String DATABASE_PATH = System.getProperty("user.home") + "/db_sudohelp.db";
+
+    /**
+     * URL de connexion JDBC pour accéder à la base de données SQLite.
+     */
     private static final String DATABASE_URL = "jdbc:sqlite:" + DATABASE_PATH;
-    private static Connection conn = null; // Connexion persistante
+
+    /**
+     * Connexion persistante à la base de données.
+     */
+    private static Connection conn = null;
+
 
     /**
      * Initialise la base de donnees et execute le script SQL si necessaire.
@@ -528,8 +544,8 @@ public final class DBManager {
             return false;
         }
     }
-    /*
-     * Sauvegarde un jeu dans la base de données. Si le jeu existe déjà, il est mis à jour.
+    /**
+     * Sauvegarde un jeu dans la base de donnees. Si le jeu existe deja, il est mis a jour.
      * 
      * @param game Le jeu a sauvegarder.
      * @throws SQLException Si une erreur survient lors de la connexion ou de l'execution de la requete.
@@ -762,6 +778,7 @@ public final class DBManager {
 
     /**
      * Recuperation des techniques
+     * @return Liste des techniques
      */
     public static List<Technique> getTechs() {
         List<Technique> res = new ArrayList<>();
@@ -799,7 +816,9 @@ public final class DBManager {
     }
 
     /**  
-     * Récupération d'une technique par son ID  
+     * Recuperation d'une technique par son ID 
+     * @param id identifiant de la technique 
+     * @return La technique (nom, descriptions, donnees) 
      */  
     public static Technique getTech(int id) {  
         Technique technique = null;  

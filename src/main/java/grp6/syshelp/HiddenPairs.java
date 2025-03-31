@@ -11,30 +11,33 @@ import grp6.sudocore.Grid;
 
 /**
  * Cette classe permet d'obtenir une aide sur la grille de sudoku en se basant de  la technique de HiddenPairs.
+ * @author NGANGA YABIE Taise de These
  * @see InterfaceTech
  * @see Help
  * @see Cell
  * @see Grid
- * @author Taïse De Thèse
- * @version 1.0 
- * @since 2025-03-25
  */
 public class HiddenPairs implements InterfaceTech{
 
+    /** 
+    *Constructeur de la classe HiddenPairs 
+    */
+    public HiddenPairs(){}
+
     /**
-     * cette methode permet de verifier si une cellule peut contiennir des  candidats caché.
-     * @param cell
-     * @return true si la cellule peut contienir des candidats caché, false sinon
+     * Verifie si une cellule peut contenir des candidats caches.
+     * @param cell cellule concernee
+     * @return true si la cellule peut contenir des candidats caches, false sinon
      */
     protected Boolean hasPossibleCellHidden(Cell cell){
         return cell.isEditable() && cell.getAnnotations().size() >= 2;
     }
 
     /**
-     * cette methode permet de retourner les candidats cachés dans une cellule.
-     * @param cell1 : la cellule à partir de laquelle on cherche les candidats cachés
-     * @param cell2 : la cellule à partir de laquelle on cherche les candidats cachés
-     * @return les candidats cachés si ils existent, null sinon
+     * Renvoie les candidats caches dans une cellule.
+     * @param cell1 : la cellule a partir de laquelle on cherche les candidats caches
+     * @param cell2 : la cellule a partir de laquelle on cherche les candidats caches
+     * @return les candidats caches si ils existent, null sinon
      */
     protected int[] getCandidate(Cell cell1,Cell cell2){
            List<Integer>candidates= cell1.getAnnotations();
@@ -45,18 +48,18 @@ public class HiddenPairs implements InterfaceTech{
            return null;
     }
     /**
-     * cette permet de retouner le nombre autorisé de candidats cachés qui doit être trouvé dans une cellule.
-     * @return
+     * Envoie le nombre autorise de candidats caches qui doit être trouve dans une cellule.
+     * @return le nombre de candidats caches
      */
     protected int getHiddenLength(){
         return 2;
     }
 
     /**
-     * cette methode permet de retourner la cellule cachée.
-     * @param cell : la cellule à partir de laquelle on cherche la cellule cachée
+     * Renvoie la cellule cachee.
+     * @param cell : la cellule a partir de laquelle on cherche la cellule cachee
      * @param otherCells : les autres cellules de la ligne, colonne ou sous grille de la cellule
-     * @return les cellules cachée si elles existent, null sinon
+     * @return les cellules cachees si elles existent, null sinon
      */
     private ArrayList<Cell> getHiddenCell(Cell cell,Cell[] otherCells) {
         ArrayList<Integer> candidates = new ArrayList<>();
@@ -97,8 +100,8 @@ public class HiddenPairs implements InterfaceTech{
     }
 
     /**
-     * cette methode permet de retourner le nom de la technique
-     * @return
+     * Retourne le nom de la technique
+     * @return nom de la technique
      */
     public String getName(){
         return "Paires cachées";
@@ -108,6 +111,8 @@ public class HiddenPairs implements InterfaceTech{
      * Classe implementant la technique des paires cachees dans une grille Sudoku.
      * Cette technique permet d'identifier des annotations cachees dans une ligne, 
      * une colonne ou une sous-grille.
+     * @param grille Grille sur laquelle chercher l'aide
+     * @return l'aide HiddenPairs
      */
     @Override
     public Help getHelp(Grid grille){

@@ -67,6 +67,11 @@ public class SudoLog {
      * Permet de savoir si il faut affichier les messages de debug 
      */
     private static boolean debug = false;
+
+    /**
+     * Constructeur de la classe SudoLog
+     */
+    public SudoLog(){}
     
     /**
      * Méthode privée pour écrire un log dans le terminal avec des informations détaillées sur l'appelant.

@@ -5,15 +5,31 @@ import java.util.List;
 import grp6.sudocore.*;
 
 /**
- * Cette classe représente la technique NakedSingleton.
+ * Cette classe represente la technique XWing.
  * 
- * Elle permet de trouver les singletons nus(1 chiffre apparaissant uniquement dans une case d'une unité(ligne colones carré)). 
- * @author POUSSE K
- * @see InterfaceTech Contenant les méthodes des techniques
+ * Elle permet de trouver les X-Wings, une technique qui consiste a trouver un chiffre apparaissant exactement deux fois dans deux lignes, 
+ * et qui partage les memes colonnes candidates.
+ * 
+ * @author POUSSE Kilian
+ * @see InterfaceTech Contenant les methodes des techniques
  * 
  */
 public class XWing implements InterfaceTech {
 
+    /**
+     * Constructeur de la classe XWing
+     */
+    public XWing(){}
+
+    /**
+     * Applique la technique X-Wing pour identifier une solution possible dans une grille de Sudoku. 
+     * La technique repose sur l'identification de paires de lignes avec des annotations identiques dans deux colonnes.
+     * Lorsqu'une telle paire est trouvée, les annotations dans les autres lignes et colonnes sont supprimées, 
+     * ce qui aide à réduire les choix possibles pour les cases restantes.
+     * 
+     * @param grille La grille de Sudoku sur laquelle la technique X-Wing sera appliquée
+     * @return Un objet Help contenant des informations sur la technique utilisée, ou null si aucun X-Wing n'a été trouvé
+    */
     @Override
     public Help getHelp(Grid grille) {
         Help aide = new Help(getClass().getSimpleName());
@@ -22,7 +38,7 @@ public class XWing implements InterfaceTech {
         for(int num = 1; num <= 9; num++) {
             List<Integer> lignesCandidates = new ArrayList<>();
 
-            // Étape 1: Trouver les lignes avec exactement 2 occurrences du candidat
+            // Etape 1: Identifier les lignes avec exactement 2 annotations pour le candidat
             for(int i = 0; i < 9; i++) {
                 Cell[] ligne = grille.getLine(i);
                 if(nbAnnotation(ligne, num) == 2) {
@@ -30,7 +46,7 @@ public class XWing implements InterfaceTech {
                 }
             }
 
-            // Étape 2: Rechercher une paire de lignes ayant les mêmes colonnes candidates
+            // Etape 2: Rechercher une paire de lignes avec les mêmes colonnes candidates
             for(int i = 0; i < lignesCandidates.size(); i++) {
                 int ligne1 = lignesCandidates.get(i);
                 List<Integer> colonnes1 = getColonnesAvecAnnotation(grille.getLine(ligne1), num);
@@ -47,18 +63,17 @@ public class XWing implements InterfaceTech {
                         aide.addColumn(colonnes1.get(1));
 
                         aide.setMessage(1, "Pense à utiliser les annotations. Une technique est faisable avec les " + num + ".");
-                        aide.setMessage(3, "Le chiffre " + num + " forme un X-Wing dans cette zone, fait attention à bien retirer tes annotations !");
+                        aide.setMessage(3, "Le chiffre " + num + " forme un X-Wing dans cette zone, fais attention à bien retirer tes annotations !");
 
                         removeAnnotations(grille, ligne1, ligne2, colonnes1, num);
 
                         for(Cell c: grille) {
                             if(c.OnlyOneAnnotation()) {
-                                aide.setMessage(3, "Le chiffre " + num + " forme un X-Wing dans cette zone, fait attention à bien retirer tes annotations ! Cela pourrait te mener à un coups avec un " + c.getLastAnnotation() + ".");
+                                aide.setMessage(3, "Le chiffre " + num + " forme un X-Wing dans cette zone, fais attention à bien retirer tes annotations ! Cela pourrait te mener à un coup avec un " + c.getLastAnnotation() + ".");
                             }
                         }
 
-
-                        return aide; 
+                        return aide;
                     }
                 }
             }
@@ -66,6 +81,13 @@ public class XWing implements InterfaceTech {
         return null; // Aucun X-Wing trouvé
     }
 
+    /**
+     * Compte le nombre d'annotations pour un chiffre donné dans une ligne spécifique de la grille.
+     * 
+     * @param data La ligne de la grille sur laquelle les annotations doivent être comptées
+     * @param num Le chiffre dont le nombre d'annotations est calculé
+     * @return Le nombre d'annotations pour le chiffre donné dans la ligne
+     */
     private int nbAnnotation(Cell[] data, int num) {
         int res = 0;
         for(Cell c : data) {
@@ -76,6 +98,13 @@ public class XWing implements InterfaceTech {
         return res;
     }
 
+    /**
+     * Identifie les colonnes contenant des annotations pour un chiffre donné dans une ligne de la grille.
+     * 
+     * @param ligne La ligne de la grille dans laquelle les colonnes avec annotations doivent être identifiées
+     * @param num Le chiffre dont les colonnes avec annotation sont recherchées
+     * @return Une liste contenant les indices des colonnes qui contiennent des annotations pour le chiffre donné
+     */
     private List<Integer> getColonnesAvecAnnotation(Cell[] ligne, int num) {
         List<Integer> colonnes = new ArrayList<>();
         for(int c = 0; c < 9; c++) {
@@ -86,6 +115,16 @@ public class XWing implements InterfaceTech {
         return colonnes;
     }
 
+    /**
+     * Supprime les annotations pour un chiffre donné dans les cases de la grille, 
+     * en fonction des lignes et colonnes identifiées par la technique X-Wing.
+     * 
+     * @param grille La grille sur laquelle les annotations doivent être retirées
+     * @param ligne1 L'indice de la première ligne candidate
+     * @param ligne2 L'indice de la deuxième ligne candidate
+     * @param colonnes La liste des colonnes candidates contenant les annotations à retirer
+     * @param num Le chiffre dont les annotations doivent être retirées
+     */
     private void removeAnnotations(Grid grille, int ligne1, int ligne2, List<Integer> colonnes, int num) {
         for(int i = 0; i < 9; i++) {
             if(i != ligne1 && i != ligne2) {
@@ -106,6 +145,12 @@ public class XWing implements InterfaceTech {
         }
     }
 
+    /**
+     * Teste la technique X-Wing sur une grille de Sudoku. Initialise une grille, applique des annotations automatiques 
+     * et vérifie si un X-Wing peut être détecté en utilisant cette technique.
+     * 
+     * @param args Les arguments de la ligne de commande
+     */
     public static void main(String[] args) {
         XWing tech = new XWing();
 
@@ -135,4 +180,5 @@ public class XWing implements InterfaceTech {
             System.out.println(help);
         }
     }
+
 }

@@ -14,9 +14,24 @@ import grp6.sudocore.Grid;
  * 
  */
 public class NakedTriples implements InterfaceTech{
-        Help aide = new Help(getClass().getSimpleName());
 
+    /**
+     * Constructeur de la classe NakedTriples
+     */
+    public NakedTriples(){}
+    /**
+     * Instance de la classe Help, initialisée avec le nom de la classe actuelle pour fournir une aide contextuelle.
+     * Cette instance sera utilisée pour générer des messages d'aide ou des annotations pour les techniques de résolution du Sudoku.
+     */
+    private Help aide = new Help(getClass().getSimpleName());
 
+    /**
+     * Remplit une liste d'entiers avec les indices où la valeur correspondante dans le tableau booléen est vraie.
+     * Chaque index dans le tableau booléen qui a une valeur "true" est ajouté à la liste avec un décalage de +1 (car les indices commencent à 0, mais les valeurs doivent commencer à 1).
+     * 
+     * @param tabBool Le tableau booléen contenant les valeurs à vérifier
+     * @return Une ArrayList contenant les indices +1 où la valeur dans tabBool est vraie
+     */
     private ArrayList<Integer> remplirList(boolean[] tabBool){
         ArrayList<Integer> tab = new ArrayList<Integer>();
         for(int i = 0; i<9;i++){
@@ -27,7 +42,7 @@ public class NakedTriples implements InterfaceTech{
         return tab;
     }   
   
-/**
+    /**
      * Permet de détecter les triples dans un carré
      * @param num
      * @param grille
@@ -100,12 +115,13 @@ public class NakedTriples implements InterfaceTech{
         return false;
     }
 
-/**
+    /**
      * Permet de détecter les triples dans une ligne ou une colonne
      * @param num
      * @param grille
      * @return boolean si on a trouvé une triples dans une ligne ou une colonne
-     */    private boolean detectTriple(int num,Grid grille){
+     */    
+    private boolean detectTriple(int num,Grid grille){
 
         //tableau des annotations des colonnes et des lignes
         ArrayList<List<Integer>> tabCol = new ArrayList<List<Integer>>();
@@ -188,7 +204,11 @@ public class NakedTriples implements InterfaceTech{
         return false;
     }
 
-
+    /**
+     * Analyse la grille pour determiner si un coup peut etre joue en utilisant la technique NakedTriples.
+     * @param grille La grille de Sudoku a analyser
+     * @return Une aide indiquant le coup possible, ou null si aucun coup n'est trouve
+     */
     @Override
     public Help getHelp(Grid grille) {
         for(int i = 0; i<9;i++){

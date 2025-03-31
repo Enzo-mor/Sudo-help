@@ -32,7 +32,9 @@ public final class FlexCell extends FixCell {
     /* ======= Méthodes d'instance ======= */
 
     /**
-     * Constructeur de la classe 'FlexCell'.
+     * Constructeur de la classe 'FlexCell'
+     * @param x Coordonnee de la ligne
+     * @param y Coordonnee de la colonne
      */
     public FlexCell(int x, int y) {
         super(0, x ,y);
@@ -44,7 +46,7 @@ public final class FlexCell extends FixCell {
 
     /**
      * Mettre un chiffre dans une cellule.
-     * @param number Chiffre à mettre dans la cellule [int]
+     * @param number Chiffre a mettre dans la cellule [int]
      */
     @Override
     public void setNumber(int number) {
@@ -99,8 +101,8 @@ public final class FlexCell extends FixCell {
     }
 
     /** 
-     * Récupérer les annotations de la cellule.
-     * @return Liste des annotations [List<Integer>]
+     * Recuperer les annotations de la cellule.
+     * @return Liste des annotations 
      */
     @Override
     public List<Integer> getAnnotations() {
@@ -114,8 +116,8 @@ public final class FlexCell extends FixCell {
     }
 
     /** 
-     * Récupérer la dernière annotation de la cellule.
-     * @return La dernière annotation [Integer]
+     * Recuperer la derniere annotation de la cellule.
+     * @return La derniere annotation [Integer]
      */
     @Override
     public Integer getLastAnnotation() {
@@ -126,7 +128,7 @@ public final class FlexCell extends FixCell {
     }
 
     /**
-     * Vérifier si la cellule possède des annotations.
+     * Verifier si la cellule possede des annotations.
      * @return true si la cellule a des annotations, sinon false [boolean]
      */
     @Override
@@ -143,8 +145,8 @@ public final class FlexCell extends FixCell {
     }
 
     /** 
-     * Transformer la cellule en chaîne de caractères.
-     * @return La chaîne de caractères correspondante [String]
+     * Transformer la cellule en chaine de caracteres.
+     * @return La chaine de caracteres correspondante [String]
      */
     @Override
     public String toString() {
@@ -157,7 +159,7 @@ public final class FlexCell extends FixCell {
 
     /**
      * Savoir si une cellule est modifiable.
-     * @return true si la cellule peut etre modifiée, sinon false [boolean]
+     * @return true si la cellule peut etre modifiee, sinon false [boolean]
      */
     @Override
     public boolean isEditable() {

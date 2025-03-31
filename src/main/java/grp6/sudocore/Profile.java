@@ -8,7 +8,7 @@ import java.sql.*;
 /**
  * Classe representant les profils.
  * @author POUSSE Kilian
- * @author NGANGA YABIE Taïse de These
+ * @author NGANGA YABIE Taise de These
  */
 public class Profile {
     

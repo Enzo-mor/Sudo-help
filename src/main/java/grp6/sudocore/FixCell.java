@@ -27,7 +27,9 @@ public class FixCell implements Cell {
     /**
      * Constructeur de la classe 'FixCell'.
      * 
-     * @param number Chiffre qui sera stocke dans la cellule [int]
+     * @param number Chiffre qui sera stocke dans la cellule 
+     * @param x coordonnee de la ligne
+     * @param y coordonnee de la colonne
      */
     public FixCell(int number, int x, int y) {
         this.position = new int[] {x, y};
@@ -79,7 +81,7 @@ public class FixCell implements Cell {
     /** 
      * Recuperer les annotations de la cellule.
      * 
-     * @return Liste des annotations [List<Integer>]
+     * @return Liste des annotations
      */
     @Override
     public List<Integer> getAnnotations() {

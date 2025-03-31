@@ -85,7 +85,7 @@ public class ToggleSwitch extends HBox {
     /**
      * Ajoute un ecouteur sur le changement d'etat du switch.
      * 
-     * @param listener Listener qui reagit au changement d'etat [ChangeListener<Boolean>]
+     * @param listener Listener qui reagit au changement d'etat
      */
     public void setOnToggleChanged(ChangeListener<Boolean> listener) {
         toggle.selectedProperty().addListener(listener);

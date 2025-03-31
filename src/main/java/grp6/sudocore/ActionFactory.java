@@ -8,13 +8,18 @@ import com.google.gson.JsonParseException;
 /**
  * Cette classe permet de stocker les classes qui implementent l'interface Action.
  * 
- * @author NGANGA YABIE Taïse de These
+ * @author NGANGA YABIE Taise de These
  * @see Action
  * @see AnnotationCellAction
  * @see NumberCellAction
  * @see AnnotationRemoveCellAction
  */
 public class ActionFactory {
+
+    /**
+     * Constructeur de la classe ActionFactory
+     */
+    public ActionFactory(){}
 
     /***
      * Variable contenant le type d'action.

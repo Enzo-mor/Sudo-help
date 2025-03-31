@@ -3,7 +3,7 @@ package grp6.sudocore;
  * Exception levee lorsqu'on tente d'assigner un chiffre a une cellule
  * non modifiable.
  * 
- * @author NGANGA YABIE Taïse de These
+ * @author NGANGA YABIE Taise de These
  * @see Cell Interface des cellules dans la grille.
  */
 public class NoPutNumberOnCellExeception extends RuntimeException {

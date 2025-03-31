@@ -11,6 +11,11 @@ import java.util.List;
 public final class SudokuSolver {
 
     /**
+     * Constructeur de la classe SudokuSolver
+     */
+    public SudokuSolver(){}
+
+    /**
      * Resout la liste des cellules donnee en parametre et renvoie 
      * la solution sans modifier l'originale.
      * @param cells Liste de cellules

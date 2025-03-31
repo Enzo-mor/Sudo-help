@@ -3,7 +3,9 @@ package grp6.syshelp;
 import grp6.sudocore.*;
 
 /**
- * Classe 
+ * Classe representant une technique de resolution pour le Sudoku.
+ * Chaque technique a un identifiant, un nom, une description courte et une description longue.
+ * Elle est associee a une grille de Sudoku initiale et une grille resolue.
  * 
  * @author POUSSE Kilian
  */
@@ -40,11 +42,15 @@ public class Technique {
     private final Grid grid;
 
     /**
-     * Constructeur
-     * @param id
-     * @param nameTech
-     * @param shortDesc
-     * @param longDesc
+     * Constructeur de la classe Technique.
+     * 
+     * @param id L'identifiant unique de la technique.
+     * @param nameTech Le nom de la technique.
+     * @param shortDesc La description courte de la technique.
+     * @param longDesc La description longue de la technique.
+     * @param data La representation de la grille de Sudoku de la technique.
+     * @param finalCells Les cellules resolues de la grille.
+     * @param annotFinal Les annotations finales des cellules de la grille.
      */
     public Technique(int id, String nameTech, String shortDesc, String longDesc, String data, String finalCells, String annotFinal) { 
         this.id = id;
@@ -56,7 +62,6 @@ public class Technique {
         AutoAnnotation.generate(grid);
     }
 
-    
     /**
      * Recupere le nom de la technique.
      * 
@@ -93,23 +98,34 @@ public class Technique {
         return longDesc;
     }
 
+    /**
+     * Recupere la grille exemple de la technique.
+     * 
+     * @return La grille exemple de la technique.
+     */
     public Grid getGrid() {
         return grid;
     }
 
+    /**
+     * Initialise la grille resolue de la technique.
+     * 
+     * @param solvedCells Les cellules resolues.
+     * @param solvedAnnot Les annotations resolues.
+     * @return La grille resolue.
+     */
     private static Grid initSolvedGrid(String solvedCells, String solvedAnnot) {
-
         Grid grid = new Grid(solvedCells);
         
         // Diviser la chaine en sous-chaines basees sur ':'
         String[] parts = solvedAnnot.split(":");
 
-        // Vérifier si le nombre de parties est inférieur à 9, et compléter avec des chaînes vides si nécessaire
+        // Verifier si le nombre de parties est inferieur a 9, et completer avec des chaines vides si necessaire
         if (parts.length < 9) {
             String[] newParts = new String[9];
             System.arraycopy(parts, 0, newParts, 0, parts.length);
             for (int i = parts.length; i < 9; i++) {
-                newParts[i] = ""; // Remplir les cases manquantes avec des chaînes vides
+                newParts[i] = ""; // Remplir les cases manquantes avec des chaines vides
             }
             parts = newParts;
         }
@@ -134,6 +150,11 @@ public class Technique {
         return grid;
     }
 
+    /**
+     * Recupere la grille resolue de la technique.
+     * 
+     * @return La grille resolue de la technique.
+     */
     public Grid getSolvedGrid() {
         return solvedGrid;
     }

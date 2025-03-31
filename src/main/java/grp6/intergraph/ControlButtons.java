@@ -161,7 +161,7 @@ public class ControlButtons {
         return controlButtons;
     }
 
-    /*
+    /**
      * Retourne le bouton d'aide.
      * 
      * @return Le bouton d'aide [Button]
@@ -373,7 +373,7 @@ public class ControlButtons {
     /**
      * Modifie le numero de l'aide actuel
      * 
-     * @param currentHelp le nouveau numero d'aide [int]
+     * @param ch le nouveau numero d'aide 
      */
     public static void setCurrentHelp(int ch) {
         currentHelp = ch;

@@ -17,7 +17,7 @@ import grp6.sudocore.SudoTypes.ActionType;
  * Cette classe gere les actions d'annotation dans un jeu de sudoku.
  * Elle permet d'ajouter une annotation a une cellule flexible.
  * 
- * @author NGANGA YABIE Taïse de These
+ * @author NGANGA YABIE Taise de These
  * @see Game
  * @see ActionManagerApply
  * @see Action
@@ -26,7 +26,6 @@ import grp6.sudocore.SudoTypes.ActionType;
  * @see AnnotationRemoveCellAction
  * @see NumberCellAction
  * @see ActionFactory
- * @see ActionManager
  * @see AnnotationCellAction
  * @see AnnotationRemoveCellAction
  * @see NumberCellAction

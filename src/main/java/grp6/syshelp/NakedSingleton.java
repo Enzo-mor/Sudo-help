@@ -6,12 +6,22 @@ import grp6.sudocore.Grid;
  * Cette classe représente la technique NakedSingleton.
  * 
  * Elle permet de trouver les singletons nus(1 chiffre apparaissant uniquement dans une case d'une unité(ligne colones carré)). 
- * @author 
+ * @author MOREAU Enzo
  * @see InterfaceTech Contenant les méthodes des techniques
  * 
  */
 public class NakedSingleton implements InterfaceTech {
 
+    /**
+     * Constructeur de la classe NakedSingleton
+     */
+    public NakedSingleton(){}
+
+    /**
+     * Analyse la grille pour determiner si un coup peut etre joue en utilisant la technique NakedSingleton.
+     * @param grille La grille de Sudoku a analyser
+     * @return Une aide indiquant le coup possible, ou null si aucun coup n'est trouve
+     */
     @Override
     public Help getHelp(Grid grille) {
         Help aide = new Help(getClass().getSimpleName());
@@ -52,7 +62,7 @@ public class NakedSingleton implements InterfaceTech {
     }
 
     /**
-     * Permet de récupérer l'annotation de la cellule
+     * Permet de recuperer l'annotation de la cellule
      * @param c
      * @return
      */

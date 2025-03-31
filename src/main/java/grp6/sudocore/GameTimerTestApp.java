@@ -9,9 +9,9 @@ import javafx.stage.Stage;
 
 /**
  * Classe de test pour le timer du jeu.
- * Permet d'afficher le temps écoulé pendant une partie et de tester les fonctionnalités de minuterie du jeu.
+ * Permet d'afficher le temps ecoule pendant une partie et de tester les fonctionnalites de minuterie du jeu.
  * 
- * @author NGANGA YABIE Taïse de These
+ * @author NGANGA YABIE Taise de These
  * @see Game
  * @see GameTimeListener
  * @see DBManager
@@ -25,14 +25,19 @@ public class GameTimerTestApp extends Application {
     private Game game;
 
     /**
-     * Label affichant le temps écoulé dans l'interface utilisateur.
+     * Label affichant le temps écoule dans l'interface utilisateur.
      */
     private Label timerLabel;
 
     /**
-     * Lancement du jeu et affichage du temps écoulé dans une fenetre JavaFX.
+     * Constructeur de la classe GameTimerTestApp
+     */
+    public GameTimerTestApp(){}
+
+    /**
+     * Lancement du jeu et affichage du temps écoule dans une fenetre JavaFX.
      * 
-     * @param args Arguments non utilisés
+     * @param primaryStage stage pour afficher les informations
      */
     @Override
     public void start(Stage primaryStage) {
@@ -65,7 +70,7 @@ public class GameTimerTestApp extends Application {
     }
 
     /**
-     * Point d'entrée principal de l'application.
+     * Point d'entree principal de l'application.
      * 
      * @param args Arguments non utilisés
      */

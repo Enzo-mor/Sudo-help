@@ -40,7 +40,7 @@ public class LearningGame {
      * Constructeur de la classe LearningGame.
      * 
      * @param profile Profil du joueur
-     * @param tech Technique utilisee pour resoudre la grille
+     * @param techni Technique utilisee pour resoudre la grille
      * @throws SQLException En cas d'erreur lors de la recuperation de la grille solution
      */
     public LearningGame(Profile profile, Technique techni) throws  SQLException {
@@ -51,7 +51,7 @@ public class LearningGame {
 
     /**
      * Retourne le profil du joueur actuel.
-     * @return
+     * @return profile du joueur actuel
      */
     public Profile getProfile() {
         return game.getProfile();
@@ -87,8 +87,6 @@ public class LearningGame {
 
     /**
      * Demarre le jeu
-     * 
-     * @throws Exception Si une erreur se produit
      */
     public void startGame() {
         game.startGame();
@@ -151,7 +149,7 @@ public class LearningGame {
 
     /**
      * Retourne une copie de la grille du jeu.
-     * Cela permet d'acceder & la grille du jeu sans alterrer la partie en cours.
+     * Cela permet d'acceder a la grille du jeu sans alterrer la partie en cours.
      * 
      * @return Une copie de la grille du jeu.
      */
@@ -159,6 +157,10 @@ public class LearningGame {
         return game.getGrid();
     }
 
+    /**
+     * Renvoie le jeu actuel
+     * @return le jeu actuel
+     */
     public Game getGame() {
         return game;
     }
@@ -167,7 +169,7 @@ public class LearningGame {
      * Execute une action dans le jeu. L'action est unique pour chaque instance de jeu.
      * L'action sera automatiquement sauvegardee et appliquee.
      *
-     * @param e L'action a effectuer dans le jeu.
+     * @param action L'action a effectuer dans le jeu.
      * @return L'instance du jeu apres modification.
      * @throws IllegalStateException Si le jeu est en pause.
      * @throws IllegalArgumentException Si l'action n'est pas compatible avec le jeu.
@@ -204,7 +206,7 @@ public class LearningGame {
     }
 
     /**
-     * Cette methode permet de retablir les actions annulees.
+     * Retablit les actions annulees.
      * Si l'action suivante est une `ActionCell`, elle seule est refaite.
      * Sinon, toutes les actions suivantes sont refaites jusqu'a la premiere `ActionCell` trouvee.
      *
@@ -215,7 +217,7 @@ public class LearningGame {
     }
 
     /**
-     * cette methode permet de retourner l'historique des actions effectuees
+     * Renvoie l'historique des actions effectuees
      * 
      * @return une chaine representant l'historique des actions effectuees
      */
@@ -224,15 +226,15 @@ public class LearningGame {
     }
 
     /**
-     * cette methode permet d'ajouter une annotation  & une case du jeu 
+     * Ajoute une annotation a une case du jeu 
      * 
      * @param x represente la position x de la case dans la grille
      * @param y represente la position Y de la case dans la grille
-     * @param value represente l'annoatation & ajouter
+     * @param value represente l'annotation a ajouter
      * 
-     * @return la meme instance du jeu  apres appliquation de  la modification
+     * @return la meme instance du jeu apres application de la modification
      * 
-     * @throws IllegalStateException leve une exception si le jeu se trouve dans un eta incompatible & cette methode
+     * @throws IllegalStateException leve une exception si le jeu se trouve dans un etat incompatible a cette methode
      * @throws NoEditableCellExeception leve une exception si la cellule n'est pas editable
      */
     public Game addAnnotation(int x,int y, int value) throws IllegalStateException, NoEditableCellExeception {
@@ -240,15 +242,13 @@ public class LearningGame {
     }
 
     /**
-    * methode permettant de supprimer un nombre dans une cellule
-
+    * Supprime un nombre dans une cellule
     * @param x represente la position x de la case dans la grille
     * @param y represente la position Y de la case dans la grille
-    * @param value represente l'annotation & ajouter
     * 
-    * @return la meme instance du jeu  apres appliquation de  la modification
+    * @return la meme instance du jeu  apres application de  la modification
     * 
-    * @throws IllegalStateException leve une exception si le jeu se trouve dans un eta incompatible & cette methode
+    * @throws IllegalStateException leve une exception si le jeu se trouve dans un etat incompatible a cette methode
     * @throws NoEditableCellExeception leve une exception si la cellule n'est pas editable
     */
     public Game removeNumber(int x, int y) throws IllegalStateException, NoEditableCellExeception {
@@ -256,14 +256,14 @@ public class LearningGame {
     }
 
     /**
-     * cette methode permet de supprimer une annotation  & une case du jeu
+     * Supprime une annotation d'une case du jeu
      * 
      * @param x represente la position x de la case dans la grille
      * @param y represente la position Y de la case dans la grille
-     * @param value represente l'annoatation & supprimer
-     * @return la meme instance du jeu  apres appliquation de  la modification
-     * @throws IllegalStateException
-     * @throws NoEditableCellExeception
+     * @param value represente l'annotation a supprimer
+     * @return la meme instance du jeu apres application de la modification
+     * @throws IllegalStateException exception
+     * @throws NoEditableCellExeception exception
      */
     public Game removeAnnotation(int x, int y, int value) throws IllegalStateException, NoEditableCellExeception {
         return game.removeAnnotation(x, y, value);
@@ -386,6 +386,8 @@ public class LearningGame {
                 Set<Integer> correctAnnotations = new HashSet<>(solvedGrid.getCell(i, j).getAnnotations());
 
                 if (!currentAnnotations.equals(correctAnnotations)) {
+                    System.out.println("grid : " + currentAnnotations);
+                    System.out.println("solved : " + correctAnnotations);
                     return false;
                 }
             }

@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
  * Les cellules ne pourront etre modifiees que par le biais d'une action dans un Jeu.
  * 
  * @author POUSSE Kilian
- * @author NGANGA YABIE Taïse de These
+ * @author NGANGA YABIE Taise de These
  * 
  * @see Cell   Interface des cellules contenant toutes les methodes en ecriture.
  * @see Action Interface permettant de modifier les cellules d'un jeu.
@@ -57,7 +57,16 @@ public final class Grid implements Iterable<Cell> {
     /** 
      * Type de forme qu'on peut avoir dans un grille 
      */
-    public static enum Shape {LINE, COLUMN, SQUARE;}    
+    public static enum Shape {
+        /** Représente une ligne dans la grille. */
+        LINE,
+
+        /** Représente une colonne dans la grille. */
+        COLUMN,
+
+        /** Représente un carré 3x3 dans la grille. */
+        SQUARE;
+    }    
 
     /* ======= Methodes de Classe ======= */
 
@@ -115,6 +124,7 @@ public final class Grid implements Iterable<Cell> {
 
     /**
      * Constructeur de la classe 'Grid' pour les tests.
+     * @param data grille
      */
     public Grid(int[] data) {
         SudoLog.debug("Creation d'une grille");
@@ -364,9 +374,9 @@ public final class Grid implements Iterable<Cell> {
     }
 
     /**
-     * Transforme les cellules en chaîne de caractères.
-     * @param grid Liste de cellules représentant une grille
-     * @return La chaîne de caractères correspondante
+     * Transforme les cellules en chaine de caractères.
+     * @param grid Liste de cellules representant une grille
+     * @return La chaine de caractères correspondante
      */
     public static String toString(List<Cell> grid) {
         String result = "";
@@ -396,8 +406,8 @@ public final class Grid implements Iterable<Cell> {
     }
 
     /** 
-     * Transforme la grille en chaîne de caractères.
-     * @return La chaîne de caractères correspondante [String]
+     * Transforme la grille en chaine de caracteres.
+     * @return La chaine de caracteres correspondante [String]
      */
     @Override
     public String toString() {
@@ -413,24 +423,24 @@ public final class Grid implements Iterable<Cell> {
     }
 
     /**
-     * Getter: Difficulté de la grille.
-     * @return Difficulté de la grille [SudoTypes.Difficulty]
+     * Getter: Difficulte de la grille.
+     * @return Difficulte de la grille [SudoTypes.Difficulty]
      */
     public SudoTypes.Difficulty getDifficulty() {
         return difficulty;
     }
 
     /**
-     * Getter: Liste des cellules correspondant à la grille de solution.
-     * @return Liste de cellules (résolue) [List<Cell>]
+     * Getter: Liste des cellules correspondant a la grille de solution.
+     * @return Liste de cellules (résolue)
      */
     public List<Cell> getSolvedCells() {
         return solvedCells;
     }
 
     /**
-     * Vérifie si la grille est entièrement remplie et correctement résolue.
-     * @return true si la grille est totalement identique à solvedCells, false sinon.
+     * Verifie si la grille est entierement remplie et correctement résolue.
+     * @return true si la grille est totalement identique a solvedCells, false sinon.
      */
     public boolean isFinished() {
         for (int i = 0; i < Grid.NB_NUM; i++) {
@@ -445,8 +455,8 @@ public final class Grid implements Iterable<Cell> {
     }
 
     /**
-     * Évalue une grille (vérifier si elle est correcte).
-     * @return Liste des coordonnées des chiffres mal placés [List<int[]>]
+     * Evalue une grille (verifier si elle est correcte).
+     * @return Liste des coordonnees des chiffres mal places
      */
     public List<int[]> evaluate() {
         List<int[]> res = new ArrayList<>();
@@ -464,8 +474,8 @@ public final class Grid implements Iterable<Cell> {
     }
 
     /**
-     * Évalue une grille (vérifier combien de chiffres sont correctement placés).
-     * @return Nombre de chiffres bien placés dans la grille [int]
+     * Evalue une grille (verifier combien de chiffres sont correctement places).
+     * @return Nombre de chiffres bien places dans la grille [int]
      */
     public int nbCorrectCells() {
         int res = 0;
@@ -482,7 +492,7 @@ public final class Grid implements Iterable<Cell> {
     }
 
     /**
-     * Vérifie si une cellule donnée (r, c) est correcte.
+     * Verifie si une cellule donnee (r, c) est correcte.
      * @param r Indice de la ligne [int]
      * @param c Indice de la colonne [int]
      * @return true si la cellule est correcte, false sinon.
@@ -543,7 +553,7 @@ public final class Grid implements Iterable<Cell> {
      *
      * @param shape La forme (ligne, colonne ou carré) a analyser.
      * @param num   L'index de la ligne, colonne ou sous-grille.
-     * @return Le nombre de cellules non vides dans la forme spécifiée.
+     * @return Le nombre de cellules non vides dans la forme specifiee.
      */
     public int numberOfFullCell(Shape shape,int num){
         int res = 0;

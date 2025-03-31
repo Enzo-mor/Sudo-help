@@ -6,10 +6,10 @@ import java.util.List;
 import grp6.sudocore.Grid;
 
 /**
- * Cette classe représente une aide qui sera apportée par le Système d'aide.
- * Elle contient des messages d'aide et les cellules concernées par cette aide.
+ * Cette classe represente une aide qui sera apportee par le Systeme d'aide.
+ * Elle contient des messages d'aide et les cellules concernees par cette aide.
  * 
- * @author Kilian POUSSE
+ * @author POUSSE Kilian
  * @see Grid
  */
 public class Help {
@@ -24,7 +24,7 @@ public class Help {
     /* ===== Variables d'instances ===== */
 
     /** 
-     * Liste des positions des cellules à mettre en valeur 
+     * Liste des positions des cellules a mettre en valeur 
      */
     private final boolean[][] grid;
 
@@ -41,11 +41,11 @@ public class Help {
     /* ====== Constructeurs ====== */
 
     /**
-     * Constructeur d'une aide associée à une technique spécifique.
-     * @param techName Nom de la technique utilisée pour générer cette aide.
+     * Constructeur d'une aide associee à une technique specifique.
+     * @param techName Nom de la technique utilisee pour generer cette aide.
      */
     public Help(String techName) {
-        // Initialisation des messages avec des valeurs par défaut
+        // Initialisation des messages avec des valeurs par defaut
         messages = new String[NB_LVL];
         for(int i = 0; i < NB_LVL; i++) {
             messages[i] = "Message d'aide de niveau " + (i + 1) + " non défini.";
@@ -60,16 +60,16 @@ public class Help {
     /* ===== Getters & Setters ===== */
 
     /**
-     * Récupère les positions des cellules mises en valeur.
-     * @return Matrice booléenne indiquant les cellules concernées.
+     * Recupere les positions des cellules mises en valeur.
+     * @return Matrice booleenne indiquant les cellules concernees.
      */
     public boolean[][] getPositions() {
         return grid;
     }
 
     /**
-     * Retourne la liste des cellules à afficher sous forme de liste de points.
-     * @return Liste des cellules concernées.
+     * Retourne la liste des cellules a afficher sous forme de liste de points.
+     * @return Liste des cellules concernees.
      */
     public List<int[]> getDisplay() {
         List<int[]> res = new ArrayList<>();
@@ -82,7 +82,7 @@ public class Help {
     }
 
     /**
-     * Définit un message d'aide à un niveau spécifique.
+     * Definit un message d'aide a un niveau specifique.
      * @param level Niveau d'aide (1, 2 ou 3).
      * @param message Texte du message d'aide.
      */
@@ -95,7 +95,7 @@ public class Help {
     }
 
     /**
-     * Récupère le message d'aide d'un niveau donné.
+     * Recupere le message d'aide d'un niveau donne.
      * @param level Niveau d'aide (1, 2 ou 3).
      * @return Message correspondant au niveau d'aide.
      */
@@ -115,12 +115,12 @@ public class Help {
         return name;
     }
 
-    /* ======= Méthodes d'affichage ======= */
+    /* ======= Methodes d'affichage ======= */
 
     /**
-     * Ajoute une cellule à l'affichage de l'aide.
-     * @param x Coordonnée ligne.
-     * @param y Coordonnée colonne.
+     * Ajoute une cellule a l'affichage de l'aide.
+     * @param x Coordonnee ligne.
+     * @param y Coordonnee colonne.
      */
     public void addPos(int x, int y) {
         if(x >= 0 && x < Grid.NB_NUM && y >= 0 && y < Grid.NB_NUM) {
@@ -129,7 +129,7 @@ public class Help {
     }
 
     /**
-     * Ajoute une ligne entière à l'affichage.
+     * Ajoute une ligne entiere a l'affichage.
      * @param i Indice de la ligne.
      */
     public void addLine(int i) {
@@ -139,7 +139,7 @@ public class Help {
     }
 
     /**
-     * Ajoute une colonne entière à l'affichage.
+     * Ajoute une colonne entiere a l'affichage.
      * @param i Indice de la colonne.
      */
     public void addColumn(int i) {
@@ -149,7 +149,7 @@ public class Help {
     }
 
     /**
-     * Ajoute une sous-grille à l'affichage.
+     * Ajoute une sous-grille a l'affichage.
      * @param i Indice ligne de la sous-grille (0 à 2).
      * @param j Indice colonne de la sous-grille (0 à 2).
      */
@@ -167,13 +167,16 @@ public class Help {
     }
 
     /**
-     * Ajoute une sous-grille à l'affichage via son index (0 à 8).
+     * Ajoute une sous-grille a l'affichage via son index (0 à 8).
      * @param i Indice de la sous-grille.
      */
     public void addSquare(int i) {
         addSquare(i / 3, i % 3);
     }
 
+    /**
+     * Remet les positions a zero
+     */
     public void resetPositions(){
         for (int i = 0;i<9;i++){
             for(int y = 0;y<9;y++){

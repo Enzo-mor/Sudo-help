@@ -4,10 +4,15 @@ package grp6.sudocore;
  * Cette classe permet de definir les types de donnees utilises dans le jeu de sudoku.
  * Elle permet de definir les types d'actions, les types de cellules, les niveaux de difficulte, les etats du jeu, etc.
  * 
- * @author NGANGA YABIE Taïse de These
+ * @author NGANGA YABIE Taise de These
  * @author POUSSE Kilian
  */
 public final class SudoTypes {
+
+    /**
+     * Constructeur de la classe SudoTypes
+     */
+    public SudoTypes(){}
 
     /**
      * Enum pour les types d'actions

@@ -11,8 +11,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import grp6.intergraph.ControlButtons;
-import grp6.intergraph.SudokuDisplay;
-import grp6.intergraph.SudokuGame;
 import grp6.intergraph.SudokuGrid;
 import grp6.sudocore.SudoTypes.GameState;
 import javafx.application.Platform;
@@ -27,7 +25,7 @@ import javafx.application.Platform;
  * une partie, il faut appeler pauseGame. Pour reprendre une partie, il faut appeler 
  * resumeGame, et pour terminer une partie, il faut appeler stopGame.
  * 
- * @author NGANGA YABIE Taïse de These
+ * @author NGANGA YABIE Taise de These
  * 
  * @see Grid
  * @see Profile
@@ -123,7 +121,7 @@ public class Game {
      * Constructeur de la classe Game
      * @param grid Grille du jeu
      * @param profile Profil du joueur
-     * @throws SQLException Si une erreur se produit lors de la connexion à la base de donnees
+     * @throws SQLException Si une erreur se produit lors de la connexion a la base de donnees
      */
     public Game(Grid grid, Profile profile) throws SQLException {
         this.id = DBManager.getLastIdGame() + 1;
@@ -252,7 +250,7 @@ public class Game {
   
     /**
      * Demarre le jeu
-     * @throws Exception Si une erreur se produit
+     * @throws IllegalStateException Si une erreur se produit
      */
     public void startGame() {
         try {
@@ -416,7 +414,7 @@ public class Game {
      * Execute une action dans le jeu. L'action est unique pour chaque instance de jeu.
      * L'action sera automatiquement sauvegardee et appliquee.
      *
-     * @param e L'action a effectuer dans le jeu.
+     * @param action L'action a effectuer dans le jeu.
      * @return L'instance du jeu apres modification.
      * @throws IllegalStateException Si le jeu est en pause.
      * @throws IllegalArgumentException Si l'action n'est pas compatible avec le jeu.
@@ -522,7 +520,7 @@ public class Game {
     }
 
     /**
-     * Cette methode permet de retablir les actions annulees.
+     * Retabli les actions annulees.
      * Si l'action suivante est une `ActionCell`, elle seule est refaite.
      * Sinon, toutes les actions suivantes sont refaites jusqu'a la premiere `ActionCell` trouvee.
      *
@@ -561,15 +559,15 @@ public class Game {
         }
     }
 
-     /**
-      * Methode permettant de sauvegarder le jeu
-      *
-      * @throws SQLException leve une exception en cas d'erreur de connection à la base de donnée
-      */
-     private void saveGame() throws SQLException{
+    /**
+    * Sauvegarde le jeu
+    *
+    * @throws SQLException leve une exception en cas d'erreur de connection a la base de donnee
+    */
+    private void saveGame() throws SQLException{
 
-        DBManager.saveGame(this);
-     }
+    DBManager.saveGame(this);
+    }
 
    /**
     * Renvoie le score de la partie.
@@ -581,25 +579,24 @@ public class Game {
     }
 
     /**
-     * cette methode permet de retourner l'historique des actions effectuées
+     * Renvoie l'historique des actions effectuees
      * 
-     * @return une chaine representant l'historique des actions effectuées
+     * @return une chaine representant l'historique des actions effectuees
      */
     public String getHistoActions() {
         return histoActions;        
     }
 
     /**
-     * cette methode permet d'ajouter une valeur à une case du jeu 
+     * Ajoute une valeur a une case du jeu 
      * 
      * @param x represente la position x de la case dans la grille
      * @param y represente la position Y de la case dans la grille
-     * @param value represente la valeur à ajouter
-     * @return la même instance du jeux  après appliquation de  la modification
-     * @throws IllegalStateException leve une exception si le jeu se trouve dans un eta incompatible à cette methode
+     * @param value represente la valeur a ajouter
+     * @throws IllegalStateException leve une exception si le jeu se trouve dans un etat incompatible a cette methode
      * @throws NoEditableCellExeception leve une exception si la cellule n'est pas editable
      *
-     * @return la même instance du jeu  après appliquation de  la modification
+     * @return la meme instance du jeu  apres application de la modification
      */
     public Game addNumber(int x,int y,int value) throws IllegalStateException,NoEditableCellExeception{
 
@@ -619,15 +616,15 @@ public class Game {
        
 
      /**
-     *  cette methode permet d'ajouter une annotation  à une case du jeu 
+     * Ajoute une annotation a une case du jeu 
      * 
      * @param x represente la position x de la case dans la grille
      * @param y represente la position Y de la case dans la grille
      * @param value represente l'annoatation à ajouter
      * 
-     * @return la même instance du jeu  après appliquation de  la modification
+     * @return la meme instance du jeu  apres application de  la modification
      * 
-     * @throws IllegalStateException leve une exception si le jeu se trouve dans un eta incompatible à cette methode
+     * @throws IllegalStateException leve une exception si le jeu se trouve dans un etat incompatible a cette methode
      * @throws NoEditableCellExeception leve une exception si la cellule n'est pas editable
      */
     public  Game addAnnotation(int x,int y, int value) throws IllegalStateException,NoEditableCellExeception{
@@ -649,14 +646,13 @@ public class Game {
     }
 
     /**
-     * methode permettant de supprimer un nombre dans une cellule
+     * Supprime un nombre dans une cellule
      * @param x represente la position x de la case dans la grille
      * @param y represente la position Y de la case dans la grille
-     * @param value represente l'annotation à ajouter
      * 
-     * @return la même instance du jeu  après appliquation de  la modification
+     * @return la meme instance du jeu apres application de la modification
      * 
-     * @throws IllegalStateException leve une exception si le jeu se trouve dans un eta incompatible à cette methode
+     * @throws IllegalStateException leve une exception si le jeu se trouve dans un etat incompatible a cette methode
      * @throws NoEditableCellExeception leve une exception si la cellule n'est pas editable
      */
     public Game removeNumber(int x, int y) throws IllegalStateException,NoEditableCellExeception{
@@ -669,14 +665,14 @@ public class Game {
           }
     }
     /**
-     * cette methode permet de supprimer une annotation  à une case du jeu
+     * Supprimer une annotation a une case du jeu
      * 
      * @param x represente la position x de la case dans la grille
      * @param y represente la position Y de la case dans la grille
-     * @param value represente l'annoatation à supprimer
-     * @return la même instance du jeu  après appliquation de  la modification
-     * @throws IllegalStateException
-     * @throws NoEditableCellExeception
+     * @param value represente l'annotation a supprimer
+     * @return la meme instance du jeu après application de la modification
+     * @throws IllegalStateException exception
+     * @throws NoEditableCellExeception exception
      */
     public Game removeAnnotation(int x, int y, int value) throws IllegalStateException,NoEditableCellExeception{
         try {

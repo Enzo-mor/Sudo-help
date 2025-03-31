@@ -2,7 +2,7 @@ package grp6.syshelp;
 
 /**
  * Classe qui represente le faite de ne pas avoir d'aide
- * @author Kilian POUSSE
+ * @author POUSSE Kilian
  * @see Help
  * @see SysHelp
  */

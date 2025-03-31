@@ -7,14 +7,18 @@ import java.util.List;
 import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
 /***
- * Cette classe permet d'obtenir une aide sur la grille de sudoku en se basant de  la technique de PointingPairs.
- * @author Taïse De Thèse
- * @version 1.0
- * @since 2025-03-19
+ * Cette classe permet d'obtenir une aide sur la grille de sudoku en se basant de la technique de PointingPairs.
+ * @author NGANGA YABIE Taise de These
  */
 public class PointingPairs implements InterfaceTech{
+
     /**
-     * cette methode permet de retourner les positions du candidat(l' annotation) dans une sous grille.
+     * Constructeur de la classe PointingPairs
+     */
+    public PointingPairs(){}
+
+    /**
+     * Renvoie les positions du candidat(l' annotation) dans une sous grille.
      * @param subgrid : la sous grille dans laquelle on cherche les candidats
      * @param candidate : le candidat qu'on cherche
      * @return les positions du candidat dans la sous grille
@@ -31,7 +35,7 @@ public class PointingPairs implements InterfaceTech{
          return positions;
     }
      /**
-      * cette methode permet de verifier si la line ou colonne contient un nombre de candidat requis pour appliquer la technique
+      * Verifie si la line ou colonne contient un nombre de candidat requis pour appliquer la technique
       * @param candidate : le candidat qu'on cherche
       * @param LineCell : la ligne ou colonne dans laquelle on cherche le candidat
       * @return true si la ligne ou colonne contient le nombre de candidat requis, false sinon
@@ -42,7 +46,7 @@ public class PointingPairs implements InterfaceTech{
     }
 
     /**
-     * cette methode permet de retourner le nombre de candidat dans une ligne ou colonne
+     * Renvoie le nombre de candidat dans une ligne ou colonne
      * @param candidate : le candidat qu'on cherche
      * @param LineCell : la ligne ou colonne dans laquelle on cherche le candidat
      * @return le nombre de candidat dans la ligne ou colonne
@@ -53,7 +57,7 @@ public class PointingPairs implements InterfaceTech{
 
 
     /**
-     * cette methode permet de verifier si une sous grille contient un pointing pair par rappor à un candidat.
+     * Verifie si une sous grille contient un pointing pair par rappor à un candidat.
      * @param subgrid : la sous grille dans laquelle on cherche le pointing pair
      * @param candidate : le candidat qu'on cherche
      * @return true si la sous grille contient un pointing pair, false sinon
@@ -71,13 +75,18 @@ public class PointingPairs implements InterfaceTech{
     }
 
      /**
-      * cette methode permet de retourner le nom de la technique
-      * @return
+      * Renvoie le nom de la technique
+      * @return nom de la technique
       */ 
     public String getName(){
         return "Pairs pointantes";
     }
     
+    /**
+     * Analyse la grille pour determiner si un coup peut etre joue en utilisant la technique PointingPairs.
+     * @param grille La grille de Sudoku a analyser
+     * @return Une aide indiquant le coup possible, ou null si aucun coup n'est trouve
+     */
     @Override
     public Help getHelp(Grid grille){
         Help help = new Help(getClass().getSimpleName());
@@ -127,37 +136,42 @@ public class PointingPairs implements InterfaceTech{
    
         }
 
-     public static void main(String[] args) {
-        int[] data = {
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0
-        };
-        
+    /**
+     * Methode principale pour tester l'algorithme PointingPairs sur une grille de Sudoku.
+     * 
+     * @param args Arguments de la ligne de commande (non utilises).
+     */
+    public static void main(String[] args) {
+    int[] data = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0
+    };
+    
 
-        Grid grille = new Grid(data);
-        System.out.println("Grille initiale :");
-        grille.getCell(0, 0).addAnnotation(2);
-        grille.getCell(0, 1).addAnnotation(2);
-        grille.getCell(0, 2).addAnnotation(2);
-        grille.getCell(0, 3).addAnnotation(2);
-        grille.printAnnotationsGrid();
+    Grid grille = new Grid(data);
+    System.out.println("Grille initiale :");
+    grille.getCell(0, 0).addAnnotation(2);
+    grille.getCell(0, 1).addAnnotation(2);
+    grille.getCell(0, 2).addAnnotation(2);
+    grille.getCell(0, 3).addAnnotation(2);
+    grille.printAnnotationsGrid();
 
-       
-        System.out.println("\n");
+    
+    System.out.println("\n");
 
-        // Création d'une instance de la technique des paires pointantes
-        PointingPairs pointingTriple = new PointingTriples();
+    // Création d'une instance de la technique des paires pointantes
+    PointingPairs pointingTriple = new PointingTriples();
 
-        // Détection
-        System.out.println("triple pointantes  détectées ? " + pointingTriple.getHelp(grille));
+    // Détection
+    System.out.println("triple pointantes  détectées ? " + pointingTriple.getHelp(grille));
 
-       
-     }
+    
+    }
 }

@@ -14,6 +14,18 @@ import grp6.sudocore.Grid;
  */
 public class HiddenSingle implements InterfaceTech {
 
+    /**
+     * Constructeur de la classe HiddenSingle
+     */
+    public HiddenSingle(){}
+
+    /**
+     * Classe implementant la technique du singleton cachees dans une grille Sudoku.
+     * Cette technique permet d'identifier des annotations cachees dans une ligne, 
+     * une colonne ou une sous-grille.
+     * @param grille Grille sur laquelle chercher l'aide
+     * @return l'aide HiddenSingle
+     */
     @Override
     public Help getHelp(Grid grille) {    
 
@@ -57,9 +69,9 @@ public class HiddenSingle implements InterfaceTech {
     }
 
     /**
-     * Permet de savoir combien d'occurence de chiffre il y a dans le tableau de cellule
-     * @param tab tableau de cellule
-     * @return un tableau du nombre d'occurence de chaque chiffre
+     * Permet de savoir combien d'occurences de chiffre il y a dans le tableau de cellules
+     * @param tab tableau de cellules
+     * @return un tableau du nombre d'occurences de chaque chiffre
      */
     private int[] nb_Num_Annotations(Cell[] tab){
         int[] compteur;
@@ -132,7 +144,10 @@ public class HiddenSingle implements InterfaceTech {
         
     }*/
 
-    
+    /**
+     * Main pour tester la classe
+     * @param args non utilise
+     */
     public static void main(String[] args) {
         // Exemple de grille où un singleton caché peut être trouvé
         int[] data = {

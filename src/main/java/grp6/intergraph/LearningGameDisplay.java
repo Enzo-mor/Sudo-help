@@ -521,6 +521,8 @@ public class LearningGameDisplay {
 
     /**
      * Applique un style au panneau d'aide
+     * @param helpOverlay boite vbox pour l'affichage
+     * @param helpText label pour l'affichage
      */
     public static void setupHelpOverlay(VBox helpOverlay, Label helpText) {
 

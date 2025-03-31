@@ -18,7 +18,7 @@ import grp6.sudocore.SudoTypes.ActionType;
  * Cette classe permet de gerer les actions de modification d'une cellule
  * dans un jeu de Sudoku. Elle permet de modifier la valeur d'une cellule.
  * 
- * @author NGANGA YABIE Taïse de These
+ * @author NGANGA YABIE Taise de These
  * @see Game
  * @see ActionManagerApply
  * @see Action
@@ -60,9 +60,9 @@ public final class NumberCellAction extends ActionCell {
     }
 
     /**
-     * Retourne une chaîne representant l'action effectuée.
+     * Retourne une chaine representant l'action effectuee.
      * 
-     * @return La chaîne decrivant l'action de modification de la cellule.
+     * @return La chaine decrivant l'action de modification de la cellule.
      */
     @Override
     public String toString() {

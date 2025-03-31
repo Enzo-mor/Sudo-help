@@ -12,12 +12,17 @@ import grp6.sudocore.Grid;
 /**
  * Classe permettant la generation automatique des annotations d'une grille
  * 
- * @author Kilian POUSSE
+ * @author POUSSE Kilian
  * @see Grid
  * @see Cell
  */
 
 public class AutoAnnotation {
+
+    /**
+     * Constructeur de la classe AutoAnnotation
+     */
+    public AutoAnnotation(){}
 
     /**
      * Generation des annotation automatiquement
@@ -71,7 +76,7 @@ public class AutoAnnotation {
     }
 
     /**
-     * Generation des annotation par apport à la ligne
+     * Generation des annotation par apport a la ligne
      * @param grid  Grille a modifier
      * @param i Identifiant de la ligne
      * @return Liste des annotations des lignes
@@ -81,7 +86,7 @@ public class AutoAnnotation {
     }
 
     /**
-     * Generation des annotation par apport à la colonne
+     * Generation des annotation par apport a la colonne
      * @param grid  Grille a modifier
      * @param j Identifiant de la colonne
      * @return Liste des annotations des colonnes
@@ -91,7 +96,7 @@ public class AutoAnnotation {
     }
 
     /**
-     * Generation des annotation par apport à la sous-grille
+     * Generation des annotation par apport a la sous-grille
      * @param grid Grille a modifier
      * @param i Identifiant de la ligne
      * @param j Identifiant de la colonne
@@ -118,8 +123,8 @@ public class AutoAnnotation {
     }
 
     /**
-     * Main pour tester la génération des annotations automatique
-     * @param args
+     * Main pour tester la generation des annotations automatique
+     * @param args Non utilise
      */
     public static void main(String[] args) {
         int[] data = {

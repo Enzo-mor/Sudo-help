@@ -7,23 +7,30 @@ import grp6.sudocore.Grid;
 
 /**
  * Cette classe permet d'obtenir une aide sur la grille de sudoku en se basant de  la technique de HiddenTriple.
+ * @author NGANGA YABIE Taise de These
  * @see InterfaceTech
  * @see Help
  * @see Cell
  * @see Grid
  * @see HiddenPairs
- * @author Taïse De Thèse
- * @version 1.0     
- * @since 2025-03-25
  */
 public class HiddenTriples extends HiddenPairs {
+
+    /**
+     * Constructeur de la classe HiddenTriples
+     */
+    public HiddenTriples(){}
+
+    /*
+     * Retourne la taille du triplet cache
+     */
     @Override
     protected int getHiddenLength() {
         return 3;
     }
 
     /**
-     * Permet de récupérer le nom de la technique
+     * Permet de recuperer le nom de la technique
      * @return String le nom de la technique
      */
     public String getName() {
@@ -40,15 +47,19 @@ public class HiddenTriples extends HiddenPairs {
            return null;
     }
     /**
-     * Permet de savoir si une cellule a des annotations cachées
-     * @param cell la cellule à vérifier
-     * @return boolean true si la cellule a des annotations cachées, false sinon
+     * Permet de savoir si une cellule a des annotations cachees
+     * @param cell la cellule a verifier
+     * @return boolean true si la cellule a des annotations cachees, false sinon
      */
     @Override
     protected Boolean hasPossibleCellHidden(Cell cell){
         return cell.isEditable() && cell.getAnnotations().size() >= 3;
     }
 
+    /**
+     * Main pour tester la classe 
+     * @param args non utilise
+     * */
     public static void main(String[] args) {
         int[] data = {
             0, 0, 0, 0, 0, 0, 0, 0, 0,

@@ -433,7 +433,7 @@ public class SudokuGame {
 
     /**
      * Modifie le texte de l'aide
-     * @param text
+     * @param text texte de l'aide
      */
     public static void setHelpText(String text) {
         helpText.setText(text);
@@ -528,6 +528,8 @@ public class SudokuGame {
 
     /**
      * Applique un style au panneau d'aide
+     * @param helpOverlay vbox pour l'affichage
+     * @param helpText label pour l'affichage
      */
     public static void setupHelpOverlay(VBox helpOverlay, Label helpText) {
 
@@ -641,6 +643,7 @@ public class SudokuGame {
 
     /**
      * Methode pour changer l'etat du bouton afin d'en voir plus lors de la demande de l'aide
+     * @param state etat
      */
     public static void setDisableSeeMoreButton(boolean state) {
         seeMoreButton.setDisable(state);
@@ -678,7 +681,7 @@ public class SudokuGame {
         resetTimer();
     }
 
-    /*
+    /**
      * Remise a zero du timer d'inactivite
      */
     public static void resetTimer() {
@@ -708,7 +711,7 @@ public class SudokuGame {
         resetTimer();
     }
 
-    /*
+    /**
      * Permet de changer l'etat de l'affichage de la fenetre d'aide via les Settings
      */
     public static void switchShowPopUp(){
@@ -717,7 +720,7 @@ public class SudokuGame {
         }
     }
 
-    /*
+    /**
      * Permet de changer l'etat de l'affichage de l'animation du bouton d'aide via les Settings
      */
     public static void switchShowHelpAnimation(){

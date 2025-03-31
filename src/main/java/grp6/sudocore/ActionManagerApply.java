@@ -18,17 +18,22 @@ import com.google.gson.reflect.TypeToken;
 /**
  * Cette classe permet de gerer la serialisation et la deserialisation d'une liste d'actions.
  * 
- * @author NGANGA YABIE Taïse de These
+ * @author NGANGA YABIE Taise de These
  * @see Action
  * @see Game
  */
 public class ActionManagerApply {
 
     /**
+     * Constructeur de la classe ActionManagerApply
+     */
+    public ActionManagerApply(){}
+
+    /**
      * Cette methode permet de serialiser une liste d'actions.
      * 
-     * @param actions La liste des actions à sérialiser.
-     * @return Une chaîne de caractères au format JSON contenant les actions sérialisées.
+     * @param actions La liste des actions a serialiser.
+     * @return Une chaine de caracteres au format JSON contenant les actions serialisees.
      */
     public static String serializeList(List<Action> actions) {
         return new GsonBuilder()
@@ -38,9 +43,9 @@ public class ActionManagerApply {
     }
 
     /**
-     * Cette methode permet de deserialiser une liste d'actions à partir d'une chaîne JSON.
+     * Cette methode permet de deserialiser une liste d'actions a partir d'une chaine JSON.
      * 
-     * @param json La chaîne JSON contenant les actions serialisees.
+     * @param json La chaine JSON contenant les actions serialisees.
      * @param game Le jeu sur lequel les actions seront appliquees.
      * @return Une liste d'actions deserialisee.
      */
@@ -126,11 +131,6 @@ public class ActionManagerApply {
             List<Action> deserializedActions = ActionManagerApply.deserializeList(json, new Game(DBManager.getGrid(2), new Profile("jean")));
             System.out.println("Liste d'actions désérialisée : " + deserializedActions);
 
-            /* Exécution des actions désérialisées
-            for (Action action : deserializedActions) {
-                action.doAction();
-                System.out.println("Action exécutée : " + action);
-            }*/
         } catch (SQLException e) {
             System.err.println("Erreur lors de la désérialisation : " + e.getMessage());
         }

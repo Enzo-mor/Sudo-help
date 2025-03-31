@@ -7,73 +7,76 @@ import java.util.List;
 import grp6.sudocore.Cell;
 import grp6.sudocore.Grid;
 /**
- * Cette classe représente la technique LastCell.
+ * Cette classe represente la technique LastCell.
  * 
- * Elle permet de trouver la dernière cellule vide d'une ligne, colonne ou carré.
+ * Elle permet de trouver la derniere cellule vide d'une ligne, colonne ou carre.
  * @author GRAMMONT Dylan
- * @see InterfaceTech Contenant les méthodes des techniques
+ * @see InterfaceTech Contenant les methodes des techniques
  * 
  */
 public class LastCell implements InterfaceTech {
 
+    /**
+     * Constructeur de la classe LastCell
+     */
+    public LastCell(){}
+
     @Override
+    /**
+     * Analyse la grille de Sudoku et fournit une aide si une case vide peut etre remplie 
+     * dans une ligne, une colonne ou un carre contenant deja 8 chiffres.
+     *
+     * @param grille La grille de Sudoku a analyser.
+     * @return Un objet {@code Help} contenant une suggestion de placement, ou {@code null} si aucune aide n'est possible.
+     */
     public Help getHelp(Grid grille) {
         Help aide = new Help(getClass().getSimpleName());
 
         for (int i = 0; i < Grid.NB_NUM; i++) {
-            // Vérifie les colonnes
+            // Verifie les colonnes
             if (grille.numberOfFullCell(Grid.Shape.COLUMN, i) == 8) {
                 Cell emptyCell = findEmptyCell(grille.getColumn(i));
                 if (emptyCell != null) {
-                    //int pos[] = emptyCell.getPosition();
-                    //aide.addPos(pos[0], pos[1]);
                     aide.addColumn(i);
-                    aide.setMessage(1, "Tu peux placer un "+findLastNumber(grille.getColumn(i)));
-                    
+                    aide.setMessage(1, "Tu peux placer un " + findLastNumber(grille.getColumn(i)));
                     aide.setMessage(3, "Regarde ici");
                     return aide;
                 }
             }
-            // Vérifie les lignes
+            // Verifie les lignes
             else if (grille.numberOfFullCell(Grid.Shape.LINE, i) == 8) {
                 Cell emptyCell = findEmptyCell(grille.getLine(i));
                 if (emptyCell != null) {
-                    //int pos[] = emptyCell.getPosition();
-                    //Message d'aide
-                    //aide.addPos(pos[0], pos[1]);
                     aide.addLine(i);
-                    aide.setMessage(1, "Tu peux placer un  "+findLastNumber(grille.getLine(i)));
-                    
+                    aide.setMessage(1, "Tu peux placer un " + findLastNumber(grille.getLine(i)));
                     aide.setMessage(3, "Regarde ici");
                     return aide;
                 }
             }
-            // Vérifie les carrés
+            // Verifie les carres
             else if (grille.numberOfFullCell(Grid.Shape.SQUARE, i) == 8) {
                 int[] temp = grille.numToPosForSubGrid(i);
-                Cell emptyCell = findEmptyCell(grille.getFlatSubGrid(temp[0],temp[1]));
+                Cell emptyCell = findEmptyCell(grille.getFlatSubGrid(temp[0], temp[1]));
                 if (emptyCell != null) {
-                    //int pos[] = emptyCell.getPosition();
-                    //aide.addPos(pos[0], pos[1]);
                     aide.addSquare(i);
-                    aide.setMessage(1, "Tu peux placer un "+findLastNumber(grille.getFlatSubGrid(temp[0], temp[1])));
-                    
+                    aide.setMessage(1, "Tu peux placer un " + findLastNumber(grille.getFlatSubGrid(temp[0], temp[1])));
                     aide.setMessage(3, "Regarde ici");
                     return aide;
                 }
             }
         }
-        return null; // Aucun coup trouvé
+        return null; // Aucun coup trouve
     }
 
     /**
-     * Trouve la cellule vide dans une liste de cellules.
-     * @param cells Liste des cellules (ligne, colonne ou carré)
-     * @return La cellule vide trouvée, sinon null.
+     * Recherche une cellule vide dans un tableau de cellules (ligne, colonne ou carre).
+     *
+     * @param cells Tableau de cellules a analyser.
+     * @return La premiere cellule vide trouvee, ou {@code null} si aucune n'est vide.
      */
-    private Cell findEmptyCell(Cell[] cells){
-        for (Cell cell : cells){
-            if (cell.isEmpty()){
+    private Cell findEmptyCell(Cell[] cells) {
+        for (Cell cell : cells) {
+            if (cell.isEmpty()) {
                 return cell;
             }
         }
@@ -81,19 +84,21 @@ public class LastCell implements InterfaceTech {
     }
 
     /**
-     * Trouve le nombre manquant dans une liste de Cell.
-     * @param cells Liste des cellules (ligne, colonne ou carré)
-     * @return Le number qui doit aller dans la cellule vide.
+     * Determine le chiffre manquant dans un tableau de cellules (ligne, colonne ou carre).
+     *
+     * @param cells Tableau de cellules a analyser.
+     * @return Le chiffre qui manque dans la sequence, compris entre 1 et 9.
      */
-    private int findLastNumber(Cell[] cells){
+    private int findLastNumber(Cell[] cells) {
         List<Integer> list = new ArrayList<>(Collections.nCopies(10, 0));
-        for (Cell cell : cells){
+        for (Cell cell : cells) {
             int c = cell.getNumber();
-            list.set(cell.getNumber(),list.get(c)+1);
+            list.set(c, list.get(c) + 1);
         }
-        for(int i=0;i<10;i++){
-            if(list.get(i) == 0)return i;
+        for (int i = 1; i <= 9; i++) { // Sudoku utilise les chiffres de 1 a 9
+            if (list.get(i) == 0) return i;
         }
-        return 0;
+        return 0; // Ne devrait jamais arriver si l'entree est valide
     }
-}
+
+}    

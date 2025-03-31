@@ -60,7 +60,7 @@ public class SudokuDisplay {
      * Surligne certaines cellules dans la grille, assombrissant toutes les autres.
      *
      * @param grid        La grille ou les cellules doivent etre modifiees [ GridPane ]
-     * @param coordinates Coordonnees des cellules a surligner [ List<int[]> ]
+     * @param coordinates Coordonnees des cellules a surligner 
      */
     public static void highlightCells(GridPane grid, List<int[]> coordinates) {
         // Reinitialiser la grille avant de surligner
